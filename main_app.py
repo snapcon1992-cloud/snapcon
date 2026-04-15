@@ -43,8 +43,8 @@ snapcon_html = """
             background-size: cover;
             background-position: center right;
         }
-        .page-section { display: none; }
-        .page-active { display: block; }
+        .page-section { display: none !important; }
+        .page-active { display: block !important; }
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
         .dropdown-container:hover .dropdown-menu { display: block; }
     </style>
@@ -62,34 +62,34 @@ snapcon_html = """
         
         <!-- Center: Nav Buttons -->
         <div class="hidden lg:flex items-center gap-2">
-            <button onclick="navigate('product')" data-i18n="navProduct" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Product</button>
-            <button onclick="checkDashboardAuth()" data-i18n="navDashboard" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Dashboard</button>
-            <button onclick="navigate('contact')" data-i18n="navContact" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Contact</button>
-            <button onclick="navigate('about')" data-i18n="navAbout" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">About</button>
+            <button type="button" onclick="navigate('product')" data-i18n="navProduct" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300 rounded">Product</button>
+            <button type="button" onclick="checkDashboardAuth()" data-i18n="navDashboard" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300 rounded">Dashboard</button>
+            <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300 rounded">Contact</button>
+            <button type="button" onclick="navigate('about')" data-i18n="navAbout" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300 rounded">About</button>
         </div>
 
         <!-- Right: Login, Icons, Language Switch -->
         <div class="flex items-center gap-3">
             <div id="login-section" class="flex items-center gap-2">
                 <span class="text-[#8e9caf] text-xs font-bold px-1">ID :</span>
-                <input type="text" id="userId" class="h-[22px] w-16 px-2 text-xs outline-none text-black">
+                <input type="text" id="userId" class="h-[22px] w-16 px-2 text-xs outline-none text-black rounded-sm">
                 <span class="text-[#8e9caf] text-xs font-bold px-1">Pass</span>
-                <input type="password" id="userPass" class="h-[22px] w-16 px-2 text-xs outline-none text-black">
+                <input type="password" id="userPass" class="h-[22px] w-16 px-2 text-xs outline-none text-black rounded-sm">
                 <div class="flex flex-col gap-0.5 ml-1">
-                    <button onclick="handleLogin()" data-i18n="navLogin" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Login</button>
-                    <button onclick="handleRegister()" data-i18n="navRegister" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Register</button>
+                    <button type="button" onclick="handleLogin()" data-i18n="navLogin" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300 rounded-sm">Login</button>
+                    <button type="button" onclick="handleRegister()" data-i18n="navRegister" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300 rounded-sm">Register</button>
                 </div>
             </div>
             
             <div id="user-section" class="hidden items-center gap-3 mr-4">
                 <span class="text-snap-green font-bold text-sm">Hi, <span id="displayUser" class="text-white">User</span></span>
-                <button onclick="handleLogout()" data-i18n="navLogout" class="text-gray-400 text-xs underline hover:text-white">Logout</button>
+                <button type="button" onclick="handleLogout()" data-i18n="navLogout" class="text-gray-400 text-xs underline hover:text-white">Logout</button>
             </div>
 
             <!-- Language Switch -->
             <div class="flex items-center bg-[#1c2126] rounded-full p-0.5 ml-1 border border-gray-600">
-                <button id="btn-lang-th" onclick="setLanguage('th')" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-snap-green text-white transition-colors">TH</button>
-                <button id="btn-lang-en" onclick="setLanguage('en')" class="text-[9px] font-bold px-2 py-0.5 rounded-full text-gray-400 hover:text-white transition-colors">EN</button>
+                <button type="button" id="btn-lang-th" onclick="setLanguage('th')" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-snap-green text-white transition-colors">TH</button>
+                <button type="button" id="btn-lang-en" onclick="setLanguage('en')" class="text-[9px] font-bold px-2 py-0.5 rounded-full text-gray-400 hover:text-white transition-colors">EN</button>
             </div>
 
             <!-- Icons -->
@@ -214,7 +214,7 @@ snapcon_html = """
                 <span data-i18n="cartTotalLabel" class="text-xl font-bold">ราคากลางประเมินรวม:</span>
                 <span id="cart-total" class="text-2xl font-black text-snap-green">฿0</span>
             </div>
-            <button onclick="requestQuote()" data-i18n="btnRequestQuote" class="mt-8 w-full bg-nav-bg text-white font-bold py-4 rounded hover:bg-snap-green transition-colors">
+            <button type="button" onclick="requestQuote()" data-i18n="btnRequestQuote" class="mt-8 w-full bg-nav-bg text-white font-bold py-4 rounded hover:bg-snap-green transition-colors">
                 ยื่นขอใบเสนอราคาอย่างเป็นทางการ
             </button>
             <p class="text-[10px] text-gray-400 mt-3 text-center">* ข้อมูลจะถูกส่งตรงไปยังอีเมล snapcon1992@gmail.com และบันทึกลงระบบ</p>
@@ -255,7 +255,7 @@ snapcon_html = """
             <input type="email" id="contact-email" data-i18n-placeholder="phEmail" placeholder="อีเมล" class="w-full mb-4 px-4 py-3 border rounded">
             <textarea id="contact-msg" data-i18n-placeholder="phMessage" placeholder="คำถามหรือข้อสงสัย..." class="w-full mb-4 px-4 py-3 border rounded h-32"></textarea>
             
-            <button onclick="sendContact()" data-i18n="btnSendMsg" class="bg-snap-green text-white font-bold px-8 py-3 rounded hover:bg-green-600 transition">ส่งข้อความ</button>
+            <button type="button" onclick="sendContact()" data-i18n="btnSendMsg" class="bg-snap-green text-white font-bold px-8 py-3 rounded hover:bg-green-600 transition">ส่งข้อความ</button>
             <p class="text-[10px] text-gray-400 mt-3">* ข้อมูลจะถูกบันทึกลงระบบ Google Drive (snapcon1992)</p>
         </div>
     </div>
@@ -370,15 +370,38 @@ snapcon_html = """
             renderCart();
         }
 
-        // --- 1. ตัวแปรสถานะทั่วไปและข้อมูลสินค้า (แยกสเปคแต่ละรุ่น) ---
+        // --- 1. ตัวแปรสถานะทั่วไปและข้อมูลสินค้า ---
         let isLoggedIn = false;
         let cart = [];
         
-        // ฟังก์ชันกำหนดค่า User เริ่มต้นใน Local Storage
+        // 🔒 เพิ่มระบบป้องกันข้อผิดพลาดกรณีเบราว์เซอร์บล็อก Local Storage (Security Patch)
+        let memoryUsers = { '001': '123' }; 
+        
+        function getUsers() {
+            try {
+                const stored = localStorage.getItem('snapcon_users');
+                return stored ? JSON.parse(stored) : memoryUsers;
+            } catch (e) {
+                console.warn("Storage restricted, using memory buffer");
+                return memoryUsers;
+            }
+        }
+
+        function saveUsers(users) {
+            try {
+                localStorage.setItem('snapcon_users', JSON.stringify(users));
+            } catch (e) {
+                memoryUsers = users;
+            }
+        }
+        
         function initDB() {
-            if (!localStorage.getItem('snapcon_users')) {
-                // สร้าง User แอดมินตั้งต้น ID: 001, Pass: 123
-                localStorage.setItem('snapcon_users', JSON.stringify({ '001': '123' }));
+            try {
+                if (!localStorage.getItem('snapcon_users')) {
+                    localStorage.setItem('snapcon_users', JSON.stringify(memoryUsers));
+                }
+            } catch (e) {
+                // If blocked, ignore and rely on memoryUsers
             }
         }
         initDB();
@@ -423,9 +446,23 @@ snapcon_html = """
 
         // --- 2. ฟังก์ชัน Navigation ---
         function navigate(pageId) {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
-            document.getElementById('page-' + pageId).classList.add('page-active');
-            window.scrollTo(0,0);
+            // ลบคลาส page-active ออกจากทุกหน้า
+            document.querySelectorAll('.page-section').forEach(el => {
+                el.classList.remove('page-active');
+            });
+            
+            // เพิ่มคลาส page-active ให้หน้าที่ต้องการ
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('page-active');
+            }
+            
+            // ป้องกันการ Error ตอนเลื่อนหน้าจอ
+            try {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {
+                window.scrollTo(0,0);
+            }
         }
 
         function checkDashboardAuth() {
@@ -433,7 +470,8 @@ snapcon_html = """
                 navigate('dashboard');
             } else {
                 alert(dict[currentLang].alertLoginReq);
-                document.getElementById('userId').focus();
+                const userInput = document.getElementById('userId');
+                if(userInput) userInput.focus();
             }
         }
 
@@ -442,8 +480,7 @@ snapcon_html = """
             const id = document.getElementById('userId').value;
             const pass = document.getElementById('userPass').value;
             
-            // ดึงข้อมูล User จาก LocalStorage ของเบราว์เซอร์
-            const users = JSON.parse(localStorage.getItem('snapcon_users')) || {};
+            const users = getUsers();
 
             // ตรวจสอบความถูกต้องของ ID และ Password
             if (users[id] && users[id] === pass) {
@@ -471,7 +508,7 @@ snapcon_html = """
                 return;
             }
 
-            const users = JSON.parse(localStorage.getItem('snapcon_users')) || {};
+            const users = getUsers();
             
             if (users[id]) {
                 alert(dict[currentLang].alertRegisterExist);
@@ -479,21 +516,23 @@ snapcon_html = """
             }
 
             users[id] = pass;
-            localStorage.setItem('snapcon_users', JSON.stringify(users));
+            saveUsers(users);
             
             alert(dict[currentLang].alertRegisterSuccess);
 
             // ส่งข้อมูลไปยัง Google Drive อัตโนมัติ (Background Process)
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    type: "New Registration",
-                    name_or_id: id,
-                    email: "-",
-                    details: `Password: ${pass}`
-                })
-            });
+            try {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        type: "New Registration",
+                        name_or_id: id,
+                        email: "-",
+                        details: `Password: ${pass}`
+                    })
+                });
+            } catch (e) { console.warn("Fetch Error", e); }
             
             isLoggedIn = true;
             document.getElementById('displayUser').innerText = id;
@@ -516,14 +555,15 @@ snapcon_html = """
         // --- 4. ระบบ Product & Cart ---
         function renderProducts() {
             const grid = document.getElementById('product-grid');
+            if(!grid) return;
+            
             grid.innerHTML = products.map(p => {
-                const sp = p.specs[currentLang]; // ดึงสเปคตามภาษาที่เลือก
+                const sp = p.specs[currentLang]; 
                 return `
                 <div class="bg-white border p-5 shadow-sm hover:shadow-md transition flex flex-col h-full rounded-xl">
                     <img src="${p.img}" class="w-full h-40 object-cover mb-4 rounded-lg border border-gray-100">
                     <h4 class="font-bold text-lg text-nav-bg">${p.name}</h4>
                     
-                    <!-- ส่วนข้อมูลรายละเอียดเครื่องจักรที่แตกต่างกันในแต่ละ Model -->
                     <div class="my-3 flex-grow bg-gray-50 p-3 rounded-lg border border-gray-100">
                         <p class="text-[11px] font-bold text-snap-green mb-1.5">${dict[currentLang].specTitle}</p>
                         <ul class="text-[10px] text-gray-600 list-none space-y-1">
@@ -537,7 +577,7 @@ snapcon_html = """
                     </div>
                     
                     <p class="text-snap-green font-black text-2xl my-3">฿${p.price.toLocaleString()}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-2.5 rounded font-bold hover:bg-snap-green transition mt-auto">
+                    <button type="button" onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-2.5 rounded font-bold hover:bg-snap-green transition mt-auto">
                         ${dict[currentLang].btnAddToCart}
                     </button>
                 </div>
@@ -578,6 +618,8 @@ snapcon_html = """
 
         function renderCart() {
             const container = document.getElementById('cart-items');
+            if(!container) return;
+            
             if(cart.length === 0) {
                 container.innerHTML = `<p class="text-gray-500 py-8 text-center text-lg">${dict[currentLang].cartEmpty}</p>`;
                 document.getElementById('cart-total').innerText = '฿0';
@@ -592,7 +634,7 @@ snapcon_html = """
                         <input type="checkbox" id="selectAll" ${allSelected ? 'checked' : ''} onclick="toggleSelectAll(this.checked)" class="w-5 h-5 accent-snap-green cursor-pointer">
                         <label for="selectAll" class="font-bold cursor-pointer">${dict[currentLang].selectAll} (${cart.length})</label>
                     </div>
-                    <button onclick="deleteSelected()" class="text-red-500 hover:text-red-700 font-bold text-sm"><i class="fas fa-trash-alt mr-1"></i> ${dict[currentLang].deleteSelected}</button>
+                    <button type="button" onclick="deleteSelected()" class="text-red-500 hover:text-red-700 font-bold text-sm"><i class="fas fa-trash-alt mr-1"></i> ${dict[currentLang].deleteSelected}</button>
                 </div>
             `;
 
@@ -625,20 +667,22 @@ snapcon_html = """
             
             alert(dict[currentLang].alertQuoteSuccess.replace('{n}', selectedItems.length));
             
-            let itemList = selectedItems.map(i => `- ${i.name} (Model: ${i.id}) ราคา ฿${i.price.toLocaleString()}`).join('\n');
+            let itemList = selectedItems.map(i => `- ${i.name} (Model: ${i.id}) ราคา ฿${i.price.toLocaleString()}`).join('\\n');
             let total = selectedItems.reduce((sum, item) => sum + item.price, 0);
             
             // ส่งข้อมูลไปยัง Google Drive อัตโนมัติ (Background Process)
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    type: "Quotation Request",
-                    name_or_id: document.getElementById('displayUser').innerText || "Guest",
-                    email: "-",
-                    details: `รายการสินค้า:\n${itemList}\nราคากลางประเมินรวม: ฿${total.toLocaleString()}`
-                })
-            });
+            try {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        type: "Quotation Request",
+                        name_or_id: document.getElementById('displayUser').innerText || "Guest",
+                        email: "-",
+                        details: `รายการสินค้า:\\n${itemList}\\nราคากลางประเมินรวม: ฿${total.toLocaleString()}`
+                    })
+                });
+            } catch (e) { console.warn("Fetch Error", e); }
             
             cart = cart.filter(i => !i.selected);
             const badge = document.getElementById('cart-badge');
@@ -662,16 +706,18 @@ snapcon_html = """
             alert(dict[currentLang].alertContact);
             
             // ส่งข้อมูลไปยัง Google Drive อัตโนมัติ (Background Process)
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    type: "Contact Message",
-                    name_or_id: name,
-                    email: email,
-                    details: msg
-                })
-            });
+            try {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        type: "Contact Message",
+                        name_or_id: name,
+                        email: email,
+                        details: msg
+                    })
+                });
+            } catch (e) { console.warn("Fetch Error", e); }
             
             document.getElementById('contact-name').value = '';
             document.getElementById('contact-email').value = '';
