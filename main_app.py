@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS สำหรับ UI ที่ตรงตามภาพ ฟังก์ชัน 11 ข้อ และระบบ 2 ภาษา
+# โค้ด HTML/CSS/JS สำหรับ UI ที่ตรงตามภาพ ฟังก์ชัน 11 ข้อ และระบบ 2 ภาษา (พร้อมสเปคแยกรายรุ่น)
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -287,14 +287,7 @@ snapcon_html = """
                 alertQuoteSuccess: "ส่งคำขอใบเสนอราคาสำหรับสินค้า {n} รายการ สำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ",
                 alertContact: "ส่งข้อความสำเร็จ ทีมงานจะติดต่อกลับครับ",
                 
-                // Specifications Translation TH
-                specTitle: "รายละเอียดสำหรับสั่งทำ (Customizable):",
-                spec1: "1. ความยาวตัวเครื่อง L (0.5-100 m)",
-                spec2: "2. ความสูงตัวเครื่อง H/H1 0.1~2 m",
-                spec3: "3. ความกว้างพื้นที่สายพาน W",
-                spec4: "4. น้ำหนักลำเลียง 0~400 (kg.)",
-                spec5: "5. ความเร็วสายพาน (m/min)",
-                spec6: "6. วัสดุฐาน: สแตนเลส/เหล็ก (เพิ่มล้อได้)",
+                specTitle: "รายละเอียดสำหรับสั่งทำ (Customizable):"
             },
             en: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About",
@@ -319,14 +312,7 @@ snapcon_html = """
                 alertQuoteSuccess: "Quotation request for {n} items submitted successfully! Our team will contact you shortly.",
                 alertContact: "Message sent successfully! Our team will get back to you.",
                 
-                // Specifications Translation EN
-                specTitle: "Customizable Specifications:",
-                spec1: "1. Machine Length L (0.5-100 m)",
-                spec2: "2. Machine Height H/H1 0.1~2 m",
-                spec3: "3. Belt Width W",
-                spec4: "4. Payload Weight 0~400 (kg.)",
-                spec5: "5. Belt Speed (m/min)",
-                spec6: "6. Base: Stainless/Iron (Optional wheels)",
+                specTitle: "Customizable Specifications:"
             }
         };
 
@@ -362,15 +348,46 @@ snapcon_html = """
             renderCart();
         }
 
-        // --- 1. ตัวแปรสถานะทั่วไป ---
+        // --- 1. ตัวแปรสถานะทั่วไปและข้อมูลสินค้า (แยกสเปคแต่ละรุ่น) ---
         let isLoggedIn = false;
         let cart = [];
+        
         const products = [
-            { id: 'M01', name: 'Snapcon Model 01', price: 15000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300' },
-            { id: 'M02', name: 'Snapcon Model 02', price: 22000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300' },
-            { id: 'M03', name: 'Snapcon Model 03', price: 28500, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300' },
-            { id: 'M04', name: 'Snapcon Model 04', price: 35000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300' },
-            { id: 'M05', name: 'Snapcon Pro 05', price: 45000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300' },
+            { 
+                id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                specs: {
+                    th: { s1: "1. ความยาว (L): 0.5 - 5 m", s2: "2. ความสูง (H): 0.3 - 1 m", s3: "3. ความกว้าง (W): 200 - 400 mm", s4: "4. น้ำหนักลำเลียง: 0 - 50 kg", s5: "5. ความเร็ว: 5 - 20 m/min", s6: "6. วัสดุ: เหล็กพ่นสี / อลูมิเนียม" },
+                    en: { s1: "1. Length (L): 0.5 - 5 m", s2: "2. Height (H): 0.3 - 1 m", s3: "3. Width (W): 200 - 400 mm", s4: "4. Payload: 0 - 50 kg", s5: "5. Speed: 5 - 20 m/min", s6: "6. Material: Painted Steel / AL" }
+                }
+            },
+            { 
+                id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                specs: {
+                    th: { s1: "1. ความยาว (L): 1 - 15 m", s2: "2. ความสูง (H): 0.5 - 1.2 m", s3: "3. ความกว้าง (W): 300 - 600 mm", s4: "4. น้ำหนักลำเลียง: 0 - 100 kg", s5: "5. ความเร็ว: 10 - 30 m/min", s6: "6. วัสดุ: เหล็ก / สแตนเลส (เพิ่มล้อได้)" },
+                    en: { s1: "1. Length (L): 1 - 15 m", s2: "2. Height (H): 0.5 - 1.2 m", s3: "3. Width (W): 300 - 600 mm", s4: "4. Payload: 0 - 100 kg", s5: "5. Speed: 10 - 30 m/min", s6: "6. Material: Steel / SUS (Wheeled opt.)" }
+                }
+            },
+            { 
+                id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                specs: {
+                    th: { s1: "1. ความยาว (L): 2 - 30 m", s2: "2. ความสูง (H): 0.5 - 1.5 m", s3: "3. ความกว้าง (W): 500 - 1000 mm", s4: "4. น้ำหนักลำเลียง: 0 - 300 kg", s5: "5. ความเร็ว: 5 - 25 m/min", s6: "6. วัสดุ: เหล็กหนาพิเศษเสริมคาน" },
+                    en: { s1: "1. Length (L): 2 - 30 m", s2: "2. Height (H): 0.5 - 1.5 m", s3: "3. Width (W): 500 - 1000 mm", s4: "4. Payload: 0 - 300 kg", s5: "5. Speed: 5 - 25 m/min", s6: "6. Material: Reinforced Heavy Steel" }
+                }
+            },
+            { 
+                id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                specs: {
+                    th: { s1: "1. ความยาว (L): 1 - 20 m", s2: "2. ความสูง (H): 0.8 - 1.5 m", s3: "3. ความกว้าง (W): 400 - 800 mm", s4: "4. น้ำหนักลำเลียง: 0 - 80 kg", s5: "5. ความเร็ว: 20 - 60 m/min", s6: "6. วัสดุ: สแตนเลส 304 ฟู้ดเกรด" },
+                    en: { s1: "1. Length (L): 1 - 20 m", s2: "2. Height (H): 0.8 - 1.5 m", s3: "3. Width (W): 400 - 800 mm", s4: "4. Payload: 0 - 80 kg", s5: "5. Speed: 20 - 60 m/min", s6: "6. Material: SUS 304 Food Grade" }
+                }
+            },
+            { 
+                id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                specs: {
+                    th: { s1: "1. ความยาว (L): 5 - 100 m", s2: "2. ความสูง (H): 0.1 - 2 m", s3: "3. ความกว้าง (W): 500 - 1500 mm", s4: "4. น้ำหนักลำเลียง: 0 - 400 kg", s5: "5. ความเร็ว: 1 - 50 m/min", s6: "6. วัสดุ: ปรับแต่งได้ตามต้องการ (Full Custom)" },
+                    en: { s1: "1. Length (L): 5 - 100 m", s2: "2. Height (H): 0.1 - 2 m", s3: "3. Width (W): 500 - 1500 mm", s4: "4. Payload: 0 - 400 kg", s5: "5. Speed: 1 - 50 m/min", s6: "6. Material: Fully Customizable Options" }
+                }
+            }
         ];
 
         // --- 2. ฟังก์ชัน Navigation ---
@@ -419,21 +436,23 @@ snapcon_html = """
         // --- 4. ระบบ Product & Cart ---
         function renderProducts() {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map(p => `
+            grid.innerHTML = products.map(p => {
+                const sp = p.specs[currentLang]; // ดึงสเปคตามภาษาที่เลือก
+                return `
                 <div class="bg-white border p-5 shadow-sm hover:shadow-md transition flex flex-col h-full rounded-xl">
                     <img src="${p.img}" class="w-full h-40 object-cover mb-4 rounded-lg border border-gray-100">
                     <h4 class="font-bold text-lg text-nav-bg">${p.name}</h4>
                     
-                    <!-- ส่วนข้อมูลรายละเอียดเครื่องจักร (Custom Specifications) -->
+                    <!-- ส่วนข้อมูลรายละเอียดเครื่องจักรที่แตกต่างกันในแต่ละ Model -->
                     <div class="my-3 flex-grow bg-gray-50 p-3 rounded-lg border border-gray-100">
                         <p class="text-[11px] font-bold text-snap-green mb-1.5">${dict[currentLang].specTitle}</p>
                         <ul class="text-[10px] text-gray-600 list-none space-y-1">
-                            <li>${dict[currentLang].spec1}</li>
-                            <li>${dict[currentLang].spec2}</li>
-                            <li>${dict[currentLang].spec3}</li>
-                            <li>${dict[currentLang].spec4}</li>
-                            <li>${dict[currentLang].spec5}</li>
-                            <li>${dict[currentLang].spec6}</li>
+                            <li>${sp.s1}</li>
+                            <li>${sp.s2}</li>
+                            <li>${sp.s3}</li>
+                            <li>${sp.s4}</li>
+                            <li>${sp.s5}</li>
+                            <li>${sp.s6}</li>
                         </ul>
                     </div>
                     
@@ -442,7 +461,8 @@ snapcon_html = """
                         ${dict[currentLang].btnAddToCart}
                     </button>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function addToCart(id) {
@@ -545,5 +565,5 @@ snapcon_html = """
 </html>
 """
 
-# แสดงผลหน้าเว็บผ่าน Streamlit (ปรับความสูงเพิ่มขึ้นเพื่อให้พอดีกับข้อมูลสินค้า)
+# แสดงผลหน้าเว็บผ่าน Streamlit
 st.components.v1.html(snapcon_html, height=1400, scrolling=True)
