@@ -1,9 +1,9 @@
 import streamlit as st
 
-# 1. การตั้งค่าหน้าจอเบื้องต้น
+# 1. การตั้งค่าหน้าจอเบื้องต้น (Industrial Theme)
 st.set_page_config(
-    page_title="SNAPCON ",
-    page_icon="🔌",
+    page_title="SNAPCON | Driving the Future",
+    page_icon="⚙️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -12,163 +12,205 @@ st.set_page_config(
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
-# 3. CSS Custom Design (Premium Look)
+# 3. CSS Custom Design (Inspired by SEW-EURODRIVE)
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@200;400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Sarabun:wght@400;700&display=swap');
     
-    * { font-family: 'Sarabun', sans-serif; }
+    /* Global Reset */
+    html, body, [class*="st-"] {
+        font-family: 'Roboto', 'Sarabun', sans-serif;
+        color: #333333;
+    }
     
-    /* Background & Main Layout */
+    /* Background */
     .stApp {
-        background: radial-gradient(circle at top right, #1a1f2e, #0d1117);
+        background-color: #f4f4f4;
     }
     
-    /* Glassmorphism Card */
-    .main-card {
-        background: rgba(22, 27, 34, 0.8);
-        backdrop-filter: blur(10px);
-        border-radius: 28px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 50px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        max-width: 500px;
-        margin: auto;
+    /* Corporate Header Bar */
+    .corp-header {
+        background-color: #ffffff;
+        border-bottom: 3px solid #ce000c; /* SEW Red */
+        padding: 1rem 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     
-    /* Input Styling */
+    /* Hero Section */
+    .hero-box {
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 4px;
+        border-left: 8px solid #ce000c;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        margin-bottom: 30px;
+    }
+    
+    /* Industrial Input Fields */
     div[data-baseweb="input"] {
-        background-color: rgba(13, 17, 23, 0.6) !important;
-        border-radius: 12px !important;
-        border: 1px solid #30363d !important;
+        background-color: #ffffff !important;
+        border-radius: 2px !important;
+        border: 1px solid #cccccc !important;
     }
     
-    /* Button Premium Styling */
+    /* SEW Red Button Style */
     .stButton>button {
-        border-radius: 14px !important;
-        height: 52px !important;
-        font-size: 16px !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.5px !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    /* Login Button (Highlight) */
-    div.stButton > button:first-child {
-        background: linear-gradient(135deg, #238636 0%, #2ea043 100%) !important;
+        background-color: #ce000c !important;
         color: white !important;
         border: none !important;
-        box-shadow: 0 4px 15px rgba(35, 134, 54, 0.3) !important;
+        border-radius: 2px !important;
+        font-weight: bold !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        padding: 0.6rem 2rem !important;
+        transition: background 0.3s ease !important;
     }
     
-    /* Sidebar Styling */
+    .stButton>button:hover {
+        background-color: #a0000a !important;
+        box-shadow: 0 4px 8px rgba(206, 0, 12, 0.2) !important;
+    }
+    
+    /* Secondary/White Button */
+    .secondary-btn button {
+        background-color: #ffffff !important;
+        color: #ce000c !important;
+        border: 1px solid #ce000c !important;
+    }
+    
+    /* Sidebar Customization */
     [data-testid="stSidebar"] {
-        background-color: #0d1117 !important;
-        border-right: 1px solid #30363d !important;
+        background-color: #2b2b2b !important;
+    }
+    [data-testid="stSidebar"] * {
+        color: #ffffff !important;
     }
     
-    .status-text {
-        font-size: 0.85rem;
-        color: #8b949e;
-        margin-top: 10px;
+    .footer-text {
+        text-align: center;
+        color: #999999;
+        font-size: 0.8rem;
+        margin-top: 50px;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 4. SIDEBAR NAVIGATION
-with st.sidebar:
-    # แสดงโลโก้ใน Sidebar
-    try:
-        st.image("Logo.png", width=120)
-    except:
-        st.markdown("<h2 style='color:#58a6ff;'>🔌 SNAPCON</h2>", unsafe_allow_html=True)
-    
-    st.markdown("### เมนูระบบ")
-    
-    # เมนูที่แสดงผลตลอดเวลา (Public)
-    if st.button("🏠 หน้าแรก / Login", use_container_width=True):
-        st.switch_page("main_app.py")
-        
-    if st.button("📞 ติดต่อฝ่ายเทคนิค (Contact)", use_container_width=True):
-        st.switch_page("pages/2_Contact.py")
+# 4. TOP NAVIGATION BAR (Fake UI for Branding)
+st.markdown("""
+    <div class="corp-header">
+        <div style="display:flex; align-items:center; gap:15px;">
+            <span style="font-size:1.8rem; font-weight:900; color:#ce000c; letter-spacing:-1px;">SNAPCON</span>
+            <span style="border-left:1px solid #ddd; padding-left:15px; color:#666; font-size:0.9rem;">Solutions for Automation</span>
+        </div>
+        <div style="font-size:0.8rem; color:#999; font-weight:bold;">Thailand | Global Presence</div>
+    </div>
+""", unsafe_allow_html=True)
 
-    st.markdown("---")
+# 5. SIDEBAR
+with st.sidebar:
+    st.image("https://www.sew-eurodrive.com/static/media/sew-logo.3188d3d9.svg", width=150) # ตัวอย่างการใส่โลโก้ถ้ามี URL หรือใช้ Logo.png
+    st.markdown("### ONLINE SERVICES")
+    if st.button("🏠 Home / Products", use_container_width=True):
+        st.switch_page("main_app.py")
+    if st.button("📞 Support & Contact", use_container_width=True):
+        st.switch_page("pages/2_Contact.py")
     
-    # เมนูที่ต้อง Login เท่านั้น
+    st.markdown("---")
     if st.session_state.logged_in:
-        st.success("Log in แล้ว (Admin)")
-        if st.button("📊 Monitor Dashboard", type="primary", use_container_width=True):
+        st.success("Authorized: Admin")
+        if st.button("📊 Digital Dashboard", use_container_width=True):
             st.switch_page("pages/1_Monitor.py")
-        if st.button("🔓 ออกจากระบบ", use_container_width=True):
+        if st.button("Logout", use_container_width=True):
             st.session_state.logged_in = False
             st.rerun()
     else:
-        st.warning("🔒 Monitor (ต้องใช้รหัส)")
+        st.info("Please sign in to access engineering tools.")
 
-# 5. MAIN CONTENT
-col1, col2, col3 = st.columns([1, 2, 1])
+# 6. MAIN CONTENT
+col1, col2 = st.columns([1.2, 0.8])
+
+with col1:
+    st.markdown("""
+        <div class="hero-box">
+            <h1 style="font-size:2.8rem; font-weight:900; margin-bottom:10px;">Engineering your success.</h1>
+            <p style="font-size:1.2rem; color:#666; line-height:1.6;">
+                สัมผัสนวัตกรรมการขับเคลื่อนและระบบควบคุมอัจฉริยะจาก SNAPCON 
+                ที่ช่วยเพิ่มประสิทธิภาพการผลิต (OEE) และลดการใช้พลังงานในอุตสาหกรรมยุค 4.0
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    st.image("https://img.freepik.com/free-photo/automation-industrial-concept-mechanical-arm-working-smart-factory-industry-4-0_1214-5310.jpg?t=st=1710000000&exp=1710003600&hmac=placeholder", caption="Industrial Automation Solutions")
 
 with col2:
     if not st.session_state.logged_in:
-        st.markdown('<div class="main-card">', unsafe_allow_html=True)
+        st.markdown("""
+            <div style="background:white; padding:30px; border:1px solid #ddd; border-top:4px solid #333;">
+                <h3 style="margin-top:0;">Customer Sign-In</h3>
+                <p style="font-size:0.8rem; color:#666;">เข้าสู่ระบบเพื่อใช้งานระบบติดตามผลการผลิตแบบ Real-time</p>
+            </div>
+        """, unsafe_allow_html=True)
         
-        # Header Section
-        try:
-            st.image("Logo.png", width=180)
-        except:
-            st.markdown("<h1 style='color:white; text-align:center;'>SNAPCON</h1>", unsafe_allow_html=True)
-            
-        st.markdown("<h2 style='color:white; text-align:center; margin-top:0;'>Enterprise v1.5</h2>", unsafe_allow_html=True)
-        st.markdown("<p style='color:#8b949e; text-align:center;'>ระบบจัดการพลังงานและการผลิตอัจฉริยะ</p>", unsafe_allow_html=True)
+        username = st.text_input("Username / E-mail")
+        password = st.text_input("Password", type="password")
         
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        # Form
-        username = st.text_input("Username", placeholder="ระบุชื่อผู้ใช้งาน")
-        password = st.text_input("Password", type="password", placeholder="ระบุรหัสผ่าน")
-        
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        if st.button("เข้าสู่ระบบ (Admin Login)", use_container_width=True):
+        if st.button("SIGN IN"):
             if username == "001" and password == "123":
                 st.session_state.logged_in = True
                 st.rerun()
             else:
-                st.error("❌ ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
+                st.error("Invalid credentials.")
         
-        st.markdown("<p style='text-align:center; color:#58a6ff; font-size:0.8rem; margin-top:15px; cursor:pointer;'>ลืมรหัสผ่านใช่หรือไม่?</p>", unsafe_allow_html=True)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        # Public Shortcut Below Card
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align:center; color:#8b949e;'>หากคุณเป็นบุคคลทั่วไปหรือต้องการขอข้อมูลเพิ่มเติม</p>", unsafe_allow_html=True)
-        c1, c2, c3 = st.columns([1, 2, 1])
-        with c2:
-            if st.button("📱 ติดต่อสอบถามได้ที่นี่"):
-                st.switch_page("pages/2_Contact.py")
-
+        st.markdown("---")
+        st.markdown("#### Don't have an account?")
+        st.markdown("Please contact our sales representative to request system access for your facility.")
+        if st.button("Request Access", key="req_btn"):
+             st.switch_page("pages/2_Contact.py")
     else:
-        # แสดงเมื่อ Login แล้ว
-        st.balloons()
         st.markdown(f"""
-            <div style='text-align:center; background:rgba(35, 134, 54, 0.1); padding:40px; border-radius:24px; border:1px solid #238636;'>
-                <h1 style='color:#2ea043;'>ยินดีต้อนรับกลับมา!</h1>
-                <p style='color:white; font-size:1.1rem;'>ระบบ SNAPCON พร้อมใช้งานแล้วสำหรับคุณ</p>
-                <br>
-                <p style='color:#8b949e;'>เลือกเมนูที่ต้องการดำเนินการต่อ</p>
+            <div style="background:white; padding:30px; border:1px solid #ddd; border-top:4px solid #ce000c;">
+                <h3 style="color:#ce000c;">Welcome back, Admin</h3>
+                <p>คุณได้เข้าสู่ระบบในฐานะผู้ควบคุมระบบวิศวกรรม</p>
             </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown("<br>", unsafe_allow_html=True)
-        col_btn1, col_btn2 = st.columns(2)
-        with col_btn1:
-            if st.button("📊 เข้าดู Monitor Dashboard", use_container_width=True):
-                st.switch_page("pages/1_Monitor.py")
-        with col_btn2:
-            if st.button("📞 เข้าหน้า Contact", use_container_width=True):
-                st.switch_page("pages/2_Contact.py")
+        if st.button("Go to Monitor Dashboard", use_container_width=True):
+            st.switch_page("pages/1_Monitor.py")
 
-# 6. FOOTER
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:#30363d; font-size:0.8rem;'>© 2024 Snapcon Industrial Solution. All Rights Reserved.</p>", unsafe_allow_html=True)
+# 7. PRODUCT CARDS (SEW STYLE)
+st.markdown("### Featured Solutions")
+p1, p2, p3 = st.columns(3)
+with p1:
+    st.markdown("""
+        <div style="background:white; padding:20px; border:1px solid #eee;">
+            <h4 style="color:#ce000c;">Drive Systems</h4>
+            <p style="font-size:0.85rem;">ระบบขับเคลื่อนประสิทธิภาพสูง รองรับมาตรฐาน IE4/IE5</p>
+        </div>
+    """, unsafe_allow_html=True)
+with p2:
+    st.markdown("""
+        <div style="background:white; padding:20px; border:1px solid #eee;">
+            <h4 style="color:#ce000c;">Control Technology</h4>
+            <p style="font-size:0.85rem;">PLC และระบบควบคุมแบบ Decentralized ติดตั้งง่าย รวดเร็ว</p>
+        </div>
+    """, unsafe_allow_html=True)
+with p3:
+    st.markdown("""
+        <div style="background:white; padding:20px; border:1px solid #eee;">
+            <h4 style="color:#ce000c;">Cloud Services</h4>
+            <p style="font-size:0.85rem;">การวิเคราะห์ข้อมูลผ่าน Cloud และ Predictive Maintenance</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+# 8. FOOTER
+st.markdown("""
+    <div class="footer-text">
+        © 2024 SNAPCON ENTERPRISE SOLUTION | A Global Industry Partner<br>
+        <span style="font-size:0.7rem;">Terms of Use | Privacy Policy | Legal Info</span>
+    </div>
+""", unsafe_allow_html=True)
