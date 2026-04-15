@@ -1,4 +1,4 @@
- Snapcon Enterprise V1.5
+ Snapcon Automation
 
 Smart Production Monitoring & AI Predictive Maintenance
 
