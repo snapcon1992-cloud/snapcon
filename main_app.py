@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่สุด
+# โค้ด HTML/CSS/JS ฉบับที่จัดการฐานข้อมูลแบบ Manual ง่ายต่อการอัปเดต
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -162,7 +162,7 @@ snapcon_html = """
             <button type="button" onclick="navigate('spare')" data-i18n="navSpare" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Spare Parts</button>
             <button type="button" onclick="checkDashboardAuth()" data-i18n="navDashboard" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Dashboard</button>
             <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Contact</button>
-            <button type="button" onclick="navigate('about')" data-i18n="navAbout" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">About</button>
+            <button type="button" onclick="navigate('about')" data-i18n="navAbout" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">About Us</button>
         </div>
 
         <!-- Right Side: Login, Lang, Cart -->
@@ -304,7 +304,7 @@ snapcon_html = """
             </div>
             
             <div class="text-center mt-4">
-                <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-snap-green font-bold text-sm hover:underline" data-i18n="viewAllProducts">ดูสินค้าทั้งหมด (50 Models) <i class="fas fa-arrow-right"></i></button>
+                <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-snap-green font-bold text-sm hover:underline" data-i18n="viewAllProducts">ดูสินค้าทั้งหมด <i class="fas fa-arrow-right"></i></button>
             </div>
         </section>
     </div>
@@ -312,14 +312,14 @@ snapcon_html = """
     <!-- ==================== PAGE: PRODUCT ==================== -->
     <div id="page-product" class="page-section max-w-7xl mx-auto px-6 py-16">
         <h2 data-i18n="pageProductTitle" class="text-4xl font-black mb-4 border-l-8 border-snap-green pl-6 text-slate-800">SNAPCON Conveyor Systems</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageProductSub">รวมเครื่องจักรสายพานลำเลียงอัจฉริยะกว่า 50 รุ่นที่ครอบคลุมทุกอุตสาหกรรม</p>
+        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageProductSub">รวมเครื่องจักรสายพานลำเลียงอัจฉริยะทุกรุ่นที่ครอบคลุมทุกอุตสาหกรรม</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-h-[75vh] overflow-y-auto custom-scrollbar p-2" id="product-grid"></div>
     </div>
 
     <!-- ==================== PAGE: SPARE PARTS ==================== -->
     <div id="page-spare" class="page-section max-w-7xl mx-auto px-6 py-16">
         <h2 data-i18n="pageSpareTitle" class="text-4xl font-black mb-4 border-l-8 border-blue-500 pl-6 text-slate-800">SNAPCON Spare Parts</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageSpareSub">อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงกว่า 200 รายการ ของแท้ 100%</p>
+        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageSpareSub">อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงของแท้ 100%</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-h-[75vh] overflow-y-auto custom-scrollbar p-2" id="spare-grid"></div>
     </div>
 
@@ -368,7 +368,7 @@ snapcon_html = """
     <!-- ==================== PAGE: DASHBOARD ==================== -->
     <div id="page-dashboard" class="page-section max-w-[1600px] mx-auto px-6 py-16">
         <h2 class="text-4xl font-black mb-2 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navDashboard">Dashboard</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กร - 100 โหนดพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
+        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
         
         <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 mb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
@@ -531,58 +531,92 @@ snapcon_html = """
         let cart = [];
         let memoryUsers = { '001': '123' };
 
+        // กำหนดข้อมูล Dashboard แบบ Manual
         let dashState = {
             isRunning: false, target: 50000, carbonFactor: 0.0072, energyFactor: 0.015,
             intervalId: null, elapsedSeconds: 0,
-            nodes: Array.from({length: 100}, (_, i) => ({
-                id: i + 1, name: `Node ${String(i+1).padStart(3, '0')}`, output: 0, status: 'Offline',
-                health: 100.0, wearRate: 0.2 + (Math.random() * 0.6)
-            }))
+            nodes: [
+                { id: 1, name: "Machine 01 (Main)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                { id: 2, name: "Machine 02 (Sorter)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
+                { id: 3, name: "Machine 03 (Packer)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
+                { id: 4, name: "Machine 04 (Sealer)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                { id: 5, name: "Machine 05 (Labeler)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.6 },
+                { id: 6, name: "Machine 06 (Loader)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                { id: 7, name: "Machine 07 (Scanner)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
+                { id: 8, name: "Machine 08 (Wrapper)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.7 },
+                { id: 9, name: "Machine 09 (Stacker)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                { id: 10, name: "Machine 10 (Export)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 }
+                // เพิ่มเครื่องที่ 11, 12... ต่อตรงนี้ได้เลย คั่นด้วยลูกน้ำ (,)
+            ]
         };
 
-        let products = [];
-        let spares = [];
-        
-        const baseImgs = ['https://i.ibb.co/bZ7TKQg/01.png', 'https://i.ibb.co/tTCb2j0h/02.png', 'https://i.ibb.co/PGNt8dfj/03.png', 'https://i.ibb.co/mVfD9H0B/04.png', 'https://i.ibb.co/x4SGKtb/05.png'];
-        const cTypes = ['Mini', 'Standard', 'Heavy Duty', 'High Speed', 'Food Grade', 'Incline', 'Modular', 'Roller System', 'Eco Line', 'Flex Track'];
-        
-        for(let i=1; i<=50; i++) {
-            let t = cTypes[i % cTypes.length];
-            products.push({
-                id: 'M' + String(i).padStart(2, '0'), name: `Snapcon Model ${String(i).padStart(2, '0')} (${t})`, price: 15000 + (i * 800),
-                img: i <= 5 ? baseImgs[i-1] : `https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80&sig=${i}`,
-                specs: { th: [`L: ${1+(i%15)}m`, `W: ${300+(i*10)}mm`, `Load: ${50+(i*10)}kg`, `Speed: ${15+(i%5)}m/min`], en: [`L: ${1+(i%15)}m`, `W: ${300+(i*10)}mm`, `Load: ${50+(i*10)}kg`, `Speed: ${15+(i%5)}m/min`] }
-            });
-        }
+        // กำหนดข้อมูลสินค้า (Products) แบบ Manual
+        let products = [
+            { 
+                id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://i.ibb.co/bZ7TKQg/01.png',
+                specs: { th: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg", "Speed: 5-20m/min", "Material: Painted/AL"], en: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg", "Speed: 5-20m/min", "Material: Painted/AL"] }
+            },
+            { 
+                id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png',
+                specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg", "Speed: 10-30m/min", "Material: Steel/SUS"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg", "Speed: 10-30m/min", "Material: Steel/SUS"] }
+            },
+            { 
+                id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://i.ibb.co/PGNt8dfj/03.png',
+                specs: { th: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg", "Speed: 5-25m/min", "Material: Heavy Steel"], en: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg", "Speed: 5-25m/min", "Material: Heavy Steel"] }
+            },
+            { 
+                id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://i.ibb.co/mVfD9H0B/04.png',
+                specs: { th: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg", "Speed: 20-60m/min", "Material: SUS 304"], en: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg", "Speed: 20-60m/min", "Material: SUS 304"] }
+            },
+            { 
+                id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://i.ibb.co/x4SGKtb/05.png',
+                specs: { th: ["L: 5-100m", "W: 500-1500mm", "Load: 0-400kg", "Speed: 1-50m/min", "Material: Full Custom"], en: ["L: 5-100m", "W: 500-1500mm", "Load: 0-400kg", "Speed: 1-50m/min", "Material: Full Custom"] }
+            }
+            // เพิ่มข้อมูลสินค้าชิ้นที่ 6, 7, 8... ต่อตรงนี้ได้เลย
+        ];
 
-        const sTypes = ['Roller Series', 'Conveyor Belt PU', 'Drive Motor AC', 'Sensor Switch', 'Control Board', 'Bearing Unit', 'Bracket Set', 'Emergency Stop', 'Power Supply 24V', 'Inverter VFD'];
-        for(let i=1; i<=200; i++) {
-            let t = sTypes[i % sTypes.length];
-            spares.push({
-                id: 'SP' + String(i).padStart(3, '0'), name: `${t} - P${String(i).padStart(3, '0')}`, price: 500 + (i * 25),
-                img: `https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80&sig=${i+100}`,
-                specs: { th: [`Type: ${t}`, "Status: Ready"], en: [`Type: ${t}`, "Status: Ready"] }
-            });
-        }
+        // กำหนดข้อมูลอะไหล่ (Spare Parts) แบบ Manual
+        let spares = [
+            {
+                id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
+                specs: { th: ["Type: Roller Series", "Status: Ready"], en: ["Type: Roller Series", "Status: Ready"] }
+            },
+            {
+                id: 'SP002', name: 'Conveyor Belt PU - P002', price: 550, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
+                specs: { th: ["Type: Belt PU", "Status: Ready"], en: ["Type: Belt PU", "Status: Ready"] }
+            },
+            {
+                id: 'SP003', name: 'Drive Motor AC - P003', price: 1500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
+                specs: { th: ["Type: Motor AC", "Status: Ready"], en: ["Type: Motor AC", "Status: Ready"] }
+            },
+            {
+                id: 'SP004', name: 'Sensor Switch - P004', price: 300, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
+                specs: { th: ["Type: Sensor", "Status: Ready"], en: ["Type: Sensor", "Status: Ready"] }
+            },
+            {
+                id: 'SP005', name: 'Control Board - P005', price: 2500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
+                specs: { th: ["Type: Board", "Status: Ready"], en: ["Type: Board", "Status: Ready"] }
+            }
+            // เพิ่มข้อมูลอะไหล่ชิ้นที่ 6, 7, 8... ต่อตรงนี้ได้เลย
+        ];
         
-        const allItems = [...products, ...spares];
+        let allItems = []; // จะถูกรวมข้อมูลจาก products และ spares ตอนโหลด
 
-        // 🌐 DICTIONARY: ระบบภาษาที่สมบูรณ์ 100%
+        // 🌐 DICTIONARY: ระบบภาษาที่สมบูรณ์
         const dict = {
             th: {
-                navProduct: "Products (50)", navSpare: "Spares (200)", navDashboard: "Dashboard (100)", navContact: "Contact", navAbout: "About Us",
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
                 cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
-                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "รวมเครื่องจักรสายพานลำเลียงอัจฉริยะกว่า 50 รุ่นที่ครอบคลุมทุกอุตสาหกรรม",
-                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงกว่า 200 รายการ ของแท้ 100%",
+                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "รวมเครื่องจักรสายพานลำเลียงอัจฉริยะทุกรุ่นที่ครอบคลุมทุกอุตสาหกรรม",
+                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงของแท้ 100%",
                 btnAddToCart: "หยิบใส่รถเข็น",
                 pageCartTitle: "รถเข็นขอใบเสนอราคา", cartEmpty: "ยังไม่มีสินค้าในรถเข็น", cartTotalLabel: "ราคากลางประเมินรวม:",
                 btnRequestQuote: "ยื่นขอใบเสนอราคา", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก", specTitle: "สเปค:",
                 alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว!",
                 alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับ",
                 
-                // Contact & About
                 contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ", btnEmail: "ส่งอีเมลติดต่อเรา",
                 aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด เพื่อเตรียมความพร้อมอุตสาหกรรมสู่อนาคต",
                 aboutVisionTitle: "วิสัยทัศน์ (Vision)", aboutVisionDesc: "มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้",
@@ -591,37 +625,33 @@ snapcon_html = """
                 regTitle: "สร้างบัญชีผู้ใช้", regDesc: "ลงทะเบียนเพื่อเข้าถึงระบบและขอใบเสนอราคา", btnSubmitReg: "ยืนยันการลงทะเบียน",
                 regId: "รหัสผู้ใช้ (User ID)", regPass: "รหัสผ่าน (Password)", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์",
                 
-                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด (50 Models)",
+                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด",
                 
-                // Dashboard
-                dashSubTitle: "ระบบตรวจสอบระดับองค์กร - 100 โหนดพร้อมระบบซ่อมบำรุงเชิงคาดการณ์",
+                dashSubTitle: "ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์",
                 dashCtrlTitle: "การควบคุมระบบ", dashCfgTitle: "ตั้งค่าพารามิเตอร์", dashTarget: "เป้าหมาย (ชิ้น)", dashCarbon: "ค่าคาร์บอน", dashEnergy: "ค่าพลังงาน",
                 dashPlanTitle: "แผนการทำงานวันนี้ (Production Planning)", dashTotOut: "ยอดผลิตรวม", dashCalCarbon: "คาร์บอน (Cal Carbon)", dashTotPower: "พลังงานรวม (Power)",
                 dashTimeElapsed: "เวลาที่ใช้ (Elapsed)", dashTimeRemain: "เวลาคงเหลือ (ETA)", dashMacStatus2: "สถานะการทำงานและสุขภาพเครื่อง",
                 statusNormal: "ปกติ (>70%)", statusWarning: "เฝ้าระวัง (<70%)", statusMaint: "ซ่อมบำรุง (<30%)",
                 
-                // Cart Guests
                 guestContactTitle: "ข้อมูลติดต่อกลับ (Contact Info)", guestNotice: "ข้อมูลจะถูกบันทึกลงระบบ Google Drive อย่างปลอดภัย",
                 
-                // Placeholders
                 phId: "ID", phPass: "PW",
                 phGuestName: "ชื่อผู้ติดต่อ / ชื่อบริษัท", phGuestContact: "อีเมล หรือ เบอร์โทรศัพท์",
                 phRegId: "ตั้งรหัส ID สำหรับเข้าระบบ", phRegPass: "ตั้งรหัสผ่านของคุณ", phRegName: "ระบุชื่อสำหรับติดต่อ", phRegContact: "ระบุช่องทางติดต่อกลับ"
             },
             en: {
-                navProduct: "Products (50)", navSpare: "Spares (200)", navDashboard: "Dashboard (100)", navContact: "Contact", navAbout: "About Us",
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
                 cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
-                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "Explore over 50 intelligent conveyor models covering all industries.",
-                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "Over 200 genuine spare parts and conveyor components. 100% Authentic.",
+                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "Explore our intelligent conveyor models covering all industries.",
+                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "Genuine spare parts and conveyor components. 100% Authentic.",
                 btnAddToCart: "Add to Cart",
                 pageCartTitle: "Quotation Cart", cartEmpty: "Your cart is empty", cartTotalLabel: "Estimated Total:",
                 btnRequestQuote: "Submit Quotation Request", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "Specs:",
                 alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart!",
                 alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info.",
                 
-                // Contact & About
                 contactSub: "Official Technical Support & Inquiries", btnEmail: "SEND DIRECT EMAIL",
                 aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems. We are committed to revolutionizing the automation industry with solutions that reduce complexity, minimize installation time, and maximize production efficiency.",
                 aboutVisionTitle: "Our Vision", aboutVisionDesc: "To be the leading provider of the most accessible and advanced Plug & Play automation systems in Southeast Asia.",
@@ -630,19 +660,16 @@ snapcon_html = """
                 regTitle: "Create Account", regDesc: "Register to access the system and request quotes", btnSubmitReg: "Confirm Registration",
                 regId: "User ID", regPass: "Password", regName: "Full Name / Company", regContact: "Email / Phone",
                 
-                homeProductsTitle: "Our Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products (50 Models)",
+                homeProductsTitle: "Our Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products",
                 
-                // Dashboard
-                dashSubTitle: "Enterprise Monitoring System - 100 Active Nodes with Predictive Maintenance",
+                dashSubTitle: "Enterprise Monitoring System with Predictive Maintenance",
                 dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target (Units)", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
                 dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon Footprint", dashTotPower: "Total Power Use",
                 dashTimeElapsed: "Elapsed Time", dashTimeRemain: "Est. Remaining (ETA)", dashMacStatus2: "Machine Status & Health",
                 statusNormal: "Optimal (>70%)", statusWarning: "Warning (<70%)", statusMaint: "Maintenance (<30%)",
                 
-                // Cart Guests
                 guestContactTitle: "Contact Info", guestNotice: "Information will be securely saved to Google Drive",
                 
-                // Placeholders
                 phId: "ID", phPass: "PW",
                 phGuestName: "Contact Name / Company", phGuestContact: "Email or Phone Number",
                 phRegId: "Create your User ID", phRegPass: "Create your Password", phRegName: "Enter your full name", phRegContact: "Enter email or phone"
@@ -748,7 +775,7 @@ snapcon_html = """
             csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dashState.carbonFactor).toFixed(4)},${(totalOut * dashState.energyFactor).toFixed(4)}\\n`;
             
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_100Nodes_Report.csv`; link.click();
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_Report.csv`; link.click();
         }
         function formatTimeStr(totalSecs) {
             if (!isFinite(totalSecs) || totalSecs < 0) return "--:--:--";
@@ -823,6 +850,7 @@ snapcon_html = """
         }
 
         function renderProducts() {
+            allItems = [...products, ...spares];
             const pGrid = document.getElementById('product-grid'); if(pGrid) pGrid.innerHTML = products.map(p => createItemCard(p)).join('');
             const sGrid = document.getElementById('spare-grid'); if(sGrid) sGrid.innerHTML = spares.map(p => createItemCard(p)).join('');
             const slider = document.getElementById('home-product-slider');
@@ -869,7 +897,7 @@ snapcon_html = """
                         <img src="${item.img}" class="w-20 h-20 object-cover rounded-xl shadow-sm border border-slate-100 shrink-0">
                         <div>
                             <span class="font-black text-slate-800 text-lg block leading-tight mb-1">${item.name}</span>
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-50 px-2 py-1 rounded-md">MODEL: ${item.id}</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-50 px-2 py-1 rounded-md">ID: ${item.id}</span>
                         </div>
                     </div>
                     <span class="font-black text-slate-700 text-2xl self-end sm:self-auto">฿${item.price.toLocaleString()}</span>
