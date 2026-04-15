@@ -45,8 +45,11 @@ snapcon_html = """
         }
         .page-section { display: none !important; }
         .page-active { display: block !important; animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalShow { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        .modal-active { animation: modalShow 0.3s ease-out forwards; }
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
         .dropdown-container:hover .dropdown-menu { display: block; }
         
@@ -82,7 +85,8 @@ snapcon_html = """
                 <input type="password" id="userPass" class="h-[26px] w-16 px-2 text-xs outline-none text-black rounded border-none focus:ring-2 ring-snap-green">
                 <div class="flex flex-col gap-0.5 ml-1">
                     <button type="button" onclick="handleLogin()" data-i18n="navLogin" class="bg-snap-green text-white font-bold text-[9px] px-3 py-0.5 hover:bg-green-600 rounded transition-colors">Login</button>
-                    <button type="button" onclick="handleRegister()" data-i18n="navRegister" class="bg-slate-600 text-white font-bold text-[9px] px-3 py-0.5 hover:bg-slate-500 rounded transition-colors">Register</button>
+                    <!-- เปลี่ยนปุ่ม Register ให้เรียกหน้าต่าง Modal แทน -->
+                    <button type="button" onclick="openRegisterModal()" data-i18n="navRegister" class="bg-slate-600 text-white font-bold text-[9px] px-3 py-0.5 hover:bg-slate-500 rounded transition-colors">Register</button>
                 </div>
             </div>
             
@@ -279,6 +283,44 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- ==================== MODAL: REGISTER ==================== -->
+    <div id="modal-register" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+            <button onclick="closeRegisterModal()" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition-colors z-10">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div class="p-8 pb-6 border-b border-slate-100 shrink-0">
+                <h3 class="text-2xl font-black text-slate-800" data-i18n="regTitle">สร้างบัญชีผู้ใช้</h3>
+                <p class="text-sm text-slate-500 mt-2" data-i18n="regDesc">ลงทะเบียนเพื่อเข้าถึง Dashboard และขอใบเสนอราคา</p>
+            </div>
+            
+            <div class="p-8 space-y-5 overflow-y-auto no-scrollbar flex-1">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" data-i18n="regId">รหัสผู้ใช้ (User ID)</label>
+                    <input type="text" id="reg-id" class="w-full px-5 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-snap-green/50 focus:border-snap-green transition-all text-sm font-bold text-slate-700" placeholder="ตั้งรหัส ID สำหรับเข้าระบบ">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" data-i18n="regPass">รหัสผ่าน (Password)</label>
+                    <input type="password" id="reg-pass" class="w-full px-5 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-snap-green/50 focus:border-snap-green transition-all text-sm font-bold text-slate-700" placeholder="ตั้งรหัสผ่านของคุณ">
+                </div>
+                <div class="h-[1px] bg-slate-100 my-2"></div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" data-i18n="regName">ชื่อ-นามสกุล / ชื่อบริษัท</label>
+                    <input type="text" id="reg-name" class="w-full px-5 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-snap-green/50 focus:border-snap-green transition-all text-sm font-bold text-slate-700" placeholder="ระบุชื่อสำหรับติดต่อ">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" data-i18n="regContact">อีเมล / เบอร์โทรศัพท์</label>
+                    <input type="text" id="reg-contact" class="w-full px-5 py-3.5 rounded-xl bg-slate-50 border border-slate-200 outline-none focus:ring-2 focus:ring-snap-green/50 focus:border-snap-green transition-all text-sm font-bold text-slate-700" placeholder="ระบุช่องทางติดต่อกลับ">
+                </div>
+            </div>
+            
+            <div class="p-8 pt-6 border-t border-slate-100 bg-slate-50 shrink-0">
+                <button type="button" onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4 rounded-xl font-black hover:bg-green-600 transition-all shadow-[0_10px_20px_rgba(0,179,110,0.2)] active:scale-95" data-i18n="btnSubmitReg">ยืนยันการลงทะเบียน</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 🚀 DATABASE & CONFIG
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTXYEcWYEsbcwL0ipt5vl1azB-C8psZUuwpjfIirzCdH2mBE2OHNdKSMoNPhklRt2M/exec';
@@ -297,7 +339,9 @@ snapcon_html = """
                 btnRequestQuote: "ยื่นขอใบเสนอราคาอย่างเป็นทางการ", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก",
                 specTitle: "รายละเอียดสำหรับสั่งทำ (Customizable):",
                 alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว!",
-                alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับเพื่อให้ทีมงานส่งใบเสนอราคาให้ท่านได้"
+                alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับเพื่อให้ทีมงานส่งใบเสนอราคาให้ท่านได้",
+                regTitle: "สร้างบัญชีผู้ใช้", regDesc: "ลงทะเบียนเพื่อเข้าถึง Dashboard และระบบขอใบเสนอราคา",
+                regId: "รหัสผู้ใช้ (User ID)", regPass: "รหัสผ่าน (Password)", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์", btnSubmitReg: "ยืนยันการลงทะเบียน"
             },
             en: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
@@ -308,7 +352,9 @@ snapcon_html = """
                 btnRequestQuote: "Submit Official Quotation Request", selectAll: "Select All", deleteSelected: "Delete Selected",
                 specTitle: "Specifications (Custom):",
                 alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart!",
-                alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info so we can send the quote back to you."
+                alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info so we can send the quote back to you.",
+                regTitle: "Create Account", regDesc: "Register to access Dashboard and Quotation features",
+                regId: "User ID", regPass: "Password", regName: "Full Name / Company", regContact: "Email / Phone", btnSubmitReg: "Confirm Registration"
             }
         };
 
@@ -373,16 +419,59 @@ snapcon_html = """
             } else alert("Invalid ID/Pass");
         }
 
-        function handleRegister() {
-            const id = document.getElementById('userId').value;
-            const pass = document.getElementById('userPass').value;
-            if(id && pass) {
-                memoryUsers[id] = pass;
-                alert("Registered! Now please Login.");
-                try {
-                    fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Registration", name_or_id: id, details: "New Account Created" }) });
-                } catch(e) {}
-            } else alert("Fill all fields");
+        // Modal Controls
+        function openRegisterModal() {
+            const modal = document.getElementById('modal-register');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex', 'modal-active');
+        }
+
+        function closeRegisterModal() {
+            const modal = document.getElementById('modal-register');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex', 'modal-active');
+        }
+
+        function submitRegistration() {
+            const id = document.getElementById('reg-id').value;
+            const pass = document.getElementById('reg-pass').value;
+            const name = document.getElementById('reg-name').value;
+            const contact = document.getElementById('reg-contact').value;
+
+            if(!id || !pass || !name || !contact) {
+                alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วนทุกช่อง" : "Please fill in all fields.");
+                return;
+            }
+
+            if(memoryUsers[id]) {
+                alert(currentLang === 'th' ? "ID นี้มีผู้ใช้งานแล้ว กรุณาเลือก ID อื่น" : "This ID is already registered. Please choose another.");
+                return;
+            }
+
+            // บันทึกรหัสผ่านในหน่วยความจำ
+            memoryUsers[id] = pass;
+            
+            // นำข้อมูลไปส่ง Google Drive (Background)
+            try {
+                fetch(GOOGLE_SCRIPT_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    body: JSON.stringify({ 
+                        type: "Registration", 
+                        name_or_id: id, 
+                        email: contact,
+                        details: `Name/Company: ${name}\\nPassword: ${pass}` 
+                    }) 
+                });
+            } catch(e) {}
+
+            alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! กรุณา Login ด้วย ID ที่สร้าง" : "Registered successfully! Please Login.");
+            
+            // ช่วยกรอกช่อง Login ให้อัตโนมัติเพื่อความสะดวก
+            document.getElementById('userId').value = id;
+            document.getElementById('userPass').value = pass;
+            
+            closeRegisterModal();
         }
 
         function handleLogout() {
