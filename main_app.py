@@ -1,12 +1,31 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
+import time
 
 # --- CONFIGURATION ---
 st.set_page_config(
-    page_title="SNAPCON | Enterprise Control Unit",
+    page_title="SNAPCON | Shared Intelligence Unit",
     page_icon="🟢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# --- CENTRALIZED DATA ENGINE (SHARED SOURCE) ---
+# ฟังก์ชันนี้จำลองการดึงข้อมูลจาก Edge Gateway เพื่อให้ทุกหน้าเห็นข้อมูลตรงกัน
+if 'plant_data' not in st.session_state:
+    st.session_state.plant_data = {
+        "oee": 94.2,
+        "shift_output": 4580,
+        "active_alerts": 2,
+        "uptime": 99.8,
+        "nodes": [
+            {"id": "NODE-A1", "status": "Online", "temp": 42.5, "load": 78},
+            {"id": "NODE-A2", "status": "Online", "temp": 38.2, "load": 62},
+            {"id": "NODE-B1", "status": "Offline", "temp": 0.0, "load": 0},
+            {"id": "NODE-C3", "status": "Warning", "temp": 56.8, "load": 91},
+        ]
+    }
 
 # --- SESSION STATE MANAGEMENT ---
 if 'page' not in st.session_state:
@@ -14,9 +33,8 @@ if 'page' not in st.session_state:
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'auth_mode' not in st.session_state:
-    st.session_state.auth_mode = "login" # 'login' or 'register'
+    st.session_state.auth_mode = "login"
 if 'user_db' not in st.session_state:
-    # เริ่มต้นด้วย User ตัวอย่าง (Employee ID: 001, Token: 123)
     st.session_state.user_db = {"001": {"token": "123", "name": "Watanabe San", "role": "Senior Engineer"}}
 if 'current_user' not in st.session_state:
     st.session_state.current_user = None
@@ -26,42 +44,37 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
-    
     .stApp { background-color: #FFFFFF; }
     
-    /* Hero Section */
     .hero-box {
-        background-color: #F8FAFC;
-        padding: 80px 60px;
+        background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+        padding: 60px;
         border-radius: 0 0 40px 40px;
         border-bottom: 5px solid #009639;
-        margin-bottom: 40px;
+        margin-bottom: 30px;
     }
-    .hero-title { font-size: 3.8rem; font-weight: 800; line-height: 1.1; color: #1A202C; }
+    .hero-title { font-size: 3.2rem; font-weight: 800; color: #1A202C; margin:0; }
     .hero-highlight { color: #009639; }
     
-    /* Solution Cards */
     .solution-card {
         background: white;
-        padding: 30px;
-        border-radius: 20px;
+        padding: 25px;
+        border-radius: 15px;
         border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         height: 100%;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     }
     
-    /* Sidebar Styling */
-    section[data-testid="stSidebar"] { background-color: #F8FAFC !important; border-right: 1px solid #E2E8F0; }
-    .sidebar-brand { color: #009639; font-weight: 800; font-size: 1.5rem; margin-bottom: 0; }
-    
-    /* Status Box */
-    .status-box {
-        background-color: #F0FDF4;
-        padding: 15px;
-        border-radius: 12px;
-        border: 1px solid #BBF7D0;
-        margin: 20px 0;
+    section[data-testid="stSidebar"] { background-color: #F8FAFC !important; }
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
     }
+    .badge-online { background: #DCFCE7; color: #166534; }
+    .badge-offline { background: #FEE2E2; color: #991B1B; }
+    .badge-warning { background: #FEF3C7; color: #92400E; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -74,141 +87,118 @@ def toggle_auth(mode):
     st.session_state.auth_mode = mode
     st.rerun()
 
+# --- REUSABLE COMPONENTS ---
+def render_kpi_metrics():
+    """แสดงค่า KPI หลักที่ใช้ร่วมกันทุกหน้า"""
+    data = st.session_state.plant_data
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("OEE Performance", f"{data['oee']}%", "Stable")
+    c2.metric("Shift Output", f"{data['shift_output']:,}", "+120")
+    c3.metric("Critical Alerts", f"0{data['active_alerts']}", "-1", delta_color="inverse")
+    c4.metric("System Uptime", f"{data['uptime']}%", "Optimal")
+
 # --- SIDEBAR UI ---
 with st.sidebar:
-    st.markdown("<p class='sidebar-brand'>SNAPCON</p>", unsafe_allow_html=True)
-    st.caption("INDUSTRIAL AI & CONTROL")
+    st.markdown("<h2 style='color:#009639; margin-bottom:0;'>SNAPCON</h2>", unsafe_allow_html=True)
+    st.caption("INTELLIGENT CONTROL UNIT")
     st.markdown("---")
     
-    if st.session_state.logged_in and st.session_state.current_user:
+    if st.session_state.logged_in:
         u = st.session_state.current_user
-        st.markdown(f"""
-            <div class="status-box">
-                <p style='margin:0; font-size: 0.8rem; color: #166534;'>Logged in as:</p>
-                <p style='margin:0; font-weight: 700; color: #166534;'>{u['name']}</p>
-                <p style='margin:0; font-size: 0.75rem; color: #15803d;'>{u['role']}</p>
-            </div>
-        """, unsafe_allow_html=True)
-    
-    if st.button("🏠 Home", use_container_width=True):
-        go_to("main")
-        
-    if st.button("📊 My Dashboard", use_container_width=True):
-        if st.session_state.logged_in:
-            go_to("dashboard")
-        else:
+        st.success(f"**{u['name']}**\n\n{u['role']}")
+        if st.button("📊 My Dashboard", use_container_width=True): go_to("dashboard")
+        if st.button("🔌 Monitor Center", use_container_width=True): go_to("monitor")
+    else:
+        if st.button("🔑 Login to System", use_container_width=True, type="primary"): 
             st.session_state.auth_mode = "login"
             go_to("auth")
-            
-    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    st.markdown("---")
+    if st.button("🏠 Home", use_container_width=True): go_to("main")
+    
     if st.session_state.logged_in:
-        if st.button("🚪 Sign Out System", type="secondary", use_container_width=True):
+        if st.button("🚪 Sign Out", use_container_width=True):
             st.session_state.logged_in = False
-            st.session_state.current_user = None
             go_to("main")
 
-# --- PAGE ROUTING ---
+# --- PAGES ---
 
-# 1. AUTHENTICATION PAGE (LOGIN & REGISTER)
+# 1. AUTH PAGE
 if st.session_state.page == "auth":
-    st.markdown("<div style='max-width: 450px; margin: 0 auto; padding-top: 50px;'>", unsafe_allow_html=True)
-    
-    if st.session_state.auth_mode == "login":
-        st.title("Sign In")
-        st.write("Access the SNAPCON Enterprise Dashboard")
-        
-        login_id = st.text_input("Employee ID", placeholder="e.g. 001")
-        login_token = st.text_input("Access Token", type="password")
-        
-        if st.button("SIGN IN", type="primary", use_container_width=True):
-            if login_id in st.session_state.user_db and st.session_state.user_db[login_id]['token'] == login_token:
-                st.session_state.logged_in = True
-                st.session_state.current_user = st.session_state.user_db[login_id]
-                go_to("dashboard")
-            else:
-                st.error("Invalid credentials. Please check your ID and Token.")
-        
-        st.markdown("---")
-        st.write("New to SNAPCON?")
-        if st.button("Create New Account", use_container_width=True):
-            toggle_auth("register")
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        if st.session_state.auth_mode == "login":
+            st.title("Sign In")
+            uid = st.text_input("Employee ID")
+            utoken = st.text_input("Token", type="password")
+            if st.button("Login", type="primary", use_container_width=True):
+                if uid in st.session_state.user_db and st.session_state.user_db[uid]['token'] == utoken:
+                    st.session_state.logged_in = True
+                    st.session_state.current_user = st.session_state.user_db[uid]
+                    go_to("dashboard")
+                else: st.error("Access Denied")
+            st.button("New User? Register here", on_click=lambda: toggle_auth("register"))
+        else:
+            st.title("Register")
+            rid = st.text_input("New Employee ID")
+            rname = st.text_input("Full Name")
+            rrole = st.selectbox("Role", ["Engineer", "Operator", "Manager"])
+            rtoken = st.text_input("Create Token", type="password")
+            if st.button("Create Account", type="primary", use_container_width=True):
+                st.session_state.user_db[rid] = {"token": rtoken, "name": rname, "role": rrole}
+                st.success("Registered!")
+                toggle_auth("login")
+            st.button("Back to Login", on_click=lambda: toggle_auth("login"))
 
-    else: # REGISTER MODE
-        st.title("Register")
-        st.write("Create your enterprise access account")
-        
-        reg_id = st.text_input("Employee ID (Unique)", placeholder="e.g. 002")
-        reg_name = st.text_input("Full Name", placeholder="e.g. John Doe")
-        reg_role = st.selectbox("Role", ["Senior Engineer", "Maintenance", "Operator", "Manager"])
-        reg_token = st.text_input("Set Access Token", type="password")
-        
-        if st.button("REGISTER NOW", type="primary", use_container_width=True):
-            if not reg_id or not reg_name or not reg_token:
-                st.warning("Please fill in all fields.")
-            elif reg_id in st.session_state.user_db:
-                st.error("This Employee ID is already registered.")
-            else:
-                # Save to memory (Session)
-                st.session_state.user_db[reg_id] = {
-                    "token": reg_token,
-                    "name": reg_name,
-                    "role": reg_role
-                }
-                st.success("Account created successfully!")
-                st.session_state.auth_mode = "login"
-                st.rerun()
-        
-        if st.button("Already have an account? Sign In", use_container_width=True):
-            toggle_auth("login")
-            
-    if st.button("← Back to Home"):
-        go_to("main")
-    st.markdown("</div>", unsafe_allow_html=True)
-
-# 2. DASHBOARD PAGE
+# 2. DASHBOARD PAGE (Internal Overview)
 elif st.session_state.page == "dashboard":
-    st.title("Plant Telemetry")
-    st.caption("CONTROL CENTER / GENERAL VIEW")
+    st.title(f"Welcome, {st.session_state.current_user['name']}")
+    st.subheader("Enterprise Performance Overview")
     
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("OEE PERFORMANCE", "94.2%", "+1.2%")
-    m2.metric("SHIFT OUTPUT", "4,500", "+420")
-    m3.metric("ACTIVE ALERTS", "03", "-1", delta_color="inverse")
-    m4.metric("UPTIME RATIO", "99.9%", "MAX")
+    # ใช้ Metrics ตัวเดียวกัน
+    render_kpi_metrics()
+    
+    st.markdown("### Production Trend")
+    chart_data = pd.DataFrame(np.random.randn(20, 3), columns=['Line A', 'Line B', 'Line C'])
+    st.line_chart(chart_data)
+
+# 3. MONITOR PAGE (Detailed Node View)
+elif st.session_state.page == "monitor":
+    st.title("Live Node Monitor")
+    st.info("Direct synchronization with Edge Computing Gateway")
+    
+    # ใช้ Metrics ตัวเดียวกันเพื่อให้เห็นภาพรวมก่อนลงรายละเอียด
+    render_kpi_metrics()
     
     st.markdown("---")
-    st.subheader("Active Nodes Monitor")
-    st.info("💡 ระบบกำลังรวบรวมข้อมูล Real-time จาก Edge Computing Gateway ทั้งหมดในพื้นที่ A1")
+    nodes = st.session_state.plant_data['nodes']
     
-    if st.button("Back to Main Screen"):
-        go_to("main")
+    for node in nodes:
+        with st.expander(f"🖥️ {node['id']} - Status: {node['status']}"):
+            c1, c2, c3 = st.columns(3)
+            c1.write(f"**Temperature:** {node['temp']}°C")
+            c2.write(f"**Load Factor:** {node['load']}%")
+            state_color = "green" if node['status'] == "Online" else "red" if node['status'] == "Offline" else "orange"
+            c3.markdown(f"**Signal:** <span style='color:{state_color}'>● Active</span>", unsafe_allow_html=True)
 
-# 3. MAIN PAGE (HOME)
+# 4. MAIN PAGE
 else:
-    st.markdown("""
+    st.markdown(f"""
         <div class="hero-box">
-            <h1 class="hero-title">Cool running.<br><span class="hero-highlight">Long life.</span></h1>
-            <p style='color: #64748B; font-size: 1.1rem; margin-top: 25px; max-width: 600px;'>
-                Industrial Automation Solutions for a Greener Future.<br>
-                Optimizing energy efficiency and system longevity.
+            <h1 class="hero-title">Cloud Monitoring.<br><span class="hero-highlight">Connected Intelligence.</span></h1>
+            <p style='color: #64748B; font-size: 1.1rem; margin-top: 20px;'>
+                Shared data ecosystem for real-time industrial control.
             </p>
         </div>
     """, unsafe_allow_html=True)
-
-    st.subheader("Our Solutions")
-    c1, c2, c3 = st.columns(3)
-
+    
+    # แสดง Preview ข้อมูลจริงที่หน้า Home แม้ยังไม่ได้ Login (Public KPI)
+    st.subheader("Global Plant Status (Live)")
+    render_kpi_metrics()
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    c1, c2 = st.columns(2)
     with c1:
-        st.markdown("""<div class="solution-card"><h3>📄 Data Sheets</h3><p style='color: #64748B; font-size: 0.9rem; margin-bottom: 20px;'>เข้าถึงข้อมูลทางเทคนิคของอุปกรณ์ทั้งหมดและคู่มือการติดตั้งแบบครบวงจร</p><p style='color: #009639; font-weight: 600;'>Download Data Sheet ></p></div>""", unsafe_allow_html=True)
-        if st.button("Open Documents", key="sh1"): st.toast("เตรียมไฟล์ Data Sheet...")
-
+        st.markdown("""<div class="solution-card"><h4>Engineering Docs</h4><p>Access technical drawings and node specifications.</p></div>""", unsafe_allow_html=True)
     with c2:
-        st.markdown("""<div class="solution-card"><h3>⚙️ Drawings</h3><p style='color: #64748B; font-size: 0.9rem; margin-bottom: 20px;'>ตรวจสอบสถานะเครื่องจักรและดาวน์โหลดแผนผังโครงสร้างทางวิศวกรรม (DWG/PDF)</p><p style='color: #009639; font-weight: 600;'>Download Drawing ></p></div>""", unsafe_allow_html=True)
-        if st.button("Get Drawing", key="sh2"): st.toast("ดาวน์โหลดไฟล์ Drawing...")
-
-    with c3:
-        st.markdown("""<div class="solution-card"><h3>🛡️ Catalog</h3><p style='color: #64748B; font-size: 0.9rem; margin-bottom: 20px;'>เลือกชมแค็ตตาล็อกสินค้าล่าสุดเพื่อการอัปเกรดประสิทธิภาพเครื่องจักรในระบบของคุณ</p><p style='color: #009639; font-weight: 600;'>Product Catalog ></p></div>""", unsafe_allow_html=True)
-        if st.button("View Catalog", key="sh3"): st.toast("เปิด Product Catalog...")
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.caption("Auth Server: ID-SEA-01 | SNAPCON Enterprise | System Status: Optimal")
+        st.markdown("""<div class="solution-card"><h4>Maintenance Portal</h4><p>Schedule and track hardware health checks.</p></div>""", unsafe_allow_html=True)
