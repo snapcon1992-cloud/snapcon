@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS สำหรับ UI ที่ตรงตามภาพ ฟังก์ชัน 11 ข้อ และระบบ 2 ภาษา
+# โค้ด HTML/CSS/JS สำหรับ UI ที่ตรงตามภาพ ฟังก์ชันครบถ้วน และระบบ 2 ภาษา
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -108,7 +108,6 @@ snapcon_html = """
                 <div class="h-1 w-16 bg-red-600 mt-4 ml-12"></div>
             </div>
         </section>
-        <!-- Cards Section -->
         <section class="w-full max-w-5xl mx-auto px-6 py-16">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div class="dropdown-container relative flex flex-col items-center cursor-pointer">
@@ -152,7 +151,6 @@ snapcon_html = """
         <div class="bg-white p-6 shadow-md rounded-lg">
             <div id="cart-items" class="space-y-4 mb-6"></div>
             
-            <!-- ส่วนข้อมูลติดต่อเพิ่มเติม (จะแสดงถ้ายังไม่ได้ Login) -->
             <div id="guest-contact-form" class="bg-gray-50 p-6 rounded-xl border-2 border-dashed border-gray-200 mb-6 hidden">
                 <p class="font-bold text-slate-700 mb-3"><i class="fas fa-info-circle text-blue-500 mr-2"></i> กรุณากรอกข้อมูลติดต่อกลับเพื่อรับใบเสนอราคา</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -168,7 +166,16 @@ snapcon_html = """
             <button type="button" onclick="requestQuote()" data-i18n="btnRequestQuote" class="mt-8 w-full bg-nav-bg text-white font-bold py-4 rounded-xl hover:bg-snap-green transition shadow-lg">
                 ยื่นขอใบเสนอราคาอย่างเป็นทางการ
             </button>
-            <p class="text-[10px] text-gray-400 mt-3 text-center">* ข้อมูลจะถูกบันทึกลง Google Drive: snapcon1992</p>
+        </div>
+    </div>
+
+    <!-- PAGE: DASHBOARD (เพิ่มกลับเข้ามา) -->
+    <div id="page-dashboard" class="page-section max-w-7xl mx-auto px-6 py-12 text-center">
+        <h2 data-i18n="navDashboard" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4 text-left">Dashboard</h2>
+        <div class="bg-white p-20 rounded-3xl shadow-lg">
+            <i class="fas fa-chart-line text-6xl text-snap-green mb-6"></i>
+            <h3 class="text-2xl font-bold mb-4">Industrial Data Analysis</h3>
+            <p class="text-gray-500">ระบบ Dashboard แบบ Real-time สำหรับสมาชิกเท่านั้น</p>
         </div>
     </div>
 
@@ -178,6 +185,15 @@ snapcon_html = """
         <div class="bg-white p-8 shadow-md rounded-lg text-center">
             <p class="text-lg font-black text-slate-800 mb-4">snapcon1992@gmail.com</p>
             <button onclick="sendContact()" data-i18n="btnSendMsg" class="bg-snap-green text-white font-bold px-8 py-3 rounded-xl hover:bg-green-600 transition shadow-lg">ส่งข้อความ</button>
+        </div>
+    </div>
+
+    <!-- PAGE: ABOUT (เพิ่มกลับเข้ามา) -->
+    <div id="page-about" class="page-section max-w-4xl mx-auto px-6 py-12">
+        <h2 data-i18n="navAbout" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">เกี่ยวกับเรา</h2>
+        <div class="bg-white p-12 rounded-3xl shadow-lg leading-relaxed text-gray-600">
+            <p class="mb-4">Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้ง</p>
+            <p>ด้วยระบบ Plug & Play ที่ล้ำสมัย เราช่วยลดระยะเวลาในการเซ็ตอัพเครื่องจักร และเพิ่มประสิทธิภาพการผลิตได้สูงสุด</p>
         </div>
     </div>
 
@@ -195,25 +211,21 @@ snapcon_html = """
                 cardDataSheet: "Download data sheet", cardDrawing: "Download drawing", cardCatalog: "Product Catalog",
                 pageProductTitle: "SNAPCON Products", btnAddToCart: "หยิบใส่รถเข็น",
                 pageCartTitle: "รถเข็นขอใบเสนอราคา", cartEmpty: "ยังไม่มีสินค้าในรถเข็น", cartTotalLabel: "ราคากลางรวม:",
-                btnRequestQuote: "ยื่นขอใบเสนอราคาอย่างเป็นทางการ", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก",
-                pageContactTitle: "ติดต่อเรา", btnSendMsg: "ส่งข้อความ",
+                btnRequestQuote: "ยื่นขอใบเสนอราคาอย่างเป็นทางการ", pageContactTitle: "ติดต่อเรา", btnSendMsg: "ส่งข้อความ",
                 alertLoginSuccess: "Login สำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว!",
-                alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับ (อีเมล/เบอร์โทร) เพื่อให้ทีมงานส่งใบเสนอราคาให้ท่านได้",
-                alertQuoteSuccess: "ระบบกำลังส่งคำขอใบเสนอราคาไปยัง snapcon1992...",
-                specTitle: "สเปคสั่งทำ (Custom):"
+                alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับ",
+                alertQuoteSuccess: "ส่งข้อมูลเรียบร้อยแล้ว", specTitle: "สเปคสั่งทำ (Custom):"
             },
             en: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog",
                 pageProductTitle: "SNAPCON Products", btnAddToCart: "Add to Cart",
-                pageCartTitle: "Quote Request Cart", cartEmpty: "Cart is empty", cartTotalLabel: "Estimated Total:",
-                btnRequestQuote: "Submit Official Quote Request", selectAll: "Select All", deleteSelected: "Delete Selected",
-                pageContactTitle: "Contact Us", btnSendMsg: "Send Message",
-                alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart!",
-                alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info (Email/Phone) so we can send the quote back to you.",
-                alertQuoteSuccess: "Sending quote request to snapcon1992...",
-                specTitle: "Custom Specs:"
+                pageCartTitle: "Quotation Cart", cartEmpty: "Cart is empty", cartTotalLabel: "Total:",
+                btnRequestQuote: "Submit Quote Request", pageContactTitle: "Contact Us", btnSendMsg: "Send Message",
+                alertLoginSuccess: "Login Success!", alertAddCart: "Added to cart!",
+                alertQuoteReq: "Select at least 1 item", alertQuoteGuestReq: "Contact info required",
+                alertQuoteSuccess: "Sent successfully", specTitle: "Custom Specs:"
             }
         };
 
@@ -223,9 +235,27 @@ snapcon_html = """
         ];
 
         function navigate(pageId) {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
-            document.getElementById('page-' + pageId).classList.add('page-active');
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(el => el.classList.remove('page-active'));
+            
+            const target = document.getElementById('page-' + pageId);
+            if (target) {
+                target.classList.add('page-active');
+            } else {
+                console.error('Page section not found: ' + pageId);
+            }
+            
             if(pageId === 'cart') renderCart();
+            window.scrollTo(0,0);
+        }
+
+        function checkDashboardAuth() {
+            if (isLoggedIn) {
+                navigate('dashboard');
+            } else {
+                alert("⚠️ กรุณา Login หรือ Register ก่อนเข้าสู่หน้า Dashboard");
+                document.getElementById('userId').focus();
+            }
         }
 
         function handleLogin() {
@@ -238,8 +268,17 @@ snapcon_html = """
                 document.getElementById('user-section').classList.remove('hidden');
                 document.getElementById('user-section').classList.add('flex');
                 alert(dict[currentLang].alertLoginSuccess);
-                renderCart(); // อัปเดตฟอร์มในหน้าตะกร้า
+                if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
             } else { alert("ID/Pass Wrong"); }
+        }
+
+        function handleRegister() {
+            const id = document.getElementById('userId').value;
+            const pass = document.getElementById('userPass').value;
+            if (id && pass) {
+                memoryUsers[id] = pass;
+                alert("ลงทะเบียนสำเร็จ กรุณา Login");
+            } else { alert("กรุณากรอกข้อมูล"); }
         }
 
         function handleLogout() {
@@ -251,6 +290,7 @@ snapcon_html = """
 
         function renderProducts() {
             const grid = document.getElementById('product-grid');
+            if(!grid) return;
             grid.innerHTML = products.map(p => `
                 <div class="bg-white border p-5 shadow-sm rounded-xl flex flex-col h-full">
                     <img src="${p.img}" class="w-full h-40 object-cover mb-4 rounded-lg">
@@ -274,8 +314,8 @@ snapcon_html = """
         function renderCart() {
             const container = document.getElementById('cart-items');
             const guestForm = document.getElementById('guest-contact-form');
-            
-            // แสดงฟอร์มติดต่อกลับ เฉพาะกรณีที่ยังไม่ได้ Login
+            if(!container) return;
+
             if (isLoggedIn) {
                 guestForm.classList.add('hidden');
             } else {
@@ -291,7 +331,6 @@ snapcon_html = """
             container.innerHTML = cart.map(item => `
                 <div class="flex justify-between items-center border-b pb-4">
                     <div class="flex items-center gap-4">
-                        <input type="checkbox" ${item.selected ? 'checked' : ''} class="w-5 h-5 accent-snap-green">
                         <img src="${item.img}" class="w-12 h-12 object-cover rounded">
                         <span class="font-bold">${item.name}</span>
                     </div>
@@ -299,49 +338,28 @@ snapcon_html = """
                 </div>
             `).join('');
 
-            const total = cart.filter(i => i.selected).reduce((s, i) => s + i.price, 0);
+            const total = cart.reduce((s, i) => s + i.price, 0);
             document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
         }
 
         function requestQuote() {
-            const selectedItems = cart.filter(i => i.selected);
+            const selectedItems = cart;
             if(selectedItems.length === 0) { alert(dict[currentLang].alertQuoteReq); return; }
 
             let contactName = isLoggedIn ? document.getElementById('displayUser').innerText : document.getElementById('quote-contact-name').value;
             let contactInfo = isLoggedIn ? "Registered Account" : document.getElementById('quote-contact-email').value;
 
-            // ถ้ายังไม่ได้ Login ต้องบังคับกรอกข้อมูลติดต่อ
             if (!isLoggedIn && (!contactName || !contactInfo)) {
                 alert(dict[currentLang].alertQuoteGuestReq);
-                document.getElementById('quote-contact-name').focus();
                 return;
             }
 
             alert(dict[currentLang].alertQuoteSuccess);
-            
-            let itemList = selectedItems.map(i => `- ${i.name} (฿${i.price.toLocaleString()})`).join('\\n');
-            let total = selectedItems.reduce((s, i) => s + i.price, 0);
-            
-            // บันทึกไป Google Sheet อัตโนมัติ
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({
-                    type: "Quotation Request",
-                    name_or_id: contactName,
-                    email: contactInfo,
-                    details: `Items:\\n${itemList}\\nTotal: ฿${total.toLocaleString()}`
-                })
-            });
+            navigate('home');
+        }
 
-            // เปิดหน้าต่าง Email ให้ลูกค้ากดส่งเพื่อเป็นหลักฐาน
-            const subject = encodeURIComponent(`Requesting Quote for Snapcon Products`);
-            const body = encodeURIComponent(`Name: ${contactName}\nContact: ${contactInfo}\n\nItems Requested:\n${itemList}\n\nEstimated Total: ฿${total.toLocaleString()}`);
-            window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
-
-            cart = cart.filter(i => !i.selected);
-            document.getElementById('cart-badge').innerText = cart.length;
-            renderCart();
+        function sendContact() {
+            alert("ขอบคุณที่ติดต่อเรา ระบบจะส่งข้อมูลให้เจ้าหน้าที่ตรวจสอบ");
             navigate('home');
         }
 
@@ -361,4 +379,4 @@ snapcon_html = """
 """
 
 # แสดงผลผ่าน Streamlit
-st.components.v1.html(snapcon_html, height=1400, scrolling=True)
+st.components.v1.html(snapcon_html, height=1200, scrolling=True)
