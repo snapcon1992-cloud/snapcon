@@ -1,0 +1,7 @@
+df = df_meta.copy()
+    df["Output (Units)"] = [random.randint(150, 600) for _ in range(10)]
+    df["Health (%)"] = [random.randint(75, 100) for _ in range(10)]
+except:
+    # หากหาไฟล์ไม่เจอ ให้ใช้การสุ่มแบบเดิม
+    nodes = [f"Node-{i+1:02d}" for i in range(10)]
+    df = pd.DataFrame({"Node ID": nodes, "Output (Units)": [0]*10})
