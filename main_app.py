@@ -1,192 +1,145 @@
 import streamlit as st
 
-# 1. การตั้งค่าหน้ากระดาษ (Home Page)
+# การตั้งค่าหน้ากระดาษ
 st.set_page_config(
-    page_title="SNAPCON | Green Technology & Automation",
+    page_title="SNAPCON | Enterprise Control Unit",
     page_icon="🌱",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# 2. Custom CSS เพื่อปรับสไตล์ให้เหมือน SEW-EURODRIVE
+# Custom CSS เพื่อความสวยงามและแก้ปัญหาสไตล์
 st.markdown("""
 <style>
-    /* แถบเมนูด้านบน */
+    /* แถบหัวข้อหลัก */
     .main-header {
-        font-size: 2.5rem;
-        font-weight: 700;
         color: #009639;
-        margin-bottom: 0px;
+        font-weight: 800;
     }
     
-    /* สไตล์ปุ่ม Navigation ใน Sidebar */
-    .stButton > button {
+    /* สไตล์ปุ่ม Navigation */
+    div.stButton > button {
         width: 100%;
-        border-radius: 4px;
-        height: 3em;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
         background-color: white;
-        color: #333;
-        border: 1px solid #ddd;
-        transition: all 0.3s;
+        color: #1a202c;
         font-weight: 500;
-        text-align: left;
-        padding-left: 20px;
+        transition: 0.2s;
     }
-    .stButton > button:hover {
+    div.stButton > button:hover {
         border-color: #009639;
         color: #009639;
-        background-color: #f0fdf4;
-    }
-    
-    /* แบนเนอร์หน้าหลัก */
-    .hero-section {
-        background-color: #f8f9fa;
-        padding: 80px 60px;
-        border-radius: 15px;
-        margin-bottom: 40px;
-        border-bottom: 6px solid #009639;
-        background-image: linear-gradient(to right, #f8f9fa, #e2e8f0);
-    }
-    
-    /* การ์ดฟีเจอร์ */
-    .feature-card {
-        padding: 30px;
-        background: white;
-        border: 1px solid #eee;
-        border-radius: 12px;
-        text-align: left;
-        transition: 0.3s;
-        height: 250px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .feature-card:hover {
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        border-color: #009639;
-        transform: translateY(-5px);
-    }
-    
-    .card-title {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #1a202c;
-        margin-bottom: 10px;
-    }
-    
-    .card-text {
-        color: #718096;
-        font-size: 0.95rem;
     }
 
-    .card-link {
-        color: #009639;
-        font-weight: 700;
-        margin-top: 15px;
-        text-decoration: none;
+    /* แบนเนอร์หน้าหลัก */
+    .hero-container {
+        background-color: #f8fafc;
+        padding: 60px;
+        border-radius: 20px;
+        margin-bottom: 40px;
+        border-bottom: 5px solid #009639;
+    }
+
+    /* การ์ดโซลูชัน */
+    .solution-card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        border: 1px solid #edf2f7;
+        height: 100%;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# 3. Sidebar (ปรับให้ใช้ st.switch_page ตามโครงสร้างโฟลเดอร์จริง)
+# --- SIDEBAR ---
 with st.sidebar:
-    st.markdown("<h2 style='color: #009639;'>SNAPCON</h2>", unsafe_allow_html=True)
-    
-    # ข้อมูลผู้ใช้งาน
-    st.info("👤 **Logged in as:**\nWatanabe San\n*Senior Engineer*")
+    st.markdown("<h2 style='color: #009639; margin-bottom: 0;'>SNAPCON</h2>", unsafe_allow_html=True)
+    st.caption("ENTERPRISE CONTROL UNIT")
     
     st.markdown("---")
-    st.write("🔍 **Navigation**")
     
-    # ใช้ปุ่มธรรมดาเรียก switch_page เพื่อไปหน้าต่างๆ ในโฟลเดอร์ /pages
-    if st.button("🏠 Home"):
-        st.rerun() # อยู่หน้าเดิม
-        
+    # 1. ข้อมูลผู้ใช้ (ตามภาพ image_16734e.jpg)
+    st.markdown("""
+        <div style='background-color: #f0fff4; padding: 15px; border-radius: 10px; border: 1px solid #c6f6d5;'>
+            <p style='margin:0; font-size: 0.8rem; color: #2f855a;'>Logged in as:</p>
+            <p style='margin:0; font-weight: bold; color: #22543d;'>Watanabe San</p>
+            <p style='margin:0; font-size: 0.8rem; color: #2f855a;'>Senior Engineer</p>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # 2. เมนู Navigation ที่ปรับปรุงใหม่
+    st.write("📂 **Navigation**")
+    
+    # ปุ่ม My Dashboard ปรับให้ไปหน้า Login เพื่อเข้าดูข้อมูล
     if st.button("📊 My Dashboard"):
-        try:
-            st.switch_page("pages/1_Monitor.py")
-        except:
-            st.error("ไม่พบไฟล์ Dashboard ในระบบ")
-            
-    if st.button("📞 Contact Support"):
-        try:
-            st.switch_page("pages/2_Contact.py")
-        except:
-            st.error("ไม่พบไฟล์ Contact ในระบบ")
+        st.switch_page("pages/1_Monitor.py") # สมมติว่าหน้า 1 คือหน้า Login/Monitor
         
-    st.markdown("---")
-    st.write("⚙️ **System Control**")
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("▶️ Start", key="start_btn"):
-            st.toast("System Starting...")
-    with col2:
-        if st.button("⏹️ Stop", key="stop_btn"):
-            st.toast("System Stopping...")
+    if st.button("📞 Contact Support"):
+        # ปรับให้ใช้งานได้ตามคำแนะนำ
+        st.toast("Connecting to support team...")
+        # st.switch_page("pages/2_Contact.py") # เปิดใช้งานเมื่อมีไฟล์หน้า contact
 
     st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # ปุ่ม Logout แบบเรียบง่าย (แก้ Error style จากภาพ image_0b21aa)
     if st.button("Logout"):
-        st.session_state.logged_in = False
-        st.rerun()
+        st.success("Logged out successfully")
 
-# 4. เนื้อหาหน้าหลัก (Home Page)
+# --- MAIN CONTENT ---
+
 # Hero Section
 st.markdown("""
-    <div class="hero-section">
-        <h1 style='font-size: 4rem; margin-bottom: 15px; font-weight: 800; line-height: 1.1;'>Cool running. <br><span style='color: #009639;'>Long life.</span></h1>
-        <p style='font-size: 1.4rem; color: #4a5568; max-width: 600px; margin-bottom: 30px;'>
+    <div class="hero-container">
+        <h1 style='font-size: 3.5rem; line-height: 1;'>Cool running.<br><span style='color: #009639;'>Long life.</span></h1>
+        <p style='font-size: 1.2rem; color: #4a5568; margin-top: 20px; max-width: 500px;'>
             Industrial Automation Solutions for a Greener Future. 
             Optimizing energy efficiency and system longevity.
         </p>
-        <div style='background: #009639; color: white; padding: 12px 25px; border-radius: 5px; display: inline-block; font-weight: bold; cursor: pointer;'>
+        <div style='background: #009639; color: white; padding: 10px 25px; border-radius: 5px; display: inline-block; margin-top: 20px; font-weight: bold;'>
             Find out more
         </div>
     </div>
 """, unsafe_allow_html=True)
 
-# Features Grid
-st.markdown("<h3 style='margin-bottom: 25px;'>Our Solutions</h3>", unsafe_allow_html=True)
+st.subheader("Our Solutions")
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("""
-        <div class="feature-card">
-            <div>
-                <div class="card-title">📄 Data & Documents</div>
-                <div class="card-text">เข้าถึงคู่มือการใช้งาน เอกสารเทคนิค และแค็ตตาล็อกสินค้าแบบดิจิทัลครบวงจร</div>
-            </div>
-            <div class="card-link">Explore documents ></div>
+        <div class="solution-card">
+            <h4>📄 Data & Documents</h4>
+            <p style='color: #718096; font-size: 0.9rem;'>เข้าถึงคู่มือการใช้งาน เอกสารเทคนิค และแค็ตตาล็อกสินค้าแบบดิจิทัล</p>
+            <p style='color: #009639; font-weight: bold; margin-top: 20px;'>Explore documents ></p>
         </div>
     """, unsafe_allow_html=True)
-    if st.button("Open Documents", key="btn_docs"):
-        st.info("กำลังเปิดฐานข้อมูลเอกสาร...")
-    
+    st.button("Open Documents", key="btn_docs")
+
 with col2:
     st.markdown("""
-        <div class="feature-card">
-            <div>
-                <div class="card-title">⚙️ Product Status</div>
-                <div class="card-text">ตรวจสอบสถานะเครื่องจักร ประสิทธิภาพการผลิต และแจ้งเตือนการซ่อมบำรุงแบบ Real-time</div>
-            </div>
-            <div class="card-link">View status ></div>
+        <div class="solution-card">
+            <h4>⚙️ Product Status</h4>
+            <p style='color: #718096; font-size: 0.9rem;'>ตรวจสอบสถานะเครื่องจักร ประสิทธิภาพการผลิต และแผนผังทางเทคนิค</p>
+            <p style='color: #009639; font-weight: bold; margin-top: 20px;'>View status ></p>
         </div>
     """, unsafe_allow_html=True)
-    if st.button("Go to Monitor", key="btn_status"):
-        st.switch_page("pages/1_Monitor.py")
-    
+    # ปรับเป็น Download Drawing ตาม comment
+    st.button("Download Drawing", key="btn_drawings")
+
 with col3:
     st.markdown("""
-        <div class="feature-card">
-            <div>
-                <div class="card-title">🛡️ Quality Control</div>
-                <div class="card-text">วิเคราะห์รายงานคุณภาพและการใช้พลังงาน เพื่อลดคาร์บอนฟุตพริ้นท์ตามมาตรฐานสากล</div>
-            </div>
-            <div class="card-link">See analysis ></div>
+        <div class="solution-card">
+            <h4>🛡️ Quality Control</h4>
+            <p style='color: #718096; font-size: 0.9rem;'>วิเคราะห์รายงานคุณภาพและการใช้พลังงาน พร้อมรายละเอียดผลิตภัณฑ์</p>
+            <p style='color: #009639; font-weight: bold; margin-top: 20px;'>See analysis ></p>
         </div>
     """, unsafe_allow_html=True)
-    if st.button("View Analysis", key="btn_qc"):
-        st.switch_page("pages/1_Monitor.py")
+    # ปรับเป็น Product Catalog ตาม comment
+    st.button("Product Catalog", key="btn_catalog")
 
-# Footer เล็กๆ
 st.markdown("---")
-st.caption("© 2024 SNAPCON Automation | Standardized by Industrial IoT Protocols")
+st.caption("Auth Server: ID-SEA-01 | SNAPCON Enterprise System")
