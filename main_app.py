@@ -354,7 +354,7 @@ snapcon_html = """
         
         const products = [
             { 
-                id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://ibb.co/vGDpjVx',
+                id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: '<img src="https://i.ibb.co/bZ7TKQg/01.png" alt="01" border="0">',
                 specs: {
                     th: { s1: "1. ความยาว (L): 0.5 - 5 m", s2: "2. ความสูง (H): 0.3 - 1 m", s3: "3. ความกว้าง (W): 200 - 400 mm", s4: "4. น้ำหนักลำเลียง: 0 - 50 kg", s5: "5. ความเร็ว: 5 - 20 m/min", s6: "6. วัสดุ: เหล็กพ่นสี / อลูมิเนียม" },
                     en: { s1: "1. Length (L): 0.5 - 5 m", s2: "2. Height (H): 0.3 - 1 m", s3: "3. Width (W): 200 - 400 mm", s4: "4. Payload: 0 - 50 kg", s5: "5. Speed: 5 - 20 m/min", s6: "6. Material: Painted Steel / AL" }
