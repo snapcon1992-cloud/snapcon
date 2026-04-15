@@ -361,28 +361,28 @@ snapcon_html = """
                 }
             },
             { 
-                id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://ibb.co/v6zJdyNB',
+                id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: '<a href="https://ibb.co/v6zJdyNB"><img src="https://i.ibb.co/tTCb2j0h/02.png" alt="02" border="0"></a>',
                 specs: {
                     th: { s1: "1. ความยาว (L): 1 - 15 m", s2: "2. ความสูง (H): 0.5 - 1.2 m", s3: "3. ความกว้าง (W): 300 - 600 mm", s4: "4. น้ำหนักลำเลียง: 0 - 100 kg", s5: "5. ความเร็ว: 10 - 30 m/min", s6: "6. วัสดุ: เหล็ก / สแตนเลส (เพิ่มล้อได้)" },
                     en: { s1: "1. Length (L): 1 - 15 m", s2: "2. Height (H): 0.5 - 1.2 m", s3: "3. Width (W): 300 - 600 mm", s4: "4. Payload: 0 - 100 kg", s5: "5. Speed: 10 - 30 m/min", s6: "6. Material: Steel / SUS (Wheeled opt.)" }
                 }
             },
             { 
-                id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://ibb.co/4R7JxH5t',
+                id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: '<a href="https://ibb.co/4R7JxH5t"><img src="https://i.ibb.co/PGNt8dfj/03.png" alt="03" border="0"></a>',
                 specs: {
                     th: { s1: "1. ความยาว (L): 2 - 30 m", s2: "2. ความสูง (H): 0.5 - 1.5 m", s3: "3. ความกว้าง (W): 500 - 1000 mm", s4: "4. น้ำหนักลำเลียง: 0 - 300 kg", s5: "5. ความเร็ว: 5 - 25 m/min", s6: "6. วัสดุ: เหล็กหนาพิเศษเสริมคาน" },
                     en: { s1: "1. Length (L): 2 - 30 m", s2: "2. Height (H): 0.5 - 1.5 m", s3: "3. Width (W): 500 - 1000 mm", s4: "4. Payload: 0 - 300 kg", s5: "5. Speed: 5 - 25 m/min", s6: "6. Material: Reinforced Heavy Steel" }
                 }
             },
             { 
-                id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://ibb.co/67jnH48Z',
+                id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: '<a href="https://ibb.co/67jnH48Z"><img src="https://i.ibb.co/mVfD9H0B/04.png" alt="04" border="0"></a>',
                 specs: {
                     th: { s1: "1. ความยาว (L): 1 - 20 m", s2: "2. ความสูง (H): 0.8 - 1.5 m", s3: "3. ความกว้าง (W): 400 - 800 mm", s4: "4. น้ำหนักลำเลียง: 0 - 80 kg", s5: "5. ความเร็ว: 20 - 60 m/min", s6: "6. วัสดุ: สแตนเลส 304 ฟู้ดเกรด" },
                     en: { s1: "1. Length (L): 1 - 20 m", s2: "2. Height (H): 0.8 - 1.5 m", s3: "3. Width (W): 400 - 800 mm", s4: "4. Payload: 0 - 80 kg", s5: "5. Speed: 20 - 60 m/min", s6: "6. Material: SUS 304 Food Grade" }
                 }
             },
             { 
-                id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://ibb.co/Q5Fn73V',
+                id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: '<a href="https://ibb.co/Q5Fn73V"><img src="https://i.ibb.co/x4SGKtb/05.png" alt="05" border="0"></a>',
                 specs: {
                     th: { s1: "1. ความยาว (L): 5 - 100 m", s2: "2. ความสูง (H): 0.1 - 2 m", s3: "3. ความกว้าง (W): 500 - 1500 mm", s4: "4. น้ำหนักลำเลียง: 0 - 400 kg", s5: "5. ความเร็ว: 1 - 50 m/min", s6: "6. วัสดุ: ปรับแต่งได้ตามต้องการ (Full Custom)" },
                     en: { s1: "1. Length (L): 5 - 100 m", s2: "2. Height (H): 0.1 - 2 m", s3: "3. Width (W): 500 - 1500 mm", s4: "4. Payload: 0 - 400 kg", s5: "5. Speed: 1 - 50 m/min", s6: "6. Material: Fully Customizable Options" }
