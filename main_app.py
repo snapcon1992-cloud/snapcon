@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่สุด (Enterprise Scale: 50 Products, 200 Spares, 100 Machines)
+# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่สุด (Enterprise Scale: 50 Products, 200 Spares, 100 Machines + Predictive Maintenance)
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -366,10 +366,10 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: DASHBOARD (100 MACHINES) ==================== -->
+    <!-- ==================== PAGE: DASHBOARD (100 MACHINES + Predictive Maintenance) ==================== -->
     <div id="page-dashboard" class="page-section max-w-[1600px] mx-auto px-6 py-16">
         <h2 class="text-4xl font-black mb-2 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navDashboard">Dashboard</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium">Enterprise Monitoring System - 100 Active Nodes</p>
+        <p class="text-slate-500 mb-10 pl-8 font-medium">Enterprise Monitoring System - 100 Active Nodes with Predictive Maintenance</p>
         
         <!-- Controls & Settings Row -->
         <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 mb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -446,12 +446,19 @@ snapcon_html = """
         </div>
 
         <!-- 100 Machine Grid -->
-        <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
-            <i class="fas fa-server text-slate-400"></i> สถานะการทำงาน 100 เครื่อง (100 Nodes Status)
-        </h3>
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-black text-slate-800 flex items-center gap-3">
+                <i class="fas fa-server text-slate-400"></i> สถานะการทำงานและสุขภาพเครื่อง (Predictive Maintenance)
+            </h3>
+            <div class="flex gap-3 text-[10px] font-bold uppercase tracking-widest bg-white px-4 py-2 rounded-xl border border-slate-200">
+                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-snap-green"></div> ปกติ (>70%)</span>
+                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-amber-400"></div> เฝ้าระวัง (<70%)</span>
+                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-red-500"></div> ซ่อมบำรุง (<30%)</span>
+            </div>
+        </div>
         <div class="bg-slate-50/50 p-4 rounded-3xl border border-slate-200">
             <!-- Grid 100 items with max-height to scroll -->
-            <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-3 max-h-[60vh] overflow-y-auto custom-scrollbar p-2">
+            <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-3 max-h-[65vh] overflow-y-auto custom-scrollbar p-2">
                 <!-- Nodes injected by JS -->
             </div>
         </div>
@@ -500,12 +507,17 @@ snapcon_html = """
         let cart = [];
         let memoryUsers = { '001': '123' };
 
-        // 📊 DASHBOARD STATE (100 Machines)
+        // 📊 DASHBOARD STATE (100 Machines + Predictive Maintenance)
         let dashState = {
             isRunning: false, target: 50000, carbonFactor: 0.0072, energyFactor: 0.015,
             intervalId: null, elapsedSeconds: 0,
             nodes: Array.from({length: 100}, (_, i) => ({
-                id: i + 1, name: `Node ${String(i+1).padStart(3, '0')}`, output: 0, status: 'Offline'
+                id: i + 1, 
+                name: `Node ${String(i+1).padStart(3, '0')}`, 
+                output: 0, 
+                status: 'Offline',
+                health: 100.0,
+                wearRate: 0.2 + (Math.random() * 0.6) // Random wear rate for each machine
             }))
         };
 
@@ -633,46 +645,80 @@ snapcon_html = """
             stopSystem(); navigate('home');
         }
 
+        // ================= DASHBOARD CORE LOGIC =================
         function startSystem() {
             dashState.isRunning = true;
-            dashState.nodes.forEach(n => n.status = 'Running');
+            dashState.nodes.forEach(n => {
+                if(n.health > 30) n.status = 'Running';
+                else n.status = 'Maintenance'; // เครื่องที่พังไปแล้วไม่สามารถเริ่มทำงานใหม่ได้
+            });
             if(!dashState.intervalId) dashState.intervalId = setInterval(simulateProduction, 500);
             renderDashboard();
         }
+        
         function stopSystem() {
             dashState.isRunning = false;
-            dashState.nodes.forEach(n => n.status = 'Stopped');
+            dashState.nodes.forEach(n => {
+                if(n.status !== 'Maintenance') n.status = 'Stopped';
+            });
             if(dashState.intervalId) { clearInterval(dashState.intervalId); dashState.intervalId = null; }
             renderDashboard();
         }
-        function resetSystem() { dashState.nodes.forEach(n => n.output = 0); dashState.elapsedSeconds = 0; renderDashboard(); }
+        
+        function resetSystem() { 
+            dashState.nodes.forEach(n => {
+                n.output = 0; 
+                n.health = 100.0;
+                n.status = dashState.isRunning ? 'Running' : 'Offline';
+            }); 
+            dashState.elapsedSeconds = 0; 
+            renderDashboard(); 
+        }
+        
         function updateDashboardConfig() {
             dashState.target = parseInt(document.getElementById('cfg-target').value) || 1;
             dashState.carbonFactor = parseFloat(document.getElementById('cfg-carbon').value) || 0;
             dashState.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
             renderDashboard();
         }
+        
         function simulateProduction() {
             if(!dashState.isRunning) return;
             dashState.elapsedSeconds += 0.5;
-            // 100 machines producing
-            dashState.nodes.forEach(n => { if(Math.random() > 0.5) n.output += 1; });
+            
+            // 100 machines producing and degrading
+            dashState.nodes.forEach(n => { 
+                if(n.status === 'Running' || n.status === 'Warning') {
+                    if(Math.random() > 0.5) {
+                        n.output += 1;
+                        n.health -= n.wearRate; // ลดทอนสุขภาพ
+                        if(n.health < 0) n.health = 0;
+                    }
+                    
+                    // อัปเดตสถานะตาม Health
+                    if(n.health <= 30) {
+                        n.status = 'Maintenance'; // เครื่องพัง
+                    } else if (n.health <= 70) {
+                        n.status = 'Warning'; // เตือน
+                    }
+                }
+            });
             renderDashboard();
         }
         
         function exportCSV() {
             let bom = "\\uFEFF";
-            let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
+            let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
             let totalOut = 0;
             dashState.nodes.forEach(n => {
                 let c = (n.output * dashState.carbonFactor).toFixed(4);
                 let e = (n.output * dashState.energyFactor).toFixed(4);
                 totalOut += n.output;
-                csvContent += `${n.id},${n.name},${n.status},${n.output},${c},${e}\\n`;
+                csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\\n`;
             });
             let totalC = (totalOut * dashState.carbonFactor).toFixed(4);
             let totalE = (totalOut * dashState.energyFactor).toFixed(4);
-            csvContent += `\\nTOTAL,, ,${totalOut},${totalC},${totalE}\\n`;
+            csvContent += `\\nTOTAL,, ,${totalOut},-,${totalC},${totalE}\\n`;
             
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
@@ -714,22 +760,46 @@ snapcon_html = """
             document.getElementById('dash-time-elapsed').innerText = elapsedStr;
             document.getElementById('dash-time-remain').innerText = remainStr + (dashState.target <= totalOutput && totalOutput > 0 ? " (Completed)" : "");
 
-            // Render 100 Nodes Compactly
+            // Render 100 Nodes Compactly with Predictive Maintenance Visuals
             grid.innerHTML = dashState.nodes.map(n => {
                 const isRun = n.status === 'Running';
-                const col = isRun ? 'text-snap-green' : 'text-slate-400';
-                const bg = isRun ? 'bg-snap-green animate-pulse' : 'bg-slate-300';
+                const isWarn = n.status === 'Warning';
+                const isMaint = n.status === 'Maintenance';
+                
+                let dotBg = 'bg-slate-300';
+                let borderCol = 'border-slate-200';
+                let alertOverlay = '';
+                
+                if (isRun) { dotBg = 'bg-snap-green animate-pulse'; borderCol = 'hover:border-snap-green'; }
+                else if (isWarn) { dotBg = 'bg-amber-400 animate-pulse'; borderCol = 'border-amber-300'; alertOverlay = '<div class="absolute inset-0 bg-amber-400/5 z-0 pointer-events-none"></div>'; }
+                else if (isMaint) { dotBg = 'bg-red-500'; borderCol = 'border-red-300'; alertOverlay = '<div class="absolute inset-0 bg-red-500/10 z-0 pointer-events-none"></div>'; }
+
+                let healthBarCol = n.health > 70 ? 'bg-snap-green' : (n.health > 30 ? 'bg-amber-400' : 'bg-red-500');
+
                 return `
-                <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex flex-col justify-between hover:border-snap-green transition-all">
-                    <div class="flex justify-between items-center mb-2">
+                <div class="bg-white border ${borderCol} p-3 rounded-xl shadow-sm flex flex-col justify-between transition-all relative overflow-hidden">
+                    ${alertOverlay}
+                    <div class="flex justify-between items-center mb-2 relative z-10">
                         <span class="text-[10px] font-black text-slate-500">${n.name}</span>
-                        <div class="w-2 h-2 rounded-full ${bg}"></div>
+                        <div class="w-2 h-2 rounded-full ${dotBg}"></div>
                     </div>
-                    <h4 class="text-xl font-black text-slate-800 text-center">${n.output.toLocaleString()}</h4>
+                    <h4 class="text-xl font-black text-slate-800 text-center relative z-10">${n.output.toLocaleString()}</h4>
+                    
+                    <!-- Health Bar (Predictive Maintenance) -->
+                    <div class="mt-3 relative z-10">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="text-[8px] font-bold uppercase tracking-wider ${isMaint ? 'text-red-500' : 'text-slate-400'}">Health</span>
+                            <span class="text-[9px] font-black ${isMaint ? 'text-red-500' : 'text-slate-600'}">${n.health.toFixed(0)}%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full ${healthBarCol} transition-all duration-300" style="width: ${n.health}%"></div>
+                        </div>
+                    </div>
                 </div>`;
             }).join('');
         }
 
+        // 🛒 PRODUCT & CART SYSTEM
         function createItemCard(p) {
             return `
                 <div class="bg-white border border-slate-100 p-5 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all flex flex-col h-full group hover:-translate-y-1">
@@ -757,7 +827,6 @@ snapcon_html = """
             
             const slider = document.getElementById('home-product-slider');
             if(slider) {
-                // Show first 10 products on home slider
                 slider.innerHTML = products.slice(0, 10).map(p => `
                     <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all cursor-pointer">
                         <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50">
@@ -843,4 +912,4 @@ snapcon_html = """
 """
 
 # แสดงผลหน้าเว็บผ่าน Streamlit
-st.components.v1.html(snapcon_html, height=2000, scrolling=True)
+st.components.v1.html(snapcon_html, height=2100, scrolling=True)
