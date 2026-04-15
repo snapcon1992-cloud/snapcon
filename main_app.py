@@ -265,13 +265,14 @@ snapcon_html = """
         
         <!-- Controls & Settings Row -->
         <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 mb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- 1-3. Control Buttons -->
+            <!-- 1-3. Control Buttons with Export CSV -->
             <div>
                 <h3 class="font-black text-slate-700 mb-4 flex items-center gap-2 uppercase tracking-wider text-sm" data-i18n="dashCtrlTitle"><i class="fas fa-gamepad text-blue-500"></i> การควบคุมระบบ</h3>
-                <div class="flex flex-wrap sm:flex-nowrap gap-3">
-                    <button onclick="startSystem()" id="btn-start" class="flex-1 bg-snap-green text-white py-4 rounded-2xl font-black shadow-md hover:bg-green-600 active:scale-95 transition-all text-sm"><i class="fas fa-play mr-2"></i> START SYSTEM</button>
-                    <button onclick="stopSystem()" id="btn-stop" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black shadow-sm hover:bg-red-500 hover:text-white active:scale-95 transition-all text-sm"><i class="fas fa-stop mr-2"></i> STOP SYSTEM</button>
-                    <button onclick="resetSystem()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black shadow-md hover:bg-slate-700 active:scale-95 transition-all text-sm"><i class="fas fa-sync-alt mr-2"></i> REFRESH</button>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <button onclick="startSystem()" id="btn-start" class="bg-snap-green text-white py-3 md:py-4 rounded-2xl font-black shadow-md hover:bg-green-600 active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-play mr-1 md:mr-2"></i> START</button>
+                    <button onclick="stopSystem()" id="btn-stop" class="bg-slate-100 text-slate-600 py-3 md:py-4 rounded-2xl font-black shadow-sm hover:bg-red-500 hover:text-white active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-stop mr-1 md:mr-2"></i> STOP</button>
+                    <button onclick="resetSystem()" class="bg-slate-800 text-white py-3 md:py-4 rounded-2xl font-black shadow-md hover:bg-slate-700 active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-sync-alt mr-1 md:mr-2"></i> REFRESH</button>
+                    <button onclick="exportCSV()" class="bg-blue-500 text-white py-3 md:py-4 rounded-2xl font-black shadow-md hover:bg-blue-600 active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-file-csv mr-1 md:mr-2"></i> REPORT</button>
                 </div>
             </div>
             
@@ -646,6 +647,55 @@ snapcon_html = """
                 if(Math.random() > 0.5) n.output += 1;
             });
             renderDashboard();
+        }
+        
+        // ฟังก์ชันโหลดข้อมูล CSV ของหน้า Dashboard
+        function exportCSV() {
+            // ใส่รหัสป้องกันภาษาไทยเพี้ยนในไฟล์ Excel (BOM)
+            let bom = "\\uFEFF";
+            let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
+            
+            let totalOut = 0;
+            
+            // ดึงข้อมูลแต่ละเครื่อง
+            dashState.nodes.forEach(n => {
+                let c = (n.output * dashState.carbonFactor).toFixed(4);
+                let e = (n.output * dashState.energyFactor).toFixed(4);
+                totalOut += n.output;
+                csvContent += `${n.id},${n.name},${n.status},${n.output},${c},${e}\\n`;
+            });
+            
+            // แถวสรุปผล (Total)
+            let totalC = (totalOut * dashState.carbonFactor).toFixed(4);
+            let totalE = (totalOut * dashState.energyFactor).toFixed(4);
+            csvContent += `\\nTOTAL,, ,${totalOut},${totalC},${totalE}\\n`;
+            
+            // ใส่เวลาในการดาวน์โหลด
+            let now = new Date();
+            csvContent += `\\nExported At,${now.toLocaleString()}\\n`;
+            
+            // สร้างไฟล์เพื่อดาวน์โหลด
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            
+            // ตั้งชื่อไฟล์ตามเวลาปัจจุบัน
+            let dateStr = now.toISOString().slice(0, 10);
+            let timeStr = now.toTimeString().slice(0, 8).replace(/:/g, "-");
+            link.setAttribute("download", `Snapcon_Dashboard_Report_${dateStr}_${timeStr}.csv`);
+            
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // แจ้งเตือนเมื่อดาวน์โหลดสำเร็จ
+            if (currentLang === 'th') {
+                alert("กำลังดาวน์โหลดไฟล์รายงาน CSV...");
+            } else {
+                alert("Downloading CSV Report...");
+            }
         }
 
         function renderDashboard() {
