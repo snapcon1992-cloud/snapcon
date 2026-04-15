@@ -1,92 +1,125 @@
 import streamlit as st
-import pandas as pd
 
-st.set_page_config(page_title="Snapcon Automation", layout="wide")
+st.set_page_config(layout="wide")
 
 # -------------------------
-# STYLE (Industrial Theme)
+# GLOBAL STYLE (SEW Style)
 # -------------------------
 st.markdown("""
 <style>
 body {
-    background-color: #0a1e1a;
+    margin:0;
 }
 .main {
-    background-color: #0a1e1a;
-    color: white;
+    padding: 0;
 }
-.card {
-    background: rgba(255,255,255,0.05);
-    padding: 20px;
-    border-radius: 20px;
-    border: 1px solid rgba(16,185,129,0.2);
+
+/* HERO */
+.hero {
+    position: relative;
+    height: 500px;
+    background-image: url("https://images.unsplash.com/photo-1581092918056-0c4c3acd3789");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
 }
-.metric {
-    font-size: 32px;
-    font-weight: bold;
-    color: #10b981;
+
+/* overlay */
+.hero-overlay {
+    background: rgba(255,255,255,0.85);
+    padding: 40px;
+    max-width: 500px;
+    margin-left: 80px;
+    border-radius: 10px;
 }
+
+/* TEXT */
 .title {
     font-size: 42px;
-    font-weight: 900;
+    font-weight: 800;
+    color: #333;
 }
 .subtitle {
-    color: gray;
+    font-size: 16px;
+    color: #666;
+}
+.cta {
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* SECTION */
+.section {
+    padding: 80px 60px;
+    text-align: center;
+}
+
+/* CARD */
+.card {
+    padding: 40px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    transition: 0.3s;
+}
+.card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 </style>
 """, unsafe_allow_html=True)
 
 # -------------------------
-# HEADER (Hero Section)
+# HERO SECTION
 # -------------------------
-st.markdown('<div class="title">SNAPCON AUTOMATION</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Intelligent Industrial Solutions</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="hero">
+    <div class="hero-overlay">
+        <div class="subtitle">SNAPCON INDUSTRIAL SYSTEM</div>
+        <div class="title">Compact<br>and powerful.</div>
+        <div class="cta">→ Find out more</div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
+# -------------------------
+# SPACE
+# -------------------------
 st.write("")
 
 # -------------------------
-# KPI Section
+# SECTION: FEATURES
 # -------------------------
-col1, col2, col3, col4 = st.columns(4)
+col1, col2 = st.columns(2)
 
-col1.markdown('<div class="card"><div>OEE</div><div class="metric">94%</div></div>', unsafe_allow_html=True)
-col2.markdown('<div class="card"><div>Output</div><div class="metric">4,500</div></div>', unsafe_allow_html=True)
-col3.markdown('<div class="card"><div>Alerts</div><div class="metric">3</div></div>', unsafe_allow_html=True)
-col4.markdown('<div class="card"><div>Uptime</div><div class="metric">99.9%</div></div>', unsafe_allow_html=True)
+with col1:
+    st.markdown("""
+    <div class="card">
+        <h3>📄 Data & Documents</h3>
+        <p>Technical drawings, datasheets, and system files</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.write("")
-
-# -------------------------
-# SAMPLE DATA
-# -------------------------
-data = [
-    {"Line": "L01", "Status": "Running", "Efficiency": 98, "Output": 1250},
-    {"Line": "L02", "Status": "Running", "Efficiency": 95, "Output": 1100},
-    {"Line": "L03", "Status": "Warning", "Efficiency": 82, "Output": 850},
-    {"Line": "L04", "Status": "Running", "Efficiency": 97, "Output": 1300},
-    {"Line": "L05", "Status": "Stopped", "Efficiency": 0, "Output": 0},
-]
-
-df = pd.DataFrame(data)
+with col2:
+    st.markdown("""
+    <div class="card">
+        <h3>⚙️ Direct to Product</h3>
+        <p>Access Snapcon modules and configurations instantly</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # -------------------------
-# TABLE (Telemetry)
+# SECTION: SNAPCON VALUE
 # -------------------------
-st.markdown("### 📊 Production Lines")
-
-st.dataframe(df, use_container_width=True)
-
-# -------------------------
-# PROGRESS BAR (SCADA Style)
-# -------------------------
-st.markdown("### ⚙️ Efficiency Monitor")
-
-for i in range(len(df)):
-    st.write(f"{df.loc[i, 'Line']} - {df.loc[i, 'Efficiency']}%")
-    st.progress(df.loc[i, "Efficiency"] / 100)
+st.markdown("""
+<div class="section">
+    <h2>Smart Factory Solutions</h2>
+    <p>Snapcon integrates PLC, IoT, and AI to deliver real-time industrial automation.</p>
+</div>
+""", unsafe_allow_html=True)
 
 # -------------------------
 # FOOTER
 # -------------------------
 st.write("---")
-st.markdown("© 2026 Snapcon Automation")
+st.write("© Snapcon Automation")
