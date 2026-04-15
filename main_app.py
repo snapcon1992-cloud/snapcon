@@ -1,94 +1,75 @@
 import streamlit as st
-import pandas as pd
-import time
-import random
-import plotly.express as px
 
-# 1. ระบบรักษาความปลอดภัย: ตรวจสอบการ Login
-# หากยังไม่ได้ Login จะถูกเด้งกลับไปหน้า main_app.py
-if 'logged_in' not in st.session_state or not st.session_state.logged_in:
-    st.error("⛔ เข้าถึงไม่ได้: กรุณา Login ที่หน้าแรกก่อน")
-    if st.button("กลับไปหน้า Login"):
-        st.switch_page("main_app.py")
-    st.stop()
+# ตั้งค่าหน้าจอ
+st.set_page_config(
+    page_title="Snapcon Login",
+    page_icon="🔌",
+    layout="centered"
+)
 
-# 2. ตั้งค่าหน้า Dashboard (ใช้ Layout แบบกว้าง)
-st.set_page_config(page_title="Snapcon Live Monitor", layout="wide")
+# --- ตรวจสอบสถานะ Login ---
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
 
-# Custom CSS เพื่อตกแต่งให้เป็นโทน Dark Mode อุตสาหกรรม
+# --- CSS เพื่อความสวยงาม ---
 st.markdown("""
     <style>
-    /* พื้นหลังและตัวอักษร */
-    .stApp { background-color: #05070a; color: #e2e8f0; }
-    
-    /* การ์ด KPI */
-    .metric-card {
-        background: #0f172a;
-        padding: 20px;
-        border-radius: 15px;
-        border: 1px solid #1e293b;
-        border-left: 5px solid #06b6d4;
-        margin-bottom: 10px;
+    .main { background-color: #0d1117; }
+    .stButton>button { width: 100%; border-radius: 10px; height: 50px; font-weight: bold; }
+    .login-box {
+        background-color: #161b22;
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px solid #30363d;
+        text-align: center;
     }
-    .metric-label { color: #94a3b8; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
-    .metric-value { color: #ffffff; font-size: 2rem; font-weight: 800; margin-top: 5px; }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. ส่วนหัวของหน้าจอ (Header)
-col_header, col_user = st.columns([4, 1])
-with col_header:
-    st.title("📊 Snapcon Live Monitoring")
-    st.caption(f"Network Status: Connected | RS485 Protocol Active")
-with col_user:
-    st.markdown(f"👤 **{st.session_state.get('user_name', 'User')}**")
-    if st.button("Logout", key="logout_btn"):
+# --- หน้า Login ---
+if not st.session_state.logged_in:
+    st.markdown('<div class="login-box">', unsafe_allow_html=True)
+    
+    # แสดงโลโก้ (ถ้ามีไฟล์ Logo.png ใน GitHub)
+    try:
+        st.image("Logo.png", width=120)
+    except:
+        st.title("🔌 SNAPCON")
+    
+    st.subheader("Enterprise V1.5 Login")
+    
+    username = st.text_input("Username", placeholder="ระบุชื่อผู้ใช้งาน")
+    password = st.text_input("Password", type="password", placeholder="ระบุรหัสผ่าน")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("เข้าสู่ระบบ (Login)"):
+            if username == "001" and password == "123":
+                st.session_state.logged_in = True
+                st.success("Login สำเร็จ! กำลังไปที่หน้า Monitor...")
+                st.rerun()
+            else:
+                st.error("ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง")
+    
+    with col2:
+        if st.button("Guest Access (Demo)"):
+            st.session_state.logged_in = True
+            st.rerun()
+            
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.info("💡 รหัสทดสอบ: User: 001 | Pass: 123")
+
+else:
+    # --- เมื่อ Login แล้วจะแสดงหน้านี้ ---
+    st.balloons()
+    st.success("✅ เชื่อมต่อระบบ Snapcon สำเร็จ!")
+    
+    st.markdown("### ยินดีต้อนรับสู่ระบบควบคุมอัจฉริยะ")
+    st.write("ขณะนี้คุณสามารถเข้าถึงข้อมูล Real-time จาก Nodes ทั้งหมดได้แล้ว")
+    
+    if st.button("📊 ไปที่หน้า Dashboard (Monitor)"):
+        st.switch_page("pages/1_Monitor.py")
+        
+    if st.button("ออกจากระบบ (Logout)"):
         st.session_state.logged_in = False
-        st.switch_page("main_app.py")
-
-st.divider()
-
-# 4. จำลองข้อมูล (Data Simulation)
-# สร้างข้อมูล 10 โหนดเพื่อแสดงในกราฟและตาราง
-nodes = [f"Node-{i+1:02d}" for i in range(10)]
-# สุ่มยอดผลิตและสุขภาพเครื่องจักร
-production = [random.randint(100, 500) for _ in range(10)]
-health = [random.randint(85, 100) for _ in range(10)]
-
-df = pd.DataFrame({
-    "Node ID": nodes,
-    "Output (Units)": production,
-    "Health (%)": health
-})
-
-# 5. แสดงผล KPI Cards (แถวบนสุด)
-k1, k2, k3, k4 = st.columns(4)
-with k1:
-    st.markdown(f'<div class="metric-card"><div class="metric-label">ยอดผลิตรวม</div><div class="metric-value">{sum(production):,}</div><small>Units</small></div>', unsafe_allow_html=True)
-with k2:
-    st.markdown(f'<div class="metric-card"><div class="metric-label">ประสิทธิภาพเฉลี่ย</div><div class="metric-value">{sum(health)/10:.1f}%</div><small>System Health</small></div>', unsafe_allow_html=True)
-with k3:
-    st.markdown(f'<div class="metric-card"><div class="metric-label">สถานะ RS485</div><div class="metric-value" style="color:#06b6d4">Active</div><small>Speed: 9600 bps</small></div>', unsafe_allow_html=True)
-with k4:
-    st.markdown(f'<div class="metric-card"><div class="metric-label">CO2 Reduced</div><div class="metric-value">{(sum(production)*0.007):.2f}</div><small>kgCO2e</small></div>', unsafe_allow_html=True)
-
-st.write("")
-
-# 6. กราฟและตารางข้อมูล (Main Display)
-c_left, c_right = st.columns([2, 1])
-
-with c_left:
-    # สร้างกราฟแท่งด้วย Plotly
-    fig = px.bar(df, x="Node ID", y="Output (Units)", color="Health (%)",
-                 color_continuous_scale="GnBu", title="Real-time Production per Node")
-    fig.update_layout(template="plotly_dark", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-    st.plotly_chart(fig, use_container_width=True)
-
-with c_right:
-    st.subheader("📋 Machine Details")
-    # แสดงตารางข้อมูลดิบ
-    st.dataframe(df, hide_index=True, use_container_width=True)
-
-# 7. ระบบ Auto-Refresh (จำลองการดึงข้อมูลทุก 5 วินาที)
-time.sleep(5)
-st.rerun()
+        st.rerun()
