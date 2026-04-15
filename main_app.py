@@ -305,7 +305,8 @@ snapcon_html = """
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
-            cart.push(product);
+            // เพิ่มฟิลด์ cartId เพื่ออ้างอิงรายชิ้น และ selected = true เป็นค่าเริ่มต้น
+            cart.push({ ...product, cartId: Date.now() + Math.random(), selected: true });
             
             // อัปเดตตัวเลขแจ้งเตือนที่ไอคอนตะกร้า
             const badge = document.getElementById('cart-badge');
@@ -316,36 +317,80 @@ snapcon_html = """
             renderCart();
         }
 
+        function toggleSelect(cartId) {
+            const item = cart.find(i => i.cartId === cartId);
+            if(item) item.selected = !item.selected;
+            renderCart();
+        }
+
+        function toggleSelectAll(checked) {
+            cart.forEach(item => item.selected = checked);
+            renderCart();
+        }
+
+        function deleteSelected() {
+            cart = cart.filter(item => !item.selected);
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cart.length;
+            if (cart.length === 0) badge.classList.add('hidden');
+            renderCart();
+        }
+
         function renderCart() {
             const container = document.getElementById('cart-items');
             if(cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-500">ยังไม่มีสินค้าในรถเข็น</p>';
+                container.innerHTML = '<p class="text-gray-500 py-8 text-center text-lg">ยังไม่มีสินค้าในรถเข็น</p>';
                 document.getElementById('cart-total').innerText = '฿0';
                 return;
             }
 
-            container.innerHTML = cart.map((item, index) => `
-                <div class="flex justify-between items-center border-b pb-2">
-                    <div class="flex items-center gap-4">
-                        <span class="font-bold">${index + 1}.</span>
-                        <span>${item.name}</span>
+            const allSelected = cart.length > 0 && cart.every(i => i.selected);
+
+            let html = `
+                <div class="flex justify-between items-center border-b pb-4 mb-4 bg-gray-50 p-4 rounded">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="selectAll" ${allSelected ? 'checked' : ''} onclick="toggleSelectAll(this.checked)" class="w-5 h-5 accent-snap-green cursor-pointer">
+                        <label for="selectAll" class="font-bold cursor-pointer">เลือกทั้งหมด (${cart.length} ชิ้น)</label>
                     </div>
-                    <span class="font-bold text-gray-700">฿${item.price.toLocaleString()}</span>
+                    <button onclick="deleteSelected()" class="text-red-500 hover:text-red-700 font-bold text-sm"><i class="fas fa-trash-alt mr-1"></i> ลบที่เลือก</button>
+                </div>
+            `;
+
+            html += cart.map((item, index) => `
+                <div class="flex justify-between items-center border-b pb-4 mb-4 hover:bg-gray-50 p-2 rounded transition-colors">
+                    <div class="flex items-center gap-4">
+                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleSelect(${item.cartId})" class="w-5 h-5 accent-snap-green cursor-pointer">
+                        <img src="${item.img}" class="w-16 h-16 object-cover rounded border">
+                        <div>
+                            <span class="font-bold block">${item.name}</span>
+                            <span class="text-xs text-gray-500">Model: ${item.id}</span>
+                        </div>
+                    </div>
+                    <span class="font-bold text-gray-700 text-lg">฿${item.price.toLocaleString()}</span>
                 </div>
             `).join('');
 
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            container.innerHTML = html;
+
+            // รวมราคาเฉพาะชิ้นที่ถูกเลือก
+            const total = cart.filter(i => i.selected).reduce((sum, item) => sum + item.price, 0);
             document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
         }
 
         function requestQuote() {
-            if(cart.length === 0) {
-                alert('ตะกร้าว่างเปล่า กรุณาเลือกสินค้าก่อนยื่นขอใบเสนอราคา');
+            const selectedItems = cart.filter(i => i.selected);
+            if(selectedItems.length === 0) {
+                alert('กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้นเพื่อยื่นขอใบเสนอราคา');
                 return;
             }
-            alert('ส่งคำขอใบเสนอราคาสำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ');
-            cart = [];
-            document.getElementById('cart-badge').classList.add('hidden');
+            alert(`ส่งคำขอใบเสนอราคาสำหรับสินค้า ${selectedItems.length} รายการ สำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ`);
+            
+            // ลบสินค้าที่ขอใบเสนอราคาแล้วออกจากตะกร้า
+            cart = cart.filter(i => !i.selected);
+            const badge = document.getElementById('cart-badge');
+            badge.innerText = cart.length;
+            if (cart.length === 0) badge.classList.add('hidden');
+            
             renderCart();
             navigate('home');
         }
