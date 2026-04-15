@@ -354,35 +354,35 @@ snapcon_html = """
         
         const products = [
             { 
-                id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://ibb.co/vGDpjVx',
                 specs: {
                     th: { s1: "1. ความยาว (L): 0.5 - 5 m", s2: "2. ความสูง (H): 0.3 - 1 m", s3: "3. ความกว้าง (W): 200 - 400 mm", s4: "4. น้ำหนักลำเลียง: 0 - 50 kg", s5: "5. ความเร็ว: 5 - 20 m/min", s6: "6. วัสดุ: เหล็กพ่นสี / อลูมิเนียม" },
                     en: { s1: "1. Length (L): 0.5 - 5 m", s2: "2. Height (H): 0.3 - 1 m", s3: "3. Width (W): 200 - 400 mm", s4: "4. Payload: 0 - 50 kg", s5: "5. Speed: 5 - 20 m/min", s6: "6. Material: Painted Steel / AL" }
                 }
             },
             { 
-                id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://ibb.co/v6zJdyNB',
                 specs: {
                     th: { s1: "1. ความยาว (L): 1 - 15 m", s2: "2. ความสูง (H): 0.5 - 1.2 m", s3: "3. ความกว้าง (W): 300 - 600 mm", s4: "4. น้ำหนักลำเลียง: 0 - 100 kg", s5: "5. ความเร็ว: 10 - 30 m/min", s6: "6. วัสดุ: เหล็ก / สแตนเลส (เพิ่มล้อได้)" },
                     en: { s1: "1. Length (L): 1 - 15 m", s2: "2. Height (H): 0.5 - 1.2 m", s3: "3. Width (W): 300 - 600 mm", s4: "4. Payload: 0 - 100 kg", s5: "5. Speed: 10 - 30 m/min", s6: "6. Material: Steel / SUS (Wheeled opt.)" }
                 }
             },
             { 
-                id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://ibb.co/4R7JxH5t',
                 specs: {
                     th: { s1: "1. ความยาว (L): 2 - 30 m", s2: "2. ความสูง (H): 0.5 - 1.5 m", s3: "3. ความกว้าง (W): 500 - 1000 mm", s4: "4. น้ำหนักลำเลียง: 0 - 300 kg", s5: "5. ความเร็ว: 5 - 25 m/min", s6: "6. วัสดุ: เหล็กหนาพิเศษเสริมคาน" },
                     en: { s1: "1. Length (L): 2 - 30 m", s2: "2. Height (H): 0.5 - 1.5 m", s3: "3. Width (W): 500 - 1000 mm", s4: "4. Payload: 0 - 300 kg", s5: "5. Speed: 5 - 25 m/min", s6: "6. Material: Reinforced Heavy Steel" }
                 }
             },
             { 
-                id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://ibb.co/67jnH48Z',
                 specs: {
                     th: { s1: "1. ความยาว (L): 1 - 20 m", s2: "2. ความสูง (H): 0.8 - 1.5 m", s3: "3. ความกว้าง (W): 400 - 800 mm", s4: "4. น้ำหนักลำเลียง: 0 - 80 kg", s5: "5. ความเร็ว: 20 - 60 m/min", s6: "6. วัสดุ: สแตนเลส 304 ฟู้ดเกรด" },
                     en: { s1: "1. Length (L): 1 - 20 m", s2: "2. Height (H): 0.8 - 1.5 m", s3: "3. Width (W): 400 - 800 mm", s4: "4. Payload: 0 - 80 kg", s5: "5. Speed: 20 - 60 m/min", s6: "6. Material: SUS 304 Food Grade" }
                 }
             },
             { 
-                id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300',
+                id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://ibb.co/Q5Fn73V',
                 specs: {
                     th: { s1: "1. ความยาว (L): 5 - 100 m", s2: "2. ความสูง (H): 0.1 - 2 m", s3: "3. ความกว้าง (W): 500 - 1500 mm", s4: "4. น้ำหนักลำเลียง: 0 - 400 kg", s5: "5. ความเร็ว: 1 - 50 m/min", s6: "6. วัสดุ: ปรับแต่งได้ตามต้องการ (Full Custom)" },
                     en: { s1: "1. Length (L): 5 - 100 m", s2: "2. Height (H): 0.1 - 2 m", s3: "3. Width (W): 500 - 1500 mm", s4: "4. Payload: 0 - 400 kg", s5: "5. Speed: 1 - 50 m/min", s6: "6. Material: Fully Customizable Options" }
