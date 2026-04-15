@@ -2,203 +2,201 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# --- CONFIGURATION ---
+# 1. Page Configuration
 st.set_page_config(
-    page_title="SNAPCON | Industrial AI",
-    page_icon="⚡",
+    page_title="SNAPCON | Automation Solution",
+    page_icon="🟢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- CENTRALIZED DATA (SINGLE SOURCE OF TRUTH) ---
-if 'plant_data' not in st.session_state:
-    st.session_state.plant_data = {
-        "oee": 94.2,
-        "shift_output": 4500,
-        "active_alerts": 3,
-        "uptime": 99.9,
-        "nodes": [
-            {"id": "NODE-01", "status": "Operational", "temp": 42.5, "load": 78},
-            {"id": "NODE-02", "status": "Operational", "temp": 38.2, "load": 62},
-            {"id": "NODE-03", "status": "Warning", "temp": 56.8, "load": 91},
-        ]
-    }
-
-# --- SESSION STATE MANAGEMENT ---
+# 2. Centralized State Management (แหล่งข้อมูลเดียวที่สอดคล้องกัน)
 if 'page' not in st.session_state:
     st.session_state.page = "main"
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
+if 'user_db' not in st.session_state:
+    st.session_state.user_db = {"001": {"pass": "123", "name": "Watanabe San", "role": "Senior Engineer"}}
 
-# --- CUSTOM CSS (MATCHING THE UPLOADED IMAGES) ---
+# ข้อมูล Monitor ที่เชื่อมโยงกับ Dashboard
+if 'plant_metrics' not in st.session_state:
+    st.session_state.plant_metrics = {
+        "oee": 94.2,
+        "output": 4500,
+        "alerts": 3,
+        "uptime": 99.9
+    }
+
+# 3. Custom CSS (SNAPCON Dark Theme & Modern Layout)
 st.markdown("""
 <style>
-    /* Global Styles */
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-    html, body, [class*="css"] { font-family: 'Plus Jakarta Sans', sans-serif; }
-    
-    /* Sidebar Styling */
-    [data-testid="stSidebar"] {
+    /* Sidebar styling: Dark Green/Black theme */
+    section[data-testid="stSidebar"] {
         background-color: #061A14 !important;
         color: white !important;
     }
-    .sidebar-user-box {
+    .st-emotion-cache-6qob1r { background-color: transparent !important; }
+    
+    /* User Profile Box in Sidebar */
+    .user-profile-card {
         background-color: #F0FFF4;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        border: 1px solid #C6F6D5;
+        padding: 15px;
+        border-radius: 10px;
         color: #1A365D;
+        border: 1px solid #C6F6D5;
+        margin-bottom: 20px;
     }
     
-    /* Button Styles */
-    .stButton>button {
-        border-radius: 8px;
-        font-weight: 600;
-        transition: all 0.3s;
-    }
-    
-    /* Hero Section */
-    .hero-container {
+    /* Hero Banner Styling */
+    .hero-banner {
         background: white;
-        padding: 40px;
+        padding: 60px;
         border-radius: 20px;
-        border-bottom: 4px solid #009639;
+        border-bottom: 5px solid #009639;
         margin-bottom: 30px;
     }
-    .hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
-    .hero-subtitle { color: #4A5568; font-size: 1.2rem; margin-bottom: 25px; }
     
     /* Solution Cards */
-    .solution-card {
+    .sol-card {
         background: #F8FAFC;
-        padding: 24px;
-        border-radius: 16px;
-        border: 1px solid #EDF2F7;
+        padding: 25px;
+        border-radius: 15px;
+        border: 1px solid #E2E8F0;
         height: 100%;
-        transition: transform 0.2s;
+        transition: 0.3s;
     }
-    .solution-card:hover { transform: translateY(-5px); }
-    
+    .sol-card:hover { transform: translateY(-5px); border-color: #009639; }
+
     /* Metric Cards */
-    .metric-card {
+    .metric-item {
         background: white;
-        padding: 20px;
+        padding: 30px;
         border-radius: 40px;
         text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- NAVIGATION LOGIC ---
-def nav_to(page_name):
+# 4. Navigation Helper
+def switch_to(page_name):
     st.session_state.page = page_name
     st.rerun()
 
-# --- SIDEBAR UI (AS PER IMAGE_0B7463.PNG) ---
+# 5. --- SIDEBAR (Clean & Functional as per image_15fc2c.jpg) ---
 with st.sidebar:
-    st.markdown("<h2 style='color:#00B36E; font-weight:800;'>SNAPCON</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='color:#4FD1C5; font-size:0.8rem; margin-top:-15px;'>INDUSTRIAL AI</p>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color:#00B36E; font-weight:800; margin-bottom:0;'>SNAPCON</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='color:#4FD1C5; font-size:0.8rem; margin-top:-5px;'>AUTOMATION SOLUTION</p>", unsafe_allow_html=True)
     
     if st.session_state.logged_in:
+        # Profile Section
         st.markdown(f"""
-        <div class="sidebar-user-box">
-            <small style='color:#718096;'>Logged in as:</small><br>
-            <strong style='font-size:1.1rem;'>Watanabe San</strong><br>
-            <span style='font-size:0.9rem;'>Senior Engineer</span>
+        <div class="user-profile-card">
+            <small>Logged in as:</small><br>
+            <strong style="font-size:1.1rem;">{st.session_state.user_db['001']['name']}</strong><br>
+            <span style="font-size:0.85rem; color:#2F855A;">{st.session_state.user_db['001']['role']}</span>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("🏠 HOME", use_container_width=True): nav_to("main")
-        if st.button("📊 MY DASHBOARD", use_container_width=True): nav_to("dashboard")
-        if st.button("🔌 MONITOR CENTER", use_container_width=True): nav_to("monitor")
+        # Navigation Buttons (ลบปุ่ม Home ซ้ำซ้อนและ Start/Stop ออกตามภาพ image_175923.jpg)
+        if st.button("🏠 Home", use_container_width=True): switch_to("main")
+        if st.button("📊 My Dashboard", use_container_width=True): switch_to("dashboard")
         
         st.markdown("---")
-        st.caption("Resources")
-        if st.button("📞 Contact Support", use_container_width=True): st.toast("Connecting to support...")
-        
+        # Contact Support เข้าได้เลยไม่ต้อง Login
+        if st.button("📞 Contact Support", use_container_width=True):
+            st.toast("Redirecting to support center...")
+            
         st.markdown("<br><br>", unsafe_allow_html=True)
-        if st.button("Logout", use_container_width=True):
+        if st.button("🚪 SIGN OUT SYSTEM", use_container_width=True):
             st.session_state.logged_in = False
-            nav_to("main")
+            switch_to("main")
     else:
-        if st.button("🔑 Login to Access Dashboard", use_container_width=True, type="primary"):
-            nav_to("auth")
+        st.info("Please login to access secure features.")
 
-# --- SHARED METRIC COMPONENT ---
-def display_kpis():
-    data = st.session_state.plant_data
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        st.markdown(f"<div class='metric-card'><small>OEE PERFORMANCE</small><h2>{data['oee']}%</h2><span style='color:green;'>+1.2%</span></div>", unsafe_allow_html=True)
-    with c2:
-        st.markdown(f"<div class='metric-card'><small>SHIFT OUTPUT</small><h2>{data['shift_output']:,}</h2><span style='color:green;'>+420</span></div>", unsafe_allow_html=True)
-    with c3:
-        st.markdown(f"<div class='metric-card'><small>ACTIVE ALERTS</small><h2>{data['active_alerts']:02d}</h2><span style='color:red;'>-1</span></div>", unsafe_allow_html=True)
-    with c4:
-        st.markdown(f"<div class='metric-card'><small>UPTIME RATIO</small><h2>{data['uptime']}%</h2><span style='color:blue;'>MAX</span></div>", unsafe_allow_html=True)
+# 6. --- PAGE ROUTING ---
 
-# --- PAGES ---
-
-# 1. AUTHENTICATION (AS PER IMAGE_15FC0F.PNG)
+# PAGE: AUTHENTICATION (Login / Register Card)
 if st.session_state.page == "auth":
     col1, col2, col3 = st.columns([1, 1.5, 1])
     with col2:
         st.markdown("<br><br>", unsafe_allow_html=True)
         with st.container(border=True):
-            st.markdown("<div style='text-align:center;'><h1 style='color:#00B36E;'>S</h1><h2>SNAPCON</h2><p>ENTERPRISE CONTROL UNIT</p></div>", unsafe_allow_html=True)
+            st.markdown("<div style='text-align:center;'><h1 style='color:#00B36E; margin-bottom:0;'>S</h1><h2 style='margin-top:0;'>SNAPCON</h2><p style='color:#718096;'>ENTERPRISE CONTROL UNIT</p></div>", unsafe_allow_html=True)
             st.markdown("---")
-            emp_id = st.text_input("Employee ID", placeholder="Enter ID...")
-            token = st.text_input("Access Token", type="password", placeholder="••••••••")
+            uid = st.text_input("Employee ID", placeholder="001")
+            upass = st.text_input("Access Token", type="password", placeholder="••••")
+            
             if st.button("AUTHENTICATE", type="primary", use_container_width=True):
-                st.session_state.logged_in = True
-                nav_to("dashboard")
-            st.button("Back to Home", on_click=lambda: nav_to("main"), use_container_width=True)
+                if uid == "001" and upass == "123":
+                    st.session_state.logged_in = True
+                    switch_to("dashboard")
+                else: st.error("Invalid Credentials")
+            
+            if st.button("Register New User", use_container_width=True):
+                st.info("Registration portal is under maintenance.")
+            st.button("Back to Home", on_click=lambda: switch_to("main"), use_container_width=True)
 
-# 2. HOME PAGE (AS PER IMAGE_175923.JPG & IMAGE_15FC2C.JPG)
+# PAGE: MAIN (Home with Google Drive Links)
 elif st.session_state.page == "main":
+    # Header area with Login inputs (image_184225.jpg)
+    if not st.session_state.logged_in:
+        h_col1, h_col2, h_col3, h_col4, h_col5 = st.columns([4, 1, 1, 1, 1])
+        with h_col2: st.caption("Login ID:")
+        with h_col3: login_id = st.text_input("", label_visibility="collapsed", key="top_id")
+        with h_col4: st.caption("Pass:")
+        with h_col5: login_pw = st.text_input("", type="password", label_visibility="collapsed", key="top_pw")
+    
+    # Hero Banner (image_15eca7.jpg)
     st.markdown("""
-        <div class="hero-container">
-            <h1 class="hero-title">Cool running.<br><span style='color:#009639;'>Long life.</span></h1>
-            <p class="hero-subtitle">Industrial Automation Solutions for a Greener Future.<br>Optimizing energy efficiency and system longevity.</p>
-            <button style='background:#00B36E; color:white; border:none; padding:10px 25px; border-radius:5px; font-weight:bold;'>Find out more</button>
-        </div>
+    <div class="hero-banner">
+        <h1 style='font-size: 3.5rem; font-weight: 800; line-height: 1.1;'>Cool running.<br><span style='color:#009639;'>Long life.</span></h1>
+        <p style='color:#4A5568; font-size: 1.2rem; margin-top:20px;'>
+            Industrial Automation Solutions for a Greener Future.<br>
+            Optimizing energy efficiency and system longevity.
+        </p>
+        <button style='background:#00B36E; color:white; border:none; padding:12px 30px; border-radius:8px; font-weight:bold; cursor:pointer;'>Find out more</button>
+    </div>
     """, unsafe_allow_html=True)
     
+    # Solutions Section with Actual Drive Links (image_17ccae.png)
     st.subheader("Our Solutions")
-    col1, col2, col3 = st.columns(3)
+    c1, c2, c3 = st.columns(3)
     
-    with col1:
-        st.markdown("<div class='solution-card'><h3>📄 Data & Documents</h3><p>เข้าถึงคู่มือการใช้งาน เอกสารเทคนิค และแค็ตตาล็อกสินค้าแบบดิจิทัลครบวงจร</p></div>", unsafe_allow_html=True)
-        st.link_button("Open Data Sheet", "https://drive.google.com/your-datasheet-link", use_container_width=True)
+    with c1:
+        st.markdown("<div class='sol-card'><h3>📄 Data & Documents</h3><p>เข้าถึงคู่มือการใช้งาน เอกสารเทคนิค และแค็ตตาล็อกสินค้าแบบดิจิทัลครบวงจร</p></div>", unsafe_allow_html=True)
+        st.link_button("Download Data Sheet", "https://drive.google.com/...", use_container_width=True)
         
-    with col2:
-        st.markdown("<div class='solution-card'><h3>⚙️ Product Status</h3><p>ตรวจสอบสถานะเครื่องจักร ประสิทธิภาพการผลิต และแจ้งเตือนการซ่อมบำรุงแบบ Real-time</p></div>", unsafe_allow_html=True)
-        if st.button("Go to Monitor", use_container_width=True): nav_to("monitor")
+    with c2:
+        st.markdown("<div class='sol-card'><h3>⚙️ Product Status</h3><p>ตรวจสอบสถานะเครื่องจักร ประสิทธิภาพการผลิต และแจ้งเตือนการซ่อมบำรุงแบบ Real-time</p></div>", unsafe_allow_html=True)
+        if st.button("Go to Monitor", use_container_width=True): switch_to("monitor")
         
-    with col3:
-        st.markdown("<div class='solution-card'><h3>🛡️ Quality Control</h3><p>วิเคราะห์รายงานคุณภาพและการใช้พลังงาน เพื่อลดคาร์บอนฟุตพริ้นท์ตามมาตรฐานสากล</p></div>", unsafe_allow_html=True)
-        st.link_button("Product Catalog", "https://drive.google.com/your-catalog-link", use_container_width=True)
+    with c3:
+        st.markdown("<div class='sol-card'><h3>🛡️ Quality Control</h3><p>วิเคราะห์รายงานคุณภาพและการใช้พลังงาน เพื่อลดคาร์บอนฟุตพริ้นท์ตามมาตรฐานสากล</p></div>", unsafe_allow_html=True)
+        st.link_button("Product Catalog", "https://drive.google.com/...", use_container_width=True)
 
-# 3. DASHBOARD PAGE
-elif st.session_state.page == "dashboard":
-    st.title("Plant Telemetry")
-    st.caption("Control Center / General View")
-    display_kpis()
+# PAGE: DASHBOARD & MONITOR (Shared Metrics)
+elif st.session_state.page in ["dashboard", "monitor"]:
+    st.title("Plant Intelligence")
+    st.caption("CONTROL CENTER / REAL-TIME DATA SYNC")
     
-    st.markdown("### Efficiency Trend")
-    st.line_chart(pd.DataFrame(np.random.randn(20, 2), columns=['Output', 'Target']))
-
-# 4. MONITOR PAGE
-elif st.session_state.page == "monitor":
-    st.title("Node Status Monitor")
-    display_kpis()
+    # Metrics (Shared Source)
+    m = st.session_state.plant_metrics
+    col1, col2, col3, col4 = st.columns(4)
+    with col1: st.markdown(f"<div class='metric-item'><small>OEE PERFORMANCE</small><h2>{m['oee']}%</h2><span style='color:green;'>+1.2%</span></div>", unsafe_allow_html=True)
+    with col2: st.markdown(f"<div class='metric-item'><small>SHIFT OUTPUT</small><h2>{m['output']:,}</h2><span style='color:green;'>+420</span></div>", unsafe_allow_html=True)
+    with col3: st.markdown(f"<div class='metric-item'><small>ACTIVE ALERTS</small><h2>{m['alerts']:02d}</h2><span style='color:red;'>-1</span></div>", unsafe_allow_html=True)
+    with col4: st.markdown(f"<div class='metric-item'><small>UPTIME RATIO</small><h2>{m['uptime']}%</h2><span style='color:blue;'>MAX</span></div>", unsafe_allow_html=True)
     
     st.markdown("---")
-    for node in st.session_state.plant_data['nodes']:
-        with st.expander(f"📍 {node['id']} - {node['status']}"):
-            c1, c2, c3 = st.columns(3)
-            c1.metric("Temperature", f"{node['temp']} °C")
-            c2.metric("System Load", f"{node['load']}%")
-            c3.markdown(f"**Health Score:** {'Good' if node['load'] < 80 else 'Attention Required'}")
+    if st.session_state.page == "dashboard":
+        st.subheader("Efficiency Trends")
+        st.area_chart(pd.DataFrame(np.random.randn(20, 2), columns=['Line A', 'Line B']))
+    else:
+        st.subheader("Edge Node Monitor")
+        st.info("Connected to 4 Active Nodes in Production Area A.")
+
+    if st.button("← Back to Home"): switch_to("main")
+
+# Footer
+st.markdown("<br><hr><center><small style='color:#94A3B8;'>Auth Server: ID-SEA-01 | SNAPCON Automation Solution | 2026</small></center>", unsafe_allow_html=True)
