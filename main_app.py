@@ -60,6 +60,61 @@ snapcon_html = """
         /* ซ่อน Scrollbar สำหรับ Slider */
         .slider-container::-webkit-scrollbar { display: none; }
         .slider-container { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
+        
+        /* ---- เพิ่ม Animation ใหม่สำหรับ Logo & Hero ---- */
+        .animate-gradient-text {
+            background: linear-gradient(90deg, #00B36E 0%, #06b6d4 25%, #3b82f6 50%, #00B36E 100%);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-sweep 4s linear infinite;
+        }
+        @keyframes gradient-sweep {
+            0% { background-position: 100% 0%; }
+            100% { background-position: 0% 0%; }
+        }
+        
+        .animate-speed-slide-1 {
+            animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+            transform: translateX(-50px) skewX(-15deg);
+        }
+        .animate-speed-slide-2 {
+            animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+            opacity: 0;
+            transform: translateX(-50px) skewX(-15deg);
+        }
+        .animate-speed-slide-3 {
+            animation: speed-slide-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        @keyframes speed-slide {
+            100% { opacity: 1; transform: translateX(0) skewX(0); }
+        }
+        @keyframes speed-slide-up {
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .energy-line {
+            position: relative;
+            overflow: hidden;
+        }
+        .energy-line::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+            animation: light-beam 2.5s linear infinite;
+        }
+        @keyframes light-beam {
+            100% { left: 200%; }
+        }
+        
+        .logo-glow {
+            filter: drop-shadow(0 0 8px rgba(0, 179, 110, 0.6));
+        }
     </style>
 </head>
 <body>
@@ -67,9 +122,18 @@ snapcon_html = """
     <!-- 1. Top Navigation Bar -->
     <nav class="bg-nav-bg h-[65px] w-full fixed top-0 z-50 flex items-center justify-between px-4 md:px-6 border-b-4 border-snap-green shadow-lg">
         <!-- Logo -->
-        <div class="flex flex-col cursor-pointer justify-center h-full shrink-0" onclick="navigate('home')">
-            <span class="font-black text-xl md:text-2xl text-snap-green tracking-tight leading-none mt-1">SNAPCON</span>
-            <span class="font-bold text-[9px] md:text-[10px] text-snap-green leading-none">Automation</span>
+        <div class="flex items-center gap-3 cursor-pointer h-full shrink-0 group" onclick="navigate('home')">
+            <div class="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-snap-green to-emerald-900 rounded-xl shadow-[0_0_15px_rgba(0,179,110,0.4)] group-hover:shadow-[0_0_25px_rgba(0,179,110,0.8)] transition-all overflow-hidden">
+                <i class="fas fa-bolt text-white text-xl animate-pulse relative z-10"></i>
+                <div class="absolute inset-0 bg-white/20 energy-line"></div>
+            </div>
+            <div class="flex flex-col justify-center">
+                <span class="font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-snap-green to-emerald-400 tracking-tight leading-none mt-1 logo-glow transition-all">SNAPCON</span>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                    <div class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping"></div>
+                    <span class="font-bold text-[9px] md:text-[10px] text-slate-400 tracking-[0.2em] leading-none uppercase">Automation</span>
+                </div>
+            </div>
         </div>
         
         <!-- Center Menus (Responsive Scroll) -->
@@ -120,18 +184,31 @@ snapcon_html = """
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         <section class="w-full h-[350px] md:h-[450px] hero-bg relative flex items-center border-b border-gray-200">
-            <div class="bg-white/95 backdrop-blur-sm pl-6 md:pl-12 pr-12 md:pr-20 py-10 md:py-16 ml-0 shadow-[15px_0_30px_-5px_rgba(0,0,0,0.1)] absolute left-0 z-10 h-full flex flex-col justify-center border-r border-white/50">
-                <p data-i18n="heroText1" class="text-xl md:text-[28px] text-slate-800 mb-1 font-medium tracking-wide">Snap to Connect.</p>
-                <p data-i18n="heroText2" class="text-xl md:text-[28px] text-slate-800 mb-4 pl-4 md:pl-8 font-medium tracking-wide">Ready to Control.</p>
-                <h1 data-i18n="heroText3" class="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter pl-8 md:pl-12">Plug & Play</h1>
-                <div class="h-1.5 w-20 bg-snap-green mt-6 md:mt-8 ml-8 md:ml-12 rounded-full"></div>
+            <div class="bg-white/90 backdrop-blur-md pl-6 md:pl-12 pr-12 md:pr-20 py-10 md:py-16 ml-0 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.15)] absolute left-0 z-10 h-full flex flex-col justify-center border-r border-white/50 overflow-hidden">
+                <!-- Tech grid background for modern feel -->
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
                 
-                <!-- Social Links -->
-                <div class="flex flex-wrap items-center gap-5 mt-8 md:mt-10 ml-8 md:ml-12">
-                    <a href="tel:0812345678" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-snap-green hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fas fa-phone-alt"></i></a>
-                    <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#1877F2] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://line.me" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#00B900] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-line text-lg"></i></a>
-                    <a href="mailto:snapcon1992@gmail.com" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fas fa-envelope"></i></a>
+                <div class="relative z-10">
+                    <div class="flex items-center gap-3 mb-1 animate-speed-slide-1">
+                        <i class="fas fa-angle-double-right text-snap-green animate-pulse"></i>
+                        <p data-i18n="heroText1" class="text-xl md:text-[28px] text-slate-600 font-bold tracking-widest uppercase italic">Snap to Connect.</p>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4 pl-4 md:pl-8 animate-speed-slide-2">
+                        <i class="fas fa-angle-double-right text-blue-500 animate-pulse"></i>
+                        <p data-i18n="heroText2" class="text-xl md:text-[28px] text-slate-800 font-black tracking-widest uppercase italic">Ready to Control.</p>
+                    </div>
+                    <h1 class="animate-speed-slide-3 text-6xl md:text-[85px] font-black tracking-tighter pl-8 md:pl-12 mt-2 mb-2 leading-none">
+                        <span data-i18n="heroText3" class="animate-gradient-text drop-shadow-xl pb-2">Plug & Play</span>
+                    </h1>
+                    <div class="animate-speed-slide-3 h-2 w-40 bg-gradient-to-r from-snap-green to-blue-500 mt-6 md:mt-8 ml-8 md:ml-12 rounded-full energy-line shadow-[0_0_15px_rgba(0,179,110,0.6)]"></div>
+                    
+                    <!-- Social Links -->
+                    <div class="flex flex-wrap items-center gap-5 mt-8 md:mt-10 ml-8 md:ml-12 animate-speed-slide-3" style="animation-delay: 0.6s;">
+                        <a href="tel:0812345678" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-snap-green hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fas fa-phone-alt"></i></a>
+                        <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#1877F2] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://line.me" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#00B900] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-line text-lg"></i></a>
+                        <a href="mailto:snapcon1992@gmail.com" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fas fa-envelope"></i></a>
+                    </div>
                 </div>
             </div>
         </section>
