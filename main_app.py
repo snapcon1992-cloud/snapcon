@@ -1,143 +1,134 @@
 import streamlit as st
-import os
+import pandas as pd
+import time
+import random
+import plotly.express as px
 
 # การตั้งค่าหน้าจอ
 st.set_page_config(
     page_title="SNAPCON | Automation Solutions",
     page_icon="🌿",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# ตรวจสอบสถานะ Login
+# --- SESSION STATE สำหรับเก็บค่าการรัน ---
+if 'is_running' not in st.session_state:
+    st.session_state.is_running = False
+if 'prod_counts' not in st.session_state:
+    st.session_state.prod_counts = [random.randint(100, 200) for _ in range(10)]
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
-# CSS เพื่อซ่อนเมนูเดิมและปรับแต่งปุ่มให้กดได้จริงบน Mobile และ Desktop
+# CSS เพื่อความสวยงาม (อิงจากแบบเดิมที่คุณชอบ)
 st.markdown("""
     <style>
-    /* ซ่อนเมนูนำทางมาตรฐานของ Streamlit */
-    [data-testid="stSidebarNav"] {
-        display: none !important;
+    .stApp { background-color: #0d1117; color: #e6edf3; }
+    .metric-card {
+        background: #161b22; 
+        border: 1px solid #30363d; 
+        border-radius: 12px; 
+        padding: 1.5rem;
+        border-left: 5px solid #22d3ee;
     }
-    
-    [data-testid="stSidebar"] {
-        background-color: #1e272e !important;
+    .node-card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
     }
-
-    /* สไตล์ปุ่มกดสีเขียว Navigation */
     div.stButton > button {
-        background-color: #27ae60 !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 8px !important;
-        padding: 0.7rem 1rem !important;
-        font-weight: 600 !important;
-        width: 100% !important;
-        margin-bottom: 10px !important;
-        cursor: pointer !important;
-        transition: all 0.3s ease;
-    }
-    
-    div.stButton > button:hover {
-        background-color: #2ecc71 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
-    }
-
-    .nav-label {
-        color: #ffffff;
-        font-size: 0.85rem;
+        width: 100%;
+        border-radius: 8px;
         font-weight: bold;
-        margin: 20px 0 10px 5px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    
-    .status-badge {
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.7rem;
-        background: #34495e;
-        color: #ecf0f1;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# ฟังก์ชันสำหรับเปลี่ยนหน้า (แก้ปัญหา Path บน Streamlit Cloud)
-def nav_to(page_path):
-    try:
-        # พยายามรันด้วย Path ปกติ
-        st.switch_page(page_path)
-    except Exception as e:
-        # หากพลาด ให้ลองเช็คว่าไฟล์มีจริงไหมแล้วแสดง Error ที่เข้าใจง่าย
-        st.error(f"ไม่สามารถไปที่หน้า {page_path} ได้: {str(e)}")
-
-# ส่วนของ Sidebar
-with st.sidebar:
-    st.markdown("<h2 style='color:white; text-align:center;'>SNAPCON</h2>", unsafe_allow_html=True)
-    
-    st.markdown("<div class='nav-label'>🟢 NAVIGATION</div>", unsafe_allow_html=True)
-    
-    # ปุ่มหลัก
-    if st.button("🏠 Main / Home", key="btn_main_nav"):
-        nav_to("main_app.py")
-    
-    if st.button("📊 My Dashboard", key="btn_dash_nav"):
-        if st.session_state.logged_in:
-            # ตรวจสอบชื่อไฟล์ตามที่คุณตั้งใน GitHub (ถ้าคุณแก้เป็น Folder แล้วใช้ path นี้)
-            nav_to("pages/1_Monitor.py")
-        else:
-            st.warning("🔒 กรุณาเข้าสู่ระบบก่อน")
-            
-    if st.button("📞 Contact Support", key="btn_contact_nav"):
-        nav_to("pages/2_Contact.py")
-
-    st.markdown("---")
-    if st.session_state.logged_in:
-        st.markdown("<div class='status-badge'>Verified User: Admin</div>", unsafe_allow_html=True)
-        if st.button("Logout", key="btn_logout_nav"):
-            st.session_state.logged_in = False
-            st.rerun()
-
-# --- ส่วนเนื้อหาหน้าหลัก (Main Content) ---
-st.markdown("""
-    <div style="background:white; padding:15px; border-bottom:3px solid #27ae60; margin-bottom:25px;">
-        <h3 style="margin:0; color:#2c3e50;">SNAPCON <span style="font-weight:normal; color:#bdc3c7;">| Green Technology</span></h3>
-    </div>
-""", unsafe_allow_html=True)
-
-col1, col2 = st.columns([1.3, 0.7])
-
-with col1:
-    st.markdown("""
-        <div style="background:white; padding:40px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.05); border-left:10px solid #27ae60;">
-            <h1 style="color:#2c3e50; font-size:2.5rem;">Engineering your success.</h1>
-            <p style="color:#7f8c8d; font-size:1.2rem;">
-                สัมผัสนวัตกรรมการขับเคลื่อนและระบบควบคุมอัจฉริยะจาก SNAPCON 
-                ที่ช่วยเพิ่มประสิทธิภาพการผลิต (OEE) และลดการใช้พลังงานในอุตสาหกรรมยุค 4.0
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    if not st.session_state.logged_in:
-        st.markdown("<div style='background:white; padding:30px; border-radius:15px; border:1px solid #eee;'>", unsafe_allow_html=True)
-        st.subheader("Customer Sign-In")
-        user = st.text_input("Username / E-mail")
+# --- ส่วน LOGIN ---
+if not st.session_state.logged_in:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("<h1 style='text-align:center;'>SNAPCON LOGIN</h1>", unsafe_allow_html=True)
+        user = st.text_input("Username")
         pwd = st.text_input("Password", type="password")
-        
-        if st.button("SIGN IN", key="btn_login_main"):
+        if st.button("เข้าสู่ระบบ"):
             if user == "001" and pwd == "123":
                 st.session_state.logged_in = True
                 st.rerun()
             else:
-                st.error("ข้อมูลการเข้าสู่ระบบไม่ถูกต้อง")
-        st.markdown("</div>", unsafe_allow_html=True)
-    else:
-        st.success("คุณเข้าสู่ระบบแล้ว")
-        if st.button("เข้าสู่หน้า Dashboard", key="btn_go_dash"):
-            nav_to("pages/1_Monitor.py")
+                st.error("รหัสผ่านไม่ถูกต้อง")
+    st.stop()
 
-st.markdown("<br><p style='text-align:center; color:#bdc3c7;'>Industrial Automation Solutions | Thailand</p>", unsafe_allow_html=True)
+# --- ส่วนเนื้อหาหลักเมื่อ Login แล้ว ---
+# Header
+h_col1, h_col2 = st.columns([3, 1])
+with h_col1:
+    st.title("🔌 SNAPCON CONTROL PANEL")
+    st.write("Smart Production Monitoring System")
+
+with h_col2:
+    if st.button("Log Out"):
+        st.session_state.logged_in = False
+        st.rerun()
+
+st.divider()
+
+# Control Buttons (ปุ่ม Start/Stop/Reset ที่กลับมาใช้ได้)
+c1, c2, c3, c4 = st.columns(4)
+with c1:
+    if st.button("▶ START SYSTEM", type="primary"):
+        st.session_state.is_running = True
+with c2:
+    if st.button("⏹ STOP SYSTEM"):
+        st.session_state.is_running = False
+with c3:
+    if st.button("🔄 RESET COUNTER"):
+        st.session_state.prod_counts = [0] * 10
+with c4:
+    status_text = "🟢 ONLINE" if st.session_state.is_running else "🔴 OFFLINE"
+    st.markdown(f"### {status_text}")
+
+# Logic จำลองการผลิต
+if st.session_state.is_running:
+    for i in range(10):
+        if random.random() > 0.5:
+            st.session_state.prod_counts[i] += 1
+    time.sleep(0.5)
+    st.rerun()
+
+# แสดงผล KPI
+total_prod = sum(st.session_state.prod_counts)
+k1, k2, k3 = st.columns(3)
+with k1:
+    st.markdown(f'<div class="metric-card"><div>Total Production</div><div style="font-size:2rem; font-weight:bold;">{total_prod:,}</div></div>', unsafe_allow_html=True)
+with k2:
+    st.markdown(f'<div class="metric-card"><div>Carbon Saving</div><div style="font-size:2rem; font-weight:bold;">{total_prod * 0.0072:.2f} kg</div></div>', unsafe_allow_html=True)
+with k3:
+    st.markdown(f'<div class="metric-card"><div>System Health</div><div style="font-size:2rem; font-weight:bold;">98.5%</div></div>', unsafe_allow_html=True)
+
+st.write("")
+st.subheader("🌐 Real-time Node Status")
+
+# แสดงผลราย Node
+for r in range(2):
+    row = st.columns(5)
+    for c in range(5):
+        idx = (r * 5) + c
+        with row[c]:
+            st.markdown(f"""
+                <div class="node-card">
+                    <div style="color:#94a3b8; font-size:0.8rem;">Node {idx+1:02d}</div>
+                    <div style="font-size:1.5rem; font-weight:bold;">{st.session_state.prod_counts[idx]}</div>
+                    <div style="color:#10b981; font-size:0.7rem;">● Connected</div>
+                </div>
+            """, unsafe_allow_html=True)
+
+# กราฟสรุปผล
+st.write("")
+df = pd.DataFrame({
+    "Node": [f"N{i+1}" for i in range(10)],
+    "Output": st.session_state.prod_counts
+})
+fig = px.bar(df, x="Node", y="Output", title="Production Overview per Node", template="plotly_dark")
+st.plotly_chart(fig, use_container_width=True)
