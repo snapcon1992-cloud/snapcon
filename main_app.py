@@ -275,6 +275,9 @@ snapcon_html = """
 
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
+        // ⬇️ นำ URL ของเว็บแอป (Web app URL) ที่ก๊อปปี้มาจาก Google Apps Script มาใส่ตรงนี้ ⬇️
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTXYEcWYEsbcwL0ipt5vl1azB-C8psZUuwpjfIirzCdH2mBE2OHNdKSMoNPhklRt2M/exec';
+
         // --- 0. ระบบแปลภาษา (Translations) ---
         let currentLang = 'th';
         
@@ -293,10 +296,12 @@ snapcon_html = """
                 aboutDesc1: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรม 4.0 ที่มุ่งเน้นการพัฒนาระบบ",
                 aboutDesc2: "เพื่อลดความซับซ้อนในการติดตั้งและควบคุมเครื่องจักร",
                 aboutDesc3: "(ข้อมูลประวัติบริษัทเพิ่มเติมจะถูกเพิ่มเข้ามาในส่วนนี้ภายหลัง)",
-                alertLoginFail: "⚠️ ID หรือ Password ไม่ถูกต้อง\\n(ใช้ ID: 001 และ Pass: 123)",
+                alertLoginFail: "⚠️ ID หรือ Password ไม่ถูกต้อง",
                 alertLoginReq: "⚠️ กรุณา Login หรือ Register ก่อนเข้าสู่หน้า Dashboard",
-                alertLoginSuccess: "Login สำเร็จ! บันทึกข้อมูล Session",
-                alertRegister: "ระบบเตรียมข้อมูลสำหรับสมาชิกใหม่",
+                alertLoginSuccess: "Login สำเร็จ! เข้าสู่ระบบเรียบร้อย",
+                alertRegisterEmpty: "⚠️ กรุณากรอก ID และ Password ให้ครบถ้วน",
+                alertRegisterExist: "⚠️ ID นี้มีผู้ลงทะเบียนใช้งานแล้ว กรุณาใช้ ID อื่น",
+                alertRegisterSuccess: "ลงทะเบียนสำเร็จ! ระบบกำลังส่งข้อมูลผู้ใช้ใหม่ไปบันทึกที่ Google Drive...",
                 alertAddCart: "เพิ่มสินค้าลงในรถเข็นแล้ว!",
                 alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้นเพื่อยื่นขอใบเสนอราคา",
                 alertQuoteSuccess: "ระบบกำลังเตรียมอีเมลขอใบเสนอราคาสำหรับสินค้า {n} รายการ...",
@@ -318,10 +323,12 @@ snapcon_html = """
                 aboutDesc1: "Snapcon Automation is a leader in Industry 4.0 technology, focusing on",
                 aboutDesc2: "systems to simplify the installation and control of machinery.",
                 aboutDesc3: "(Additional company history will be added here later)",
-                alertLoginFail: "⚠️ Invalid ID or Password\\n(Use ID: 001 and Pass: 123)",
+                alertLoginFail: "⚠️ Invalid ID or Password",
                 alertLoginReq: "⚠️ Please Login or Register to access the Dashboard",
-                alertLoginSuccess: "Login Successful! Session data saved",
-                alertRegister: "Preparing new member registration",
+                alertLoginSuccess: "Login Successful!",
+                alertRegisterEmpty: "⚠️ Please enter both ID and Password.",
+                alertRegisterExist: "⚠️ This ID is already registered. Please choose another.",
+                alertRegisterSuccess: "Registration successful! Preparing to save user data to Google Drive...",
                 alertAddCart: "Item added to your cart!",
                 alertQuoteReq: "Please select at least 1 item to request a quotation.",
                 alertQuoteSuccess: "Preparing quotation email for {n} items...",
@@ -366,6 +373,15 @@ snapcon_html = """
         // --- 1. ตัวแปรสถานะทั่วไปและข้อมูลสินค้า (แยกสเปคแต่ละรุ่น) ---
         let isLoggedIn = false;
         let cart = [];
+        
+        // ฟังก์ชันกำหนดค่า User เริ่มต้นใน Local Storage
+        function initDB() {
+            if (!localStorage.getItem('snapcon_users')) {
+                // สร้าง User แอดมินตั้งต้น ID: 001, Pass: 123
+                localStorage.setItem('snapcon_users', JSON.stringify({ '001': '123' }));
+            }
+        }
+        initDB();
         
         const products = [
             { 
@@ -425,21 +441,70 @@ snapcon_html = """
         function handleLogin() {
             const id = document.getElementById('userId').value;
             const pass = document.getElementById('userPass').value;
-            if ((id === '001' && pass === '123') || (id === '' && pass === '')) {
+            
+            // ดึงข้อมูล User จาก LocalStorage ของเบราว์เซอร์
+            const users = JSON.parse(localStorage.getItem('snapcon_users')) || {};
+
+            // ตรวจสอบความถูกต้องของ ID และ Password
+            if (users[id] && users[id] === pass) {
                 isLoggedIn = true;
-                document.getElementById('displayUser').innerText = id || 'Admin';
+                document.getElementById('displayUser').innerText = id;
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('user-section').classList.remove('hidden');
                 document.getElementById('user-section').classList.add('flex');
                 alert(dict[currentLang].alertLoginSuccess);
+                
+                // ล้างค่าในช่องกรอก
+                document.getElementById('userId').value = '';
+                document.getElementById('userPass').value = '';
             } else {
                 alert(dict[currentLang].alertLoginFail);
             }
         }
+
         function handleRegister() {
-            alert(dict[currentLang].alertRegister);
-            handleLogin(); 
+            const id = document.getElementById('userId').value;
+            const pass = document.getElementById('userPass').value;
+            
+            if (!id || !pass) {
+                alert(dict[currentLang].alertRegisterEmpty);
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('snapcon_users')) || {};
+            
+            if (users[id]) {
+                alert(dict[currentLang].alertRegisterExist);
+                return;
+            }
+
+            users[id] = pass;
+            localStorage.setItem('snapcon_users', JSON.stringify(users));
+            
+            alert(dict[currentLang].alertRegisterSuccess);
+
+            // ส่งข้อมูลไปยัง Google Drive อัตโนมัติ (Background Process)
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    type: "New Registration",
+                    name_or_id: id,
+                    email: "-",
+                    details: `Password: ${pass}`
+                })
+            });
+            
+            isLoggedIn = true;
+            document.getElementById('displayUser').innerText = id;
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('user-section').classList.remove('hidden');
+            document.getElementById('user-section').classList.add('flex');
+            
+            document.getElementById('userId').value = '';
+            document.getElementById('userPass').value = '';
         }
+
         function handleLogout() {
             isLoggedIn = false;
             document.getElementById('login-section').classList.remove('hidden');
@@ -560,17 +625,21 @@ snapcon_html = """
             
             alert(dict[currentLang].alertQuoteSuccess.replace('{n}', selectedItems.length));
             
-            // สร้างรายการสินค้าเพื่อใส่ในเนื้อหาอีเมล
-            let itemList = selectedItems.map(i => `- ${i.name} (Model: ${i.id}) ราคา ฿${i.price.toLocaleString()}`).join('%0A');
+            let itemList = selectedItems.map(i => `- ${i.name} (Model: ${i.id}) ราคา ฿${i.price.toLocaleString()}`).join('\n');
             let total = selectedItems.reduce((sum, item) => sum + item.price, 0);
             
-            // เปิดหน้าต่างอีเมลพร้อมใส่ข้อมูลถึง snapcon1992@gmail.com
-            const subject = encodeURIComponent(`ขอใบเสนอราคา (Quotation Request) - Snapcon`);
-            const body = encodeURIComponent(`สวัสดีครับ/ค่ะ,\n\nฉันต้องการขอใบเสนอราคาอย่างเป็นทางการสำหรับสินค้ารายการดังต่อไปนี้:\n\n${itemList}\n\nราคากลางประเมินรวม: ฿${total.toLocaleString()}\n\nกรุณาติดต่อกลับเพื่อแจ้งรายละเอียดเพิ่มเติม\n\n-----------------------\n*บันทึกข้อมูลในระบบ Drive: snapcon1992*`);
+            // ส่งข้อมูลไปยัง Google Drive อัตโนมัติ (Background Process)
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    type: "Quotation Request",
+                    name_or_id: document.getElementById('displayUser').innerText || "Guest",
+                    email: "-",
+                    details: `รายการสินค้า:\n${itemList}\nราคากลางประเมินรวม: ฿${total.toLocaleString()}`
+                })
+            });
             
-            window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
-            
-            // ลบสินค้าที่ขอใบเสนอราคาแล้ว
             cart = cart.filter(i => !i.selected);
             const badge = document.getElementById('cart-badge');
             badge.innerText = cart.length;
@@ -592,13 +661,18 @@ snapcon_html = """
 
             alert(dict[currentLang].alertContact);
             
-            // เปิดหน้าต่างอีเมลพร้อมใส่ข้อมูลถึง snapcon1992@gmail.com
-            const subject = encodeURIComponent(`ติดต่อสอบถามจากคุณ ${name}`);
-            const body = encodeURIComponent(`ชื่อ-นามสกุล: ${name}\nอีเมลติดต่อกลับ: ${email}\n\nข้อความ:\n${msg}\n\n-----------------------\n*บันทึกข้อมูลในระบบ Drive: snapcon1992*`);
+            // ส่งข้อมูลไปยัง Google Drive อัตโนมัติ (Background Process)
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    type: "Contact Message",
+                    name_or_id: name,
+                    email: email,
+                    details: msg
+                })
+            });
             
-            window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
-            
-            // ล้างข้อมูลฟอร์ม
             document.getElementById('contact-name').value = '';
             document.getElementById('contact-email').value = '';
             document.getElementById('contact-msg').value = '';
@@ -610,7 +684,3 @@ snapcon_html = """
     </script>
 </body>
 </html>
-"""
-
-# แสดงผลหน้าเว็บผ่าน Streamlit
-st.components.v1.html(snapcon_html, height=1400, scrolling=True)
