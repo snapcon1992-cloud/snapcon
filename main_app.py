@@ -1,3 +1,14 @@
+import streamlit as st
+
+# ตั้งค่าหน้าหลักของ Streamlit
+st.set_page_config(
+    page_title="SNAPCON | Snap to Connect", 
+    layout="wide", 
+    initial_sidebar_state="collapsed"
+)
+
+# โค้ด HTML/CSS สำหรับหน้าเว็บ Snapcon (Professional Version)
+snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -10,6 +21,8 @@
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
         }
         .gradient-text {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -26,6 +39,10 @@
         .card-hover:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+        /* ซ่อน scrollbar ของ iframe */
+        ::-webkit-scrollbar {
+            display: none;
         }
     </style>
 </head>
@@ -47,12 +64,6 @@
                     ติดต่อเรา
                 </a>
             </div>
-            
-            <button class="md:hidden text-slate-900">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
         </div>
     </nav>
 
@@ -84,11 +95,10 @@
             </div>
             <div class="relative">
                 <div class="absolute -inset-4 bg-emerald-100/50 rounded-[40px] blur-3xl -z-10 animate-pulse"></div>
-                <!-- Image Placeholder -->
                 <div class="rounded-[40px] overflow-hidden shadow-2xl bg-slate-100 aspect-square flex items-center justify-center">
                     <div class="text-center p-8">
-                         <div class="w-24 h-24 bg-white rounded-3xl shadow-lg flex items-center justify-center mx-auto mb-6 text-4xl">🔌</div>
-                         <p class="text-slate-400 font-bold uppercase tracking-widest text-sm"></p>
+                         <div class="text-6xl mb-6">🔌</div>
+                         <p class="text-slate-400 font-bold uppercase tracking-widest text-sm">[รูปภาพอุปกรณ์ Snapcon]</p>
                     </div>
                 </div>
             </div>
@@ -121,53 +131,34 @@
     <section id="solutions" class="py-24 max-w-7xl mx-auto px-6">
         <div class="text-center max-w-3xl mx-auto mb-20">
             <h2 class="text-4xl font-black tracking-tight mb-4">ทำไมต้องเลือก SNAPCON?</h2>
-            <p class="text-slate-500 font-medium">เราออกแบบทุกอย่างโดยคำนึงถึงความเร็ว ความปลอดภัย และความง่ายในการใช้งาน เพื่อให้คุณโฟกัสกับสิ่งที่สำคัญที่สุด</p>
+            <p class="text-slate-500 font-medium">เราออกแบบทุกอย่างโดยคำนึงถึงความเร็ว ความปลอดภัย และความง่ายในการใช้งาน</p>
         </div>
         
         <div class="grid md:grid-cols-3 gap-8">
             <div class="p-10 rounded-[32px] bg-slate-50 card-hover border border-transparent hover:border-emerald-100">
-                <div class="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center text-white text-2xl mb-8">⚡</div>
+                <div class="text-4xl mb-8">⚡</div>
                 <h3 class="text-xl font-bold mb-4">ติดตั้งรวดเร็ว</h3>
-                <p class="text-slate-500 leading-relaxed">ระบบ Plug & Play ที่แท้จริง ไม่ต้องตั้งค่าให้ยุ่งยาก เพียงแค่เชื่อมต่อและเริ่มใช้งานได้ทันที</p>
+                <p class="text-slate-500 leading-relaxed">ระบบ Plug & Play ที่แท้จริง ไม่ต้องตั้งค่าให้ยุ่งยาก</p>
             </div>
             <div class="p-10 rounded-[32px] bg-slate-50 card-hover border border-transparent hover:border-emerald-100">
-                <div class="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center text-white text-2xl mb-8">🛡️</div>
+                <div class="text-4xl mb-8">🛡️</div>
                 <h3 class="text-xl font-bold mb-4">ความปลอดภัยสูงสุด</h3>
-                <p class="text-slate-500 leading-relaxed">การเข้ารหัสข้อมูลระดับสูงและการป้องกันที่รัดกุม เพื่อให้ข้อมูลของคุณปลอดภัยอยู่เสมอ</p>
+                <p class="text-slate-500 leading-relaxed">การเข้ารหัสข้อมูลระดับสูงและการป้องกันที่รัดกุม</p>
             </div>
             <div class="p-10 rounded-[32px] bg-slate-50 card-hover border border-transparent hover:border-emerald-100">
-                <div class="w-14 h-14 bg-emerald-500 rounded-2xl flex items-center justify-center text-white text-2xl mb-8">📈</div>
+                <div class="text-4xl mb-8">📈</div>
                 <h3 class="text-xl font-bold mb-4">ขยายขนาดได้ง่าย</h3>
-                <p class="text-slate-500 leading-relaxed">ไม่ว่าธุรกิจของคุณจะเล็กหรือใหญ่ ระบบของเราพร้อมที่จะเติบโตไปพร้อมกับคุณ</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-24 px-6">
-        <div class="max-w-7xl mx-auto bg-slate-900 rounded-[48px] p-12 md:p-24 overflow-hidden relative">
-            <div class="absolute top-0 right-0 w-1/2 h-full bg-emerald-500/10 blur-[100px] -z-0"></div>
-            <div class="relative z-10 text-center max-w-2xl mx-auto">
-                <h2 class="text-4xl md:text-5xl font-black text-white leading-tight mb-8">พร้อมที่จะอัปเกรดระบบของคุณแล้วหรือยัง?</h2>
-                <p class="text-emerald-200/60 mb-12 text-lg">ร่วมเป็นส่วนหนึ่งของธุรกิจยุคใหม่ที่เลือกใช้ SNAPCON เพื่อประสิทธิภาพที่เหนือกว่า</p>
-                <div class="flex justify-center gap-4">
-                    <button class="bg-white text-slate-900 px-10 py-5 rounded-2xl font-bold text-lg hover:bg-emerald-50 transition-all">ติดต่อฝ่ายขาย</button>
-                </div>
+                <p class="text-slate-500 leading-relaxed">พร้อมที่จะเติบโตไปพร้อมกับธุรกิจของคุณทุกระดับ</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-slate-100">
+    <footer class="py-12 border-t border-slate-100 bg-white">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-black text-sm">S</div>
                 <span class="text-xl font-black tracking-tighter">SNAPCON</span>
-            </div>
-            <div class="flex gap-8 text-slate-400 text-xs font-bold uppercase tracking-widest">
-                <a href="#" class="hover:text-emerald-500 transition-colors">Privacy Policy</a>
-                <a href="#" class="hover:text-emerald-500 transition-colors">Terms of Service</a>
-                <a href="#" class="hover:text-emerald-500 transition-colors">Careers</a>
             </div>
             <div class="text-slate-400 text-sm">
                 © 2026 Snapcon Solutions. All rights reserved.
@@ -177,3 +168,7 @@
 
 </body>
 </html>
+"""
+
+# แสดงผล HTML ผ่าน Streamlit component
+st.components.v1.html(snapcon_html, height=2200, scrolling=True)
