@@ -115,6 +115,34 @@ snapcon_html = """
                 <p data-i18n="heroText2" class="text-[26px] text-black mb-4 pl-8 font-normal tracking-wide">Ready to Control.</p>
                 <h1 data-i18n="heroText3" class="text-6xl font-black text-black tracking-tighter pl-12">Plug & Play</h1>
                 <div class="h-1 w-16 bg-red-600 mt-4 ml-12"></div>
+                
+                <!-- Social Media & Contact Links -->
+                <div class="flex flex-wrap items-center gap-6 mt-8 ml-12">
+                    <a href="tel:0812345678" target="_blank" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-snap-green transition-colors group">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-snap-green group-hover:text-white transition-colors">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <span class="hidden sm:block">081-XXX-XXXX</span>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-[#1877F2] transition-colors group">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#1877F2] group-hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <span class="hidden sm:block">Snapcon Automation</span>
+                    </a>
+                    <a href="https://line.me" target="_blank" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-[#00B900] transition-colors group">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#00B900] group-hover:text-white transition-colors">
+                            <i class="fab fa-line text-lg"></i>
+                        </div>
+                        <span class="hidden sm:block">@SnapconAuto</span>
+                    </a>
+                    <a href="https://youtube.com" target="_blank" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-[#FF0000] transition-colors group">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#FF0000] group-hover:text-white transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <span class="hidden sm:block">Snapcon Channel</span>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -170,7 +198,7 @@ snapcon_html = """
     <!-- ==================== PAGE: PRODUCT ==================== -->
     <div id="page-product" class="page-section max-w-7xl mx-auto px-6 py-12">
         <h2 data-i18n="pageProductTitle" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">SNAPCON Products</h2>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="product-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="product-grid">
             <!-- จะถูกสร้างโดย JavaScript -->
         </div>
     </div>
@@ -257,7 +285,16 @@ snapcon_html = """
                 alertAddCart: "เพิ่มสินค้าลงในรถเข็นแล้ว!",
                 alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้นเพื่อยื่นขอใบเสนอราคา",
                 alertQuoteSuccess: "ส่งคำขอใบเสนอราคาสำหรับสินค้า {n} รายการ สำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ",
-                alertContact: "ส่งข้อความสำเร็จ ทีมงานจะติดต่อกลับครับ"
+                alertContact: "ส่งข้อความสำเร็จ ทีมงานจะติดต่อกลับครับ",
+                
+                // Specifications Translation TH
+                specTitle: "รายละเอียดสำหรับสั่งทำ (Customizable):",
+                spec1: "1. ความยาวตัวเครื่อง L (0.5-100 m)",
+                spec2: "2. ความสูงตัวเครื่อง H/H1 0.1~2 m",
+                spec3: "3. ความกว้างพื้นที่สายพาน W",
+                spec4: "4. น้ำหนักลำเลียง 0~400 (kg.)",
+                spec5: "5. ความเร็วสายพาน (m/min)",
+                spec6: "6. วัสดุฐาน: สแตนเลส/เหล็ก (เพิ่มล้อได้)",
             },
             en: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About",
@@ -280,7 +317,16 @@ snapcon_html = """
                 alertAddCart: "Item added to your cart!",
                 alertQuoteReq: "Please select at least 1 item to request a quotation.",
                 alertQuoteSuccess: "Quotation request for {n} items submitted successfully! Our team will contact you shortly.",
-                alertContact: "Message sent successfully! Our team will get back to you."
+                alertContact: "Message sent successfully! Our team will get back to you.",
+                
+                // Specifications Translation EN
+                specTitle: "Customizable Specifications:",
+                spec1: "1. Machine Length L (0.5-100 m)",
+                spec2: "2. Machine Height H/H1 0.1~2 m",
+                spec3: "3. Belt Width W",
+                spec4: "4. Payload Weight 0~400 (kg.)",
+                spec5: "5. Belt Speed (m/min)",
+                spec6: "6. Base: Stainless/Iron (Optional wheels)",
             }
         };
 
@@ -374,11 +420,27 @@ snapcon_html = """
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = products.map(p => `
-                <div class="bg-white border p-4 shadow-sm hover:shadow-md transition">
-                    <img src="${p.img}" class="w-full h-40 object-cover mb-4 rounded">
-                    <h4 class="font-bold text-lg">${p.name}</h4>
-                    <p class="text-snap-green font-black text-xl my-2">฿${p.price.toLocaleString()}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-2 font-bold hover:bg-snap-green transition">${dict[currentLang].btnAddToCart}</button>
+                <div class="bg-white border p-5 shadow-sm hover:shadow-md transition flex flex-col h-full rounded-xl">
+                    <img src="${p.img}" class="w-full h-40 object-cover mb-4 rounded-lg border border-gray-100">
+                    <h4 class="font-bold text-lg text-nav-bg">${p.name}</h4>
+                    
+                    <!-- ส่วนข้อมูลรายละเอียดเครื่องจักร (Custom Specifications) -->
+                    <div class="my-3 flex-grow bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <p class="text-[11px] font-bold text-snap-green mb-1.5">${dict[currentLang].specTitle}</p>
+                        <ul class="text-[10px] text-gray-600 list-none space-y-1">
+                            <li>${dict[currentLang].spec1}</li>
+                            <li>${dict[currentLang].spec2}</li>
+                            <li>${dict[currentLang].spec3}</li>
+                            <li>${dict[currentLang].spec4}</li>
+                            <li>${dict[currentLang].spec5}</li>
+                            <li>${dict[currentLang].spec6}</li>
+                        </ul>
+                    </div>
+                    
+                    <p class="text-snap-green font-black text-2xl my-3">฿${p.price.toLocaleString()}</p>
+                    <button onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-2.5 rounded font-bold hover:bg-snap-green transition mt-auto">
+                        ${dict[currentLang].btnAddToCart}
+                    </button>
                 </div>
             `).join('');
         }
@@ -483,5 +545,5 @@ snapcon_html = """
 </html>
 """
 
-# แสดงผลหน้าเว็บผ่าน Streamlit
-st.components.v1.html(snapcon_html, height=1200, scrolling=True)
+# แสดงผลหน้าเว็บผ่าน Streamlit (ปรับความสูงเพิ่มขึ้นเพื่อให้พอดีกับข้อมูลสินค้า)
+st.components.v1.html(snapcon_html, height=1400, scrolling=True)
