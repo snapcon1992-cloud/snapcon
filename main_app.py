@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่สุด (The Ultimate Version)
+# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่สุด (The Ultimate Version) พร้อมระบบ Dashboard เต็มรูปแบบ
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -259,33 +259,98 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: DASHBOARD ==================== -->
+    <!-- ==================== PAGE: DASHBOARD (ADVANCED INTERACTIVE) ==================== -->
     <div id="page-dashboard" class="page-section max-w-7xl mx-auto px-6 py-16">
         <h2 class="text-4xl font-black mb-10 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navDashboard">Dashboard</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="bg-white p-10 rounded-[2.5rem] shadow-lg border border-slate-100 relative overflow-hidden group">
-                <div class="absolute top-0 left-0 w-2 h-full bg-snap-green"></div>
-                <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mb-3">Total Output</p>
-                <h3 class="text-5xl font-black text-slate-800">4,520 <span class="text-lg text-slate-400">PCS</span></h3>
+        
+        <!-- Controls & Settings Row -->
+        <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 mb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- 1-3. Control Buttons -->
+            <div>
+                <h3 class="font-black text-slate-700 mb-4 flex items-center gap-2 uppercase tracking-wider text-sm" data-i18n="dashCtrlTitle"><i class="fas fa-gamepad text-blue-500"></i> การควบคุมระบบ</h3>
+                <div class="flex flex-wrap sm:flex-nowrap gap-3">
+                    <button onclick="startSystem()" id="btn-start" class="flex-1 bg-snap-green text-white py-4 rounded-2xl font-black shadow-md hover:bg-green-600 active:scale-95 transition-all text-sm"><i class="fas fa-play mr-2"></i> START SYSTEM</button>
+                    <button onclick="stopSystem()" id="btn-stop" class="flex-1 bg-slate-100 text-slate-600 py-4 rounded-2xl font-black shadow-sm hover:bg-red-500 hover:text-white active:scale-95 transition-all text-sm"><i class="fas fa-stop mr-2"></i> STOP SYSTEM</button>
+                    <button onclick="resetSystem()" class="flex-1 bg-slate-800 text-white py-4 rounded-2xl font-black shadow-md hover:bg-slate-700 active:scale-95 transition-all text-sm"><i class="fas fa-sync-alt mr-2"></i> REFRESH</button>
+                </div>
             </div>
-            <div class="bg-white p-10 rounded-[2.5rem] shadow-lg border border-slate-100 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-2 h-full bg-blue-500"></div>
-                <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mb-3">Active Nodes</p>
-                <h3 class="text-5xl font-black text-slate-800">10 / 10</h3>
-            </div>
-            <div class="bg-white p-10 rounded-[2.5rem] shadow-lg border border-slate-100 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-2 h-full bg-amber-500"></div>
-                <p class="text-sm text-slate-400 font-bold uppercase tracking-widest mb-3">System Health</p>
-                <h3 class="text-5xl font-black text-slate-800">98.5%</h3>
+            
+            <!-- 6. Configuration Inputs -->
+            <div>
+                <h3 class="font-black text-slate-700 mb-4 flex items-center gap-2 uppercase tracking-wider text-sm" data-i18n="dashCfgTitle"><i class="fas fa-sliders-h text-amber-500"></i> ตั้งค่าพารามิเตอร์</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1" data-i18n="dashTarget">เป้าหมาย (ชิ้น)</label>
+                        <input type="number" id="cfg-target" value="5000" onchange="updateDashboardConfig()" class="w-full bg-transparent outline-none font-bold text-slate-800">
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1" data-i18n="dashCarbon">ค่าคาร์บอน</label>
+                        <input type="number" step="0.0001" id="cfg-carbon" value="0.0072" onchange="updateDashboardConfig()" class="w-full bg-transparent outline-none font-bold text-slate-800">
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1" data-i18n="dashEnergy">ค่าพลังงาน</label>
+                        <input type="number" step="0.001" id="cfg-energy" value="0.015" onchange="updateDashboardConfig()" class="w-full bg-transparent outline-none font-bold text-slate-800">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="bg-[#1e2329] p-24 rounded-[3rem] text-center text-white shadow-2xl relative overflow-hidden">
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <div class="relative z-10">
-                <i class="fas fa-microchip text-7xl text-snap-green mb-8 animate-pulse"></i>
-                <h3 class="text-3xl font-black tracking-tight mb-4">Real-time Telemetry Live</h3>
-                <p class="text-slate-400 text-lg">Dashboard Pro is monitoring network connectivity via RS485</p>
+
+        <!-- 4. Production Planning (Progress) -->
+        <div class="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-snap-green/5 to-transparent"></div>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 relative z-10">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 tracking-tight" data-i18n="dashPlanTitle">แผนการทำงานวันนี้ (Production Planning)</h3>
+                    <p class="text-sm font-bold text-slate-400 mt-1" data-i18n="dashPlanSub">ความคืบหน้าของเป้าหมายการผลิตวันนี้ (Progress Update)</p>
+                </div>
+                <div class="mt-4 sm:mt-0 text-right">
+                    <span id="dash-progress-text" class="text-4xl font-black text-snap-green">0.0%</span>
+                </div>
             </div>
+            <div class="w-full h-6 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 relative z-10 shadow-inner">
+                <div id="dash-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-snap-green transition-all duration-300 relative" style="width: 0%">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-30"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5, 6, 7. Main KPIs -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-2 h-full bg-blue-500"></div>
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest" data-i18n="dashTotOut">ยอดผลิตรวม (Total Output)</p>
+                    <i class="fas fa-boxes text-blue-100 text-3xl"></i>
+                </div>
+                <h3 id="dash-total-output" class="text-5xl font-black text-slate-800">0</h3>
+                <p class="text-[11px] text-slate-400 font-bold mt-2 uppercase">Units Produced</p>
+            </div>
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div>
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest" data-i18n="dashCalCarbon">คาร์บอนฟุตพริ้นท์ (Cal Carbon)</p>
+                    <i class="fas fa-leaf text-emerald-100 text-3xl"></i>
+                </div>
+                <h3 id="dash-carbon" class="text-5xl font-black text-slate-800">0.00</h3>
+                <p class="text-[11px] text-slate-400 font-bold mt-2 uppercase">kgCO2e</p>
+            </div>
+            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-2 h-full bg-amber-500"></div>
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-widest" data-i18n="dashTotPower">พลังงานไฟฟ้ารวม (Total Power Use)</p>
+                    <i class="fas fa-bolt text-amber-100 text-3xl"></i>
+                </div>
+                <h3 id="dash-power" class="text-5xl font-black text-slate-800">0.00</h3>
+                <p class="text-[11px] text-slate-400 font-bold mt-2 uppercase">kWh</p>
+            </div>
+        </div>
+
+        <!-- 8. Machine Status Grid -->
+        <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3" data-i18n="dashMacStatus">
+            <i class="fas fa-server text-slate-400"></i> สถานะการทำงานแต่ละเครื่อง
+        </h3>
+        <div id="dash-nodes-grid" class="grid grid-cols-2 md:grid-cols-5 gap-5">
+            <!-- Node cards injected by JS -->
         </div>
     </div>
 
@@ -357,6 +422,21 @@ snapcon_html = """
         let cart = [];
         let memoryUsers = { '001': '123' };
 
+        // 📊 DASHBOARD STATE
+        let dashState = {
+            isRunning: false,
+            target: 5000,
+            carbonFactor: 0.0072,
+            energyFactor: 0.015,
+            intervalId: null,
+            nodes: Array.from({length: 10}, (_, i) => ({
+                id: i + 1,
+                name: `Machine ${String(i+1).padStart(2, '0')}`,
+                output: 0,
+                status: 'Offline'
+            }))
+        };
+
         const dict = {
             th: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
@@ -370,7 +450,11 @@ snapcon_html = """
                 alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับเพื่อให้ทีมงานส่งใบเสนอราคาให้ท่านได้",
                 regTitle: "สร้างบัญชีผู้ใช้", regDesc: "ลงทะเบียนเพื่อเข้าถึง Dashboard และระบบขอใบเสนอราคา",
                 regId: "รหัสผู้ใช้ (User ID)", regPass: "รหัสผ่าน (Password)", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์", btnSubmitReg: "ยืนยันการลงทะเบียน",
-                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด"
+                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด",
+                // Dashboard Dictionary
+                dashCtrlTitle: "การควบคุมระบบ", dashCfgTitle: "ตั้งค่าพารามิเตอร์", dashTarget: "เป้าหมาย (ชิ้น)", dashCarbon: "ค่าคาร์บอน", dashEnergy: "ค่าพลังงาน",
+                dashPlanTitle: "แผนการทำงานวันนี้ (Production Planning)", dashPlanSub: "ความคืบหน้าของเป้าหมายการผลิตวันนี้", dashTotOut: "ยอดผลิตรวม (Total Output)",
+                dashCalCarbon: "คาร์บอนฟุตพริ้นท์ (Cal Carbon)", dashTotPower: "พลังงานไฟฟ้ารวม (Total Power Use)", dashMacStatus: "สถานะการทำงานแต่ละเครื่อง"
             },
             en: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
@@ -384,7 +468,11 @@ snapcon_html = """
                 alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info so we can send the quote back to you.",
                 regTitle: "Create Account", regDesc: "Register to access Dashboard and Quotation features",
                 regId: "User ID", regPass: "Password", regName: "Full Name / Company", regContact: "Email / Phone", btnSubmitReg: "Confirm Registration",
-                homeProductsTitle: "Our Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products"
+                homeProductsTitle: "Our Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products",
+                // Dashboard Dictionary
+                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target (Units)", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
+                dashPlanTitle: "Production Planning", dashPlanSub: "Progress update for today's target", dashTotOut: "Total Output",
+                dashCalCarbon: "Cal Carbon Footprint", dashTotPower: "Total Power Use", dashMacStatus: "Machine Status"
             }
         };
 
@@ -478,10 +566,8 @@ snapcon_html = """
                 return;
             }
 
-            // บันทึกรหัสผ่านในหน่วยความจำ
             memoryUsers[id] = pass;
             
-            // นำข้อมูลไปส่ง Google Drive (Background)
             try {
                 fetch(GOOGLE_SCRIPT_URL, { 
                     method: 'POST', 
@@ -497,7 +583,6 @@ snapcon_html = """
 
             alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! กรุณา Login ด้วย ID ที่สร้าง" : "Registered successfully! Please Login.");
             
-            // ช่วยกรอกช่อง Login ให้อัตโนมัติเพื่อความสะดวก
             document.getElementById('userId').value = id;
             document.getElementById('userPass').value = pass;
             
@@ -510,7 +595,102 @@ snapcon_html = """
             document.getElementById('login-section').classList.add('md:flex');
             document.getElementById('user-section').classList.add('hidden');
             document.getElementById('user-section').classList.remove('flex');
+            stopSystem(); // Stop dashboard if running
             navigate('home');
+        }
+
+        // 📊 DASHBOARD FUNCTIONS
+        function startSystem() {
+            dashState.isRunning = true;
+            document.getElementById('btn-start').classList.add('ring-4', 'ring-green-500/50', 'scale-105');
+            document.getElementById('btn-stop').classList.remove('ring-4', 'ring-red-500/50', 'bg-red-500', 'text-white', 'scale-105');
+            document.getElementById('btn-stop').classList.add('bg-slate-100', 'text-slate-600');
+            dashState.nodes.forEach(n => n.status = 'Running');
+            
+            if(!dashState.intervalId) {
+                dashState.intervalId = setInterval(simulateProduction, 500); // อัปเดตทุกครึ่งวินาที
+            }
+            renderDashboard();
+        }
+
+        function stopSystem() {
+            dashState.isRunning = false;
+            document.getElementById('btn-start').classList.remove('ring-4', 'ring-green-500/50', 'scale-105');
+            document.getElementById('btn-stop').classList.remove('bg-slate-100', 'text-slate-600');
+            document.getElementById('btn-stop').classList.add('ring-4', 'ring-red-500/50', 'bg-red-500', 'text-white', 'scale-105');
+            dashState.nodes.forEach(n => n.status = 'Stopped');
+            
+            if(dashState.intervalId) {
+                clearInterval(dashState.intervalId);
+                dashState.intervalId = null;
+            }
+            renderDashboard();
+        }
+
+        function resetSystem() {
+            dashState.nodes.forEach(n => n.output = 0);
+            renderDashboard();
+        }
+
+        function updateDashboardConfig() {
+            dashState.target = parseInt(document.getElementById('cfg-target').value) || 1;
+            dashState.carbonFactor = parseFloat(document.getElementById('cfg-carbon').value) || 0;
+            dashState.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
+            renderDashboard();
+        }
+
+        function simulateProduction() {
+            if(!dashState.isRunning) return;
+            // สุ่มให้แต่ละเครื่องผลิตทีละ 1 ชิ้น โอกาสผลิต 50% ต่อครึ่งวินาที
+            dashState.nodes.forEach(n => {
+                if(Math.random() > 0.5) n.output += 1;
+            });
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            const grid = document.getElementById('dash-nodes-grid');
+            if(!grid) return; // Not initialized yet
+
+            const totalOutput = dashState.nodes.reduce((sum, n) => sum + n.output, 0);
+            const totalCarbon = totalOutput * dashState.carbonFactor;
+            const totalEnergy = totalOutput * dashState.energyFactor;
+            let progress = (totalOutput / dashState.target) * 100;
+            if(progress > 100) progress = 100;
+
+            // Update KPIs
+            document.getElementById('dash-total-output').innerText = totalOutput.toLocaleString();
+            document.getElementById('dash-carbon').innerText = totalCarbon.toFixed(2);
+            document.getElementById('dash-power').innerText = totalEnergy.toFixed(2);
+            
+            // Update Progress Bar
+            document.getElementById('dash-progress-bar').style.width = `${progress}%`;
+            document.getElementById('dash-progress-text').innerText = `${progress.toFixed(1)}%`;
+
+            // Update Grid
+            grid.innerHTML = dashState.nodes.map(n => {
+                const isRunning = n.status === 'Running';
+                const isStopped = n.status === 'Stopped';
+                const statusColorClass = isRunning ? 'text-snap-green' : (isStopped ? 'text-red-500' : 'text-slate-400');
+                const dotColorClass = isRunning ? 'bg-snap-green animate-pulse shadow-[0_0_8px_#00B36E]' : (isStopped ? 'bg-red-500' : 'bg-slate-300');
+                const cardBgClass = isRunning ? 'bg-white border-snap-green/30' : (isStopped ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200');
+                
+                return `
+                <div class="${cardBgClass} border p-5 rounded-2xl shadow-sm transition-all duration-300 flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-black text-slate-500 tracking-wide">${n.name}</span>
+                        <div class="w-3 h-3 rounded-full ${dotColorClass}"></div>
+                    </div>
+                    <div class="text-center mb-2">
+                        <h4 class="text-4xl font-black text-slate-800">${n.output.toLocaleString()}</h4>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Output Units</p>
+                    </div>
+                    <div class="text-center border-t border-slate-200/60 pt-3 mt-auto">
+                        <span class="text-[10px] font-black uppercase tracking-widest ${statusColorClass}">${n.status}</span>
+                    </div>
+                </div>
+                `;
+            }).join('');
         }
 
         // 🛒 PRODUCT & CART SYSTEM
@@ -681,7 +861,9 @@ snapcon_html = """
             // Update Lang Buttons Style
             document.getElementById('btn-lang-th').className = lang === 'th' ? "text-[9px] font-bold px-2.5 py-1 rounded-full bg-snap-green text-white transition-colors" : "text-[9px] font-bold px-2.5 py-1 rounded-full text-slate-400 hover:text-white transition-colors";
             document.getElementById('btn-lang-en').className = lang === 'en' ? "text-[9px] font-bold px-2.5 py-1 rounded-full bg-snap-green text-white transition-colors" : "text-[9px] font-bold px-2.5 py-1 rounded-full text-slate-400 hover:text-white transition-colors";
+            
             renderProducts();
+            renderDashboard(); // Render dashboard texts
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
 
@@ -692,5 +874,5 @@ snapcon_html = """
 </html>
 """
 
-# แสดงผลหน้าเว็บผ่าน Streamlit ปรับความสูงเพิ่มให้ครอบคลุมส่วน Slider ที่เพิ่มขึ้น
-st.components.v1.html(snapcon_html, height=1600, scrolling=True)
+# แสดงผลหน้าเว็บผ่าน Streamlit ปรับความสูงเพิ่มให้ครอบคลุมส่วน Dashboard ที่เพิ่มขึ้น
+st.components.v1.html(snapcon_html, height=1800, scrolling=True)
