@@ -63,7 +63,7 @@ st.markdown("""
     .hero-title {
         font-size: 3.8rem;
         font-weight: 900;
-        line-height: 1;
+        line-height: 1.1;
         color: #1A202C;
     }
     .hero-highlight {
@@ -94,7 +94,7 @@ def nav_to(page_name):
     st.session_state.page = page_name
     st.rerun()
 
-# 4. SIDEBAR (ตามภาพ image_184c6c.png และ image_175923.jpg)
+# 4. SIDEBAR (ตามภาพโครงสร้างเมนูย่อย)
 with st.sidebar:
     st.markdown('<p class="sidebar-brand">SNAPCON</p>', unsafe_allow_html=True)
     st.markdown('<p class="sidebar-subbrand">AUTOMATION SOLUTION</p>', unsafe_allow_html=True)
@@ -122,7 +122,7 @@ with st.sidebar:
             st.session_state.logged_in = False
             nav_to("main")
     else:
-        st.warning("Please login at the top right.")
+        st.warning("Please login at the top right to access full features.")
 
 # 5. CONTENT AREA
 if st.session_state.page == "main":
@@ -141,13 +141,15 @@ if st.session_state.page == "main":
                 else:
                     st.error("!")
 
-    # Hero Banner
+    # Hero Banner (ปรับปรุงข้อความใหม่ตามคำขอ)
     st.markdown("""
     <div class="hero-container">
-        <h1 class="hero-title">Cool running.<br><span class="hero-highlight">Long life.</span></h1>
-        <p style="font-size: 1.2rem; color: #4A5568; margin-top: 20px;">
-            ระบบจัดการเครื่องจักรอัจฉริยะ เพื่อประสิทธิภาพสูงสุดและความยั่งยืน<br>
-            Smart Monitoring & Maintenance Solution.
+        <h1 class="hero-title">Plug & Play.<br><span class="hero-highlight">Control Made Easy.</span></h1>
+        <p style="font-size: 1.5rem; color: #2D3748; margin-top: 15px; font-weight: 700; letter-spacing: 0.5px;">
+            “Just Connect. Just Control.”
+        </p>
+        <p style="font-size: 1.1rem; color: #718096; margin-top: 5px;">
+            Easy Setup. Instant Control.
         </p>
     </div>
     """, unsafe_allow_html=True)
