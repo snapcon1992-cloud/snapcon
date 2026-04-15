@@ -684,3 +684,7 @@ snapcon_html = """
     </script>
 </body>
 </html>
+"""
+
+# แสดงผลหน้าเว็บผ่าน Streamlit
+st.components.v1.html(snapcon_html, height=1400, scrolling=True)
