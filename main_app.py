@@ -130,19 +130,27 @@ snapcon_html = """
             100% { opacity: 1; transform: translateY(0); }
         }
         
-        .energy-line {
+        /* ขีดแสงยาวๆ (Long Energy Line) */
+        .long-energy-line {
             position: relative;
             overflow: hidden;
+            width: 100%;
+            max-width: 480px; 
+            height: 6px;
+            background: rgba(0, 179, 110, 0.2);
+            border-radius: 9999px;
+            box-shadow: 0 0 15px rgba(0, 179, 110, 0.6);
         }
-        .energy-line::after {
+        .long-energy-line::after {
             content: '';
             position: absolute;
             top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
-            animation: light-beam 2.5s linear infinite;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), #00B36E, transparent);
+            animation: light-beam-fast 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
-        @keyframes light-beam {
+        @keyframes light-beam-fast {
+            0% { left: -100%; }
             100% { left: 200%; }
         }
         
@@ -159,6 +167,7 @@ snapcon_html = """
         <div class="flex items-center gap-3 cursor-pointer h-full shrink-0 group" onclick="navigate('home')">
             <div class="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-snap-green to-emerald-900 rounded-xl shadow-[0_0_15px_rgba(0,179,110,0.4)] group-hover:shadow-[0_0_25px_rgba(0,179,110,0.8)] transition-all overflow-hidden">
                 <i class="fas fa-bolt text-white text-xl animate-pulse relative z-10"></i>
+                <!-- แสงวิ่งในโลโก้ -->
                 <div class="absolute inset-0 bg-white/20 energy-line"></div>
             </div>
             <div class="flex flex-col justify-center">
@@ -235,13 +244,23 @@ snapcon_html = """
                 <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
                 
                 <div class="relative z-10">
-                    <h1 class="animate-speed-slide-1 text-5xl md:text-[75px] font-black tracking-tighter mt-2 mb-4 leading-[1.1]">
-                        <span class="animate-gradient-text drop-shadow-xl pb-2">Automation<br>Conveyor System</span>
+                    <div class="flex items-center gap-3 mb-1 animate-speed-slide-1">
+                        <i class="fas fa-angle-double-right text-snap-green animate-pulse"></i>
+                        <p data-i18n="heroText1" class="text-xl md:text-[28px] text-slate-600 font-black tracking-widest uppercase italic drop-shadow-sm">Snap to Connect.</p>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4 pl-4 md:pl-8 animate-speed-slide-2">
+                        <i class="fas fa-angle-double-right text-blue-500 animate-pulse"></i>
+                        <p data-i18n="heroText2" class="text-xl md:text-[28px] text-slate-800 font-black tracking-widest uppercase italic drop-shadow-sm">Ready to Control.</p>
+                    </div>
+                    <h1 class="animate-speed-slide-3 text-6xl md:text-[85px] font-black tracking-tighter pl-8 md:pl-12 mt-2 mb-2 leading-[1.1]">
+                        <span data-i18n="heroText3" class="animate-gradient-text drop-shadow-xl pb-2">Plug & Play</span>
                     </h1>
-                    <div class="animate-speed-slide-2 h-2 w-40 bg-gradient-to-r from-snap-green to-blue-500 mt-6 md:mt-8 rounded-full energy-line shadow-[0_0_15px_rgba(0,179,110,0.6)]"></div>
+                    
+                    <!-- ขีดแสงยาวๆ แสดงความเร็ว -->
+                    <div class="animate-speed-slide-3 mt-6 md:mt-8 ml-8 md:ml-12 long-energy-line"></div>
                     
                     <!-- Social Links -->
-                    <div class="flex flex-wrap items-center gap-5 mt-8 md:mt-10 animate-speed-slide-3" style="animation-delay: 0.4s;">
+                    <div class="flex flex-wrap items-center gap-5 mt-8 md:mt-10 ml-8 md:ml-12 animate-speed-slide-3" style="animation-delay: 0.6s;">
                         <a href="tel:0812345678" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-snap-green hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fas fa-phone-alt"></i></a>
                         <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#1877F2] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://line.me" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#00B900] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-line text-lg"></i></a>
