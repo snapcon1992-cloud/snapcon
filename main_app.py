@@ -38,11 +38,45 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #F8F9FA; overflow-x: hidden; }
         .hero-bg {
-            background: linear-gradient(to right, #ffffff 35%, rgba(124, 224, 184, 0.9) 65%, rgba(124, 224, 184, 0.6) 100%), 
-                        url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center right;
+            position: relative;
+            background-color: #0f172a;
         }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, #ffffff 40%, rgba(124, 224, 184, 0.9) 70%, rgba(124, 224, 184, 0.5) 100%);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* ---- Image Slider Background Animations ---- */
+        .slide-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            animation: slideBgAnimation 20s infinite linear;
+        }
+
+        /* ภาพที่ 1: แขนกล Automation */
+        .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
+        /* ภาพที่ 2: เส้นแสงความเร็ว Fiber Optic */
+        .slide-2 { background-image: url('https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
+        /* ภาพที่ 3: ระบบเซิร์ฟเวอร์ ทันสมัย */
+        .slide-3 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
+        /* ภาพที่ 4: แผงวงจรชิปอัจฉริยะ */
+        .slide-4 { background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80'); animation-delay: 15s; }
+
+        @keyframes slideBgAnimation {
+            0% { opacity: 0; transform: scale(1.1) translateX(30px); }
+            5% { opacity: 1; transform: scale(1.1) translateX(20px); }
+            20% { opacity: 1; transform: scale(1.1) translateX(-10px); }
+            25% { opacity: 0; transform: scale(1.1) translateX(-20px); }
+            100% { opacity: 0; }
+        }
+
         .page-section { display: none !important; }
         .page-active { display: block !important; animation: fadeIn 0.4s ease-out forwards; }
         
@@ -183,7 +217,19 @@ snapcon_html = """
 
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
-        <section class="w-full h-[350px] md:h-[450px] hero-bg relative flex items-center border-b border-gray-200">
+        <section class="w-full h-[350px] md:h-[450px] hero-bg relative flex items-center border-b border-gray-200 overflow-hidden">
+            
+            <!-- Animated Background Slider -->
+            <div class="absolute inset-0 z-0">
+                <div class="slide-img slide-1"></div>
+                <div class="slide-img slide-2"></div>
+                <div class="slide-img slide-3"></div>
+                <div class="slide-img slide-4"></div>
+            </div>
+            
+            <!-- Gradient Overlay -->
+            <div class="hero-overlay"></div>
+
             <div class="bg-white/90 backdrop-blur-md pl-6 md:pl-12 pr-12 md:pr-20 py-10 md:py-16 ml-0 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.15)] absolute left-0 z-10 h-full flex flex-col justify-center border-r border-white/50 overflow-hidden">
                 <!-- Tech grid background for modern feel -->
                 <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
@@ -373,7 +419,7 @@ snapcon_html = """
             </div>
         </div>
 
-        <!-- 4. Production Planning (Progress) -->
+        <!-- 4. Production Planning (Progress) with Time Calculation -->
         <div class="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
             <div class="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-snap-green/5 to-transparent"></div>
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 relative z-10">
@@ -385,9 +431,22 @@ snapcon_html = """
                     <span id="dash-progress-text" class="text-4xl font-black text-snap-green">0.0%</span>
                 </div>
             </div>
-            <div class="w-full h-6 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 relative z-10 shadow-inner">
+            
+            <div class="w-full h-6 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 relative z-10 shadow-inner mb-4">
                 <div id="dash-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-snap-green transition-all duration-300 relative" style="width: 0%">
                     <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] opacity-30"></div>
+                </div>
+            </div>
+            
+            <!-- Time Calculation Display -->
+            <div class="flex flex-col sm:flex-row justify-between relative z-10 gap-3">
+                <div class="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase tracking-widest bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                    <i class="fas fa-clock text-slate-400"></i> <span data-i18n="dashTimeElapsed">เวลาที่ใช้ (Elapsed)</span>: 
+                    <span id="dash-time-elapsed" class="text-slate-700 font-black ml-1">00:00:00</span>
+                </div>
+                <div class="flex items-center gap-2 text-amber-600 text-xs font-bold uppercase tracking-widest bg-amber-50 px-4 py-2 rounded-xl border border-amber-200 shadow-sm">
+                    <i class="fas fa-stopwatch text-amber-500"></i> <span data-i18n="dashTimeRemain">เวลาคงเหลือโดยประมาณ (ETA)</span>: 
+                    <span id="dash-time-remain" class="text-amber-700 font-black ml-1">--:--:--</span>
                 </div>
             </div>
         </div>
@@ -507,6 +566,7 @@ snapcon_html = """
             carbonFactor: 0.0072,
             energyFactor: 0.015,
             intervalId: null,
+            elapsedSeconds: 0, // สำหรับจับเวลา
             nodes: Array.from({length: 10}, (_, i) => ({
                 id: i + 1,
                 name: `Machine ${String(i+1).padStart(2, '0')}`,
@@ -532,7 +592,8 @@ snapcon_html = """
                 // Dashboard Dictionary
                 dashCtrlTitle: "การควบคุมระบบ", dashCfgTitle: "ตั้งค่าพารามิเตอร์", dashTarget: "เป้าหมาย (ชิ้น)", dashCarbon: "ค่าคาร์บอน", dashEnergy: "ค่าพลังงาน",
                 dashPlanTitle: "แผนการทำงานวันนี้ (Production Planning)", dashPlanSub: "ความคืบหน้าของเป้าหมายการผลิตวันนี้", dashTotOut: "ยอดผลิตรวม (Total Output)",
-                dashCalCarbon: "คาร์บอนฟุตพริ้นท์ (Cal Carbon)", dashTotPower: "พลังงานไฟฟ้ารวม (Total Power Use)", dashMacStatus: "สถานะการทำงานแต่ละเครื่อง"
+                dashCalCarbon: "คาร์บอนฟุตพริ้นท์ (Cal Carbon)", dashTotPower: "พลังงานไฟฟ้ารวม (Total Power Use)", dashMacStatus: "สถานะการทำงานแต่ละเครื่อง",
+                dashTimeElapsed: "เวลาที่ใช้ (Elapsed)", dashTimeRemain: "เวลาคงเหลือโดยประมาณ (ETA)"
             },
             en: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
@@ -550,7 +611,8 @@ snapcon_html = """
                 // Dashboard Dictionary
                 dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target (Units)", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
                 dashPlanTitle: "Production Planning", dashPlanSub: "Progress update for today's target", dashTotOut: "Total Output",
-                dashCalCarbon: "Cal Carbon Footprint", dashTotPower: "Total Power Use", dashMacStatus: "Machine Status"
+                dashCalCarbon: "Cal Carbon Footprint", dashTotPower: "Total Power Use", dashMacStatus: "Machine Status",
+                dashTimeElapsed: "Elapsed Time", dashTimeRemain: "Est. Remaining (ETA)"
             }
         };
 
@@ -686,7 +748,7 @@ snapcon_html = """
             dashState.nodes.forEach(n => n.status = 'Running');
             
             if(!dashState.intervalId) {
-                dashState.intervalId = setInterval(simulateProduction, 500); // อัปเดตทุกครึ่งวินาที
+                dashState.intervalId = setInterval(simulateProduction, 500); // อัปเดตทุก 0.5 วินาที
             }
             renderDashboard();
         }
@@ -707,6 +769,7 @@ snapcon_html = """
 
         function resetSystem() {
             dashState.nodes.forEach(n => n.output = 0);
+            dashState.elapsedSeconds = 0;
             renderDashboard();
         }
 
@@ -719,6 +782,10 @@ snapcon_html = """
 
         function simulateProduction() {
             if(!dashState.isRunning) return;
+            
+            // บวกเวลาที่ใช้ไปรอบละ 0.5 วินาที
+            dashState.elapsedSeconds += 0.5;
+            
             // สุ่มให้แต่ละเครื่องผลิตทีละ 1 ชิ้น โอกาสผลิต 50% ต่อครึ่งวินาที
             dashState.nodes.forEach(n => {
                 if(Math.random() > 0.5) n.output += 1;
@@ -775,6 +842,15 @@ snapcon_html = """
             }
         }
 
+        // ฟังก์ชันช่วยแปลงเวลา (วินาที เป็น HH:MM:SS)
+        function formatTimeStr(totalSeconds) {
+            if (!isFinite(totalSeconds) || totalSeconds < 0) return "--:--:--";
+            const h = Math.floor(totalSeconds / 3600);
+            const m = Math.floor((totalSeconds % 3600) / 60);
+            const s = Math.floor(totalSeconds % 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
         function renderDashboard() {
             const grid = document.getElementById('dash-nodes-grid');
             if(!grid) return; // Not initialized yet
@@ -793,6 +869,34 @@ snapcon_html = """
             // Update Progress Bar
             document.getElementById('dash-progress-bar').style.width = `${progress}%`;
             document.getElementById('dash-progress-text').innerText = `${progress.toFixed(1)}%`;
+            
+            // Update Time Calculation
+            let elapsedStr = formatTimeStr(dashState.elapsedSeconds);
+            let remainStr = "--:--:--";
+            
+            if (totalOutput > 0 && dashState.elapsedSeconds > 0) {
+                let unitsPerSecond = totalOutput / dashState.elapsedSeconds;
+                let remainUnits = dashState.target - totalOutput;
+                
+                if (remainUnits > 0 && unitsPerSecond > 0) {
+                    remainStr = formatTimeStr(remainUnits / unitsPerSecond);
+                } else if (remainUnits <= 0) {
+                    remainStr = "00:00:00";
+                }
+            } else if (dashState.target <= totalOutput) {
+                remainStr = "00:00:00";
+            }
+            
+            const elElapsed = document.getElementById('dash-time-elapsed');
+            const elRemain = document.getElementById('dash-time-remain');
+            
+            if (elElapsed) elElapsed.innerText = elapsedStr;
+            if (elRemain) {
+                elRemain.innerText = remainStr;
+                if (dashState.target <= totalOutput) {
+                    elRemain.innerText += " (Completed)";
+                }
+            }
 
             // Update Grid
             grid.innerHTML = dashState.nodes.map(n => {
