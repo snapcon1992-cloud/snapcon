@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่สุด (Enterprise Scale: 50 Products, 200 Spares, 100 Machines + Predictive Maintenance)
+# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่สุด
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -162,15 +162,16 @@ snapcon_html = """
             <button type="button" onclick="navigate('spare')" data-i18n="navSpare" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Spare Parts</button>
             <button type="button" onclick="checkDashboardAuth()" data-i18n="navDashboard" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Dashboard</button>
             <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Contact</button>
+            <button type="button" onclick="navigate('about')" data-i18n="navAbout" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">About</button>
         </div>
 
         <!-- Right Side: Login, Lang, Cart -->
         <div class="flex items-center gap-3 shrink-0">
             <div id="login-section" class="hidden md:flex items-center gap-2">
                 <span class="text-slate-400 text-xs font-bold px-1">ID:</span>
-                <input type="text" id="userId" class="h-[26px] w-16 px-2 text-xs outline-none text-black rounded border-none focus:ring-2 ring-snap-green">
+                <input type="text" id="userId" data-i18n-placeholder="phId" placeholder="ID" class="h-[26px] w-16 px-2 text-xs outline-none text-black rounded border-none focus:ring-2 ring-snap-green">
                 <span class="text-slate-400 text-xs font-bold px-1">PW:</span>
-                <input type="password" id="userPass" class="h-[26px] w-16 px-2 text-xs outline-none text-black rounded border-none focus:ring-2 ring-snap-green">
+                <input type="password" id="userPass" data-i18n-placeholder="phPass" placeholder="PW" class="h-[26px] w-16 px-2 text-xs outline-none text-black rounded border-none focus:ring-2 ring-snap-green">
                 <div class="flex flex-col gap-0.5 ml-1">
                     <button type="button" onclick="handleLogin()" data-i18n="navLogin" class="bg-snap-green text-white font-bold text-[9px] px-3 py-0.5 hover:bg-green-600 rounded transition-colors">Login</button>
                     <button type="button" onclick="openRegisterModal()" data-i18n="navRegister" class="bg-slate-600 text-white font-bold text-[9px] px-3 py-0.5 hover:bg-slate-500 rounded transition-colors">Register</button>
@@ -285,7 +286,7 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- 🎉 Home Product Slider (Only shows first 10 for performance) -->
+        <!-- 🎉 Home Product Slider -->
         <section class="w-full max-w-7xl mx-auto px-6 py-12 border-t border-slate-200/60 bg-slate-50/50 rounded-t-[3rem]">
             <div class="flex justify-between items-end mb-8">
                 <div>
@@ -308,19 +309,17 @@ snapcon_html = """
         </section>
     </div>
 
-    <!-- ==================== PAGE: PRODUCT (50 Models) ==================== -->
+    <!-- ==================== PAGE: PRODUCT ==================== -->
     <div id="page-product" class="page-section max-w-7xl mx-auto px-6 py-16">
         <h2 data-i18n="pageProductTitle" class="text-4xl font-black mb-4 border-l-8 border-snap-green pl-6 text-slate-800">SNAPCON Conveyor Systems</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium">รวมเครื่องจักรสายพานลำเลียงอัจฉริยะกว่า 50 รุ่นที่ครอบคลุมทุกอุตสาหกรรม</p>
-        <!-- Product Grid (Scrollable for 50 items) -->
+        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageProductSub">รวมเครื่องจักรสายพานลำเลียงอัจฉริยะกว่า 50 รุ่นที่ครอบคลุมทุกอุตสาหกรรม</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-h-[75vh] overflow-y-auto custom-scrollbar p-2" id="product-grid"></div>
     </div>
 
-    <!-- ==================== PAGE: SPARE PARTS (200 Parts) ==================== -->
+    <!-- ==================== PAGE: SPARE PARTS ==================== -->
     <div id="page-spare" class="page-section max-w-7xl mx-auto px-6 py-16">
         <h2 data-i18n="pageSpareTitle" class="text-4xl font-black mb-4 border-l-8 border-blue-500 pl-6 text-slate-800">SNAPCON Spare Parts</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium">อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงกว่า 200 รายการ ของแท้ 100%</p>
-        <!-- Spare Parts Grid (Scrollable for 200 items) -->
+        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageSpareSub">อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงกว่า 200 รายการ ของแท้ 100%</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-h-[75vh] overflow-y-auto custom-scrollbar p-2" id="spare-grid"></div>
     </div>
 
@@ -345,11 +344,11 @@ snapcon_html = """
             <div id="guest-form" class="bg-slate-50 p-8 rounded-3xl mb-10 border-2 border-dashed border-slate-200 hidden">
                 <p class="font-black text-slate-700 mb-6 uppercase text-sm tracking-widest flex items-center gap-3">
                     <span class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center"><i class="fas fa-info"></i></span> 
-                    ข้อมูลติดต่อกลับ (Contact Info)
+                    <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ (Contact Info)</span>
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="text" id="guest-name" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-6 py-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-snap-green transition-all shadow-sm font-bold text-slate-700">
-                    <input type="text" id="guest-contact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-6 py-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-snap-green transition-all shadow-sm font-bold text-slate-700">
+                    <input type="text" id="guest-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-6 py-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-snap-green transition-all shadow-sm font-bold text-slate-700">
+                    <input type="text" id="guest-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-6 py-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-snap-green transition-all shadow-sm font-bold text-slate-700">
                 </div>
             </div>
 
@@ -362,16 +361,15 @@ snapcon_html = """
                     ยื่นขอใบเสนอราคา
                 </button>
             </div>
-            <p class="text-[11px] text-slate-400 mt-6 text-center font-bold bg-slate-50 py-3 rounded-xl"><i class="fas fa-shield-alt text-snap-green mr-1"></i> ข้อมูลจะถูกบันทึกลงระบบ Google Drive: snapcon1992 อย่างปลอดภัย</p>
+            <p class="text-[11px] text-slate-400 mt-6 text-center font-bold bg-slate-50 py-3 rounded-xl"><i class="fas fa-shield-alt text-snap-green mr-1"></i> <span data-i18n="guestNotice">ข้อมูลจะถูกบันทึกลงระบบ Google Drive อย่างปลอดภัย</span></p>
         </div>
     </div>
 
-    <!-- ==================== PAGE: DASHBOARD (100 MACHINES + Predictive Maintenance) ==================== -->
+    <!-- ==================== PAGE: DASHBOARD ==================== -->
     <div id="page-dashboard" class="page-section max-w-[1600px] mx-auto px-6 py-16">
         <h2 class="text-4xl font-black mb-2 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navDashboard">Dashboard</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium">Enterprise Monitoring System - 100 Active Nodes with Predictive Maintenance</p>
+        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กร - 100 โหนดพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
         
-        <!-- Controls & Settings Row -->
         <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 mb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
                 <h3 class="font-black text-slate-700 mb-4 flex items-center gap-2 uppercase tracking-wider text-sm" data-i18n="dashCtrlTitle"><i class="fas fa-gamepad text-blue-500"></i> การควบคุมระบบ</h3>
@@ -402,11 +400,10 @@ snapcon_html = """
             </div>
         </div>
 
-        <!-- Production Planning -->
         <div class="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 relative z-10">
                 <div>
-                    <h3 class="text-2xl font-black text-slate-800 tracking-tight" data-i18n="dashPlanTitle">แผนการทำงานวันนี้</h3>
+                    <h3 class="text-2xl font-black text-slate-800 tracking-tight" data-i18n="dashPlanTitle">แผนการทำงานวันนี้ (Production Planning)</h3>
                 </div>
                 <div class="mt-4 sm:mt-0 text-right">
                     <span id="dash-progress-text" class="text-4xl font-black text-snap-green">0.0%</span>
@@ -429,7 +426,6 @@ snapcon_html = """
             </div>
         </div>
 
-        <!-- KPIs -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
             <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 border-l-8 border-l-blue-500">
                 <p class="text-xs text-slate-400 font-bold uppercase" data-i18n="dashTotOut">ยอดผลิตรวม (Total Output)</p>
@@ -445,39 +441,67 @@ snapcon_html = """
             </div>
         </div>
 
-        <!-- 100 Machine Grid -->
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-2xl font-black text-slate-800 flex items-center gap-3">
-                <i class="fas fa-server text-slate-400"></i> สถานะการทำงานและสุขภาพเครื่อง (Predictive Maintenance)
+                <i class="fas fa-server text-slate-400"></i> <span data-i18n="dashMacStatus2">สถานะการทำงานและสุขภาพเครื่อง</span>
             </h3>
-            <div class="flex gap-3 text-[10px] font-bold uppercase tracking-widest bg-white px-4 py-2 rounded-xl border border-slate-200">
-                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-snap-green"></div> ปกติ (>70%)</span>
-                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-amber-400"></div> เฝ้าระวัง (<70%)</span>
-                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-red-500"></div> ซ่อมบำรุง (<30%)</span>
+            <div class="hidden sm:flex gap-3 text-[10px] font-bold uppercase tracking-widest bg-white px-4 py-2 rounded-xl border border-slate-200">
+                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-snap-green"></div> <span data-i18n="statusNormal">ปกติ (>70%)</span></span>
+                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-amber-400"></div> <span data-i18n="statusWarning">เฝ้าระวัง (<70%)</span></span>
+                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-red-500"></div> <span data-i18n="statusMaint">ซ่อมบำรุง (<30%)</span></span>
             </div>
         </div>
         <div class="bg-slate-50/50 p-4 rounded-3xl border border-slate-200">
-            <!-- Grid 100 items with max-height to scroll -->
             <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-3 max-h-[65vh] overflow-y-auto custom-scrollbar p-2">
-                <!-- Nodes injected by JS -->
             </div>
         </div>
     </div>
 
-    <!-- ==================== PAGE: CONTACT & ABOUT ==================== -->
+    <!-- ==================== PAGE: CONTACT ==================== -->
     <div id="page-contact" class="page-section max-w-4xl mx-auto px-6 py-16 text-center">
         <h2 class="text-4xl font-black mb-12 text-slate-800" data-i18n="navContact">Contact Us</h2>
         <div class="bg-white p-16 rounded-[4rem] shadow-2xl border border-slate-100 relative overflow-hidden">
             <div class="absolute -top-20 -right-20 w-64 h-64 bg-snap-green/10 blur-[80px] rounded-full"></div>
+            <div class="w-24 h-24 bg-snap-green/10 text-snap-green rounded-[2rem] flex items-center justify-center text-4xl mx-auto mb-8 relative z-10 shadow-inner border border-snap-green/20">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
             <p class="text-3xl font-black text-slate-800 mb-4 relative z-10">snapcon1992@gmail.com</p>
-            <button onclick="window.location.href='mailto:snapcon1992@gmail.com'" class="relative z-10 bg-snap-green text-white px-14 py-5 rounded-2xl font-black text-lg hover:bg-green-600 transition-all active:scale-95">SEND DIRECT EMAIL</button>
+            <p class="text-slate-500 font-medium mb-12 relative z-10 text-lg" data-i18n="contactSub">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ</p>
+            <button onclick="window.location.href='mailto:snapcon1992@gmail.com'" class="relative z-10 bg-snap-green text-white px-14 py-5 rounded-2xl font-black text-lg hover:bg-green-600 transition-all shadow-[0_15px_30px_rgba(0,179,110,0.3)] active:scale-95 tracking-wide" data-i18n="btnEmail">ส่งอีเมลติดต่อเรา</button>
         </div>
     </div>
 
-    <div id="page-about" class="page-section max-w-4xl mx-auto px-6 py-16">
-        <h2 class="text-4xl font-black mb-10 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navAbout">About Us</h2>
-        <div class="bg-white p-16 rounded-[4rem] shadow-xl border border-slate-100 leading-loose text-slate-600 text-xl font-medium">
-            <p class="mb-8"><strong class="text-slate-900 font-black text-2xl">Snapcon Automation</strong> คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ <strong>Plug & Play System</strong></p>
+    <!-- ==================== PAGE: ABOUT US ==================== -->
+    <div id="page-about" class="page-section max-w-5xl mx-auto px-6 py-16">
+        <h2 class="text-4xl font-black mb-10 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navAbout">เกี่ยวกับเรา</h2>
+        <div class="bg-white p-12 md:p-16 rounded-[4rem] shadow-xl border border-slate-100 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-snap-green/5 blur-[80px] rounded-full -mr-20 -mt-20"></div>
+            
+            <p class="text-3xl font-black text-slate-900 mb-6 leading-tight">
+                SNAPCON AUTOMATION
+            </p>
+            <p class="text-lg text-slate-600 leading-relaxed mb-12 font-medium" data-i18n="aboutDesc">
+                Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด เพื่อเตรียมความพร้อมอุตสาหกรรมสู่อนาคต
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Vision Card -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 hover:border-snap-green transition-colors group">
+                    <div class="w-14 h-14 bg-snap-green/10 text-snap-green rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-4" data-i18n="aboutVisionTitle">วิสัยทัศน์ (Vision)</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed" data-i18n="aboutVisionDesc">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
+                </div>
+                <!-- Mission Card -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 hover:border-blue-500 transition-colors group">
+                    <div class="w-14 h-14 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-2xl font-black text-slate-800 mb-4" data-i18n="aboutMissionTitle">พันธกิจ (Mission)</h3>
+                    <p class="text-slate-500 font-medium leading-relaxed" data-i18n="aboutMissionDesc">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -489,13 +513,13 @@ snapcon_html = """
                 <h3 class="text-2xl font-black text-slate-800" data-i18n="regTitle">สร้างบัญชีผู้ใช้</h3>
             </div>
             <div class="p-8 space-y-5 overflow-y-auto no-scrollbar flex-1">
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2">User ID</label><input type="text" id="reg-id" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2">Password</label><input type="password" id="reg-pass" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2">Name / Company</label><input type="text" id="reg-name" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2">Email / Phone</label><input type="text" id="reg-contact" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
+                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regId">User ID</label><input type="text" id="reg-id" data-i18n-placeholder="phRegId" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
+                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regPass">Password</label><input type="password" id="reg-pass" data-i18n-placeholder="phRegPass" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
+                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regName">Name / Company</label><input type="text" id="reg-name" data-i18n-placeholder="phRegName" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
+                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regContact">Email / Phone</label><input type="text" id="reg-contact" data-i18n-placeholder="phRegContact" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
             </div>
             <div class="p-8 pt-6 border-t bg-slate-50 shrink-0">
-                <button type="button" onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4 rounded-xl font-black hover:bg-green-600">ยืนยันลงทะเบียน</button>
+                <button type="button" onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4 rounded-xl font-black hover:bg-green-600" data-i18n="btnSubmitReg">ยืนยันลงทะเบียน</button>
             </div>
         </div>
     </div>
@@ -507,52 +531,35 @@ snapcon_html = """
         let cart = [];
         let memoryUsers = { '001': '123' };
 
-        // 📊 DASHBOARD STATE (100 Machines + Predictive Maintenance)
         let dashState = {
             isRunning: false, target: 50000, carbonFactor: 0.0072, energyFactor: 0.015,
             intervalId: null, elapsedSeconds: 0,
             nodes: Array.from({length: 100}, (_, i) => ({
-                id: i + 1, 
-                name: `Node ${String(i+1).padStart(3, '0')}`, 
-                output: 0, 
-                status: 'Offline',
-                health: 100.0,
-                wearRate: 0.2 + (Math.random() * 0.6) // Random wear rate for each machine
+                id: i + 1, name: `Node ${String(i+1).padStart(3, '0')}`, output: 0, status: 'Offline',
+                health: 100.0, wearRate: 0.2 + (Math.random() * 0.6)
             }))
         };
 
-        // 🔧 DATA GENERATION: 50 Products & 200 Spares
         let products = [];
         let spares = [];
         
         const baseImgs = ['https://i.ibb.co/bZ7TKQg/01.png', 'https://i.ibb.co/tTCb2j0h/02.png', 'https://i.ibb.co/PGNt8dfj/03.png', 'https://i.ibb.co/mVfD9H0B/04.png', 'https://i.ibb.co/x4SGKtb/05.png'];
         const cTypes = ['Mini', 'Standard', 'Heavy Duty', 'High Speed', 'Food Grade', 'Incline', 'Modular', 'Roller System', 'Eco Line', 'Flex Track'];
         
-        // Generate 50 Conveyors
         for(let i=1; i<=50; i++) {
             let t = cTypes[i % cTypes.length];
             products.push({
-                id: 'M' + String(i).padStart(2, '0'),
-                name: `Snapcon Model ${String(i).padStart(2, '0')} (${t})`,
-                price: 15000 + (i * 800),
+                id: 'M' + String(i).padStart(2, '0'), name: `Snapcon Model ${String(i).padStart(2, '0')} (${t})`, price: 15000 + (i * 800),
                 img: i <= 5 ? baseImgs[i-1] : `https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80&sig=${i}`,
-                specs: { 
-                    th: [`L: ${1+(i%15)}m`, `W: ${300+(i*10)}mm`, `Load: ${50+(i*10)}kg`, `Speed: ${15+(i%5)}m/min`],
-                    en: [`L: ${1+(i%15)}m`, `W: ${300+(i*10)}mm`, `Load: ${50+(i*10)}kg`, `Speed: ${15+(i%5)}m/min`] 
-                }
+                specs: { th: [`L: ${1+(i%15)}m`, `W: ${300+(i*10)}mm`, `Load: ${50+(i*10)}kg`, `Speed: ${15+(i%5)}m/min`], en: [`L: ${1+(i%15)}m`, `W: ${300+(i*10)}mm`, `Load: ${50+(i*10)}kg`, `Speed: ${15+(i%5)}m/min`] }
             });
         }
 
         const sTypes = ['Roller Series', 'Conveyor Belt PU', 'Drive Motor AC', 'Sensor Switch', 'Control Board', 'Bearing Unit', 'Bracket Set', 'Emergency Stop', 'Power Supply 24V', 'Inverter VFD'];
-        const spareImg = 'https://images.unsplash.com/photo-1581092335397-9583eb92d232?auto=format&fit=crop&w=400&q=80';
-        
-        // Generate 200 Spares
         for(let i=1; i<=200; i++) {
             let t = sTypes[i % sTypes.length];
             spares.push({
-                id: 'SP' + String(i).padStart(3, '0'),
-                name: `${t} - P${String(i).padStart(3, '0')}`,
-                price: 500 + (i * 25),
+                id: 'SP' + String(i).padStart(3, '0'), name: `${t} - P${String(i).padStart(3, '0')}`, price: 500 + (i * 25),
                 img: `https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80&sig=${i+100}`,
                 specs: { th: [`Type: ${t}`, "Status: Ready"], en: [`Type: ${t}`, "Status: Ready"] }
             });
@@ -560,36 +567,85 @@ snapcon_html = """
         
         const allItems = [...products, ...spares];
 
+        // 🌐 DICTIONARY: ระบบภาษาที่สมบูรณ์ 100%
         const dict = {
             th: {
                 navProduct: "Products (50)", navSpare: "Spares (200)", navDashboard: "Dashboard (100)", navContact: "Contact", navAbout: "About Us",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
-                cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog",
-                pageProductTitle: "SNAPCON Conveyor Systems", pageSpareTitle: "SNAPCON Spare Parts", btnAddToCart: "หยิบใส่รถเข็น",
+                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
+                cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
+                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "รวมเครื่องจักรสายพานลำเลียงอัจฉริยะกว่า 50 รุ่นที่ครอบคลุมทุกอุตสาหกรรม",
+                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงกว่า 200 รายการ ของแท้ 100%",
+                btnAddToCart: "หยิบใส่รถเข็น",
                 pageCartTitle: "รถเข็นขอใบเสนอราคา", cartEmpty: "ยังไม่มีสินค้าในรถเข็น", cartTotalLabel: "ราคากลางประเมินรวม:",
                 btnRequestQuote: "ยื่นขอใบเสนอราคา", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก", specTitle: "สเปค:",
                 alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว!",
                 alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับ",
-                regTitle: "สร้างบัญชีผู้ใช้", regDesc: "ลงทะเบียนเพื่อเข้าถึงระบบ", btnSubmitReg: "ยืนยันการลงทะเบียน",
-                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด",
+                
+                // Contact & About
+                contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ", btnEmail: "ส่งอีเมลติดต่อเรา",
+                aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด เพื่อเตรียมความพร้อมอุตสาหกรรมสู่อนาคต",
+                aboutVisionTitle: "วิสัยทัศน์ (Vision)", aboutVisionDesc: "มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้",
+                aboutMissionTitle: "พันธกิจ (Mission)", aboutMissionDesc: "พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก",
+
+                regTitle: "สร้างบัญชีผู้ใช้", regDesc: "ลงทะเบียนเพื่อเข้าถึงระบบและขอใบเสนอราคา", btnSubmitReg: "ยืนยันการลงทะเบียน",
+                regId: "รหัสผู้ใช้ (User ID)", regPass: "รหัสผ่าน (Password)", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์",
+                
+                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด (50 Models)",
+                
+                // Dashboard
+                dashSubTitle: "ระบบตรวจสอบระดับองค์กร - 100 โหนดพร้อมระบบซ่อมบำรุงเชิงคาดการณ์",
                 dashCtrlTitle: "การควบคุมระบบ", dashCfgTitle: "ตั้งค่าพารามิเตอร์", dashTarget: "เป้าหมาย (ชิ้น)", dashCarbon: "ค่าคาร์บอน", dashEnergy: "ค่าพลังงาน",
                 dashPlanTitle: "แผนการทำงานวันนี้ (Production Planning)", dashTotOut: "ยอดผลิตรวม", dashCalCarbon: "คาร์บอน (Cal Carbon)", dashTotPower: "พลังงานรวม (Power)",
-                dashTimeElapsed: "เวลาที่ใช้ (Elapsed)", dashTimeRemain: "เวลาคงเหลือ (ETA)"
+                dashTimeElapsed: "เวลาที่ใช้ (Elapsed)", dashTimeRemain: "เวลาคงเหลือ (ETA)", dashMacStatus2: "สถานะการทำงานและสุขภาพเครื่อง",
+                statusNormal: "ปกติ (>70%)", statusWarning: "เฝ้าระวัง (<70%)", statusMaint: "ซ่อมบำรุง (<30%)",
+                
+                // Cart Guests
+                guestContactTitle: "ข้อมูลติดต่อกลับ (Contact Info)", guestNotice: "ข้อมูลจะถูกบันทึกลงระบบ Google Drive อย่างปลอดภัย",
+                
+                // Placeholders
+                phId: "ID", phPass: "PW",
+                phGuestName: "ชื่อผู้ติดต่อ / ชื่อบริษัท", phGuestContact: "อีเมล หรือ เบอร์โทรศัพท์",
+                phRegId: "ตั้งรหัส ID สำหรับเข้าระบบ", phRegPass: "ตั้งรหัสผ่านของคุณ", phRegName: "ระบุชื่อสำหรับติดต่อ", phRegContact: "ระบุช่องทางติดต่อกลับ"
             },
             en: {
                 navProduct: "Products (50)", navSpare: "Spares (200)", navDashboard: "Dashboard (100)", navContact: "Contact", navAbout: "About Us",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
-                cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog",
-                pageProductTitle: "SNAPCON Conveyor Systems", pageSpareTitle: "SNAPCON Spare Parts", btnAddToCart: "Add to Cart",
+                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
+                cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
+                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "Explore over 50 intelligent conveyor models covering all industries.",
+                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "Over 200 genuine spare parts and conveyor components. 100% Authentic.",
+                btnAddToCart: "Add to Cart",
                 pageCartTitle: "Quotation Cart", cartEmpty: "Your cart is empty", cartTotalLabel: "Estimated Total:",
                 btnRequestQuote: "Submit Quotation Request", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "Specs:",
                 alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart!",
                 alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info.",
-                regTitle: "Create Account", regDesc: "Register to access system", btnSubmitReg: "Confirm Registration",
-                homeProductsTitle: "Our Products", homeProductsSub: "Explore latest automation machines", viewAllProducts: "View All Products",
+                
+                // Contact & About
+                contactSub: "Official Technical Support & Inquiries", btnEmail: "SEND DIRECT EMAIL",
+                aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems. We are committed to revolutionizing the automation industry with solutions that reduce complexity, minimize installation time, and maximize production efficiency.",
+                aboutVisionTitle: "Our Vision", aboutVisionDesc: "To be the leading provider of the most accessible and advanced Plug & Play automation systems in Southeast Asia.",
+                aboutMissionTitle: "Our Mission", aboutMissionDesc: "Develop innovations that reduce complexity, minimize installation time, and elevate the operational efficiency of industries of all sizes to compete globally.",
+
+                regTitle: "Create Account", regDesc: "Register to access the system and request quotes", btnSubmitReg: "Confirm Registration",
+                regId: "User ID", regPass: "Password", regName: "Full Name / Company", regContact: "Email / Phone",
+                
+                homeProductsTitle: "Our Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products (50 Models)",
+                
+                // Dashboard
+                dashSubTitle: "Enterprise Monitoring System - 100 Active Nodes with Predictive Maintenance",
                 dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target (Units)", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
                 dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon Footprint", dashTotPower: "Total Power Use",
-                dashTimeElapsed: "Elapsed Time", dashTimeRemain: "Est. Remaining (ETA)"
+                dashTimeElapsed: "Elapsed Time", dashTimeRemain: "Est. Remaining (ETA)", dashMacStatus2: "Machine Status & Health",
+                statusNormal: "Optimal (>70%)", statusWarning: "Warning (<70%)", statusMaint: "Maintenance (<30%)",
+                
+                // Cart Guests
+                guestContactTitle: "Contact Info", guestNotice: "Information will be securely saved to Google Drive",
+                
+                // Placeholders
+                phId: "ID", phPass: "PW",
+                phGuestName: "Contact Name / Company", phGuestContact: "Email or Phone Number",
+                phRegId: "Create your User ID", phRegPass: "Create your Password", phRegName: "Enter your full name", phRegContact: "Enter email or phone"
             }
         };
 
@@ -603,7 +659,7 @@ snapcon_html = """
 
         function checkDashboardAuth() {
             if (isLoggedIn) navigate('dashboard');
-            else { alert(dict[currentLang].alertLoginReq || "Please Login first"); document.getElementById('userId').focus(); }
+            else { alert(currentLang === 'th' ? "กรุณา Login ก่อน" : "Please Login first"); document.getElementById('userId').focus(); }
         }
 
         function handleLogin() {
@@ -618,7 +674,7 @@ snapcon_html = """
                 document.getElementById('user-section').classList.add('flex');
                 alert(dict[currentLang].alertLoginSuccess);
                 document.getElementById('userId').value = ''; document.getElementById('userPass').value = '';
-            } else alert("Invalid ID/Pass");
+            } else alert(currentLang === 'th' ? "ID/Pass ไม่ถูกต้อง" : "Invalid ID/Pass");
         }
 
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
@@ -629,11 +685,13 @@ snapcon_html = """
             const pass = document.getElementById('reg-pass').value;
             const name = document.getElementById('reg-name').value;
             const contact = document.getElementById('reg-contact').value;
-            if(!id || !pass || !name || !contact) return alert("Please fill all fields");
-            if(memoryUsers[id]) return alert("ID already exists");
+            if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบ" : "Please fill all fields");
+            if(memoryUsers[id]) return alert(currentLang === 'th' ? "ID นี้มีผู้ใช้งานแล้ว" : "ID already exists");
+            
             memoryUsers[id] = pass;
             try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name }) }); } catch(e) {}
-            alert("Registered successfully!");
+            
+            alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ!" : "Registered successfully!");
             document.getElementById('userId').value = id; document.getElementById('userPass').value = pass;
             closeRegisterModal();
         }
@@ -648,152 +706,98 @@ snapcon_html = """
         // ================= DASHBOARD CORE LOGIC =================
         function startSystem() {
             dashState.isRunning = true;
-            dashState.nodes.forEach(n => {
-                if(n.health > 30) n.status = 'Running';
-                else n.status = 'Maintenance'; // เครื่องที่พังไปแล้วไม่สามารถเริ่มทำงานใหม่ได้
-            });
+            dashState.nodes.forEach(n => { if(n.health > 30) n.status = 'Running'; else n.status = 'Maintenance'; });
             if(!dashState.intervalId) dashState.intervalId = setInterval(simulateProduction, 500);
             renderDashboard();
         }
-        
         function stopSystem() {
             dashState.isRunning = false;
-            dashState.nodes.forEach(n => {
-                if(n.status !== 'Maintenance') n.status = 'Stopped';
-            });
+            dashState.nodes.forEach(n => { if(n.status !== 'Maintenance') n.status = 'Stopped'; });
             if(dashState.intervalId) { clearInterval(dashState.intervalId); dashState.intervalId = null; }
             renderDashboard();
         }
-        
         function resetSystem() { 
-            dashState.nodes.forEach(n => {
-                n.output = 0; 
-                n.health = 100.0;
-                n.status = dashState.isRunning ? 'Running' : 'Offline';
-            }); 
-            dashState.elapsedSeconds = 0; 
-            renderDashboard(); 
+            dashState.nodes.forEach(n => { n.output = 0; n.health = 100.0; n.status = dashState.isRunning ? 'Running' : 'Offline'; }); 
+            dashState.elapsedSeconds = 0; renderDashboard(); 
         }
-        
         function updateDashboardConfig() {
             dashState.target = parseInt(document.getElementById('cfg-target').value) || 1;
             dashState.carbonFactor = parseFloat(document.getElementById('cfg-carbon').value) || 0;
             dashState.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
             renderDashboard();
         }
-        
         function simulateProduction() {
             if(!dashState.isRunning) return;
             dashState.elapsedSeconds += 0.5;
-            
-            // 100 machines producing and degrading
             dashState.nodes.forEach(n => { 
                 if(n.status === 'Running' || n.status === 'Warning') {
-                    if(Math.random() > 0.5) {
-                        n.output += 1;
-                        n.health -= n.wearRate; // ลดทอนสุขภาพ
-                        if(n.health < 0) n.health = 0;
-                    }
-                    
-                    // อัปเดตสถานะตาม Health
-                    if(n.health <= 30) {
-                        n.status = 'Maintenance'; // เครื่องพัง
-                    } else if (n.health <= 70) {
-                        n.status = 'Warning'; // เตือน
-                    }
+                    if(Math.random() > 0.5) { n.output += 1; n.health -= n.wearRate; if(n.health < 0) n.health = 0; }
+                    if(n.health <= 30) n.status = 'Maintenance'; else if (n.health <= 70) n.status = 'Warning';
                 }
             });
             renderDashboard();
         }
-        
         function exportCSV() {
             let bom = "\\uFEFF";
             let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
             let totalOut = 0;
             dashState.nodes.forEach(n => {
-                let c = (n.output * dashState.carbonFactor).toFixed(4);
-                let e = (n.output * dashState.energyFactor).toFixed(4);
-                totalOut += n.output;
+                let c = (n.output * dashState.carbonFactor).toFixed(4); let e = (n.output * dashState.energyFactor).toFixed(4); totalOut += n.output;
                 csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\\n`;
             });
-            let totalC = (totalOut * dashState.carbonFactor).toFixed(4);
-            let totalE = (totalOut * dashState.energyFactor).toFixed(4);
-            csvContent += `\\nTOTAL,, ,${totalOut},-,${totalC},${totalE}\\n`;
+            csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dashState.carbonFactor).toFixed(4)},${(totalOut * dashState.energyFactor).toFixed(4)}\\n`;
             
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `Snapcon_100Nodes_Report.csv`;
-            link.click();
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_100Nodes_Report.csv`; link.click();
         }
-
         function formatTimeStr(totalSecs) {
             if (!isFinite(totalSecs) || totalSecs < 0) return "--:--:--";
             const h = Math.floor(totalSecs / 3600); const m = Math.floor((totalSecs % 3600) / 60); const s = Math.floor(totalSecs % 60);
             return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
-
         function renderDashboard() {
-            const grid = document.getElementById('dash-nodes-grid');
-            if(!grid) return;
-
+            const grid = document.getElementById('dash-nodes-grid'); if(!grid) return;
             const totalOutput = dashState.nodes.reduce((sum, n) => sum + n.output, 0);
-            const totalCarbon = totalOutput * dashState.carbonFactor;
-            const totalEnergy = totalOutput * dashState.energyFactor;
-            let progress = (totalOutput / dashState.target) * 100;
-            if(progress > 100) progress = 100;
-
             document.getElementById('dash-total-output').innerText = totalOutput.toLocaleString();
-            document.getElementById('dash-carbon').innerText = totalCarbon.toFixed(2);
-            document.getElementById('dash-power').innerText = totalEnergy.toFixed(2);
+            document.getElementById('dash-carbon').innerText = (totalOutput * dashState.carbonFactor).toFixed(2);
+            document.getElementById('dash-power').innerText = (totalOutput * dashState.energyFactor).toFixed(2);
+            
+            let progress = (totalOutput / dashState.target) * 100; if(progress > 100) progress = 100;
             document.getElementById('dash-progress-bar').style.width = `${progress}%`;
             document.getElementById('dash-progress-text').innerText = `${progress.toFixed(1)}%`;
             
-            let elapsedStr = formatTimeStr(dashState.elapsedSeconds);
-            let remainStr = "--:--:--";
+            let elapsedStr = formatTimeStr(dashState.elapsedSeconds), remainStr = "--:--:--";
             if (totalOutput > 0 && dashState.elapsedSeconds > 0) {
-                let ups = totalOutput / dashState.elapsedSeconds;
-                let remainUnits = dashState.target - totalOutput;
-                if (remainUnits > 0 && ups > 0) remainStr = formatTimeStr(remainUnits / ups);
-                else if (remainUnits <= 0) remainStr = "00:00:00";
+                let ups = totalOutput / dashState.elapsedSeconds, remainUnits = dashState.target - totalOutput;
+                if (remainUnits > 0 && ups > 0) remainStr = formatTimeStr(remainUnits / ups); else if (remainUnits <= 0) remainStr = "00:00:00";
             }
             document.getElementById('dash-time-elapsed').innerText = elapsedStr;
             document.getElementById('dash-time-remain').innerText = remainStr + (dashState.target <= totalOutput && totalOutput > 0 ? " (Completed)" : "");
 
-            // Render 100 Nodes Compactly with Predictive Maintenance Visuals
             grid.innerHTML = dashState.nodes.map(n => {
-                const isRun = n.status === 'Running';
-                const isWarn = n.status === 'Warning';
-                const isMaint = n.status === 'Maintenance';
-                
-                let dotBg = 'bg-slate-300';
-                let borderCol = 'border-slate-200';
-                let alertOverlay = '';
-                
+                const isRun = n.status === 'Running', isWarn = n.status === 'Warning', isMaint = n.status === 'Maintenance';
+                let dotBg = 'bg-slate-300', borderCol = 'border-slate-200', alertOverlay = '';
                 if (isRun) { dotBg = 'bg-snap-green animate-pulse'; borderCol = 'hover:border-snap-green'; }
                 else if (isWarn) { dotBg = 'bg-amber-400 animate-pulse'; borderCol = 'border-amber-300'; alertOverlay = '<div class="absolute inset-0 bg-amber-400/5 z-0 pointer-events-none"></div>'; }
                 else if (isMaint) { dotBg = 'bg-red-500'; borderCol = 'border-red-300'; alertOverlay = '<div class="absolute inset-0 bg-red-500/10 z-0 pointer-events-none"></div>'; }
-
                 let healthBarCol = n.health > 70 ? 'bg-snap-green' : (n.health > 30 ? 'bg-amber-400' : 'bg-red-500');
 
+                let statusLoc = isRun ? dict[currentLang].statusNormal : (isWarn ? dict[currentLang].statusWarning : (isMaint ? dict[currentLang].statusMaint : n.status));
+                
                 return `
                 <div class="bg-white border ${borderCol} p-3 rounded-xl shadow-sm flex flex-col justify-between transition-all relative overflow-hidden">
                     ${alertOverlay}
                     <div class="flex justify-between items-center mb-2 relative z-10">
                         <span class="text-[10px] font-black text-slate-500">${n.name}</span>
-                        <div class="w-2 h-2 rounded-full ${dotBg}"></div>
+                        <div class="w-2 h-2 rounded-full ${dotBg}" title="${statusLoc}"></div>
                     </div>
                     <h4 class="text-xl font-black text-slate-800 text-center relative z-10">${n.output.toLocaleString()}</h4>
-                    
-                    <!-- Health Bar (Predictive Maintenance) -->
                     <div class="mt-3 relative z-10">
                         <div class="flex justify-between items-end mb-1">
                             <span class="text-[8px] font-bold uppercase tracking-wider ${isMaint ? 'text-red-500' : 'text-slate-400'}">Health</span>
                             <span class="text-[9px] font-black ${isMaint ? 'text-red-500' : 'text-slate-600'}">${n.health.toFixed(0)}%</span>
                         </div>
-                        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div class="h-full ${healthBarCol} transition-all duration-300" style="width: ${n.health}%"></div>
-                        </div>
+                        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full ${healthBarCol} transition-all duration-300" style="width: ${n.health}%"></div></div>
                     </div>
                 </div>`;
             }).join('');
@@ -819,12 +823,8 @@ snapcon_html = """
         }
 
         function renderProducts() {
-            const pGrid = document.getElementById('product-grid');
-            if(pGrid) pGrid.innerHTML = products.map(p => createItemCard(p)).join('');
-
-            const sGrid = document.getElementById('spare-grid');
-            if(sGrid) sGrid.innerHTML = spares.map(p => createItemCard(p)).join('');
-            
+            const pGrid = document.getElementById('product-grid'); if(pGrid) pGrid.innerHTML = products.map(p => createItemCard(p)).join('');
+            const sGrid = document.getElementById('spare-grid'); if(sGrid) sGrid.innerHTML = spares.map(p => createItemCard(p)).join('');
             const slider = document.getElementById('home-product-slider');
             if(slider) {
                 slider.innerHTML = products.slice(0, 10).map(p => `
@@ -847,29 +847,32 @@ snapcon_html = """
         function addToCart(id) {
             const p = allItems.find(i => i.id === id);
             cart.push({ ...p, cartId: Date.now() + Math.random(), selected: true });
-            const b = document.getElementById('cart-badge');
-            b.innerText = cart.length; b.classList.remove('hidden');
+            const b = document.getElementById('cart-badge'); b.innerText = cart.length; b.classList.remove('hidden');
             b.classList.add('animate-bounce'); setTimeout(() => b.classList.remove('animate-bounce'), 1000);
             alert(dict[currentLang].alertAddCart);
         }
 
         function renderCart() {
-            const container = document.getElementById('cart-items');
+            const container = document.getElementById('cart-items'); const guestForm = document.getElementById('guest-form');
             if(!container) return;
+            if (isLoggedIn) guestForm.classList.add('hidden'); else guestForm.classList.remove('hidden');
+
             if(cart.length === 0) {
-                container.innerHTML = `<p class="text-center py-10 text-slate-400 font-bold text-lg">${dict[currentLang].cartEmpty}</p>`;
+                container.innerHTML = `<p class="text-center py-12 text-slate-400 font-bold text-lg bg-slate-50 rounded-3xl border border-dashed border-slate-200">${dict[currentLang].cartEmpty}</p>`;
                 document.getElementById('cart-total').innerText = '฿0';
                 return;
             }
             container.innerHTML = cart.map(item => `
-                <div class="flex items-center bg-white border shadow-sm p-4 rounded-2xl gap-4">
-                    <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-5 h-5 accent-snap-green shrink-0">
-                    <img src="${item.img}" class="w-16 h-16 object-cover rounded-lg shrink-0">
-                    <div class="flex-1 min-w-0">
-                        <span class="font-black text-sm text-slate-800 block truncate">${item.name}</span>
-                        <span class="text-[10px] text-slate-400 font-bold bg-slate-50 px-2 py-0.5 rounded">ID: ${item.id}</span>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-100 shadow-sm p-4 md:p-6 rounded-2xl gap-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 w-full sm:w-auto">
+                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-6 h-6 accent-snap-green cursor-pointer shrink-0 rounded">
+                        <img src="${item.img}" class="w-20 h-20 object-cover rounded-xl shadow-sm border border-slate-100 shrink-0">
+                        <div>
+                            <span class="font-black text-slate-800 text-lg block leading-tight mb-1">${item.name}</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-50 px-2 py-1 rounded-md">MODEL: ${item.id}</span>
+                        </div>
                     </div>
-                    <span class="font-black text-slate-700 text-lg">฿${item.price.toLocaleString()}</span>
+                    <span class="font-black text-slate-700 text-2xl self-end sm:self-auto">฿${item.price.toLocaleString()}</span>
                 </div>
             `).join('');
             const total = cart.filter(i => i.selected).reduce((s, i) => s + i.price, 0);
@@ -887,24 +890,43 @@ snapcon_html = """
             let name = isLoggedIn ? document.getElementById('displayUser').innerText : document.getElementById('guest-name').value;
             let info = isLoggedIn ? "Registered Account" : document.getElementById('guest-contact').value;
             if(!isLoggedIn && (!name || !info)) return alert(dict[currentLang].alertQuoteGuestReq);
+            
             let detailsForEmail = selected.map(i => `- ${i.name} (%E0%B8%BF${i.price.toLocaleString()})`).join('%0A');
+            let detailsForDB = selected.map(i => `- ${i.name} (฿${i.price.toLocaleString()})`).join('\\n');
             let total = selected.reduce((s, i) => s + i.price, 0);
             
-            try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Quotation", name_or_id: name, email: info, details: `Total: ฿${total}` }) }); } catch(e) {}
+            try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Quotation", name_or_id: name, email: info, details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` }) }); } catch(e) {}
             
-            const subject = encodeURIComponent("Quotation Request - Snapcon");
+            const subject = encodeURIComponent("Quotation Request - Snapcon (" + name + ")");
             const body = "Request for Official Quotation:%0A%0AItems:%0A" + detailsForEmail + "%0A%0AEstimated Total: %E0%B8%BF" + total.toLocaleString() + "%0A%0AContact Info: " + encodeURIComponent(info);
             window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
             
-            cart = cart.filter(i => !i.selected); document.getElementById('cart-badge').innerText = cart.length; renderCart(); navigate('home');
+            cart = cart.filter(i => !i.selected); document.getElementById('cart-badge').innerText = cart.length; if(cart.length === 0) document.getElementById('cart-badge').classList.add('hidden'); renderCart(); navigate('home');
         }
 
+        // 🌐 LANGUAGE SYSTEM
         function setLanguage(lang) {
             currentLang = lang;
-            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
-            renderProducts(); renderDashboard(); if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+            // Update Texts
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[lang][key]) el.innerHTML = dict[lang][key];
+            });
+            // Update Placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[lang][key]) el.placeholder = dict[lang][key];
+            });
+            // Update Lang Buttons Style
+            document.getElementById('btn-lang-th').className = lang === 'th' ? "text-[9px] font-bold px-2.5 py-1 rounded-full bg-snap-green text-white transition-colors" : "text-[9px] font-bold px-2.5 py-1 rounded-full text-slate-400 hover:text-white transition-colors";
+            document.getElementById('btn-lang-en').className = lang === 'en' ? "text-[9px] font-bold px-2.5 py-1 rounded-full bg-snap-green text-white transition-colors" : "text-[9px] font-bold px-2.5 py-1 rounded-full text-slate-400 hover:text-white transition-colors";
+            
+            renderProducts();
+            renderDashboard(); // Update dashboard localization
+            if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
-        
+
+        // INIT
         setLanguage('th');
     </script>
 </body>
