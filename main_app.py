@@ -6,253 +6,229 @@ import plotly.express as px
 
 # การตั้งค่าหน้าจอ
 st.set_page_config(
-    page_title="SNAPCON | Automation Solutions",
-    page_icon="🌿",
+    page_title="SNAPCON | Green Solutions",
+    page_icon="♻️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- SESSION STATE สำหรับเก็บค่าการรัน ---
+# --- SESSION STATE ---
 if 'is_running' not in st.session_state:
     st.session_state.is_running = False
 if 'prod_counts' not in st.session_state:
     st.session_state.prod_counts = [random.randint(100, 200) for _ in range(10)]
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
+if 'current_page' not in st.session_state:
+    st.session_state.current_page = "Home"
 
-# CSS เพื่อเปลี่ยนสไตล์เป็นแบบสว่าง (Light Theme) ตามรูปภาพที่ส่งมา
+# CSS Style ปรับเป็นสีเขียว SNAPCON (Green, Dark Gray, White)
 st.markdown("""
     <style>
-    /* ตั้งค่าพื้นหลังแอปเป็นสีเทาอ่อนแบบสะอาดตา */
+    /* Global Styles */
     .stApp {
-        background-color: #f8fafc;
-        color: #1e293b;
+        background-color: #ffffff;
+        color: #333333;
+    }
+    
+    /* Green Banner Style */
+    .hero-section {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%); /* Green Gradient */
+        padding: 60px 40px;
+        color: white;
+        border-radius: 0 0 50px 0;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+    
+    /* Navigation Bar */
+    .nav-mimic {
+        background: #1f2937;
+        padding: 10px 40px;
+        color: white;
+        font-size: 0.8rem;
+        display: flex;
+        justify-content: space-between;
     }
 
-    /* สไตล์ Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #ffffff !important;
-        border-right: 1px solid #e2e8f0;
-    }
-
-    /* Card สำหรับแสดงตัวเลข KPI */
-    .metric-card {
-        background: #ffffff; 
-        border: 1px solid #e2e8f0; 
-        border-radius: 16px; 
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
-    }
-    .metric-card:hover {
-        transform: translateY(-5px);
+    /* Metric Boxes */
+    .metric-box {
+        background: white;
+        border-top: 4px solid #10b981;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border-radius: 4px;
+        margin-bottom: 20px;
     }
     .metric-label {
-        color: #64748b;
-        font-size: 0.875rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
+        color: #6b7280;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     .metric-value {
-        color: #0f172a;
-        font-size: 2rem;
-        font-weight: 800;
+        color: #111827;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 10px 0;
     }
 
-    /* Card สำหรับ Node */
-    .node-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 20px;
-        text-align: center;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    /* Side Tab Active Style */
+    .nav-btn {
+        text-align: left;
+        padding: 10px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        border-radius: 4px;
     }
-    
-    /* สไตล์ปุ่มกด */
+
+    /* Buttons */
     div.stButton > button {
-        border-radius: 10px !important;
-        font-weight: 600 !important;
-        padding: 0.6rem 1rem !important;
-        transition: all 0.2s;
+        border-radius: 4px !important;
+        text-transform: uppercase;
+        font-weight: bold !important;
     }
-    
-    /* ปุ่ม Start สีเขียว */
     .stButton>button[kind="primary"] {
         background-color: #10b981 !important;
         border: none !important;
     }
 
-    /* แถบหัวข้อ */
-    .section-header {
-        border-left: 5px solid #3b82f6;
-        padding-left: 15px;
-        margin: 25px 0 15px 0;
-        font-weight: 800;
-        color: #1e293b;
+    /* User Profile Card */
+    .user-card {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- ส่วน LOGIN ---
+# --- LOGIN SECTION ---
 if not st.session_state.logged_in:
-    col1, col2, col3 = st.columns([1, 1.5, 1])
-    with col2:
-        st.markdown("<div style='text-align:center; padding: 50px 0;'>", unsafe_allow_html=True)
-        st.markdown("<h1 style='color:#0f172a; margin-bottom:10px;'>SNAPCON</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='color:#64748b;'>Industrial Automation Monitoring System</p>", unsafe_allow_html=True)
-        
-        with st.container():
-            st.markdown("<div style='background:white; padding:30px; border-radius:20px; border:1px solid #e2e8f0;'>", unsafe_allow_html=True)
-            user = st.text_input("Username", placeholder="ระบุชื่อผู้ใช้")
-            pwd = st.text_input("Password", type="password", placeholder="ระบุรหัสผ่าน")
-            if st.button("SIGN IN", use_container_width=True, type="primary"):
-                if user == "001" and pwd == "123":
+    col_l1, col_l2, col_l3 = st.columns([1, 1.2, 1])
+    with col_l2:
+        st.markdown("<div style='height:100px;'></div>", unsafe_allow_html=True)
+        st.markdown("""
+            <div style='text-align:center; margin-bottom:30px;'>
+                <h1 style='color:#10b981; font-weight:900; letter-spacing:-2px; font-size:3.5rem;'>SNAPCON</h1>
+                <p style='color:#374151; font-weight:bold;'>THE GREEN FUTURE OF AUTOMATION</p>
+            </div>
+        """, unsafe_allow_html=True)
+        with st.form("login_form"):
+            user = st.text_input("Personnel ID")
+            pwd = st.text_input("Access Code", type="password")
+            if st.form_submit_button("SYSTEM LOGIN", use_container_width=True):
+                if user == "admin" or user == "001":
                     st.session_state.logged_in = True
                     st.rerun()
                 else:
-                    st.error("Invalid Username or Password")
-            st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+                    st.error("Authentication Failed")
     st.stop()
 
-# --- ส่วนเนื้อหาหลัก (เมื่อ Login แล้ว) ---
-
-# Sidebar Navigation & User Info
+# --- SIDEBAR NAVIGATION ---
 with st.sidebar:
-    st.markdown("<h2 style='color:#0f172a;'>SNAPCON</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='color:#64748b; font-size:0.8rem;'>V 2.5 Enterprise</p>", unsafe_allow_html=True)
-    st.divider()
+    st.markdown("<h2 style='color:#10b981;'>SNAPCON</h2>", unsafe_allow_html=True)
+    st.markdown("""
+        <div class="user-card">
+            <small>Logged in as:</small><br>
+            <strong>Watanabe San</strong><br>
+            <small>Senior Engineer</small>
+        </div>
+    """, unsafe_allow_html=True)
     
-    st.write("👤 User: Admin (001)")
-    if st.button("Log Out", use_container_width=True):
-        st.session_state.logged_in = False
-        st.rerun()
+    if st.button("🏠 Home", use_container_width=True):
+        st.session_state.current_page = "Home"
+    if st.button("📊 My Dashboard", use_container_width=True):
+        st.session_state.current_page = "My Dashboard"
     
-    st.divider()
-    st.markdown("### System Controls")
+    st.write("---")
+    st.subheader("System Control")
     if st.button("▶ START SYSTEM", type="primary", use_container_width=True):
         st.session_state.is_running = True
     if st.button("⏹ STOP SYSTEM", use_container_width=True):
         st.session_state.is_running = False
-    if st.button("🔄 RESET COUNTER", use_container_width=True):
-        st.session_state.prod_counts = [0] * 10
+    
+    if st.button("Logout", style="margin-top:50px;"):
+        st.session_state.logged_in = False
+        st.rerun()
 
-# Header Section
-h_col1, h_col2 = st.columns([3, 1])
-with h_col1:
-    st.markdown("<h1 style='color:#0f172a; margin-bottom:0;'>Dashboard Overview</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='color:#64748b;'>ติดตามสถานะการผลิตแบบเรียลไทม์</p>", unsafe_allow_html=True)
-
-with h_col2:
-    status_color = "#10b981" if st.session_state.is_running else "#ef4444"
-    status_text = "Running" if st.session_state.is_running else "Stopped"
-    st.markdown(f"""
-        <div style="text-align:right; margin-top:20px;">
-            <span style="background:{status_color}22; color:{status_color}; padding:8px 16px; border-radius:30px; font-weight:bold; font-size:0.9rem; border:1px solid {status_color}55;">
-                ● {status_text}
-            </span>
-        </div>
-    """, unsafe_allow_html=True)
-
-st.write("")
-
-# Logic จำลองการผลิต (Auto rerun)
+# Logic Auto-update
 if st.session_state.is_running:
     for i in range(10):
-        if random.random() > 0.4: # โอกาสเพิ่มค่า
-            st.session_state.prod_counts[i] += 1
+        st.session_state.prod_counts[i] += random.randint(0, 3)
     time.sleep(1)
     st.rerun()
 
-# --- KPI Section (Cards) ---
-total_prod = sum(st.session_state.prod_counts)
-k1, k2, k3, k4 = st.columns(4)
+# --- HEADER (Navigation Mimic) ---
+st.markdown("""
+    <div class="nav-mimic">
+        <div>DASHBOARDS | ANALYTICS | PREDICTIVE MAINTENANCE | SETTINGS</div>
+        <div>REGION: SOUTHEAST ASIA (TH)</div>
+    </div>
+""", unsafe_allow_html=True)
 
-with k1:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">TOTAL PRODUCTION</div>
-            <div class="metric-value">{total_prod:,}</div>
-            <div style="color:#10b981; font-size:0.8rem; margin-top:5px;">↑ 12% from last shift</div>
+# --- PAGE ROUTING ---
+if st.session_state.current_page == "Home":
+    # Hero Section
+    st.markdown("""
+        <div class="hero-section">
+            <p style="text-transform:uppercase; letter-spacing:2px; font-size:0.9rem; margin-bottom:5px;">Factory Overview</p>
+            <h1 style="font-size:3rem; font-weight:800; margin-top:0;">Sustainable Intelligence.</h1>
+            <p style="font-size:1.2rem; opacity:0.9;">Real-time monitoring for your smart factory ecosystem.</p>
         </div>
     """, unsafe_allow_html=True)
 
-with k2:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">CARBON SAVING</div>
-            <div class="metric-value">{total_prod * 0.0072:.2f} <span style='font-size:1rem;'>kg</span></div>
-            <div style="color:#64748b; font-size:0.8rem; margin-top:5px;">Eco-Friendly Rating: A</div>
-        </div>
-    """, unsafe_allow_html=True)
+    m1, m2, m3, m4 = st.columns(4)
+    with m1:
+        st.markdown(f'<div class="metric-box"><div class="metric-label">Total Production</div><div class="metric-value">{sum(st.session_state.prod_counts):,}</div><small style="color:green">Efficiency 100%</small></div>', unsafe_allow_html=True)
+    with m2:
+        st.markdown(f'<div class="metric-box"><div class="metric-label">Global OEE</div><div class="metric-value">92.4%</div><small style="color:green">Optimal Range</small></div>', unsafe_allow_html=True)
+    with m3:
+        st.markdown(f'<div class="metric-box"><div class="metric-label">Active Robots</div><div class="metric-value">12 Units</div><small style="color:blue">Synchronized</small></div>', unsafe_allow_html=True)
+    with m4:
+        st.markdown(f'<div class="metric-box"><div class="metric-label">CO2 Saving</div><div class="metric-value">14.2 <span style="font-size:1rem">kg</span></div><small style="color:green">Eco Mode Active</small></div>', unsafe_allow_html=True)
 
-with k3:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">AVG MACHINE HEALTH</div>
-            <div class="metric-value">98.2%</div>
-            <div style="color:#10b981; font-size:0.8rem; margin-top:5px;">Optimal Condition</div>
-        </div>
-    """, unsafe_allow_html=True)
-
-with k4:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">ACTIVE NODES</div>
-            <div class="metric-value">10 / 10</div>
-            <div style="color:#3b82f6; font-size:0.8rem; margin-top:5px;">RS485 Connected</div>
-        </div>
-    """, unsafe_allow_html=True)
-
-# --- Node Status Section ---
-st.markdown("<div class='section-header'>Real-time Node Status</div>", unsafe_allow_html=True)
-
-for r in range(2):
-    row = st.columns(5)
-    for c in range(5):
-        idx = (r * 5) + c
-        with row[c]:
-            st.markdown(f"""
-                <div class="node-card">
-                    <div style="color:#64748b; font-size:0.75rem; font-weight:bold; margin-bottom:10px;">NODE {idx+1:02d}</div>
-                    <div style="font-size:1.8rem; font-weight:800; color:#0f172a;">{st.session_state.prod_counts[idx]}</div>
-                    <div style="height:4px; width:40%; background:#3b82f6; margin: 10px auto; border-radius:2px;"></div>
-                    <div style="color:#10b981; font-size:0.7rem; font-weight:bold;">● Active</div>
-                </div>
-            """, unsafe_allow_html=True)
-
-# --- Visualization Section ---
-st.markdown("<div class='section-header'>Production Analytics</div>", unsafe_allow_html=True)
-col_graph, col_table = st.columns([2, 1])
-
-with col_graph:
+    st.markdown("<h3 style='border-left: 5px solid #10b981; padding-left:15px; margin-top:20px;'>Live Production Line</h3>", unsafe_allow_html=True)
     df = pd.DataFrame({
-        "Node": [f"N{i+1}" for i in range(10)],
+        "Line": [f"LINE-{i+1:02d}" for i in range(10)],
         "Output": st.session_state.prod_counts
     })
-    fig = px.bar(
-        df, x="Node", y="Output", 
-        color="Output", 
-        color_continuous_scale="Blues",
-        text_auto=True
-    )
-    fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        margin=dict(l=20, r=20, t=20, b=20),
-        height=350,
-        showlegend=False
-    )
+    fig = px.bar(df, x="Line", y="Output", color="Output", color_continuous_scale='Greens')
     st.plotly_chart(fig, use_container_width=True)
 
-with col_table:
-    st.markdown("<p style='font-size:0.9rem; font-weight:bold; color:#64748b;'>Recent Log History</p>", unsafe_allow_html=True)
-    log_data = {
-        "Time": [time.strftime("%H:%M:%S") for _ in range(5)],
-        "Event": ["Sync Data", "Health Check", "Target Reach", "Node 05 Peak", "System Init"],
-        "Status": ["Success", "Success", "Warning", "Info", "Success"]
-    }
-    st.table(pd.DataFrame(log_data))
+elif st.session_state.current_page == "My Dashboard":
+    st.markdown(f"<h1 style='color:#10b981;'>Welcome back, Watanabe San</h1>", unsafe_allow_html=True)
+    st.write("---")
+    
+    c1, c2 = st.columns([1, 2])
+    with c1:
+        st.markdown("### 🔔 Personalized Alerts")
+        st.warning("Maintenance due for Line 04 in 2 days.")
+        st.success("Your energy optimization target was met!")
+        st.info("System update scheduled for Sunday.")
+        
+        st.markdown("### ⚙️ Quick Actions")
+        st.button("Download My Last Report", use_container_width=True)
+        st.button("View Team Tasks", use_container_width=True)
 
-st.markdown("<br><hr style='border-color:#e2e8f0;'><p style='text-align:center; color:#94a3b8; font-size:0.8rem;'>SNAPCON Automation Solution © 2024</p>", unsafe_allow_html=True)
+    with c2:
+        st.markdown("### 📈 My Focus KPIs")
+        # สร้างกราฟจำลองของตัวเอง
+        my_data = pd.DataFrame({
+            "Day": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            "Personal Task Comp.": [80, 95, 70, 85, 90, 60, 40]
+        })
+        fig2 = px.line(my_data, x="Day", y="Personal Task Comp.", markers=True)
+        fig2.update_traces(line_color='#10b981')
+        st.plotly_chart(fig2, use_container_width=True)
+        
+        st.markdown("### 📋 Recent Activities")
+        st.table(pd.DataFrame({
+            "Time": ["10:45", "09:30", "Yesterday"],
+            "Activity": ["Checked Line 02 Logs", "System Start", "Quarterly Report Created"]
+        }))
+
+# Footer
+st.markdown("<br><div style='background:#f9fafb; border-top:1px solid #eee; color:#9ca3af; padding:20px; text-align:center; font-size:0.8rem;'>© 2024 SNAPCON GREEN SOLUTIONS - DRIVING SUSTAINABILITY THROUGH AUTOMATION</div>", unsafe_allow_html=True)
