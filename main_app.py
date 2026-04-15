@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   LayoutDashboard, 
   Home, 
@@ -7,22 +7,23 @@ import {
   LogOut, 
   Bell, 
   Search, 
-  User, 
   TrendingUp, 
   Zap, 
   CheckCircle2, 
   AlertTriangle,
   Menu,
-  X,
   PlusCircle,
-  FileText
+  FileText,
+  Download,
+  Box,
+  FileCode,
+  BookOpen
 } from 'lucide-react';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState('Home');
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [activeLine, setActiveLine] = useState(null);
 
   // Mock Data สำหรับสายการผลิต
   const productionLines = [
@@ -40,13 +41,13 @@ const App = () => {
   return (
     <div className="flex h-screen bg-gray-50 text-slate-800 font-sans">
       {/* Sidebar */}
-      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-slate-900 text-white transition-all duration-300 flex flex-col`}>
+      <aside className={`${isSidebarOpen ? 'w-64' : 'w-20'} bg-slate-900 text-white transition-all duration-300 flex flex-col shrink-0`}>
         <div className="p-6 flex items-center gap-3">
-          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-bold text-white italic">S</div>
+          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-bold text-white italic shadow-lg shadow-emerald-500/20">S</div>
           {isSidebarOpen && <span className="font-black text-xl tracking-tighter">SNAPCON</span>}
         </div>
 
-        <nav className="flex-1 mt-6 px-3">
+        <nav className="flex-1 mt-2 px-3 space-y-1">
           <NavItem 
             icon={<Home size={20} />} 
             label="Home" 
@@ -61,29 +62,33 @@ const App = () => {
             expanded={isSidebarOpen}
             onClick={() => setCurrentPage('My Dashboard')}
           />
-          <NavItem 
-            icon={<BarChart3 size={20} />} 
-            label="Analytics" 
-            active={currentPage === 'Analytics'} 
-            expanded={isSidebarOpen}
-            onClick={() => setCurrentPage('Analytics')}
-          />
-          <NavItem 
-            icon={<Settings size={20} />} 
-            label="Settings" 
-            active={currentPage === 'Settings'} 
-            expanded={isSidebarOpen}
-            onClick={() => setCurrentPage('Settings')}
-          />
+          
+          {isSidebarOpen && (
+            <div className="mt-8 mb-4 px-3">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Resources</p>
+              <div className="mt-4 space-y-2">
+                <ResourceButton icon={<FileCode size={16} />} label="DWG File" color="bg-emerald-600" />
+                <ResourceButton icon={<FileText size={16} />} label="Data Sheet" color="bg-slate-700" />
+                <ResourceButton icon={<BookOpen size={16} />} label="Catalog" color="bg-slate-700" />
+              </div>
+            </div>
+          )}
         </nav>
 
         <div className="p-4 border-t border-slate-800">
+          {isSidebarOpen && (
+            <div className="mb-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+              <p className="text-[10px] text-slate-400 font-bold uppercase">Logged in as:</p>
+              <p className="text-sm font-bold text-emerald-400">Watanabe San</p>
+              <p className="text-[10px] text-slate-500">Senior Engineer</p>
+            </div>
+          )}
           <button 
             onClick={() => setIsLoggedIn(false)}
             className="flex items-center gap-4 px-3 py-2 w-full text-slate-400 hover:text-white transition-colors"
           >
             <LogOut size={20} />
-            {isSidebarOpen && <span>Logout</span>}
+            {isSidebarOpen && <span className="text-sm font-medium">Logout</span>}
           </button>
         </div>
       </aside>
@@ -93,13 +98,13 @@ const App = () => {
         {/* Header */}
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 shrink-0">
           <div className="flex items-center gap-4 text-sm font-medium text-slate-500">
-            <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="p-1 hover:bg-gray-100 rounded">
+            <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-slate-400">
               <Menu size={20} />
             </button>
             <span className="text-slate-300">/</span>
             <span>Dashboard</span>
             <span className="text-slate-300">/</span>
-            <span className="text-slate-900 font-semibold">{currentPage}</span>
+            <span className="text-emerald-600 font-bold">{currentPage}</span>
           </div>
 
           <div className="flex items-center gap-6">
@@ -107,20 +112,16 @@ const App = () => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
               <input 
                 type="text" 
-                placeholder="Search resources..." 
-                className="pl-10 pr-4 py-1.5 bg-gray-100 border-none rounded-full text-sm focus:ring-2 ring-emerald-500 w-64"
+                placeholder="Search metrics..." 
+                className="pl-10 pr-4 py-1.5 bg-gray-100 border-none rounded-full text-sm focus:ring-2 ring-emerald-500/50 w-64 transition-all"
               />
             </div>
-            <button className="relative text-slate-600 hover:text-emerald-600">
+            <button className="relative text-slate-400 hover:text-emerald-600 transition-colors">
               <Bell size={20} />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full border-2 border-white">3</span>
             </button>
             <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
-              <div className="text-right hidden sm:block">
-                <p className="text-xs font-bold text-slate-900">Watanabe San</p>
-                <p className="text-[10px] text-slate-500">Senior Plant Manager</p>
-              </div>
-              <div className="w-9 h-9 bg-emerald-100 border border-emerald-200 rounded-full flex items-center justify-center text-emerald-700 font-bold">
+              <div className="w-9 h-9 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
                 W
               </div>
             </div>
@@ -128,7 +129,7 @@ const App = () => {
         </header>
 
         {/* Scrollable Area */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-8">
           {currentPage === 'Home' ? (
             <HomePage lines={productionLines} />
           ) : (
@@ -145,8 +146,8 @@ const NavItem = ({ icon, label, active, expanded, onClick }) => (
   <button 
     onClick={onClick}
     className={`
-      flex items-center gap-4 px-3 py-3 w-full rounded-lg transition-all mb-1
-      ${active ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}
+      flex items-center gap-4 px-3 py-3 w-full rounded-lg transition-all
+      ${active ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}
     `}
   >
     {icon}
@@ -154,30 +155,49 @@ const NavItem = ({ icon, label, active, expanded, onClick }) => (
   </button>
 );
 
+const ResourceButton = ({ icon, label, color }) => (
+  <button className={`w-full flex items-center gap-3 p-3 ${color} hover:opacity-90 transition-all rounded-xl text-white shadow-sm group`}>
+    <div className="bg-white/20 p-1.5 rounded-lg group-hover:scale-110 transition-transform">
+      {icon}
+    </div>
+    <span className="text-xs font-bold tracking-tight">{label}</span>
+    <Download size={14} className="ml-auto opacity-50" />
+  </button>
+);
+
 const LoginPage = ({ onLogin }) => (
-  <div className="h-screen w-screen bg-slate-900 flex items-center justify-center p-6">
-    <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
-      <div className="bg-emerald-600 p-8 text-center text-white">
-        <div className="w-12 h-12 bg-white/20 rounded-xl mx-auto flex items-center justify-center font-bold text-2xl mb-4 italic">S</div>
-        <h1 className="text-2xl font-black tracking-tight">SNAPCON SYSTEMS</h1>
-        <p className="text-emerald-100 text-sm opacity-80 uppercase tracking-widest mt-1">Smart Enterprise Solutions</p>
+  <div className="h-screen w-screen bg-slate-950 flex items-center justify-center p-6 relative overflow-hidden">
+    {/* Decorative background blur */}
+    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-600/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
+    <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2"></div>
+    
+    <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden relative z-10">
+      <div className="bg-emerald-600 p-10 text-center text-white relative">
+        <div className="w-16 h-16 bg-white/20 rounded-2xl mx-auto flex items-center justify-center font-bold text-3xl mb-6 italic shadow-inner">S</div>
+        <h1 className="text-2xl font-black tracking-tight">SNAPCON ENTERPRISE</h1>
+        <p className="text-emerald-100 text-xs font-bold uppercase tracking-[0.2em] mt-2 opacity-80">Industrial Intelligence v1.5</p>
       </div>
-      <div className="p-8">
-        <div className="mb-6">
-          <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Personnel ID</label>
-          <input type="text" defaultValue="ADMIN-001" className="w-full px-4 py-3 bg-gray-100 border-none rounded-lg focus:ring-2 ring-emerald-500 outline-none transition-all" />
+      <div className="p-10">
+        <div className="space-y-6">
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Username</label>
+            <input type="text" placeholder="Enter Staff ID" className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 ring-emerald-500/20 focus:bg-white outline-none transition-all font-medium" />
+          </div>
+          <div>
+            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Password</label>
+            <input type="password" placeholder="••••••••" className="w-full px-5 py-4 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 ring-emerald-500/20 focus:bg-white outline-none transition-all font-medium" />
+          </div>
+          <button 
+            onClick={onLogin}
+            className="w-full py-5 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl transition-all shadow-xl shadow-emerald-600/30 active:scale-[0.98] uppercase tracking-widest text-sm"
+          >
+            Authenticate
+          </button>
         </div>
-        <div className="mb-8">
-          <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Access Key</label>
-          <input type="password" defaultValue="••••••••" className="w-full px-4 py-3 bg-gray-100 border-none rounded-lg focus:ring-2 ring-emerald-500 outline-none transition-all" />
+        <div className="mt-8 flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+            <p>Auth Server: ID-SEA-01</p>
+            <p>v1.5.2-STABLE</p>
         </div>
-        <button 
-          onClick={onLogin}
-          className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors shadow-lg shadow-emerald-600/20"
-        >
-          LOG IN TO SYSTEM
-        </button>
-        <p className="text-center text-slate-400 text-xs mt-6">© 2024 SNAPCON ALL RIGHTS RESERVED</p>
       </div>
     </div>
   </div>
@@ -185,23 +205,23 @@ const LoginPage = ({ onLogin }) => (
 
 const HomePage = ({ lines }) => (
   <div className="max-w-7xl mx-auto">
-    <div className="flex justify-between items-end mb-8">
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900">Plant Overview</h2>
-        <p className="text-slate-500 text-sm">Real-time status of all production lines across the facility.</p>
+        <h2 className="text-3xl font-black text-slate-900 tracking-tight">Plant Performance</h2>
+        <p className="text-slate-500 text-sm font-medium mt-1">Real-time telemetry and OEE analysis across all active modules.</p>
       </div>
-      <div className="flex gap-2">
-        <button className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-gray-50 flex items-center gap-2">
-          <FileText size={16} /> Export PDF
+      <div className="flex gap-3">
+        <button className="px-5 py-2.5 bg-white border border-gray-200 rounded-xl text-xs font-bold text-slate-700 hover:bg-gray-50 flex items-center gap-2 shadow-sm transition-all">
+          <FileText size={16} className="text-slate-400" /> Export PDF Report
         </button>
-        <button className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 flex items-center gap-2">
-          <PlusCircle size={16} /> New Entry
+        <button className="px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 flex items-center gap-2 shadow-lg shadow-emerald-600/20 transition-all active:scale-95">
+          <PlusCircle size={16} /> New Monitoring Unit
         </button>
       </div>
     </div>
 
     {/* Quick Stats */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
       <StatCard label="Overall OEE" value="94.2%" change="+1.2%" icon={<Zap className="text-emerald-500" />} />
       <StatCard label="Total Output" value="4,500" change="+420" icon={<TrendingUp className="text-emerald-500" />} />
       <StatCard label="Active Alerts" value="03" change="-1" icon={<AlertTriangle className="text-amber-500" />} isWarning />
@@ -209,47 +229,54 @@ const HomePage = ({ lines }) => (
     </div>
 
     {/* Production Lines Table */}
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-        <h3 className="font-bold text-slate-800">Live Production Monitoring</h3>
-        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded">LIVE UPDATING</span>
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+      <div className="px-8 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+        <h3 className="font-bold text-slate-800 tracking-tight">Live Line Monitoring</h3>
+        <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+            <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Live Sync</span>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left">
-          <thead className="bg-gray-50 text-slate-400 text-[10px] uppercase tracking-wider font-bold">
+          <thead className="text-slate-400 text-[10px] uppercase tracking-[0.15em] font-black border-b border-gray-100">
             <tr>
-              <th className="px-6 py-4">Line ID</th>
-              <th className="px-6 py-4">Status</th>
-              <th className="px-6 py-4">OEE Efficiency</th>
-              <th className="px-6 py-4">Current Output</th>
-              <th className="px-6 py-4">Energy (Real-time)</th>
-              <th className="px-6 py-4 text-right">Actions</th>
+              <th className="px-8 py-5">Line Identity</th>
+              <th className="px-8 py-5">Operational Status</th>
+              <th className="px-8 py-5">OEE Score</th>
+              <th className="px-8 py-5">Current Output</th>
+              <th className="px-8 py-5">Consumption</th>
+              <th className="px-8 py-5 text-right">Details</th>
             </tr>
           </thead>
-          <tbody className="text-sm divide-y divide-gray-100">
+          <tbody className="text-sm divide-y divide-gray-50">
             {lines.map((line) => (
-              <tr key={line.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-bold text-slate-700">{line.id}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
+              <tr key={line.id} className="hover:bg-gray-50/80 transition-colors group">
+                <td className="px-8 py-5 font-bold text-slate-900">{line.id}</td>
+                <td className="px-8 py-5">
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tight ${
                     line.status === 'Running' ? 'bg-emerald-100 text-emerald-700' : 
                     line.status === 'Warning' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'
                   }`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${
+                        line.status === 'Running' ? 'bg-emerald-500' : 
+                        line.status === 'Warning' ? 'bg-amber-500' : 'bg-red-500'
+                    }`}></div>
                     {line.status}
                   </span>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500" style={{ width: line.efficiency }}></div>
+                <td className="px-8 py-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 transition-all duration-1000" style={{ width: line.efficiency }}></div>
                     </div>
-                    <span className="font-bold text-slate-600">{line.efficiency}</span>
+                    <span className="font-bold text-slate-700 text-xs">{line.efficiency}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-slate-600 font-medium">{line.output.toLocaleString()} units</td>
-                <td className="px-6 py-4 text-slate-500 italic">{line.energy}</td>
-                <td className="px-6 py-4 text-right">
-                  <button className="text-emerald-600 font-bold text-xs hover:underline">View Details</button>
+                <td className="px-8 py-5 text-slate-600 font-bold">{line.output.toLocaleString()} <span className="text-[10px] text-slate-400 font-medium">units</span></td>
+                <td className="px-8 py-5 text-slate-500 font-medium italic">{line.energy}</td>
+                <td className="px-8 py-5 text-right">
+                  <button className="text-emerald-600 font-black text-[10px] uppercase tracking-widest hover:text-emerald-700 underline decoration-emerald-500/30 underline-offset-4">View Analytics</button>
                 </td>
               </tr>
             ))}
@@ -262,79 +289,74 @@ const HomePage = ({ lines }) => (
 
 const MyDashboardPage = () => (
   <div className="max-w-7xl mx-auto">
-    <div className="mb-8">
-      <h2 className="text-2xl font-bold text-slate-900 underline decoration-emerald-500 decoration-4 underline-offset-8">My Dashboard</h2>
-      <p className="text-slate-500 text-sm mt-3">Welcome back, Watanabe. Here is your personalized daily performance snapshot.</p>
+    <div className="mb-10">
+      <h2 className="text-3xl font-black text-slate-900 tracking-tight">Personal Workspace</h2>
+      <div className="w-20 h-1.5 bg-emerald-500 mt-4 rounded-full"></div>
     </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Task Summary */}
-      <div className="lg:col-span-2 space-y-6">
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="font-bold mb-4 text-slate-800 flex items-center gap-2">
-            <CheckCircle2 size={18} className="text-emerald-600" /> Tasks Assigned to Me
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="lg:col-span-2 space-y-8">
+        <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
+          <h3 className="font-black text-slate-800 flex items-center gap-3 mb-6 uppercase text-xs tracking-widest">
+            <CheckCircle2 size={18} className="text-emerald-600" /> Pending Approvals
           </h3>
           <div className="space-y-4">
-            <TaskItem title="Approve Line 03 Maintenance" priority="High" deadline="Today" />
-            <TaskItem title="Review Q3 Sustainability Report" priority="Medium" deadline="Tomorrow" />
-            <TaskItem title="Update Safety Protocol (V2.1)" priority="Low" deadline="Fri, 18 Oct" />
+            <TaskItem title="System Calibration - Line 03" priority="High" deadline="Immediate" />
+            <TaskItem title="Q4 Inventory Verification" priority="Medium" deadline="Tomorrow" />
+            <TaskItem title="New Vendor Compliance" priority="Low" deadline="Friday" />
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="font-bold mb-4 text-slate-800 flex items-center gap-2">
-            <BarChart3 size={18} className="text-emerald-600" /> My Performance Trend
-          </h3>
-          <div className="h-48 bg-emerald-50/50 rounded-lg flex items-end justify-between p-4 gap-2">
-            {[40, 60, 45, 90, 80, 75, 95].map((h, i) => (
-              <div key={i} className="flex-1 bg-emerald-500 rounded-t-md hover:bg-emerald-600 transition-colors" style={{ height: `${h}%` }}></div>
+        <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="font-black text-slate-800 flex items-center gap-3 uppercase text-xs tracking-widest">
+                    <BarChart3 size={18} className="text-emerald-600" /> Department Efficiency
+                </h3>
+                <select className="text-[10px] font-bold bg-gray-50 border-none rounded-lg px-3 py-1 text-slate-500">
+                    <option>Last 7 Days</option>
+                </select>
+            </div>
+          <div className="h-56 bg-emerald-50/30 rounded-2xl flex items-end justify-between p-6 gap-3">
+            {[45, 65, 40, 95, 85, 70, 90].map((h, i) => (
+              <div key={i} className="flex-1 bg-emerald-500 rounded-t-lg hover:bg-emerald-600 transition-all cursor-pointer relative group" style={{ height: `${h}%` }}>
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity font-bold">
+                    {h}%
+                  </div>
+              </div>
             ))}
           </div>
-          <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase mt-2 px-2">
+          <div className="flex justify-between text-[10px] text-slate-400 font-black uppercase mt-4 px-2 tracking-widest">
             <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
           </div>
         </div>
       </div>
 
-      {/* Right Column: Personal Stats */}
-      <div className="space-y-6">
-        <div className="bg-slate-900 text-white p-6 rounded-xl shadow-lg">
-          <div className="flex items-center gap-3 mb-6">
-             <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-bold">W</div>
+      <div className="space-y-8">
+        <div className="bg-slate-900 text-white p-8 rounded-2xl shadow-xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+              <Box size={100} />
+          </div>
+          <div className="flex items-center gap-4 mb-8 relative z-10">
+             <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center font-black text-lg shadow-lg shadow-emerald-500/40">W</div>
              <div>
-               <p className="text-sm font-bold">Watanabe San</p>
-               <p className="text-[10px] text-emerald-400 uppercase tracking-widest font-bold">Administrator</p>
+               <p className="text-base font-black tracking-tight">Watanabe San</p>
+               <p className="text-[10px] text-emerald-400 uppercase tracking-[0.2em] font-black">Admin Access</p>
              </div>
           </div>
-          <div className="space-y-4 pt-4 border-t border-slate-800">
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-400">Lines Managed</span>
-              <span className="font-bold">05 Lines</span>
-            </div>
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-400">Reports Pending</span>
-              <span className="font-bold text-amber-400">12 Pending</span>
-            </div>
-            <div className="flex justify-between text-xs">
-              <span className="text-slate-400">Uptime Contribution</span>
-              <span className="font-bold text-emerald-400">99.8%</span>
-            </div>
+          <div className="space-y-5 pt-6 border-t border-slate-800 relative z-10">
+            <ProfileStat label="Active Responsibilities" value="05 Plants" />
+            <ProfileStat label="Incident Clearance" value="100%" />
+            <ProfileStat label="Department Rank" value="Lead #02" />
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <h3 className="font-bold mb-4 text-slate-800 flex items-center gap-2 text-sm">
-            <Bell size={16} className="text-emerald-600" /> Personal Notifications
+        <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
+          <h3 className="font-black mb-6 text-slate-800 flex items-center gap-3 text-xs uppercase tracking-widest">
+            <Bell size={18} className="text-emerald-600" /> Notifications
           </h3>
           <div className="space-y-4">
-            <div className="p-3 bg-amber-50 rounded-lg border-l-4 border-amber-400">
-              <p className="text-xs font-bold text-amber-900">Urgent Alert</p>
-              <p className="text-[10px] text-amber-800 mt-1">Pressure drop detected in Line 03. Please verify.</p>
-            </div>
-            <div className="p-3 bg-emerald-50 rounded-lg border-l-4 border-emerald-400">
-              <p className="text-xs font-bold text-emerald-900">Success</p>
-              <p className="text-[10px] text-emerald-800 mt-1">Line 01 daily quota achieved 2 hours early.</p>
-            </div>
+            <NotificationItem type="alert" title="Pressure Warning" desc="Drop detected in Line 03 bypass." />
+            <NotificationItem type="success" title="Target Reached" desc="Line 01 completed daily quota." />
           </div>
         </div>
       </div>
@@ -343,37 +365,53 @@ const MyDashboardPage = () => (
 );
 
 const StatCard = ({ label, value, change, icon, isWarning }) => (
-  <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-start justify-between">
+  <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-start justify-between group hover:border-emerald-200 transition-colors">
     <div>
-      <p className="text-slate-500 text-[11px] font-bold uppercase tracking-wider mb-2">{label}</p>
-      <h4 className="text-3xl font-black text-slate-900 tracking-tight">{value}</h4>
-      <p className={`text-[10px] font-bold mt-2 ${isWarning ? 'text-red-500' : 'text-emerald-600'}`}>
-        {change} <span className="text-slate-400 font-normal">vs last period</span>
+      <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2 group-hover:text-emerald-600 transition-colors">{label}</p>
+      <h4 className="text-3xl font-black text-slate-900 tracking-tighter">{value}</h4>
+      <p className={`text-[10px] font-black mt-2 inline-flex items-center gap-1 ${isWarning ? 'text-red-500' : 'text-emerald-600'}`}>
+        {change} <span className="text-slate-300 font-bold ml-1 tracking-normal">vs Prev.</span>
       </p>
     </div>
-    <div className="p-3 bg-gray-50 rounded-xl">
+    <div className="p-4 bg-gray-50 rounded-2xl group-hover:bg-emerald-50 transition-colors">
       {icon}
     </div>
   </div>
 );
 
 const TaskItem = ({ title, priority, deadline }) => (
-  <div className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-100">
-    <div className="flex items-center gap-3">
-      <div className={`w-2 h-2 rounded-full ${
+  <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-100 cursor-pointer group">
+    <div className="flex items-center gap-4">
+      <div className={`w-3 h-3 rounded-full shadow-sm ${
         priority === 'High' ? 'bg-red-500' : 
         priority === 'Medium' ? 'bg-amber-500' : 'bg-blue-500'
       }`}></div>
       <div>
-        <p className="text-sm font-semibold text-slate-700">{title}</p>
-        <p className="text-[10px] text-slate-400 font-medium italic">Deadline: {deadline}</p>
+        <p className="text-sm font-bold text-slate-700 group-hover:text-emerald-700 transition-colors">{title}</p>
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tighter mt-0.5">Deadline: {deadline}</p>
       </div>
     </div>
-    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-       priority === 'High' ? 'bg-red-50 text-red-700' : 'text-slate-500 bg-gray-100'
+    <span className={`text-[10px] font-black px-3 py-1 rounded-lg tracking-widest uppercase ${
+       priority === 'High' ? 'bg-red-50 text-red-600' : 'text-slate-400 bg-gray-100'
     }`}>
       {priority}
     </span>
+  </div>
+);
+
+const ProfileStat = ({ label, value }) => (
+  <div className="flex justify-between items-center text-xs">
+    <span className="text-slate-500 font-bold uppercase tracking-tighter">{label}</span>
+    <span className="font-black text-emerald-400">{value}</span>
+  </div>
+);
+
+const NotificationItem = ({ type, title, desc }) => (
+  <div className={`p-4 rounded-xl border-l-4 transition-all hover:translate-x-1 ${
+    type === 'alert' ? 'bg-red-50 border-red-500 shadow-red-100' : 'bg-emerald-50 border-emerald-500 shadow-emerald-100'
+  } shadow-sm`}>
+    <p className={`text-[10px] font-black uppercase tracking-widest ${type === 'alert' ? 'text-red-700' : 'text-emerald-700'}`}>{title}</p>
+    <p className="text-xs text-slate-600 font-medium mt-1 leading-relaxed">{desc}</p>
   </div>
 );
 
