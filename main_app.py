@@ -3,123 +3,141 @@ import streamlit as st
 st.set_page_config(layout="wide")
 
 # -------------------------
-# GLOBAL STYLE (SEW Style)
+# STATE (LOGIN)
+# -------------------------
+if "login" not in st.session_state:
+    st.session_state.login = False
+
+# -------------------------
+# STYLE
 # -------------------------
 st.markdown("""
 <style>
-body {
-    margin:0;
-}
-.main {
-    padding: 0;
+body {margin:0;}
+.main {padding:0;}
+
+/* LOGIN */
+.login-box {
+    width: 400px;
+    margin: auto;
+    margin-top: 80px;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 
-/* HERO */
-.hero {
-    position: relative;
-    height: 500px;
-    background-image: url("https://images.unsplash.com/photo-1581092918056-0c4c3acd3789");
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-}
-
-/* overlay */
-.hero-overlay {
-    background: rgba(255,255,255,0.85);
-    padding: 40px;
-    max-width: 500px;
-    margin-left: 80px;
-    border-radius: 10px;
-}
-
-/* TEXT */
-.title {
-    font-size: 42px;
-    font-weight: 800;
-    color: #333;
-}
-.subtitle {
-    font-size: 16px;
-    color: #666;
-}
-.cta {
-    color: red;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-/* SECTION */
-.section {
-    padding: 80px 60px;
+.login-top {
+    background: linear-gradient(135deg,#022c22,#064e3b);
+    color: white;
     text-align: center;
+    padding: 60px 20px;
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    background: #10b981;
+    border-radius: 20px;
+    margin: auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.login-bottom {
+    background: #f1f5f9;
+    padding: 40px;
+}
+
+/* BUTTON */
+.btn {
+    background:#059669;
+    color:white;
+    padding:15px;
+    border-radius:20px;
+    text-align:center;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* SIDEBAR */
+.sidebar {
+    background: linear-gradient(180deg,#022c22,#021a17);
+    color:white;
+    padding:20px;
+    height:100vh;
 }
 
 /* CARD */
 .card {
-    padding: 40px;
-    border-radius: 10px;
-    border: 1px solid #eee;
-    transition: 0.3s;
+    background:white;
+    padding:25px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
 }
-.card:hover {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+.metric {
+    font-size:32px;
+    font-weight:bold;
 }
 </style>
 """, unsafe_allow_html=True)
 
 # -------------------------
-# HERO SECTION
+# LOGIN PAGE
 # -------------------------
-st.markdown("""
-<div class="hero">
-    <div class="hero-overlay">
-        <div class="subtitle">SNAPCON INDUSTRIAL SYSTEM</div>
-        <div class="title">Compact<br>and powerful.</div>
-        <div class="cta">→ Find out more</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+if not st.session_state.login:
 
-# -------------------------
-# SPACE
-# -------------------------
-st.write("")
-
-# -------------------------
-# SECTION: FEATURES
-# -------------------------
-col1, col2 = st.columns(2)
-
-with col1:
     st.markdown("""
-    <div class="card">
-        <h3>📄 Data & Documents</h3>
-        <p>Technical drawings, datasheets, and system files</p>
-    </div>
+    <div class="login-box">
+        <div class="login-top">
+            <div class="logo">S</div>
+            <h1>SNAPCON</h1>
+            <p>ENTERPRISE CONTROL UNIT</p>
+        </div>
+        <div class="login-bottom">
     """, unsafe_allow_html=True)
 
-with col2:
-    st.markdown("""
-    <div class="card">
-        <h3>⚙️ Direct to Product</h3>
-        <p>Access Snapcon modules and configurations instantly</p>
-    </div>
-    """, unsafe_allow_html=True)
+    user = st.text_input("Employee ID")
+    pwd = st.text_input("Access Token", type="password")
+
+    if st.button("AUTHENTICATE"):
+        st.session_state.login = True
+        st.rerun()
+
+    st.markdown("</div></div>", unsafe_allow_html=True)
 
 # -------------------------
-# SECTION: SNAPCON VALUE
+# DASHBOARD
 # -------------------------
-st.markdown("""
-<div class="section">
-    <h2>Smart Factory Solutions</h2>
-    <p>Snapcon integrates PLC, IoT, and AI to deliver real-time industrial automation.</p>
-</div>
-""", unsafe_allow_html=True)
+else:
 
-# -------------------------
-# FOOTER
-# -------------------------
-st.write("---")
-st.write("© Snapcon Automation")
+    # Sidebar
+    st.sidebar.markdown("## SNAPCON")
+    page = st.sidebar.radio("", ["Home", "Dashboard"])
+
+    st.title("Plant Telemetry")
+    st.caption("Monitoring real-time production")
+
+    # KPI
+    c1, c2, c3, c4 = st.columns(4)
+
+    c1.markdown('<div class="card"><div>OEE</div><div class="metric">94.2%</div></div>', unsafe_allow_html=True)
+    c2.markdown('<div class="card"><div>Output</div><div class="metric">4,500</div></div>', unsafe_allow_html=True)
+    c3.markdown('<div class="card"><div>Alerts</div><div class="metric">03</div></div>', unsafe_allow_html=True)
+    c4.markdown('<div class="card"><div>Uptime</div><div class="metric">99.9%</div></div>', unsafe_allow_html=True)
+
+    st.write("")
+
+    # Table
+    data = [
+        ["L01","Running",98,1250],
+        ["L02","Running",95,1100],
+        ["L03","Warning",82,850],
+        ["L04","Running",97,1300],
+        ["L05","Stopped",0,0],
+    ]
+
+    st.table(data)
