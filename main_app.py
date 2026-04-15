@@ -1,283 +1,208 @@
 import streamlit as st
 
-# ตั้งค่าหน้าหลักของ Streamlit
+# ตั้งค่าหน้าหลักของ Streamlit ให้แสดงผลเต็มจอ
 st.set_page_config(
-    page_title="SNAPCON | Snap to Connect", 
+    page_title="SNAPCON | Plug & Play", 
     layout="wide", 
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS สำหรับหน้าเว็บ Snapcon (Professional Version)
+# โค้ด HTML/CSS ที่จำลองหน้าจอตรงตามรูปภาพ "image_23a9f1.jpg" 100%
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNAPCON | Snap to Connect</title>
+    <title>SNAPCON | Plug & Play</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'snap-yellow': '#FFF200',
+                        'snap-dark': '#2A2A2A',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Prompt', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-            margin: 0;
-            padding: 0;
+        body { margin: 0; padding: 0; overflow-x: hidden; scroll-behavior: smooth; background-color: #F8F9FA; }
+        ::-webkit-scrollbar { display: none; }
+        .hero-clip {
+            /* สร้างพื้นที่สีเหลืองซ้ายมือ */
+            background-color: #FFF200;
         }
-        .gradient-text {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .hero-bg-image {
+            /* ภาพพื้นหลัง Green Technology */
+            background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
         }
-        .hero-bg {
-            background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent),
-                        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.02), transparent);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-        }
-        /* ซ่อน scrollbar ของ iframe */
-        ::-webkit-scrollbar {
-            display: none;
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px white inset !important;
         }
     </style>
 </head>
-<body class="bg-white text-slate-900 overflow-x-hidden">
+<body>
 
-    <!-- Top Bar Login Area -->
-    <div class="bg-slate-900 w-full py-2 px-6 flex justify-end items-center fixed top-0 z-[60]">
-        <!-- ฟอร์ม Login -->
-        <div id="loginForm" class="flex items-center gap-3 transition-opacity duration-300">
-            <span class="text-xs text-slate-400 font-bold">ID:</span>
-            <input type="text" id="userId" class="px-2 py-1 rounded text-xs w-24 border-none outline-none focus:ring-2 focus:ring-emerald-500" placeholder="001">
-            <span class="text-xs text-slate-400 font-bold">Pass:</span>
-            <input type="password" id="userPass" class="px-2 py-1 rounded text-xs w-24 border-none outline-none focus:ring-2 focus:ring-emerald-500" placeholder="***">
-            <button onclick="handleLogin()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-1 rounded text-xs font-bold transition-colors">Login</button>
-            <button onclick="alert('ระบบลงทะเบียนผู้ใช้ใหม่ (Register) กำลังอยู่ในช่วงปรับปรุงครับ')" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-1 rounded text-xs font-bold transition-colors">Register</button>
-        </div>
+    <!-- 1. Top Navigation Bar (ตามรูปเป๊ะๆ) -->
+    <nav class="bg-snap-dark h-[60px] w-full fixed top-0 z-50 flex items-center justify-between shadow-md">
         
-        <!-- ข้อมูลผู้ใช้เมื่อ Login สำเร็จ -->
-        <div id="loggedInView" class="hidden flex items-center gap-4 transition-opacity duration-300">
-            <div class="flex items-center gap-2">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span class="text-emerald-400 font-bold text-xs">Logged in as: <span class="text-white">Watanabe San</span></span>
-            </div>
-            <button onclick="handleLogout()" class="text-slate-400 hover:text-white text-xs font-bold underline transition-colors">Logout</button>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 mt-9 transition-all">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-                <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white font-black text-lg shadow-md shadow-emerald-200">S</div>
-                <span class="text-xl font-black tracking-tighter">SNAPCON</span>
+        <!-- ฝั่งซ้าย: โลโก้ และ เมนู -->
+        <div class="flex items-center h-full">
+            <!-- กล่อง SNAPCON สีเหลือง -->
+            <div class="bg-snap-yellow h-full flex items-center justify-center px-6 min-w-[150px]">
+                <span class="font-black text-2xl text-black tracking-tight">SNAPCON</span>
             </div>
             
-            <div class="hidden md:flex items-center gap-10">
-                <a href="#solutions" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">โซลูชัน</a>
-                <a href="#about" class="text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors">เกี่ยวกับเรา</a>
-                <button onclick="alert('📞 ติดต่อทีมวิศวกร: 081-XXX-XXXX หรือ support@snapcon.com')" class="bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-emerald-600 transition-all shadow-lg shadow-slate-200">
-                    ติดต่อเรา
-                </button>
+            <!-- เมนู Products, Automation, ฯลฯ -->
+            <div class="hidden lg:flex items-center gap-6 px-6 text-white font-bold text-sm">
+                <a href="#" class="hover:text-snap-yellow transition-colors">Products</a>
+                <a href="#" class="hover:text-snap-yellow transition-colors">Automation</a>
+                <a href="#" class="hover:text-snap-yellow transition-colors">Services</a>
+                <a href="#" class="hover:text-snap-yellow transition-colors">Industries</a>
+            </div>
+        </div>
+
+        <!-- ฝั่งขวา: ปุ่ม Dashboard, Contact, Login Form -->
+        <div class="flex items-center h-full pr-4 gap-1 sm:gap-2">
+            <!-- ปุ่ม Dashboard & Contact -->
+            <button onclick="alert('ไปที่หน้า Dashboard')" class="bg-snap-yellow text-black font-bold text-[11px] sm:text-xs px-2 sm:px-4 py-1.5 h-[34px] hover:bg-yellow-400">Dashboard</button>
+            <button onclick="alert('ไปที่หน้า Contact')" class="bg-snap-yellow text-black font-bold text-[11px] sm:text-xs px-2 sm:px-4 py-1.5 h-[34px] hover:bg-yellow-400">Contact</button>
+            
+            <!-- ส่วน Login Form (ซ่อนเมื่อ Login สำเร็จ) -->
+            <div id="loginForm" class="flex items-center gap-1 sm:gap-2 ml-2">
+                <div class="bg-snap-yellow text-black font-bold text-[11px] sm:text-xs px-2 py-1.5 h-[34px] flex items-center">Login</div>
+                <span class="text-snap-yellow font-bold text-xs ml-1">ID :</span>
+                <input type="text" id="userId" class="h-[30px] w-16 sm:w-24 px-2 text-xs outline-none border-none">
+                <span class="text-snap-yellow font-bold text-xs ml-1">Pass</span>
+                <input type="password" id="userPass" class="h-[30px] w-16 sm:w-24 px-2 text-xs outline-none border-none">
+                <button onclick="handleLogin()" class="bg-snap-yellow text-black font-bold text-[11px] sm:text-xs px-2 sm:px-4 py-1.5 h-[34px] ml-1 hover:bg-yellow-400">Registor</button>
+            </div>
+
+            <!-- ส่วนแสดงชื่อผู้ใช้ (แสดงเมื่อ Login สำเร็จ) -->
+            <div id="loggedInView" class="hidden items-center gap-3 ml-4">
+                <span class="text-snap-yellow font-bold text-sm">Hello, <span class="text-white">Watanabe San</span></span>
+                <button onclick="handleLogout()" class="text-white text-xs underline hover:text-red-400">Logout</button>
+            </div>
+
+            <!-- Icons (Cart & Search) -->
+            <div class="flex items-center gap-3 ml-4 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer hover:text-snap-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 cursor-pointer hover:text-snap-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative pt-40 pb-24 hero-bg overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div class="z-10">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold uppercase tracking-widest mb-6">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    The Future of Connectivity
-                </div>
-                <h1 class="text-5xl lg:text-7xl font-black tracking-tighter leading-[1.0] mb-6">
-                    Snap to <br><span class="gradient-text">Connect.</span>
-                </h1>
-                <p class="text-lg text-slate-500 font-medium leading-relaxed max-w-lg mb-8">
-                    นวัตกรรมการเชื่อมต่อที่เปลี่ยนความซับซ้อนให้เป็นเรื่องง่าย เพิ่มประสิทธิภาพให้ธุรกิจของคุณด้วยเทคโนโลยี Plug & Play ที่ทันสมัยที่สุด
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#solutions" class="bg-emerald-500 text-white px-8 py-4 rounded-2xl font-bold text-base hover:bg-emerald-600 hover:scale-105 transition-all shadow-xl shadow-emerald-100 inline-block text-center">
-                        เริ่มต้นใช้งาน
-                    </a>
-                    <button onclick="alert('ข้อมูลเพิ่มเติม: SNAPCON Automation Solution สำหรับอุตสาหกรรมยุค 4.0')" class="bg-white border-2 border-slate-100 text-slate-900 px-8 py-4 rounded-2xl font-bold text-base hover:bg-slate-50 transition-all">
-                        เรียนรู้เพิ่มเติม
-                    </button>
-                </div>
-            </div>
-            <div class="relative">
-                <div class="absolute -inset-4 bg-emerald-100/50 rounded-[40px] blur-3xl -z-10 animate-pulse"></div>
-                <div class="rounded-[40px] overflow-hidden shadow-2xl bg-slate-100 aspect-square flex flex-col items-center justify-center relative">
-                    <!-- Floating Tags แบบในรูปภาพ -->
-                    <div class="absolute top-10 right-10 bg-white/90 px-4 py-2 rounded-lg font-bold text-xs text-slate-700 shadow-lg backdrop-blur-sm shadow-slate-200">"Plug. Monitor. Control."</div>
-                    <div class="absolute bottom-20 left-10 bg-white/90 px-4 py-2 rounded-lg font-bold text-xs text-emerald-600 shadow-lg backdrop-blur-sm shadow-slate-200">"Upgrade Your Factory"</div>
-                    <div class="absolute bottom-10 right-5 bg-white/90 px-4 py-2 rounded-lg font-bold text-xs text-blue-600 shadow-lg backdrop-blur-sm shadow-slate-200">"Data-Driven Automation"</div>
-                    
-                    <div class="text-center p-8 z-10">
-                         <div class="text-7xl mb-6 drop-shadow-xl">🔌</div>
-                         <p class="text-slate-400 font-bold uppercase tracking-widest text-xs">[ภาพอุปกรณ์ Snapcon]</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats -->
-    <section class="py-12 bg-slate-900 text-white">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div class="text-center">
-                <div class="text-4xl font-black mb-1">99%</div>
-                <div class="text-slate-400 text-xs font-bold uppercase tracking-widest">Efficiency</div>
-            </div>
-            <div class="text-center">
-                <div class="text-4xl font-black mb-1">200+</div>
-                <div class="text-slate-400 text-xs font-bold uppercase tracking-widest">Partners</div>
-            </div>
-            <div class="text-center">
-                <div class="text-4xl font-black mb-1">15ms</div>
-                <div class="text-slate-400 text-xs font-bold uppercase tracking-widest">Response</div>
-            </div>
-            <div class="text-center">
-                <div class="text-4xl font-black mb-1">24/7</div>
-                <div class="text-slate-400 text-xs font-bold uppercase tracking-widest">Support</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features / Solutions -->
-    <section id="solutions" class="py-24 max-w-7xl mx-auto px-6 scroll-mt-20">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-black tracking-tight mb-4">Our Solutions</h2>
-            <p class="text-slate-500 font-medium">เข้าถึงข้อมูลและเครื่องมือที่คุณต้องการได้อย่างรวดเร็ว เพื่อการจัดการที่มีประสิทธิภาพสูงสุด</p>
-        </div>
+    <!-- 2. Hero Section (แบ่งครึ่งซ้ายเหลือง ขวาภาพ) -->
+    <section class="mt-[60px] w-full h-[500px] flex flex-col md:flex-row">
         
-        <div class="grid md:grid-cols-3 gap-8">
-            <!-- Card 1: Data Sheet -->
-            <div class="p-8 rounded-[24px] bg-slate-50 card-hover border border-slate-100 flex flex-col justify-between h-full">
-                <div>
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl mb-6">📄</div>
-                    <h3 class="text-lg font-bold mb-3">Download Data Sheet</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-6">เอกสารคู่มือ ข้อมูลทางเทคนิค และคุณสมบัติของผลิตภัณฑ์อย่างละเอียดเพื่อการวิเคราะห์</p>
-                </div>
-                <button onclick="openGoogleDrive('datasheet')" class="w-full bg-white border border-slate-200 text-slate-800 font-bold py-3 rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-colors text-sm">
-                    ดาวน์โหลด Data Sheet
-                </button>
+        <!-- ฝั่งซ้าย สีเหลือง (Text) -->
+        <div class="w-full md:w-[45%] lg:w-[40%] bg-snap-yellow flex flex-col justify-center items-end pr-8 lg:pr-16 py-10 relative">
+            <div class="text-right">
+                <p class="text-3xl md:text-4xl text-gray-800 mb-1">Snap to Connect.</p>
+                <p class="text-3xl md:text-4xl text-gray-800 mb-6 mr-6">Ready to Control.</p>
+                <h1 class="text-6xl md:text-7xl font-black text-black tracking-tighter mr-8">Plug & Play</h1>
             </div>
+        </div>
+
+        <!-- ฝั่งขวา ภาพพื้นหลังแนว Green Technology + กล่องแดงบนเหลือง -->
+        <div class="w-full md:w-[55%] lg:w-[60%] hero-bg-image relative flex items-center justify-center">
+            <!-- กล่องจำลองลายน้ำ/ข้อความบนภาพ ตามรูปภาพต้นฉบับเป๊ะๆ -->
+            <div class="bg-snap-yellow py-8 px-12 text-center shadow-2xl transform rotate-0 md:-translate-y-6">
+                <h2 class="text-red-600 font-black text-4xl mb-2">ภาพพื้นหลัง แนว</h2>
+                <h2 class="text-red-600 font-black text-6xl tracking-tight">Green Technology</h2>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- 3. Bottom Cards Section (ปุ่มดาวน์โหลด 3 กล่องสีเหลือง) -->
+    <section class="w-full max-w-7xl mx-auto px-6 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Card 1: Data sheet -->
+            <button onclick="openGoogleDrive('datasheet')" class="bg-snap-yellow py-14 px-6 flex flex-col items-center justify-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
+                <h3 class="text-3xl font-bold text-black mb-2">Dowload data sheet</h3>
+                <p class="text-black text-sm font-medium">(ใช้ไฟล์จริงใน Google drive)</p>
+            </button>
 
             <!-- Card 2: Drawing -->
-            <div class="p-8 rounded-[24px] bg-slate-50 card-hover border border-slate-100 flex flex-col justify-between h-full">
-                <div>
-                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl mb-6">📐</div>
-                    <h3 class="text-lg font-bold mb-3">Download Drawing</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-6">ไฟล์ 2D/3D CAD และแบบร่างทางวิศวกรรมสำหรับนำไปใช้วางแผนการติดตั้งเครื่องจักร</p>
-                </div>
-                <button onclick="openGoogleDrive('drawing')" class="w-full bg-emerald-500 text-white font-bold py-3 rounded-xl hover:bg-emerald-600 transition-colors text-sm shadow-lg shadow-emerald-100">
-                    ดาวน์โหลด Drawing
-                </button>
-            </div>
+            <button onclick="openGoogleDrive('drawing')" class="bg-snap-yellow py-14 px-6 flex flex-col items-center justify-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
+                <h3 class="text-3xl font-bold text-black mb-2">Dowload drawing</h3>
+                <p class="text-black text-sm font-medium">(ใช้ไฟล์จริงใน Google drive)</p>
+            </button>
 
             <!-- Card 3: Catalog -->
-            <div class="p-8 rounded-[24px] bg-slate-50 card-hover border border-slate-100 flex flex-col justify-between h-full">
-                <div>
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-xl mb-6">📦</div>
-                    <h3 class="text-lg font-bold mb-3">Product Catalog</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed mb-6">รายละเอียดสินค้า แค็ตตาล็อกรุ่นต่างๆ และอุปกรณ์เสริมทั้งหมดของ Snapcon ปี 2026</p>
-                </div>
-                <button onclick="openGoogleDrive('catalog')" class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition-colors text-sm shadow-lg shadow-slate-200">
-                    ดู Product Catalog
-                </button>
-            </div>
+            <button onclick="openGoogleDrive('catalog')" class="bg-snap-yellow py-14 px-6 flex flex-col items-center justify-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer">
+                <h3 class="text-3xl font-bold text-black mb-2">Product Catalog</h3>
+                <p class="text-black text-sm font-medium">(ใช้ไฟล์จริงใน Google drive)</p>
+            </button>
+
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer id="about" class="py-12 border-t border-slate-100 bg-white">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-black text-sm">S</div>
-                <span class="text-xl font-black tracking-tighter">SNAPCON</span>
-            </div>
-            <div class="flex gap-8 text-slate-400 text-xs font-bold uppercase tracking-widest">
-                <a href="#" class="hover:text-emerald-500 transition-colors">Privacy</a>
-                <a href="#" class="hover:text-emerald-500 transition-colors">Terms</a>
-                <a href="#" class="hover:text-emerald-500 transition-colors">Contact</a>
-            </div>
-            <div class="text-slate-400 text-xs font-medium">
-                © 2026 Snapcon Solutions. All rights reserved.
-            </div>
+    <!-- 4. Floating Action Buttons (มุมขวาล่าง) -->
+    <div class="fixed bottom-8 right-8 flex flex-col gap-4 z-50">
+        <!-- Profile Picture Icon -->
+        <div class="w-16 h-16 rounded-full border-4 border-red-600 overflow-hidden bg-white shadow-xl cursor-pointer hover:scale-105 transition-transform">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Support" class="w-full h-full object-cover">
         </div>
-    </footer>
+        <!-- Scroll to Top Arrow Icon -->
+        <button onclick="window.scrollTo(0,0)" class="w-16 h-16 rounded-full border-[3px] border-red-600 bg-white flex items-center justify-center text-red-600 shadow-xl hover:bg-red-50 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+            </svg>
+        </button>
+    </div>
 
     <!-- JavaScript Functions -->
     <script>
-        // ฟังก์ชันระบบ Login แบบจำลอง (Simulated Auth)
+        // ระบบจำลอง Login (ใช้ ID: 001, Pass: 123 ตามเดิม หรือกด Registor เพื่อ Bypass เข้าสู่ระบบ)
         function handleLogin() {
             const id = document.getElementById('userId').value;
             const pass = document.getElementById('userPass').value;
             
-            if (id === '001' && pass === '123') {
-                // หากรหัสผ่านถูกต้อง ให้สลับหน้าจอ UI ไปโหมด Logged In
+            // อนุโลมให้กดปุ่มปุ๊บก็จำลองว่า Login สำเร็จเพื่อความรวดเร็ว หรือเช็ครหัสผ่าน
+            if ((id === '001' && pass === '123') || (id === '' && pass === '')) {
                 document.getElementById('loginForm').classList.add('hidden');
                 document.getElementById('loggedInView').classList.remove('hidden');
+                document.getElementById('loggedInView').classList.add('flex');
             } else {
-                alert('⚠️ ID หรือ Password ไม่ถูกต้อง!\\n(คำแนะนำ: ลองใช้ ID: 001 และ Pass: 123)');
+                alert('⚠️ ID หรือ Password ไม่ถูกต้อง\\n(ใช้ ID: 001 และ Pass: 123)');
             }
         }
 
-        // ฟังก์ชัน Logout
+        // ระบบจำลอง Logout
         function handleLogout() {
-            // เคลียร์ข้อมูลและสลับ UI กลับมาเป็นโหมดปกติ
             document.getElementById('userId').value = '';
             document.getElementById('userPass').value = '';
             document.getElementById('loginForm').classList.remove('hidden');
             document.getElementById('loggedInView').classList.add('hidden');
+            document.getElementById('loggedInView').classList.remove('flex');
         }
 
-        // ฟังก์ชันเปิดลิงก์ Google Drive
-        function openGoogleDrive(fileType) {
-            // คุณสามารถแก้ลิงก์ตรงนี้เป็น URL ของ Google Drive ของคุณได้เลย
-            let driveLink = '';
-            
-            switch(fileType) {
-                case 'datasheet':
-                    driveLink = 'https://drive.google.com/drive/my-drive'; // ใส่ลิงก์ Data Sheet
-                    break;
-                case 'drawing':
-                    driveLink = 'https://drive.google.com/drive/my-drive'; // ใส่ลิงก์ Drawing
-                    break;
-                case 'catalog':
-                    driveLink = 'https://drive.google.com/drive/my-drive'; // ใส่ลิงก์ Catalog
-                    break;
-            }
-            
-            // ตรวจสอบสิทธิ์ว่า Login หรือยัง (ถ้าระบบบังคับ Login ค่อยปลดคอมเมนต์ด้านล่าง)
-            /*
-            if(document.getElementById('loggedInView').classList.contains('hidden')) {
-                alert("กรุณา Login ก่อนดาวน์โหลดไฟล์");
-                return;
-            }
-            */
-
-            // เปิดแท็บใหม่ไปที่ Google Drive
-            alert('กำลังนำคุณไปยัง Google Drive เพื่อดาวน์โหลดไฟล์...');
-            window.open(driveLink, '_blank');
+        // ฟังก์ชันเปิดลิงก์ดาวน์โหลด Google Drive
+        function openGoogleDrive(type) {
+            let driveUrl = "https://drive.google.com/drive/my-drive";
+            alert("กำลังเปิดไฟล์ " + type + " ใน Google Drive...");
+            window.open(driveUrl, '_blank');
         }
     </script>
 </body>
 </html>
 """
 
-# แสดงผล HTML ผ่าน Streamlit component
-st.components.v1.html(snapcon_html, height=1400, scrolling=True)
+# แสดงผลหน้าเว็บผ่าน Streamlit
+st.components.v1.html(snapcon_html, height=1200, scrolling=True)
