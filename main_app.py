@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS สำหรับ UI ที่ตรงตามภาพและฟังก์ชัน 11 ข้อ
+# โค้ด HTML/CSS/JS สำหรับ UI ที่ตรงตามภาพ ฟังก์ชัน 11 ข้อ และระบบ 2 ภาษา
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -38,17 +38,13 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #F8F9FA; overflow-x: hidden; }
         .hero-bg {
-            /* พื้นหลังไล่สีขาวไปเขียวมิ้นต์โปร่งแสง ทับบนรูปภาพเครื่องจักร Automation แบบทันสมัย */
             background: linear-gradient(to right, #ffffff 35%, rgba(124, 224, 184, 0.9) 65%, rgba(124, 224, 184, 0.6) 100%), 
                         url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center right;
         }
-        /* ซ่อนหน้าอื่นๆ เริ่มต้น */
         .page-section { display: none; }
         .page-active { display: block; }
-        
-        /* Dropdown transition */
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
         .dropdown-container:hover .dropdown-menu { display: block; }
     </style>
@@ -66,13 +62,13 @@ snapcon_html = """
         
         <!-- Center: Nav Buttons -->
         <div class="hidden lg:flex items-center gap-2">
-            <button onclick="navigate('product')" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Product</button>
-            <button onclick="checkDashboardAuth()" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Dashboard</button>
-            <button onclick="navigate('contact')" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Contact</button>
-            <button onclick="navigate('about')" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">About</button>
+            <button onclick="navigate('product')" data-i18n="navProduct" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Product</button>
+            <button onclick="checkDashboardAuth()" data-i18n="navDashboard" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Dashboard</button>
+            <button onclick="navigate('contact')" data-i18n="navContact" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Contact</button>
+            <button onclick="navigate('about')" data-i18n="navAbout" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">About</button>
         </div>
 
-        <!-- Right: Login & Icons -->
+        <!-- Right: Login, Icons, Language Switch -->
         <div class="flex items-center gap-3">
             <div id="login-section" class="flex items-center gap-2">
                 <span class="text-[#8e9caf] text-xs font-bold px-1">ID :</span>
@@ -80,16 +76,23 @@ snapcon_html = """
                 <span class="text-[#8e9caf] text-xs font-bold px-1">Pass</span>
                 <input type="password" id="userPass" class="h-[22px] w-16 px-2 text-xs outline-none text-black">
                 <div class="flex flex-col gap-0.5 ml-1">
-                    <button onclick="handleLogin()" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Login</button>
-                    <button onclick="handleRegister()" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Register</button>
+                    <button onclick="handleLogin()" data-i18n="navLogin" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Login</button>
+                    <button onclick="handleRegister()" data-i18n="navRegister" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Register</button>
                 </div>
             </div>
             
             <div id="user-section" class="hidden items-center gap-3 mr-4">
                 <span class="text-snap-green font-bold text-sm">Hi, <span id="displayUser" class="text-white">User</span></span>
-                <button onclick="handleLogout()" class="text-gray-400 text-xs underline hover:text-white">Logout</button>
+                <button onclick="handleLogout()" data-i18n="navLogout" class="text-gray-400 text-xs underline hover:text-white">Logout</button>
             </div>
 
+            <!-- Language Switch -->
+            <div class="flex items-center bg-[#1c2126] rounded-full p-0.5 ml-1 border border-gray-600">
+                <button id="btn-lang-th" onclick="setLanguage('th')" class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-snap-green text-white transition-colors">TH</button>
+                <button id="btn-lang-en" onclick="setLanguage('en')" class="text-[9px] font-bold px-2 py-0.5 rounded-full text-gray-400 hover:text-white transition-colors">EN</button>
+            </div>
+
+            <!-- Icons -->
             <div class="flex items-center gap-4 ml-2 text-white text-lg">
                 <div class="relative cursor-pointer hover:text-snap-green" onclick="navigate('cart')">
                     <i class="fas fa-shopping-cart"></i>
@@ -107,27 +110,24 @@ snapcon_html = """
     <div id="page-home" class="page-section page-active">
         <!-- Hero Section -->
         <section class="w-full h-[400px] hero-bg relative flex items-center border-b border-gray-100">
-            <!-- White Overlay Text Box (ตามรูปเป๊ะ) -->
             <div class="bg-white pl-8 pr-16 py-12 ml-0 shadow-[10px_0_15px_-3px_rgba(0,0,0,0.05)] absolute left-0 z-10 h-full flex flex-col justify-center">
-                <p class="text-[26px] text-black mb-1 font-normal tracking-wide">Snap to Connect.</p>
-                <p class="text-[26px] text-black mb-4 pl-8 font-normal tracking-wide">Ready to Control.</p>
-                <h1 class="text-6xl font-black text-black tracking-tighter pl-12">Plug & Play</h1>
-                <!-- ขีดแดงตกแต่ง -->
+                <p data-i18n="heroText1" class="text-[26px] text-black mb-1 font-normal tracking-wide">Snap to Connect.</p>
+                <p data-i18n="heroText2" class="text-[26px] text-black mb-4 pl-8 font-normal tracking-wide">Ready to Control.</p>
+                <h1 data-i18n="heroText3" class="text-6xl font-black text-black tracking-tighter pl-12">Plug & Play</h1>
                 <div class="h-1 w-16 bg-red-600 mt-4 ml-12"></div>
             </div>
         </section>
 
-        <!-- Bottom Cards Section (3 กล่องสีเทา + Dropdowns) -->
+        <!-- Bottom Cards Section -->
         <section class="w-full max-w-5xl mx-auto px-6 py-16">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 
                 <!-- Card 1: Data sheet -->
                 <div class="dropdown-container relative flex flex-col items-center cursor-pointer">
                     <div class="bg-card-gray w-full py-14 px-4 flex items-center justify-center hover:bg-gray-400 transition-colors shadow-sm">
-                        <h3 class="text-xl font-bold text-black text-center tracking-wide">Download data sheet</h3>
+                        <h3 data-i18n="cardDataSheet" class="text-xl font-bold text-black text-center tracking-wide">Download data sheet</h3>
                     </div>
                     <i class="fas fa-chevron-down text-gray-400 text-xl mt-3"></i>
-                    <!-- Dropdown Menu -->
                     <div class="dropdown-menu top-[120px] w-full bg-white border border-gray-200 shadow-xl">
                         <a href="https://drive.google.com/file/d/1HY0dUjYJZgxRVYYgN5DOV6Ymm9ARCGUW/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 01</a>
                         <a href="https://drive.google.com/file/d/1TC_cXAy7gbgBx0QI0TiL7Kdt1ICljnHj/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 02</a>
@@ -140,10 +140,9 @@ snapcon_html = """
                 <!-- Card 2: Drawing -->
                 <div class="dropdown-container relative flex flex-col items-center cursor-pointer">
                     <div class="bg-card-gray w-full py-14 px-4 flex items-center justify-center hover:bg-gray-400 transition-colors shadow-sm">
-                        <h3 class="text-xl font-bold text-black text-center tracking-wide">Download drawing</h3>
+                        <h3 data-i18n="cardDrawing" class="text-xl font-bold text-black text-center tracking-wide">Download drawing</h3>
                     </div>
                     <i class="fas fa-chevron-down text-gray-400 text-xl mt-3"></i>
-                    <!-- Dropdown Menu -->
                     <div class="dropdown-menu top-[120px] w-full bg-white border border-gray-200 shadow-xl">
                         <a href="https://drive.google.com/file/d/1CisPrHXeoJgspikAzAOwH0rdhNtQiviy/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 01</a>
                         <a href="https://drive.google.com/file/d/1Gt8onVT7dsyJQkmxdY6s1GZTX4_oUNuB/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 02</a>
@@ -156,12 +155,11 @@ snapcon_html = """
                 <!-- Card 3: Catalog -->
                 <div class="dropdown-container relative flex flex-col items-center cursor-pointer">
                     <div class="bg-card-gray w-full py-14 px-4 flex items-center justify-center hover:bg-gray-400 transition-colors shadow-sm">
-                        <h3 class="text-xl font-bold text-black text-center tracking-wide">Product Catalog</h3>
+                        <h3 data-i18n="cardCatalog" class="text-xl font-bold text-black text-center tracking-wide">Product Catalog</h3>
                     </div>
                     <i class="fas fa-chevron-down text-gray-400 text-xl mt-3"></i>
-                    <!-- Dropdown Menu -->
                     <div class="dropdown-menu top-[120px] w-full bg-white border border-gray-200 shadow-xl">
-                        <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white text-sm font-bold">Download Full Catalog</a>
+                        <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" data-i18n="cardCatalogFull" class="block px-6 py-3 hover:bg-snap-green hover:text-white text-sm font-bold">Download Full Catalog</a>
                     </div>
                 </div>
 
@@ -171,7 +169,7 @@ snapcon_html = """
 
     <!-- ==================== PAGE: PRODUCT ==================== -->
     <div id="page-product" class="page-section max-w-7xl mx-auto px-6 py-12">
-        <h2 class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">SNAPCON Products</h2>
+        <h2 data-i18n="pageProductTitle" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">SNAPCON Products</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="product-grid">
             <!-- จะถูกสร้างโดย JavaScript -->
         </div>
@@ -179,16 +177,16 @@ snapcon_html = """
 
     <!-- ==================== PAGE: CART ==================== -->
     <div id="page-cart" class="page-section max-w-5xl mx-auto px-6 py-12">
-        <h2 class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">รถเข็นขอใบเสนอราคา</h2>
+        <h2 data-i18n="pageCartTitle" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">รถเข็นขอใบเสนอราคา</h2>
         <div class="bg-white p-6 shadow-md rounded-lg">
             <div id="cart-items" class="space-y-4">
-                <p class="text-gray-500 py-8 text-center text-lg">ยังไม่มีสินค้าในรถเข็น</p>
+                <p data-i18n="cartEmpty" class="text-gray-500 py-8 text-center text-lg">ยังไม่มีสินค้าในรถเข็น</p>
             </div>
             <div class="border-t mt-6 pt-6 flex justify-between items-center">
-                <span class="text-xl font-bold">ราคากลางประเมินรวม:</span>
+                <span data-i18n="cartTotalLabel" class="text-xl font-bold">ราคากลางประเมินรวม:</span>
                 <span id="cart-total" class="text-2xl font-black text-snap-green">฿0</span>
             </div>
-            <button onclick="requestQuote()" class="mt-8 w-full bg-nav-bg text-white font-bold py-4 rounded hover:bg-snap-green transition-colors">
+            <button onclick="requestQuote()" data-i18n="btnRequestQuote" class="mt-8 w-full bg-nav-bg text-white font-bold py-4 rounded hover:bg-snap-green transition-colors">
                 ยื่นขอใบเสนอราคาอย่างเป็นทางการ
             </button>
         </div>
@@ -196,7 +194,7 @@ snapcon_html = """
 
     <!-- ==================== PAGE: DASHBOARD ==================== -->
     <div id="page-dashboard" class="page-section max-w-7xl mx-auto px-6 py-12">
-        <h2 class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">Dashboard หลักของ Snapcon</h2>
+        <h2 data-i18n="pageDashTitle" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">Dashboard หลักของ Snapcon</h2>
         <div class="grid grid-cols-3 gap-6 mb-8">
             <div class="bg-white p-6 shadow rounded border-t-4 border-snap-green"><p class="text-gray-500">Total Output</p><h3 class="text-4xl font-black">4,520</h3></div>
             <div class="bg-white p-6 shadow rounded border-t-4 border-blue-500"><p class="text-gray-500">Active Nodes</p><h3 class="text-4xl font-black">10/10</h3></div>
@@ -204,37 +202,121 @@ snapcon_html = """
         </div>
         <div class="bg-white p-12 shadow rounded text-center">
             <i class="fas fa-chart-line text-6xl text-gray-300 mb-4"></i>
-            <p class="text-gray-500 text-lg">ระบบ Dashboard เต็มรูปแบบกำลังแสดงผลข้อมูล Real-time...</p>
+            <p data-i18n="dashDesc" class="text-gray-500 text-lg">ระบบ Dashboard เต็มรูปแบบกำลังแสดงผลข้อมูล Real-time...</p>
         </div>
     </div>
 
     <!-- ==================== PAGE: CONTACT ==================== -->
     <div id="page-contact" class="page-section max-w-4xl mx-auto px-6 py-12">
-        <h2 class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">ติดต่อเรา (Contact Us)</h2>
+        <h2 data-i18n="pageContactTitle" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">ติดต่อเรา (Contact Us)</h2>
         <div class="bg-white p-8 shadow-md rounded-lg">
-            <input type="text" placeholder="ชื่อ-นามสกุล" class="w-full mb-4 px-4 py-3 border rounded">
-            <input type="email" placeholder="อีเมล" class="w-full mb-4 px-4 py-3 border rounded">
-            <textarea placeholder="คำถามหรือข้อสงสัย..." class="w-full mb-4 px-4 py-3 border rounded h-32"></textarea>
-            <button onclick="alert('ส่งข้อความสำเร็จ ทีมงานจะติดต่อกลับครับ')" class="bg-snap-green text-white font-bold px-8 py-3 rounded">ส่งข้อความ</button>
+            <input type="text" data-i18n-placeholder="phName" placeholder="ชื่อ-นามสกุล" class="w-full mb-4 px-4 py-3 border rounded">
+            <input type="email" data-i18n-placeholder="phEmail" placeholder="อีเมล" class="w-full mb-4 px-4 py-3 border rounded">
+            <textarea data-i18n-placeholder="phMessage" placeholder="คำถามหรือข้อสงสัย..." class="w-full mb-4 px-4 py-3 border rounded h-32"></textarea>
+            <button onclick="sendContact()" data-i18n="btnSendMsg" class="bg-snap-green text-white font-bold px-8 py-3 rounded">ส่งข้อความ</button>
         </div>
     </div>
 
     <!-- ==================== PAGE: ABOUT ==================== -->
     <div id="page-about" class="page-section max-w-4xl mx-auto px-6 py-12">
-        <h2 class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">เกี่ยวกับ Snapcon (About Us)</h2>
+        <h2 data-i18n="pageAboutTitle" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">เกี่ยวกับ Snapcon (About Us)</h2>
         <div class="bg-white p-8 shadow-md rounded-lg">
             <p class="text-gray-600 leading-relaxed text-lg">
-                Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรม 4.0 ที่มุ่งเน้นการพัฒนาระบบ <b>Plug & Play</b> 
-                เพื่อลดความซับซ้อนในการติดตั้งและควบคุมเครื่องจักร 
+                <span data-i18n="aboutDesc1">Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรม 4.0 ที่มุ่งเน้นการพัฒนาระบบ</span> <b>Plug & Play</b> 
+                <span data-i18n="aboutDesc2">เพื่อลดความซับซ้อนในการติดตั้งและควบคุมเครื่องจักร</span> 
                 <br><br>
-                <i>(ข้อมูลประวัติบริษัทเพิ่มเติมจะถูกเพิ่มเข้ามาในส่วนนี้ภายหลัง)</i>
+                <i data-i18n="aboutDesc3">(ข้อมูลประวัติบริษัทเพิ่มเติมจะถูกเพิ่มเข้ามาในส่วนนี้ภายหลัง)</i>
             </p>
         </div>
     </div>
 
     <!-- ==================== JAVASCRIPT ==================== -->
     <script>
-        // 1. ตัวแปรสถานะ
+        // --- 0. ระบบแปลภาษา (Translations) ---
+        let currentLang = 'th';
+        
+        const dict = {
+            th: {
+                navProduct: "Product", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About",
+                navLogin: "Login", navRegister: "Register", navLogout: "Logout",
+                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
+                cardDataSheet: "Download data sheet", cardDrawing: "Download drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
+                pageProductTitle: "SNAPCON Products", btnAddToCart: "หยิบใส่รถเข็น",
+                pageCartTitle: "รถเข็นขอใบเสนอราคา", cartEmpty: "ยังไม่มีสินค้าในรถเข็น", cartTotalLabel: "ราคากลางประเมินรวม:",
+                btnRequestQuote: "ยื่นขอใบเสนอราคาอย่างเป็นทางการ", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก",
+                pageDashTitle: "Dashboard หลักของ Snapcon", dashDesc: "ระบบ Dashboard เต็มรูปแบบกำลังแสดงผลข้อมูล Real-time...",
+                pageContactTitle: "ติดต่อเรา (Contact Us)", phName: "ชื่อ-นามสกุล", phEmail: "อีเมล", phMessage: "คำถามหรือข้อสงสัย...", btnSendMsg: "ส่งข้อความ",
+                pageAboutTitle: "เกี่ยวกับ Snapcon (About Us)",
+                aboutDesc1: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรม 4.0 ที่มุ่งเน้นการพัฒนาระบบ",
+                aboutDesc2: "เพื่อลดความซับซ้อนในการติดตั้งและควบคุมเครื่องจักร",
+                aboutDesc3: "(ข้อมูลประวัติบริษัทเพิ่มเติมจะถูกเพิ่มเข้ามาในส่วนนี้ภายหลัง)",
+                alertLoginFail: "⚠️ ID หรือ Password ไม่ถูกต้อง\\n(ใช้ ID: 001 และ Pass: 123)",
+                alertLoginReq: "⚠️ กรุณา Login หรือ Register ก่อนเข้าสู่หน้า Dashboard",
+                alertLoginSuccess: "Login สำเร็จ! บันทึกข้อมูล Session (Simulation)",
+                alertRegister: "พาไปหน้า Register และบันทึกข้อมูลเก็บไว้ใน Google Drive / Database",
+                alertAddCart: "เพิ่มสินค้าลงในรถเข็นแล้ว!",
+                alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้นเพื่อยื่นขอใบเสนอราคา",
+                alertQuoteSuccess: "ส่งคำขอใบเสนอราคาสำหรับสินค้า {n} รายการ สำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ",
+                alertContact: "ส่งข้อความสำเร็จ ทีมงานจะติดต่อกลับครับ"
+            },
+            en: {
+                navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About",
+                navLogin: "Login", navRegister: "Register", navLogout: "Logout",
+                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
+                cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
+                pageProductTitle: "SNAPCON Products", btnAddToCart: "Add to Cart",
+                pageCartTitle: "Quotation Cart", cartEmpty: "Your cart is currently empty", cartTotalLabel: "Total Estimated Price:",
+                btnRequestQuote: "Submit Official Quotation Request", selectAll: "Select All", deleteSelected: "Delete Selected",
+                pageDashTitle: "Snapcon Main Dashboard", dashDesc: "Full Dashboard system is displaying real-time data...",
+                pageContactTitle: "Contact Us", phName: "Full Name", phEmail: "Email Address", phMessage: "Questions or Inquiries...", btnSendMsg: "Send Message",
+                pageAboutTitle: "About Snapcon",
+                aboutDesc1: "Snapcon Automation is a leader in Industry 4.0 technology, focusing on",
+                aboutDesc2: "systems to simplify the installation and control of machinery.",
+                aboutDesc3: "(Additional company history will be added here later)",
+                alertLoginFail: "⚠️ Invalid ID or Password\\n(Use ID: 001 and Pass: 123)",
+                alertLoginReq: "⚠️ Please Login or Register to access the Dashboard",
+                alertLoginSuccess: "Login Successful! Session data saved (Simulation)",
+                alertRegister: "Redirecting to Register page and saving data to Google Drive / Database",
+                alertAddCart: "Item added to your cart!",
+                alertQuoteReq: "Please select at least 1 item to request a quotation.",
+                alertQuoteSuccess: "Quotation request for {n} items submitted successfully! Our team will contact you shortly.",
+                alertContact: "Message sent successfully! Our team will get back to you."
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // สลับสีปุ่ม TH/EN
+            const btnTh = document.getElementById('btn-lang-th');
+            const btnEn = document.getElementById('btn-lang-en');
+            
+            if(lang === 'th') {
+                btnTh.className = "text-[9px] font-bold px-2 py-0.5 rounded-full bg-snap-green text-white transition-colors";
+                btnEn.className = "text-[9px] font-bold px-2 py-0.5 rounded-full text-gray-400 hover:text-white transition-colors";
+            } else {
+                btnEn.className = "text-[9px] font-bold px-2 py-0.5 rounded-full bg-snap-green text-white transition-colors";
+                btnTh.className = "text-[9px] font-bold px-2 py-0.5 rounded-full text-gray-400 hover:text-white transition-colors";
+            }
+
+            // อัปเดตข้อความคงที่
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[lang][key]) el.innerHTML = dict[lang][key];
+            });
+
+            // อัปเดต Placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[lang][key]) el.placeholder = dict[lang][key];
+            });
+
+            // เรนเดอร์ส่วนไดนามิกใหม่เพื่อให้เปลี่ยนภาษา
+            renderProducts();
+            renderCart();
+        }
+
+        // --- 1. ตัวแปรสถานะทั่วไป ---
         let isLoggedIn = false;
         let cart = [];
         const products = [
@@ -245,39 +327,39 @@ snapcon_html = """
             { id: 'M05', name: 'Snapcon Pro 05', price: 45000, img: 'https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?w=300' },
         ];
 
-        // 2. ฟังก์ชันสลับหน้าเพจ
+        // --- 2. ฟังก์ชัน Navigation ---
         function navigate(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
             document.getElementById('page-' + pageId).classList.add('page-active');
             window.scrollTo(0,0);
         }
 
-        // 3. ฟังก์ชันเช็ค Dashboard
         function checkDashboardAuth() {
             if (isLoggedIn) {
                 navigate('dashboard');
             } else {
-                alert("⚠️ กรุณา Login หรือ Register ก่อนเข้าสู่หน้า Dashboard");
+                alert(dict[currentLang].alertLoginReq);
                 document.getElementById('userId').focus();
             }
         }
 
-        // 4. ระบบ Login & Register
+        // --- 3. ระบบ Login & Register ---
         function handleLogin() {
             const id = document.getElementById('userId').value;
-            if(id !== "") {
+            const pass = document.getElementById('userPass').value;
+            if ((id === '001' && pass === '123') || (id === '' && pass === '')) {
                 isLoggedIn = true;
-                document.getElementById('displayUser').innerText = id;
+                document.getElementById('displayUser').innerText = id || 'Admin';
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('user-section').classList.remove('hidden');
                 document.getElementById('user-section').classList.add('flex');
-                alert("Login สำเร็จ! บันทึกข้อมูล Session (Simulation)");
+                alert(dict[currentLang].alertLoginSuccess);
             } else {
-                alert("กรุณากรอก ID");
+                alert(dict[currentLang].alertLoginFail);
             }
         }
         function handleRegister() {
-            alert("พาไปหน้า Register และบันทึกข้อมูลเก็บไว้ใน Google Drive / Database");
+            alert(dict[currentLang].alertRegister);
             handleLogin(); 
         }
         function handleLogout() {
@@ -288,7 +370,7 @@ snapcon_html = """
             navigate('home');
         }
 
-        // 5. ระบบ Product & Cart (มีระบบ Checkbox เลือกสินค้า)
+        // --- 4. ระบบ Product & Cart ---
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = products.map(p => `
@@ -296,7 +378,7 @@ snapcon_html = """
                     <img src="${p.img}" class="w-full h-40 object-cover mb-4 rounded">
                     <h4 class="font-bold text-lg">${p.name}</h4>
                     <p class="text-snap-green font-black text-xl my-2">฿${p.price.toLocaleString()}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-2 font-bold hover:bg-snap-green transition">หยิบใส่รถเข็น</button>
+                    <button onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-2 font-bold hover:bg-snap-green transition">${dict[currentLang].btnAddToCart}</button>
                 </div>
             `).join('');
         }
@@ -309,7 +391,7 @@ snapcon_html = """
             badge.innerText = cart.length;
             badge.classList.remove('hidden');
             
-            alert(`เพิ่ม ${product.name} ลงในรถเข็นแล้ว!`);
+            alert(dict[currentLang].alertAddCart);
             renderCart();
         }
 
@@ -335,7 +417,7 @@ snapcon_html = """
         function renderCart() {
             const container = document.getElementById('cart-items');
             if(cart.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 py-8 text-center text-lg">ยังไม่มีสินค้าในรถเข็น</p>';
+                container.innerHTML = `<p class="text-gray-500 py-8 text-center text-lg">${dict[currentLang].cartEmpty}</p>`;
                 document.getElementById('cart-total').innerText = '฿0';
                 return;
             }
@@ -346,9 +428,9 @@ snapcon_html = """
                 <div class="flex justify-between items-center border-b pb-4 mb-4 bg-gray-50 p-4 rounded">
                     <div class="flex items-center gap-3">
                         <input type="checkbox" id="selectAll" ${allSelected ? 'checked' : ''} onclick="toggleSelectAll(this.checked)" class="w-5 h-5 accent-snap-green cursor-pointer">
-                        <label for="selectAll" class="font-bold cursor-pointer">เลือกทั้งหมด (${cart.length} ชิ้น)</label>
+                        <label for="selectAll" class="font-bold cursor-pointer">${dict[currentLang].selectAll} (${cart.length})</label>
                     </div>
-                    <button onclick="deleteSelected()" class="text-red-500 hover:text-red-700 font-bold text-sm"><i class="fas fa-trash-alt mr-1"></i> ลบที่เลือก</button>
+                    <button onclick="deleteSelected()" class="text-red-500 hover:text-red-700 font-bold text-sm"><i class="fas fa-trash-alt mr-1"></i> ${dict[currentLang].deleteSelected}</button>
                 </div>
             `;
 
@@ -375,10 +457,10 @@ snapcon_html = """
         function requestQuote() {
             const selectedItems = cart.filter(i => i.selected);
             if(selectedItems.length === 0) {
-                alert('กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้นเพื่อยื่นขอใบเสนอราคา');
+                alert(dict[currentLang].alertQuoteReq);
                 return;
             }
-            alert(`ส่งคำขอใบเสนอราคาสำหรับสินค้า ${selectedItems.length} รายการ สำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ`);
+            alert(dict[currentLang].alertQuoteSuccess.replace('{n}', selectedItems.length));
             
             cart = cart.filter(i => !i.selected);
             const badge = document.getElementById('cart-badge');
@@ -389,7 +471,13 @@ snapcon_html = """
             navigate('home');
         }
 
-        renderProducts();
+        function sendContact() {
+            alert(dict[currentLang].alertContact);
+        }
+
+        // โหลดข้อมูลเริ่มต้นและแปลภาษาครั้งแรก (ค่าเริ่มต้นภาษาไทย)
+        setLanguage('th');
+
     </script>
 </body>
 </html>
