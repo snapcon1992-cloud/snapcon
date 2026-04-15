@@ -23,10 +23,10 @@ snapcon_html = """
             theme: {
                 extend: {
                     colors: {
-                        'nav-bg': '#333333',
+                        'nav-bg': '#2b3035',
                         'snap-green': '#00B36E',
-                        'btn-bg': '#E0E0E0',
-                        'card-gray': '#A9A9A9',
+                        'btn-bg': '#e2e2e2',
+                        'card-gray': '#a8a8a8',
                     },
                     fontFamily: {
                         sans: ['Inter', 'Prompt', 'sans-serif'],
@@ -38,10 +38,11 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #F8F9FA; overflow-x: hidden; }
         .hero-bg {
-            /* ภาพอุตสาหกรรม/แขนกลแบบทันสมัยที่ดูเข้ากับ Automation / Conveyor */
-            background-image: url('https://images.unsplash.com/photo-1565439399249-1667b140ccb3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            /* พื้นหลังไล่สีขาวไปเขียวมิ้นต์โปร่งแสง ทับบนรูปภาพเครื่องจักร Automation แบบทันสมัย */
+            background: linear-gradient(to right, #ffffff 35%, rgba(124, 224, 184, 0.9) 65%, rgba(124, 224, 184, 0.6) 100%), 
+                        url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
-            background-position: center;
+            background-position: center right;
         }
         /* ซ่อนหน้าอื่นๆ เริ่มต้น */
         .page-section { display: none; }
@@ -54,33 +55,33 @@ snapcon_html = """
 </head>
 <body>
 
-    <!-- 1. Top Navigation Bar (ตามภาพเป๊ะ) -->
-    <nav class="bg-nav-bg h-[70px] w-full fixed top-0 z-50 flex items-center justify-between px-6 shadow-md border-b-4 border-snap-green">
+    <!-- 1. Top Navigation Bar -->
+    <nav class="bg-nav-bg h-[60px] w-full fixed top-0 z-50 flex items-center justify-between px-6 border-b-4 border-snap-green shadow-sm">
         
         <!-- Left: Logo -->
-        <div class="flex flex-col cursor-pointer" onclick="navigate('home')">
-            <span class="font-black text-2xl text-snap-green tracking-tight leading-none">SNAPCON</span>
-            <span class="font-bold text-sm text-snap-green leading-none">Automation</span>
+        <div class="flex flex-col cursor-pointer justify-center h-full" onclick="navigate('home')">
+            <span class="font-black text-2xl text-snap-green tracking-tight leading-none mt-1">SNAPCON</span>
+            <span class="font-bold text-[10px] text-snap-green leading-none">Automation</span>
         </div>
         
         <!-- Center: Nav Buttons -->
-        <div class="hidden lg:flex items-center gap-4">
-            <button onclick="navigate('product')" class="bg-btn-bg text-black font-bold px-6 py-2 hover:bg-gray-300">Product</button>
-            <button onclick="checkDashboardAuth()" class="bg-btn-bg text-black font-bold px-6 py-2 hover:bg-gray-300">Dashboard</button>
-            <button onclick="navigate('contact')" class="bg-btn-bg text-black font-bold px-6 py-2 hover:bg-gray-300">Contact</button>
-            <button onclick="navigate('about')" class="bg-btn-bg text-black font-bold px-6 py-2 hover:bg-gray-300">About</button>
+        <div class="hidden lg:flex items-center gap-2">
+            <button onclick="navigate('product')" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Product</button>
+            <button onclick="checkDashboardAuth()" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Dashboard</button>
+            <button onclick="navigate('contact')" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">Contact</button>
+            <button onclick="navigate('about')" class="bg-btn-bg text-black font-bold text-sm px-6 py-1.5 hover:bg-gray-300">About</button>
         </div>
 
         <!-- Right: Login & Icons -->
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3">
             <div id="login-section" class="flex items-center gap-2">
-                <span class="text-white text-xs font-bold bg-gray-700 px-2 py-1">ID :</span>
-                <input type="text" id="userId" class="h-[25px] w-20 px-2 text-xs outline-none">
-                <span class="text-white text-xs font-bold bg-gray-700 px-2 py-1">Pass</span>
-                <input type="password" id="userPass" class="h-[25px] w-20 px-2 text-xs outline-none">
-                <div class="flex flex-col gap-1">
-                    <button onclick="handleLogin()" class="bg-btn-bg text-black font-bold text-[10px] px-3 py-0.5 hover:bg-gray-300">Login</button>
-                    <button onclick="handleRegister()" class="bg-btn-bg text-black font-bold text-[10px] px-3 py-0.5 hover:bg-gray-300">Register</button>
+                <span class="text-[#8e9caf] text-xs font-bold px-1">ID :</span>
+                <input type="text" id="userId" class="h-[22px] w-16 px-2 text-xs outline-none text-black">
+                <span class="text-[#8e9caf] text-xs font-bold px-1">Pass</span>
+                <input type="password" id="userPass" class="h-[22px] w-16 px-2 text-xs outline-none text-black">
+                <div class="flex flex-col gap-0.5 ml-1">
+                    <button onclick="handleLogin()" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Login</button>
+                    <button onclick="handleRegister()" class="bg-btn-bg text-black font-bold text-[9px] px-3 py-0.5 hover:bg-gray-300">Register</button>
                 </div>
             </div>
             
@@ -89,10 +90,10 @@ snapcon_html = """
                 <button onclick="handleLogout()" class="text-gray-400 text-xs underline hover:text-white">Logout</button>
             </div>
 
-            <div class="flex items-center gap-4 ml-4 text-white text-xl">
+            <div class="flex items-center gap-4 ml-2 text-white text-lg">
                 <div class="relative cursor-pointer hover:text-snap-green" onclick="navigate('cart')">
                     <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 rounded-full hidden">0</span>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold px-1.5 rounded-full hidden">0</span>
                 </div>
                 <i class="fas fa-search cursor-pointer hover:text-snap-green"></i>
             </div>
@@ -100,36 +101,34 @@ snapcon_html = """
     </nav>
 
     <!-- SPACER สำหรับ Navbar -->
-    <div class="h-[70px]"></div>
+    <div class="h-[60px]"></div>
 
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         <!-- Hero Section -->
-        <section class="w-full h-[450px] hero-bg relative flex items-center">
-            <!-- White Overlay Text Box -->
-            <div class="bg-white pl-8 pr-16 py-12 ml-0 shadow-lg absolute left-0 z-10">
-                <p class="text-3xl text-black mb-2">Snap to Connect.</p>
-                <p class="text-3xl text-black mb-6 pl-12">Ready to Control.</p>
-                <h1 class="text-6xl font-black text-black tracking-tighter pl-20">Plug & Play</h1>
+        <section class="w-full h-[400px] hero-bg relative flex items-center border-b border-gray-100">
+            <!-- White Overlay Text Box (ตามรูปเป๊ะ) -->
+            <div class="bg-white pl-8 pr-16 py-12 ml-0 shadow-[10px_0_15px_-3px_rgba(0,0,0,0.05)] absolute left-0 z-10 h-full flex flex-col justify-center">
+                <p class="text-[26px] text-black mb-1 font-normal tracking-wide">Snap to Connect.</p>
+                <p class="text-[26px] text-black mb-4 pl-8 font-normal tracking-wide">Ready to Control.</p>
+                <h1 class="text-6xl font-black text-black tracking-tighter pl-12">Plug & Play</h1>
                 <!-- ขีดแดงตกแต่ง -->
-                <div class="h-1 w-32 bg-red-600 mt-6 ml-20"></div>
+                <div class="h-1 w-16 bg-red-600 mt-4 ml-12"></div>
             </div>
-            <!-- ภาพบังเงาพร้อมไล่ระดับโทนสี "Green and Technology" เพื่อให้เข้ากับระบบ -->
-            <div class="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-[#00B36E]/60"></div>
         </section>
 
         <!-- Bottom Cards Section (3 กล่องสีเทา + Dropdowns) -->
-        <section class="w-full max-w-6xl mx-auto px-6 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <section class="w-full max-w-5xl mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 
                 <!-- Card 1: Data sheet -->
                 <div class="dropdown-container relative flex flex-col items-center cursor-pointer">
-                    <div class="bg-card-gray w-full py-16 px-4 flex items-center justify-center shadow-md hover:bg-gray-400 transition-colors">
-                        <h3 class="text-2xl font-bold text-black text-center">Download data sheet</h3>
+                    <div class="bg-card-gray w-full py-14 px-4 flex items-center justify-center hover:bg-gray-400 transition-colors shadow-sm">
+                        <h3 class="text-xl font-bold text-black text-center tracking-wide">Download data sheet</h3>
                     </div>
-                    <i class="fas fa-chevron-down text-gray-400 text-2xl mt-4"></i>
+                    <i class="fas fa-chevron-down text-gray-400 text-xl mt-3"></i>
                     <!-- Dropdown Menu -->
-                    <div class="dropdown-menu top-[140px] w-full bg-white border border-gray-200 shadow-xl">
+                    <div class="dropdown-menu top-[120px] w-full bg-white border border-gray-200 shadow-xl">
                         <a href="https://drive.google.com/file/d/1HY0dUjYJZgxRVYYgN5DOV6Ymm9ARCGUW/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 01</a>
                         <a href="https://drive.google.com/file/d/1TC_cXAy7gbgBx0QI0TiL7Kdt1ICljnHj/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 02</a>
                         <a href="https://drive.google.com/file/d/1Yv_gJWWxTL4H_5YmCDAOCnI33gdfcj4j/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 03</a>
@@ -140,12 +139,12 @@ snapcon_html = """
 
                 <!-- Card 2: Drawing -->
                 <div class="dropdown-container relative flex flex-col items-center cursor-pointer">
-                    <div class="bg-card-gray w-full py-16 px-4 flex items-center justify-center shadow-md hover:bg-gray-400 transition-colors">
-                        <h3 class="text-2xl font-bold text-black text-center">Download drawing</h3>
+                    <div class="bg-card-gray w-full py-14 px-4 flex items-center justify-center hover:bg-gray-400 transition-colors shadow-sm">
+                        <h3 class="text-xl font-bold text-black text-center tracking-wide">Download drawing</h3>
                     </div>
-                    <i class="fas fa-chevron-down text-gray-400 text-2xl mt-4"></i>
+                    <i class="fas fa-chevron-down text-gray-400 text-xl mt-3"></i>
                     <!-- Dropdown Menu -->
-                    <div class="dropdown-menu top-[140px] w-full bg-white border border-gray-200 shadow-xl">
+                    <div class="dropdown-menu top-[120px] w-full bg-white border border-gray-200 shadow-xl">
                         <a href="https://drive.google.com/file/d/1CisPrHXeoJgspikAzAOwH0rdhNtQiviy/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 01</a>
                         <a href="https://drive.google.com/file/d/1Gt8onVT7dsyJQkmxdY6s1GZTX4_oUNuB/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 02</a>
                         <a href="https://drive.google.com/file/d/1zesePgsPwZDTUpKzLrmesdnuY6usfe2P/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white border-b text-sm font-bold">Model 03</a>
@@ -156,12 +155,12 @@ snapcon_html = """
 
                 <!-- Card 3: Catalog -->
                 <div class="dropdown-container relative flex flex-col items-center cursor-pointer">
-                    <div class="bg-card-gray w-full py-16 px-4 flex items-center justify-center shadow-md hover:bg-gray-400 transition-colors">
-                        <h3 class="text-2xl font-bold text-black text-center">Product Catalog</h3>
+                    <div class="bg-card-gray w-full py-14 px-4 flex items-center justify-center hover:bg-gray-400 transition-colors shadow-sm">
+                        <h3 class="text-xl font-bold text-black text-center tracking-wide">Product Catalog</h3>
                     </div>
-                    <i class="fas fa-chevron-down text-gray-400 text-2xl mt-4"></i>
+                    <i class="fas fa-chevron-down text-gray-400 text-xl mt-3"></i>
                     <!-- Dropdown Menu -->
-                    <div class="dropdown-menu top-[140px] w-full bg-white border border-gray-200 shadow-xl">
+                    <div class="dropdown-menu top-[120px] w-full bg-white border border-gray-200 shadow-xl">
                         <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green hover:text-white text-sm font-bold">Download Full Catalog</a>
                     </div>
                 </div>
@@ -183,8 +182,7 @@ snapcon_html = """
         <h2 class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">รถเข็นขอใบเสนอราคา</h2>
         <div class="bg-white p-6 shadow-md rounded-lg">
             <div id="cart-items" class="space-y-4">
-                <!-- รายการสินค้าจะมาแสดงตรงนี้ -->
-                <p class="text-gray-500">ยังไม่มีสินค้าในรถเข็น</p>
+                <p class="text-gray-500 py-8 text-center text-lg">ยังไม่มีสินค้าในรถเข็น</p>
             </div>
             <div class="border-t mt-6 pt-6 flex justify-between items-center">
                 <span class="text-xl font-bold">ราคากลางประเมินรวม:</span>
@@ -280,7 +278,7 @@ snapcon_html = """
         }
         function handleRegister() {
             alert("พาไปหน้า Register และบันทึกข้อมูลเก็บไว้ใน Google Drive / Database");
-            handleLogin(); // จำลองว่าสมัครแล้วล็อกอินเลย
+            handleLogin(); 
         }
         function handleLogout() {
             isLoggedIn = false;
@@ -290,7 +288,7 @@ snapcon_html = """
             navigate('home');
         }
 
-        // 5. ระบบ Product & Cart
+        // 5. ระบบ Product & Cart (มีระบบ Checkbox เลือกสินค้า)
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = products.map(p => `
@@ -305,10 +303,8 @@ snapcon_html = """
 
         function addToCart(id) {
             const product = products.find(p => p.id === id);
-            // เพิ่มฟิลด์ cartId เพื่ออ้างอิงรายชิ้น และ selected = true เป็นค่าเริ่มต้น
             cart.push({ ...product, cartId: Date.now() + Math.random(), selected: true });
             
-            // อัปเดตตัวเลขแจ้งเตือนที่ไอคอนตะกร้า
             const badge = document.getElementById('cart-badge');
             badge.innerText = cart.length;
             badge.classList.remove('hidden');
@@ -372,7 +368,6 @@ snapcon_html = """
 
             container.innerHTML = html;
 
-            // รวมราคาเฉพาะชิ้นที่ถูกเลือก
             const total = cart.filter(i => i.selected).reduce((sum, item) => sum + item.price, 0);
             document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
         }
@@ -385,7 +380,6 @@ snapcon_html = """
             }
             alert(`ส่งคำขอใบเสนอราคาสำหรับสินค้า ${selectedItems.length} รายการ สำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ`);
             
-            // ลบสินค้าที่ขอใบเสนอราคาแล้วออกจากตะกร้า
             cart = cart.filter(i => !i.selected);
             const badge = document.getElementById('cart-badge');
             badge.innerText = cart.length;
@@ -395,7 +389,6 @@ snapcon_html = """
             navigate('home');
         }
 
-        // เริ่มต้นเรนเดอร์สินค้า
         renderProducts();
     </script>
 </body>
