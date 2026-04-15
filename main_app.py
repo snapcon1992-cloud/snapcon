@@ -94,13 +94,12 @@ def nav_to(page_name):
     st.session_state.page = page_name
     st.rerun()
 
-# 4. SIDEBAR (ตามภาพโครงสร้างเมนูย่อย)
+# 4. SIDEBAR
 with st.sidebar:
     st.markdown('<p class="sidebar-brand">SNAPCON</p>', unsafe_allow_html=True)
     st.markdown('<p class="sidebar-subbrand">AUTOMATION SOLUTION</p>', unsafe_allow_html=True)
     
     if st.session_state.logged_in:
-        # แสดง User Profile
         st.markdown(f"""
         <div class="user-card">
             <small style="color: #4A5568;">Current Operator:</small><br>
@@ -109,10 +108,8 @@ with st.sidebar:
         </div>
         """, unsafe_allow_html=True)
         
-        # เมนูนำทางหลัก
         if st.button("🏠 MAIN HOME", use_container_width=True): nav_to("main")
         if st.button("📊 PRODUCTION DASHBOARD", use_container_width=True): nav_to("dashboard")
-        if st.button("🔍 PRODUCT MONITOR", use_container_width=True): nav_to("monitor")
         
         st.markdown("<br><hr><br>", unsafe_allow_html=True)
         if st.button("📞 CONTACT SUPPORT", use_container_width=True):
@@ -122,11 +119,11 @@ with st.sidebar:
             st.session_state.logged_in = False
             nav_to("main")
     else:
-        st.warning("Please login at the top right to access full features.")
+        st.warning("Please login to access all engineering files.")
 
 # 5. CONTENT AREA
 if st.session_state.page == "main":
-    # ส่วน Login ด้านขวาบน (ถ้ายังไม่ได้ Login)
+    # Login Section
     if not st.session_state.logged_in:
         c1, c2, c3, c4 = st.columns([5, 2, 2, 1])
         with c2: 
@@ -138,10 +135,8 @@ if st.session_state.page == "main":
                 if user_in == "001" and pass_in == "123":
                     st.session_state.logged_in = True
                     st.rerun()
-                else:
-                    st.error("!")
 
-    # Hero Banner (ปรับปรุงข้อความใหม่ตามคำขอ)
+    # Hero Banner
     st.markdown("""
     <div class="hero-container">
         <h1 class="hero-title">Plug & Play.<br><span class="hero-highlight">Control Made Easy.</span></h1>
@@ -161,50 +156,31 @@ if st.session_state.page == "main":
     with col1:
         st.markdown("""<div class="solution-card">
             <h3>📂 Documentation</h3>
-            <p>รวมคู่มือการใช้งาน (Manual), Wiring Diagram และเอกสารรับรองมาตรฐานทั้งหมด</p>
+            <p>รวมคู่มือการใช้งาน (Manual) และเอกสารรับรองมาตรฐานผลิตภัณฑ์ทั้งหมด</p>
         </div>""", unsafe_allow_html=True)
-        st.link_button("OPEN GOOGLE DRIVE", "https://drive.google.com/your-folder-1", use_container_width=True)
+        st.link_button("OPEN MANUALS", "https://drive.google.com/your-manuals-folder", use_container_width=True)
         
     with col2:
         st.markdown("""<div class="solution-card">
-            <h3>📈 Operation Status</h3>
-            <p>ดูสถานะการทำงานของไลน์ผลิตแบบสดๆ พร้อมระบบแจ้งเตือนเมื่อเกิดความผิดปกติ</p>
+            <h3>📐 Drawing download</h3>
+            <p>ดาวน์โหลดแบบทางวิศวกรรม (Drawing), Wiring Diagram และ 3D Models สำหรับออกแบบติดตั้ง</p>
         </div>""", unsafe_allow_html=True)
-        if st.button("ENTER MONITORING", use_container_width=True): nav_to("monitor")
+        st.link_button("DOWNLOAD DRAWINGS", "https://drive.google.com/your-drawing-folder", use_container_width=True)
         
     with col3:
         st.markdown("""<div class="solution-card">
             <h3>🛠️ Technical Support</h3>
-            <p>ดาวน์โหลดโปรแกรมซอฟต์แวร์ อัปเดตเฟิร์มแวร์ และแจ้งซ่อมบำรุงออนไลน์</p>
+            <p>ดาวน์โหลดซอฟต์แวร์ อัปเดตเฟิร์มแวร์ และช่องทางติดต่อวิศวกรผู้เชี่ยวชาญ</p>
         </div>""", unsafe_allow_html=True)
-        st.link_button("DOWNLOAD SOFTWARE", "https://drive.google.com/your-folder-2", use_container_width=True)
+        st.link_button("DOWNLOAD SOFTWARE", "https://drive.google.com/your-software-folder", use_container_width=True)
 
 elif st.session_state.page == "dashboard":
     st.title("📊 Production Dashboard")
-    # ตัวเลขสถิติจำลอง
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Overall OEE", "92.5%", "1.2%")
-    m2.metric("Units Produced", "1,240", "150")
-    m3.metric("Energy Save", "14%", "2.1%")
-    m4.metric("Downtime", "12 min", "-5 min")
-    
-    st.markdown("---")
-    chart_data = pd.DataFrame(np.random.randn(20, 3), columns=['Line A', 'Line B', 'Line C'])
-    st.line_chart(chart_data)
-
-elif st.session_state.page == "monitor":
-    st.title("🔍 Real-time Monitor")
-    st.write("สถานะเครื่องจักรรายจุด (Area A - Zone 1)")
-    
-    # ตารางจำลองสถานะ
-    data = {
-        "Machine ID": ["M001", "M002", "M003", "M004"],
-        "Status": ["Running", "Running", "Idle", "Maintenance"],
-        "Temp (°C)": [45, 42, 30, 25],
-        "Load (%)": [85, 78, 0, 0]
-    }
-    df = pd.DataFrame(data)
-    st.table(df)
+    st.info("หน้านี้สำหรับติดตามประสิทธิภาพการผลิตรายวัน")
+    m1, m2, m3 = st.columns(3)
+    m1.metric("Overall OEE", "92.5%")
+    m2.metric("Yield Rate", "99.2%")
+    m3.metric("Uptime", "23h 45m")
     
     if st.button("Return to Home"): nav_to("main")
 
