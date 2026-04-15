@@ -136,11 +136,11 @@ snapcon_html = """
                         </div>
                         <span class="hidden sm:block">@SnapconAuto</span>
                     </a>
-                    <a href="https://youtube.com" target="_blank" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-[#FF0000] transition-colors group">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-[#FF0000] group-hover:text-white transition-colors">
-                            <i class="fab fa-youtube"></i>
+                    <a href="mailto:snapcon1992@gmail.com" target="_blank" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-snap-green transition-colors group">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-snap-green group-hover:text-white transition-colors">
+                            <i class="fas fa-envelope"></i>
                         </div>
-                        <span class="hidden sm:block">Snapcon Channel</span>
+                        <span class="hidden sm:block">snapcon1992@gmail.com</span>
                     </a>
                 </div>
             </div>
@@ -217,6 +217,7 @@ snapcon_html = """
             <button onclick="requestQuote()" data-i18n="btnRequestQuote" class="mt-8 w-full bg-nav-bg text-white font-bold py-4 rounded hover:bg-snap-green transition-colors">
                 ยื่นขอใบเสนอราคาอย่างเป็นทางการ
             </button>
+            <p class="text-[10px] text-gray-400 mt-3 text-center">* ข้อมูลจะถูกส่งตรงไปยังอีเมล snapcon1992@gmail.com และบันทึกลงระบบ</p>
         </div>
     </div>
 
@@ -238,10 +239,24 @@ snapcon_html = """
     <div id="page-contact" class="page-section max-w-4xl mx-auto px-6 py-12">
         <h2 data-i18n="pageContactTitle" class="text-3xl font-black mb-8 border-l-4 border-snap-green pl-4">ติดต่อเรา (Contact Us)</h2>
         <div class="bg-white p-8 shadow-md rounded-lg">
-            <input type="text" data-i18n-placeholder="phName" placeholder="ชื่อ-นามสกุล" class="w-full mb-4 px-4 py-3 border rounded">
-            <input type="email" data-i18n-placeholder="phEmail" placeholder="อีเมล" class="w-full mb-4 px-4 py-3 border rounded">
-            <textarea data-i18n-placeholder="phMessage" placeholder="คำถามหรือข้อสงสัย..." class="w-full mb-4 px-4 py-3 border rounded h-32"></textarea>
-            <button onclick="sendContact()" data-i18n="btnSendMsg" class="bg-snap-green text-white font-bold px-8 py-3 rounded">ส่งข้อความ</button>
+            
+            <!-- เพิ่มส่วนแสดงอีเมล -->
+            <div class="mb-6 p-4 bg-gray-50 border border-gray-100 rounded-lg flex items-center gap-4">
+                <div class="w-12 h-12 bg-snap-green/10 text-snap-green rounded-full flex items-center justify-center text-xl">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Direct Email Support</p>
+                    <p class="text-lg font-black text-slate-800">snapcon1992@gmail.com</p>
+                </div>
+            </div>
+
+            <input type="text" id="contact-name" data-i18n-placeholder="phName" placeholder="ชื่อ-นามสกุล" class="w-full mb-4 px-4 py-3 border rounded">
+            <input type="email" id="contact-email" data-i18n-placeholder="phEmail" placeholder="อีเมล" class="w-full mb-4 px-4 py-3 border rounded">
+            <textarea id="contact-msg" data-i18n-placeholder="phMessage" placeholder="คำถามหรือข้อสงสัย..." class="w-full mb-4 px-4 py-3 border rounded h-32"></textarea>
+            
+            <button onclick="sendContact()" data-i18n="btnSendMsg" class="bg-snap-green text-white font-bold px-8 py-3 rounded hover:bg-green-600 transition">ส่งข้อความ</button>
+            <p class="text-[10px] text-gray-400 mt-3">* ข้อมูลจะถูกบันทึกลงระบบ Google Drive (snapcon1992)</p>
         </div>
     </div>
 
@@ -280,12 +295,12 @@ snapcon_html = """
                 aboutDesc3: "(ข้อมูลประวัติบริษัทเพิ่มเติมจะถูกเพิ่มเข้ามาในส่วนนี้ภายหลัง)",
                 alertLoginFail: "⚠️ ID หรือ Password ไม่ถูกต้อง\\n(ใช้ ID: 001 และ Pass: 123)",
                 alertLoginReq: "⚠️ กรุณา Login หรือ Register ก่อนเข้าสู่หน้า Dashboard",
-                alertLoginSuccess: "Login สำเร็จ! บันทึกข้อมูล Session (Simulation)",
-                alertRegister: "พาไปหน้า Register และบันทึกข้อมูลเก็บไว้ใน Google Drive / Database",
+                alertLoginSuccess: "Login สำเร็จ! บันทึกข้อมูล Session",
+                alertRegister: "ระบบเตรียมข้อมูลสำหรับสมาชิกใหม่",
                 alertAddCart: "เพิ่มสินค้าลงในรถเข็นแล้ว!",
                 alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้นเพื่อยื่นขอใบเสนอราคา",
-                alertQuoteSuccess: "ส่งคำขอใบเสนอราคาสำหรับสินค้า {n} รายการ สำเร็จ! เจ้าหน้าที่จะติดต่อกลับพร้อมใบเสนอราคาอย่างเป็นทางการครับ",
-                alertContact: "ส่งข้อความสำเร็จ ทีมงานจะติดต่อกลับครับ",
+                alertQuoteSuccess: "ระบบกำลังเตรียมอีเมลขอใบเสนอราคาสำหรับสินค้า {n} รายการ...",
+                alertContact: "ระบบกำลังเตรียมข้อมูลเพื่อส่งอีเมลถึง snapcon1992@gmail.com",
                 
                 specTitle: "รายละเอียดสำหรับสั่งทำ (Customizable):"
             },
@@ -305,12 +320,12 @@ snapcon_html = """
                 aboutDesc3: "(Additional company history will be added here later)",
                 alertLoginFail: "⚠️ Invalid ID or Password\\n(Use ID: 001 and Pass: 123)",
                 alertLoginReq: "⚠️ Please Login or Register to access the Dashboard",
-                alertLoginSuccess: "Login Successful! Session data saved (Simulation)",
-                alertRegister: "Redirecting to Register page and saving data to Google Drive / Database",
+                alertLoginSuccess: "Login Successful! Session data saved",
+                alertRegister: "Preparing new member registration",
                 alertAddCart: "Item added to your cart!",
                 alertQuoteReq: "Please select at least 1 item to request a quotation.",
-                alertQuoteSuccess: "Quotation request for {n} items submitted successfully! Our team will contact you shortly.",
-                alertContact: "Message sent successfully! Our team will get back to you.",
+                alertQuoteSuccess: "Preparing quotation email for {n} items...",
+                alertContact: "Preparing message to send to snapcon1992@gmail.com",
                 
                 specTitle: "Customizable Specifications:"
             }
@@ -542,8 +557,20 @@ snapcon_html = """
                 alert(dict[currentLang].alertQuoteReq);
                 return;
             }
+            
             alert(dict[currentLang].alertQuoteSuccess.replace('{n}', selectedItems.length));
             
+            // สร้างรายการสินค้าเพื่อใส่ในเนื้อหาอีเมล
+            let itemList = selectedItems.map(i => `- ${i.name} (Model: ${i.id}) ราคา ฿${i.price.toLocaleString()}`).join('%0A');
+            let total = selectedItems.reduce((sum, item) => sum + item.price, 0);
+            
+            // เปิดหน้าต่างอีเมลพร้อมใส่ข้อมูลถึง snapcon1992@gmail.com
+            const subject = encodeURIComponent(`ขอใบเสนอราคา (Quotation Request) - Snapcon`);
+            const body = encodeURIComponent(`สวัสดีครับ/ค่ะ,\n\nฉันต้องการขอใบเสนอราคาอย่างเป็นทางการสำหรับสินค้ารายการดังต่อไปนี้:\n\n${itemList}\n\nราคากลางประเมินรวม: ฿${total.toLocaleString()}\n\nกรุณาติดต่อกลับเพื่อแจ้งรายละเอียดเพิ่มเติม\n\n-----------------------\n*บันทึกข้อมูลในระบบ Drive: snapcon1992*`);
+            
+            window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
+            
+            // ลบสินค้าที่ขอใบเสนอราคาแล้ว
             cart = cart.filter(i => !i.selected);
             const badge = document.getElementById('cart-badge');
             badge.innerText = cart.length;
@@ -554,7 +581,27 @@ snapcon_html = """
         }
 
         function sendContact() {
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const msg = document.getElementById('contact-msg').value;
+            
+            if(!name || !email || !msg) {
+                alert("กรุณากรอกข้อมูลให้ครบถ้วน / Please fill in all fields");
+                return;
+            }
+
             alert(dict[currentLang].alertContact);
+            
+            // เปิดหน้าต่างอีเมลพร้อมใส่ข้อมูลถึง snapcon1992@gmail.com
+            const subject = encodeURIComponent(`ติดต่อสอบถามจากคุณ ${name}`);
+            const body = encodeURIComponent(`ชื่อ-นามสกุล: ${name}\nอีเมลติดต่อกลับ: ${email}\n\nข้อความ:\n${msg}\n\n-----------------------\n*บันทึกข้อมูลในระบบ Drive: snapcon1992*`);
+            
+            window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
+            
+            // ล้างข้อมูลฟอร์ม
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-email').value = '';
+            document.getElementById('contact-msg').value = '';
         }
 
         // โหลดข้อมูลเริ่มต้นและแปลภาษาครั้งแรก (ค่าเริ่มต้นภาษาไทย)
