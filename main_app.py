@@ -38,8 +38,8 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #F8F9FA; overflow-x: hidden; }
         .hero-bg {
-            /* ใช้ภาพเครื่องจักรอุตสาหกรรมแทน */
-            background-image: url('https://images.unsplash.com/photo-1580983537233-de1f8d4e9d7c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            /* ภาพอุตสาหกรรม/แขนกลแบบทันสมัยที่ดูเข้ากับ Automation / Conveyor */
+            background-image: url('https://images.unsplash.com/photo-1565439399249-1667b140ccb3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
         }
@@ -114,8 +114,8 @@ snapcon_html = """
                 <!-- ขีดแดงตกแต่ง -->
                 <div class="h-1 w-32 bg-red-600 mt-6 ml-20"></div>
             </div>
-            <!-- ภาพบังเงาเพื่อให้กลืนกัน -->
-            <div class="absolute inset-0 bg-white/20"></div>
+            <!-- ภาพบังเงาพร้อมไล่ระดับโทนสี "Green and Technology" เพื่อให้เข้ากับระบบ -->
+            <div class="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-[#00B36E]/60"></div>
         </section>
 
         <!-- Bottom Cards Section (3 กล่องสีเทา + Dropdowns) -->
