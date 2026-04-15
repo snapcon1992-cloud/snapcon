@@ -56,6 +56,10 @@ snapcon_html = """
         /* ซ่อน Scrollbar แต่ยัง Scroll ได้ */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* ซ่อน Scrollbar สำหรับ Slider */
+        .slider-container::-webkit-scrollbar { display: none; }
+        .slider-container { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
     </style>
 </head>
 <body>
@@ -133,7 +137,7 @@ snapcon_html = """
         </section>
 
         <!-- Google Drive Cards Section -->
-        <section class="w-full max-w-6xl mx-auto px-6 py-20">
+        <section class="w-full max-w-6xl mx-auto px-6 py-16">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 
                 <!-- Data sheet -->
@@ -179,6 +183,30 @@ snapcon_html = """
 
             </div>
         </section>
+
+        <!-- 🎉 New Section: Home Product Slider -->
+        <section class="w-full max-w-7xl mx-auto px-6 py-12 border-t border-slate-200/60 bg-slate-50/50 rounded-t-[3rem]">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight" data-i18n="homeProductsTitle">สินค้าของเรา</h2>
+                    <p class="text-slate-500 mt-2 font-medium" data-i18n="homeProductsSub">เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด</p>
+                </div>
+                <div class="hidden sm:flex gap-3">
+                    <button onclick="scrollSlider('left')" class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white hover:border-snap-green transition-all shadow-sm active:scale-95"><i class="fas fa-chevron-left"></i></button>
+                    <button onclick="scrollSlider('right')" class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white hover:border-snap-green transition-all shadow-sm active:scale-95"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+            
+            <!-- Slider Container -->
+            <div id="home-product-slider" class="slider-container flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 px-2 -mx-2">
+                <!-- Products will be injected here via JS -->
+            </div>
+            
+            <div class="text-center mt-4">
+                <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-snap-green font-bold text-sm hover:underline" data-i18n="viewAllProducts">ดูสินค้าทั้งหมด <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+
     </div>
 
     <!-- ==================== PAGE: PRODUCT ==================== -->
@@ -341,7 +369,8 @@ snapcon_html = """
                 alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว!",
                 alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับเพื่อให้ทีมงานส่งใบเสนอราคาให้ท่านได้",
                 regTitle: "สร้างบัญชีผู้ใช้", regDesc: "ลงทะเบียนเพื่อเข้าถึง Dashboard และระบบขอใบเสนอราคา",
-                regId: "รหัสผู้ใช้ (User ID)", regPass: "รหัสผ่าน (Password)", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์", btnSubmitReg: "ยืนยันการลงทะเบียน"
+                regId: "รหัสผู้ใช้ (User ID)", regPass: "รหัสผ่าน (Password)", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์", btnSubmitReg: "ยืนยันการลงทะเบียน",
+                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด"
             },
             en: {
                 navProduct: "Products", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
@@ -354,7 +383,8 @@ snapcon_html = """
                 alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart!",
                 alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info so we can send the quote back to you.",
                 regTitle: "Create Account", regDesc: "Register to access Dashboard and Quotation features",
-                regId: "User ID", regPass: "Password", regName: "Full Name / Company", regContact: "Email / Phone", btnSubmitReg: "Confirm Registration"
+                regId: "User ID", regPass: "Password", regName: "Full Name / Company", regContact: "Email / Phone", btnSubmitReg: "Confirm Registration",
+                homeProductsTitle: "Our Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products"
             }
         };
 
@@ -485,24 +515,54 @@ snapcon_html = """
 
         // 🛒 PRODUCT & CART SYSTEM
         function renderProducts() {
+            // Render on Product Page
             const grid = document.getElementById('product-grid');
-            if(!grid) return;
-            grid.innerHTML = products.map(p => `
-                <div class="bg-white border border-slate-100 p-6 rounded-[2rem] shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col h-full group hover:-translate-y-2">
-                    <div class="overflow-hidden rounded-2xl mb-5">
-                        <img src="${p.img}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+            if(grid) {
+                grid.innerHTML = products.map(p => `
+                    <div class="bg-white border border-slate-100 p-6 rounded-[2rem] shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col h-full group hover:-translate-y-2">
+                        <div class="overflow-hidden rounded-2xl mb-5">
+                            <img src="${p.img}" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <h4 class="font-black text-xl text-slate-800 mb-4 tracking-tight">${p.name}</h4>
+                        <div class="bg-slate-50 p-4 rounded-2xl mb-6 flex-grow border border-slate-100/50">
+                            <p class="text-[10px] font-black text-snap-green uppercase tracking-widest mb-3 flex items-center gap-2"><i class="fas fa-sliders-h"></i> ${dict[currentLang].specTitle}</p>
+                            <ul class="text-[11px] text-slate-500 space-y-2 font-medium">
+                                ${p.specs[currentLang].map(s => `<li class="flex items-start gap-2"><span class="text-snap-green mt-0.5">•</span> ${s}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <p class="text-snap-green font-black text-3xl mb-5 tracking-tighter">฿${p.price.toLocaleString()}</p>
+                        <button type="button" onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-4 rounded-2xl font-black text-sm hover:bg-snap-green transition-all shadow-lg active:scale-95 tracking-wide">${dict[currentLang].btnAddToCart}</button>
                     </div>
-                    <h4 class="font-black text-xl text-slate-800 mb-4 tracking-tight">${p.name}</h4>
-                    <div class="bg-slate-50 p-4 rounded-2xl mb-6 flex-grow border border-slate-100/50">
-                        <p class="text-[10px] font-black text-snap-green uppercase tracking-widest mb-3 flex items-center gap-2"><i class="fas fa-sliders-h"></i> ${dict[currentLang].specTitle}</p>
-                        <ul class="text-[11px] text-slate-500 space-y-2 font-medium">
-                            ${p.specs[currentLang].map(s => `<li class="flex items-start gap-2"><span class="text-snap-green mt-0.5">•</span> ${s}</li>`).join('')}
-                        </ul>
+                `).join('');
+            }
+            
+            // Render on Home Page Slider
+            const slider = document.getElementById('home-product-slider');
+            if(slider) {
+                slider.innerHTML = products.map(p => `
+                    <div onclick="navigate('product')" class="min-w-[280px] md:min-w-[320px] snap-center bg-white border border-slate-100 p-5 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group cursor-pointer hover:-translate-y-1">
+                        <div class="overflow-hidden rounded-2xl mb-4 relative">
+                            <img src="${p.img}" class="w-full h-44 object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
+                                <span class="text-white font-bold text-sm tracking-wide">VIEW SPECS <i class="fas fa-arrow-right ml-1 text-snap-green"></i></span>
+                            </div>
+                        </div>
+                        <h4 class="font-black text-lg text-slate-800 mb-2 tracking-tight">${p.name}</h4>
+                        <p class="text-snap-green font-black text-2xl tracking-tighter mt-auto">฿${p.price.toLocaleString()}</p>
                     </div>
-                    <p class="text-snap-green font-black text-3xl mb-5 tracking-tighter">฿${p.price.toLocaleString()}</p>
-                    <button type="button" onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-4 rounded-2xl font-black text-sm hover:bg-snap-green transition-all shadow-lg active:scale-95 tracking-wide">${dict[currentLang].btnAddToCart}</button>
-                </div>
-            `).join('');
+                `).join('');
+            }
+        }
+
+        // Horizontal Slider Control
+        function scrollSlider(direction) {
+            const slider = document.getElementById('home-product-slider');
+            const scrollAmount = 340; // Card width + gap
+            if (direction === 'left') {
+                slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
         }
 
         function addToCart(id) {
@@ -632,5 +692,5 @@ snapcon_html = """
 </html>
 """
 
-# แสดงผลหน้าเว็บผ่าน Streamlit
-st.components.v1.html(snapcon_html, height=1400, scrolling=True)
+# แสดงผลหน้าเว็บผ่าน Streamlit ปรับความสูงเพิ่มให้ครอบคลุมส่วน Slider ที่เพิ่มขึ้น
+st.components.v1.html(snapcon_html, height=1600, scrolling=True)
