@@ -1,138 +1,196 @@
 import streamlit as st
 
-# 1. การตั้งค่าหน้ากระดาษ
+# --- CONFIGURATION ---
 st.set_page_config(
     page_title="SNAPCON | Enterprise Control Unit",
-    page_icon="🌱",
+    page_icon="🟢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# 2. จัดการ Session State สำหรับ Login
+# --- SESSION STATE MANAGEMENT ---
+if 'page' not in st.session_state:
+    st.session_state.page = "main"
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
-if 'user_name' not in st.session_state:
-    st.session_state.user_name = ""
+if 'user_info' not in st.session_state:
+    st.session_state.user_info = {"name": "Watanabe San", "role": "Senior Engineer"}
 
-# 3. Custom CSS
+# --- CUSTOM STYLING (Modern Snapcon Theme) ---
 st.markdown("""
 <style>
-    .main-header { color: #009639; font-weight: 800; }
-    div.stButton > button {
-        width: 100%; border-radius: 8px; border: 1px solid #e2e8f0;
-        background-color: white; color: #1a202c; font-weight: 500; height: 3em;
+    /* Global Styles */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+    
+    .stApp { background-color: #FFFFFF; }
+    
+    /* Hero Section */
+    .hero-box {
+        background-color: #F8FAFC;
+        padding: 80px 60px;
+        border-radius: 0 0 40px 40px;
+        border-bottom: 5px solid #009639;
+        margin-bottom: 40px;
     }
-    div.stButton > button:hover { border-color: #009639; color: #009639; background-color: #f0fdf4; }
-    .hero-container {
-        background-color: #f8fafc; padding: 60px; border-radius: 20px;
-        margin-bottom: 40px; border-bottom: 6px solid #009639;
-    }
+    .hero-title { font-size: 3.8rem; font-weight: 800; line-height: 1.1; color: #1A202C; }
+    .hero-highlight { color: #009639; }
+    
+    /* Solution Cards */
     .solution-card {
-        background: white; padding: 25px; border-radius: 15px;
-        border: 1px solid #edf2f7; height: 280px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        display: flex; flex-direction: column; justify-content: space-between;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px solid #E2E8F0;
+        height: 100%;
+        transition: transform 0.2s;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+    .solution-card:hover { transform: translateY(-5px); border-color: #009639; }
+    
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] { background-color: #F8FAFC !important; border-right: 1px solid #E2E8F0; }
+    .sidebar-brand { color: #009639; font-weight: 800; font-size: 1.5rem; margin-bottom: 0; }
+    
+    /* Status Box */
+    .status-box {
+        background-color: #F0FDF4;
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid #BBF7D0;
+        margin: 20px 0;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR ---
+# --- NAVIGATION LOGIC ---
+def go_to(page_name):
+    st.session_state.page = page_name
+    st.rerun()
+
+# --- SIDEBAR UI ---
 with st.sidebar:
-    st.markdown("<h2 style='color: #009639; margin-bottom: 0;'>SNAPCON</h2>", unsafe_allow_html=True)
-    st.caption("ENTERPRISE CONTROL UNIT")
+    st.markdown("<p class='sidebar-brand'>SNAPCON</p>", unsafe_allow_html=True)
+    st.caption("INDUSTRIAL AI & CONTROL")
     st.markdown("---")
     
-    if not st.session_state.logged_in:
-        # ส่วนของฟอร์ม Login ใน Sidebar
-        st.write("🔐 **System Login**")
-        user_input = st.text_input("Username")
-        pass_input = st.text_input("Password", type="password")
-        if st.button("Login"):
-            if user_input == "001" and pass_input == "123":
-                st.session_state.logged_in = True
-                st.session_state.user_name = "Watanabe San"
-                st.rerun()
-            else:
-                st.error("Invalid credentials")
-    else:
-        # ส่วนแสดงข้อมูลผู้ใช้เมื่อ Login แล้ว
+    if st.session_state.logged_in:
         st.markdown(f"""
-            <div style='background-color: #f0fff4; padding: 15px; border-radius: 10px; border: 1px solid #c6f6d5;'>
-                <p style='margin:0; font-size: 0.8rem; color: #2f855a;'>Logged in as:</p>
-                <p style='margin:0; font-weight: bold; color: #22543d;'>{st.session_state.user_name}</p>
-                <p style='margin:0; font-size: 0.8rem; color: #2f855a;'>Senior Engineer</p>
+            <div class="status-box">
+                <p style='margin:0; font-size: 0.8rem; color: #166534;'>Logged in as:</p>
+                <p style='margin:0; font-weight: 700; color: #166534;'>{st.session_state.user_info['name']}</p>
+                <p style='margin:0; font-size: 0.75rem; color: #15803d;'>{st.session_state.user_info['role']}</p>
             </div>
         """, unsafe_allow_html=True)
+    
+    # Navigation Buttons (Cleaned as per request)
+    if st.button("🏠 Home", use_container_width=True):
+        go_to("main")
         
-        st.markdown("---")
-        st.write("📂 **Navigation**")
-        
-        if st.button("📊 My Dashboard"):
-            st.switch_page("pages/1_Monitor.py")
+    if st.button("📊 My Dashboard", use_container_width=True):
+        if st.session_state.logged_in:
+            go_to("dashboard")
+        else:
+            go_to("login")
             
-        if st.button("📞 Contact Support"):
-            st.switch_page("pages/2_Contact.py")
-
-        st.markdown("<br><br>", unsafe_allow_html=True)
-        if st.button("Logout"):
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    if st.session_state.logged_in:
+        if st.button("🚪 Sign Out System", type="secondary", use_container_width=True):
             st.session_state.logged_in = False
-            st.rerun()
+            go_to("main")
 
-# --- MAIN CONTENT ---
+# --- PAGE ROUTING ---
 
-# Hero Section
-st.markdown("""
-    <div class="hero-container">
-        <h1 style='font-size: 3.5rem; line-height: 1; font-weight: 800;'>Cool running.<br><span style='color: #009639;'>Long life.</span></h1>
-        <p style='font-size: 1.2rem; color: #4a5568; margin-top: 20px; max-width: 550px;'>
-            Industrial Automation Solutions for a Greener Future. 
-            Optimizing energy efficiency and system longevity with AI Predictive Maintenance.
-        </p>
-    </div>
-""", unsafe_allow_html=True)
+# 1. LOGIN PAGE (AUTHENTICATION)
+if st.session_state.page == "login":
+    st.markdown("<div style='max-width: 400px; margin: 0 auto; padding-top: 100px;'>", unsafe_allow_html=True)
+    st.subheader("System Authentication")
+    st.write("Please enter your credentials to access the dashboard.")
+    
+    emp_id = st.text_input("Employee ID", placeholder="001")
+    token = st.text_input("Access Token", type="password", placeholder="••••")
+    
+    if st.button("AUTHENTICATE", type="primary", use_container_width=True):
+        if emp_id == "001" and token == "123":
+            st.session_state.logged_in = True
+            go_to("dashboard")
+        else:
+            st.error("Invalid credentials. Try 001 / 123")
+    
+    if st.button("Back to Home"):
+        go_to("main")
+    st.markdown("</div>", unsafe_allow_html=True)
 
-st.subheader("Our Solutions")
+# 2. DASHBOARD PAGE
+elif st.session_state.page == "dashboard":
+    st.title("Plant Telemetry")
+    st.caption("CONTROL CENTER / GENERAL VIEW")
+    
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("OEE PERFORMANCE", "94.2%", "+1.2%")
+    m2.metric("SHIFT OUTPUT", "4,500", "+420")
+    m3.metric("ACTIVE ALERTS", "03", "-1", delta_color="inverse")
+    m4.metric("UPTIME RATIO", "99.9%", "MAX")
+    
+    st.markdown("---")
+    st.info("💡 รันระบบการมอนิเตอร์แบบ Real-time ของสถานะ Node ทั้งหมดในโรงงาน")
+    if st.button("Back to Main Screen"):
+        go_to("main")
 
-col1, col2, col3 = st.columns(3)
-
-with col1:
+# 3. MAIN PAGE (HOME)
+else:
+    # Hero Section
     st.markdown("""
-        <div class="solution-card">
-            <div>
-                <h4 style='color: #1a202c;'>📄 Data & Documents</h4>
-                <p style='color: #718096; font-size: 0.9rem;'>เข้าถึงคู่มือการใช้งาน เอกสารเทคนิค และแค็ตตาล็อกสินค้าแบบดิจิทัลที่อัปเดตล่าสุด</p>
-            </div>
-            <p style='color: #009639; font-weight: bold;'>Explore documents ></p>
+        <div class="hero-box">
+            <h1 class="hero-title">Cool running.<br><span class="hero-highlight">Long life.</span></h1>
+            <p style='color: #64748B; font-size: 1.1rem; margin-top: 25px; max-width: 600px;'>
+                Industrial Automation Solutions for a Greener Future.<br>
+                Optimizing energy efficiency and system longevity.
+            </p>
         </div>
     """, unsafe_allow_html=True)
-    if st.button("Open Documents", key="btn_docs"):
-        st.info("กำลังเปิดคลังเอกสารเทคนิค...")
 
-with col2:
-    st.markdown("""
-        <div class="solution-card">
-            <div>
-                <h4 style='color: #1a202c;'>⚙️ Product Status</h4>
-                <p style='color: #718096; font-size: 0.9rem;'>ตรวจสอบสถานะเครื่องจักร ประสิทธิภาพการผลิต และดาวน์โหลดแผนผังทางเทคนิค (Drawing)</p>
+    st.subheader("Our Solutions")
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        st.markdown("""
+            <div class="solution-card">
+                <h3>📄 Data Sheets</h3>
+                <p style='color: #64748B; font-size: 0.9rem; margin-bottom: 20px;'>
+                    เข้าถึงข้อมูลทางเทคนิคของอุปกรณ์ทั้งหมดและคู่มือการติดตั้งแบบครบวงจร
+                </p>
+                <p style='color: #009639; font-weight: 600;'>Download Data Sheet ></p>
             </div>
-            <p style='color: #009639; font-weight: bold;'>View drawings ></p>
-        </div>
-    """, unsafe_allow_html=True)
-    if st.button("Download Drawing", key="btn_drawings"):
-        st.toast("เตรียมไฟล์ Drawing สำหรับดาวน์โหลด...")
+        """, unsafe_allow_html=True)
+        if st.button("Open Documents", key="sh1"):
+            st.toast("กำลังเตรียมไฟล์ Data Sheet สำหรับดาวน์โหลด...")
 
-with col3:
-    st.markdown("""
-        <div class="solution-card">
-            <div>
-                <h4 style='color: #1a202c;'>🛡️ Quality Control</h4>
-                <p style='color: #718096; font-size: 0.9rem;'>วิเคราะห์รายงานคุณภาพและการใช้พลังงาน พร้อมดูแค็ตตาล็อกสินค้าเพื่อการอัปเกรดระบบ</p>
+    with c2:
+        st.markdown("""
+            <div class="solution-card">
+                <h3>⚙️ Drawings</h3>
+                <p style='color: #64748B; font-size: 0.9rem; margin-bottom: 20px;'>
+                    ตรวจสอบสถานะเครื่องจักรและดาวน์โหลดแผนผังโครงสร้างทางวิศวกรรม (DWG/PDF)
+                </p>
+                <p style='color: #009639; font-weight: 600;'>Download Drawing ></p>
             </div>
-            <p style='color: #009639; font-weight: bold;'>See products ></p>
-        </div>
-    """, unsafe_allow_html=True)
-    if st.button("Product Catalog", key="btn_catalog"):
-        st.toast("กำลังเปิดหน้า Catalog...")
+        """, unsafe_allow_html=True)
+        if st.button("Get Drawing", key="sh2"):
+            st.toast("กำลังดาวน์โหลดไฟล์ Drawing...")
 
-st.markdown("---")
-st.caption("Auth Server: ID-SEA-01 | SNAPCON Enterprise System | Environment: Production")
+    with c3:
+        st.markdown("""
+            <div class="solution-card">
+                <h3>🛡️ Catalog</h3>
+                <p style='color: #64748B; font-size: 0.9rem; margin-bottom: 20px;'>
+                    เลือกชมแค็ตตาล็อกสินค้าล่าสุดเพื่อการอัปเกรดประสิทธิภาพเครื่องจักรในระบบของคุณ
+                </p>
+                <p style='color: #009639; font-weight: 600;'>Product Catalog ></p>
+            </div>
+        """, unsafe_allow_html=True)
+        if st.button("View Catalog", key="sh3"):
+            st.toast("กำลังเปิดหน้า Product Catalog...")
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.caption("Auth Server: ID-SEA-01 | SNAPCON Enterprise | System Status: Optimal")
