@@ -290,8 +290,8 @@ snapcon_html = """
                                 <p class="text-lg md:text-xl text-emerald-400 font-bold" data-i18n="fs5Desc">ถูกกว่า SCADA แบบเดิม</p>
                             </div>
                             <div class="feature-text-slide drop-shadow-xl">
-                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs6Title">🛡️ Built-in Poka-Yoke</h4>
-                                <p class="text-lg md:text-xl text-rose-400 font-bold" data-i18n="fs6Desc">ระบบป้องกันความผิดพลาดของคน</p>
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs6Title">🛡️ Poka-Yoke-System</h4>
+                                <p class="text-lg md:text-xl text-rose-400 font-bold" data-i18n="fs6Desc">ป้องกันการทำผิดพลาดโดยไม่ตั้งใจ</p>
                             </div>
                         </div>
                     </div>
