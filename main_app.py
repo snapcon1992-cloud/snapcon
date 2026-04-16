@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ปรับ UI หน้าแรกให้ดุดันและเป๊ะตามแบบ SEW Eurodrive มากขึ้น
+# โค้ด HTML/CSS/JS ปรับปรุงระบบ Dashboard แยกตาม User (User Isolation)
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -39,13 +39,11 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #e2e8f0; overflow-x: hidden; }
         
-        /* สไตล์ใหม่สำหรับ Hero Section (Industrial Dark Background) */
         .hero-container {
             background-color: #1e293b;
             position: relative;
         }
 
-        /* เอา overlay gradient สีขาวเขียวออก ใช้แค่สีเข้มบางๆ คลุมภาพ */
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -54,12 +52,11 @@ snapcon_html = """
             pointer-events: none;
         }
 
-        /* กล่องสีขาว ทรงเหลี่ยมคมขอบล่างสีเขียว (SEW Style) */
         .hero-white-box {
             background-color: white;
             border-bottom: 8px solid #00B36E;
             box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.3);
-            border-radius: 0px; /* Sharp corners */
+            border-radius: 0px; 
         }
 
         .feature-bar {
@@ -67,7 +64,6 @@ snapcon_html = """
             color: white;
         }
 
-        /* ---- Image Slider Background Animations ---- */
         .slide-img {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -77,7 +73,6 @@ snapcon_html = """
             animation: slideBgAnimation 20s infinite linear;
         }
 
-        /* ภาพพื้นหลังสไตล์อุตสาหกรรม/เทคโนโลยี */
         .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
         .slide-2 { background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
         .slide-3 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
@@ -91,7 +86,6 @@ snapcon_html = """
             100% { opacity: 0; }
         }
 
-        /* Nav & Menus */
         .nav-link {
             position: relative;
             color: white;
@@ -107,16 +101,13 @@ snapcon_html = """
         }
         .nav-link:hover::after { width: 100%; }
 
-        /* Pages */
         .page-section { display: none !important; }
         .page-active { display: block !important; animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        /* Dropdown */
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
         .dropdown-container:hover .dropdown-menu { display: block; }
         
-        /* Scrollbars */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -124,7 +115,6 @@ snapcon_html = """
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Cards */
         .sharp-card {
             border-radius: 4px;
             border: 1px solid #e2e8f0;
@@ -144,7 +134,6 @@ snapcon_html = """
         }
         .sharp-btn:active { transform: scale(0.98); }
 
-        /* ---- Animated Text Slider (Hero Right Side) 6 Items ---- */
         .feature-text-container {
             position: relative;
             height: 140px; 
@@ -157,7 +146,6 @@ snapcon_html = """
             width: 100%;
             opacity: 0;
             transform: translateY(30px);
-            /* วนลูปที่ 18 วินาที สำหรับ 6 slide (slide ละ 3 วินาที) */
             animation: fadeSlideText 18s infinite;
         }
         .feature-text-slide:nth-child(1) { animation-delay: 0s; }
@@ -175,7 +163,6 @@ snapcon_html = """
             100% { opacity: 0; }
         }
         
-        /* ---- Animation ---- */
         .animate-gradient-text {
             background: linear-gradient(90deg, #00B36E 0%, #06b6d4 25%, #3b82f6 50%, #00B36E 100%);
             background-size: 300% 100%;
@@ -187,33 +174,6 @@ snapcon_html = """
             0% { background-position: 100% 0%; }
             100% { background-position: 0% 0%; }
         }
-        
-        .animate-speed-slide-1 { animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateX(-50px) skewX(-15deg); }
-        .animate-speed-slide-2 { animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; opacity: 0; transform: translateX(-50px) skewX(-15deg); }
-        .animate-speed-slide-3 { animation: speed-slide-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; opacity: 0; transform: translateY(30px); }
-        @keyframes speed-slide { 100% { opacity: 1; transform: translateX(0) skewX(0); } }
-        @keyframes speed-slide-up { 100% { opacity: 1; transform: translateY(0); } }
-        
-        .long-energy-line {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 480px; 
-            height: 6px;
-            background: rgba(0, 179, 110, 0.2);
-            border-radius: 9999px;
-            box-shadow: 0 0 15px rgba(0, 179, 110, 0.6);
-        }
-        .long-energy-line::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), #00B36E, transparent);
-            animation: light-beam-fast 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        @keyframes light-beam-fast { 0% { left: -100%; } 100% { left: 200%; } }
-        .logo-glow { filter: drop-shadow(0 0 8px rgba(0, 179, 110, 0.6)); }
     </style>
 </head>
 <body class="font-sans text-slate-800">
@@ -270,7 +230,7 @@ snapcon_html = """
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         
-        <!-- Hero Section (Industrial Look) -->
+        <!-- Hero Section (Industrial Look & Green Tech Theme) -->
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             
             <!-- Animated Background Slider -->
@@ -281,7 +241,7 @@ snapcon_html = """
                 <div class="slide-img slide-4"></div>
             </div>
             
-            <!-- Dark Industrial Overlay (No white gradient) -->
+            <!-- Dark Industrial Overlay -->
             <div class="hero-overlay"></div>
 
             <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
@@ -304,7 +264,7 @@ snapcon_html = """
                     </button>
                 </div>
 
-                <!-- Animated Text Slider (Right) - Transparent/Floating -->
+                <!-- Animated Text Slider (Right) -->
                 <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
                     <div>
                         <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/20 pb-4 inline-block drop-shadow-md">Why Snapcon?</h3>
@@ -344,7 +304,6 @@ snapcon_html = """
         <section class="feature-bar w-full relative z-40 shadow-2xl border-t border-slate-800">
             <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
                 
-                <!-- Data sheet -->
                 <div class="dropdown-container relative flex flex-col group">
                     <div class="p-8 md:p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors h-full">
                         <i class="fas fa-file-pdf text-4xl text-snap-green mb-4 group-hover:scale-110 transition-transform"></i>
@@ -360,7 +319,6 @@ snapcon_html = """
                     </div>
                 </div>
 
-                <!-- Drawing -->
                 <div class="dropdown-container relative flex flex-col group">
                     <div class="p-8 md:p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors h-full">
                         <i class="fas fa-drafting-compass text-4xl text-blue-500 mb-4 group-hover:scale-110 transition-transform"></i>
@@ -376,7 +334,6 @@ snapcon_html = """
                     </div>
                 </div>
 
-                <!-- Catalog -->
                 <div class="dropdown-container relative flex flex-col group">
                     <div class="p-8 md:p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors h-full">
                         <i class="fas fa-book-open text-4xl text-amber-500 mb-4 group-hover:scale-110 transition-transform"></i>
@@ -416,71 +373,6 @@ snapcon_html = """
             </div>
         </section>
 
-    </div>
-
-    <!-- ==================== PAGE: PROJECT REFERENCE ==================== -->
-    <div id="page-project" class="page-section bg-white min-h-screen pt-10">
-        <div class="max-w-[1400px] mx-auto px-6 py-10">
-            <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Project Reference</h2>
-            <div class="w-16 h-1 bg-snap-green mb-8"></div>
-            <p class="text-slate-600 mb-12 max-w-2xl font-medium" data-i18n="pageProjectSub">รวมผลงานการติดตั้งและตัวอย่างการประยุกต์ใช้งานระบบ Snapcon ในอุตสาหกรรมจริง</p>
-
-            <!-- Section 1: Pilot / Demo Project -->
-            <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
-                <i class="fas fa-rocket text-snap-green"></i> <span data-i18n="projPilotTitle">Pilot / Demo Project</span>
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                <div class="bg-slate-50 p-8 sharp-card group">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-snap-green text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot1Title">Snapcon V1</h4>
-                    <p class="text-sm text-slate-600" data-i18n="pilot1Desc">Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว</p>
-                </div>
-                <div class="bg-slate-50 p-8 sharp-card group">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot2Title">Real-time Monitoring</h4>
-                    <p class="text-sm text-slate-600" data-i18n="pilot2Desc">ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที</p>
-                </div>
-                <div class="bg-slate-50 p-8 sharp-card group">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-rose-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot3Title">Poka-Yoke Integrated</h4>
-                    <p class="text-sm text-slate-600" data-i18n="pilot3Desc">ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ</p>
-                </div>
-            </div>
-
-            <!-- Section 2: Use Case / Application -->
-            <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
-                <i class="fas fa-industry text-blue-500"></i> <span data-i18n="projUseCaseTitle">Use Case / Application</span>
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 sharp-card border-t-4 border-t-amber-500 flex flex-col items-center text-center">
-                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase1Title">Packaging Line Automation</h4>
-                    <p class="text-sm text-slate-600" data-i18n="usecase1Desc">ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ</p>
-                </div>
-                <div class="bg-white p-6 sharp-card border-t-4 border-t-snap-green flex flex-col items-center text-center">
-                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase2Title">Conveyor System Control</h4>
-                    <p class="text-sm text-slate-600" data-i18n="usecase2Desc">ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน</p>
-                </div>
-                <div class="bg-white p-6 sharp-card border-t-4 border-t-blue-500 flex flex-col items-center text-center">
-                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase3Title">Machine Health Monitoring</h4>
-                    <p class="text-sm text-slate-600" data-i18n="usecase3Desc">ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก</p>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- ==================== PAGE: PRODUCT ==================== -->
@@ -549,9 +441,11 @@ snapcon_html = """
     <!-- ==================== PAGE: DASHBOARD ==================== -->
     <div id="page-dashboard" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
-            <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2" data-i18n="navDashboard">Dashboard</h2>
+            <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">
+                <span data-i18n="navDashboard">Dashboard</span> : <span id="dash-user-name" class="text-snap-green"></span>
+            </h2>
             <div class="w-16 h-1 bg-snap-green mb-8"></div>
-            <p class="text-slate-600 mb-8" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
+            <p class="text-slate-600 mb-8" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์ (แสดงข้อมูลเฉพาะบัญชีของคุณ)</p>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Controls -->
@@ -571,15 +465,15 @@ snapcon_html = """
                     <div class="space-y-3">
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashTarget">Target</label>
-                            <input type="number" id="cfg-target" value="50000" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                            <input type="number" id="cfg-target" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
                         </div>
                         <div class="flex justify-between items-center border-b border-slate-100 pb-2">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashCarbon">Carbon Factor</label>
-                            <input type="number" step="0.0001" id="cfg-carbon" value="0.0072" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                            <input type="number" step="0.0001" id="cfg-carbon" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
                         </div>
                         <div class="flex justify-between items-center">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashEnergy">Energy Factor</label>
-                            <input type="number" step="0.001" id="cfg-energy" value="0.015" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                            <input type="number" step="0.001" id="cfg-energy" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
                         </div>
                     </div>
                 </div>
@@ -628,6 +522,71 @@ snapcon_html = """
                 </div>
                 <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-2 max-h-[60vh] overflow-y-auto custom-scrollbar p-1">
                     <!-- Nodes injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PAGE: PROJECT REFERENCE ==================== -->
+    <div id="page-project" class="page-section bg-white min-h-screen pt-10">
+        <div class="max-w-[1400px] mx-auto px-6 py-10">
+            <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Project Reference</h2>
+            <div class="w-16 h-1 bg-snap-green mb-8"></div>
+            <p class="text-slate-600 mb-12 max-w-2xl font-medium" data-i18n="pageProjectSub">รวมผลงานการติดตั้งและตัวอย่างการประยุกต์ใช้งานระบบ Snapcon ในอุตสาหกรรมจริง</p>
+
+            <!-- Section 1: Pilot / Demo Project -->
+            <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-rocket text-snap-green"></i> <span data-i18n="projPilotTitle">Pilot / Demo Project</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-slate-50 p-8 sharp-card group">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-snap-green text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot1Title">Snapcon V1</h4>
+                    <p class="text-sm text-slate-600" data-i18n="pilot1Desc">Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว</p>
+                </div>
+                <div class="bg-slate-50 p-8 sharp-card group">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot2Title">Real-time Monitoring</h4>
+                    <p class="text-sm text-slate-600" data-i18n="pilot2Desc">ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที</p>
+                </div>
+                <div class="bg-slate-50 p-8 sharp-card group">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-rose-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot3Title">Poka-Yoke Integrated</h4>
+                    <p class="text-sm text-slate-600" data-i18n="pilot3Desc">ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ</p>
+                </div>
+            </div>
+
+            <!-- Section 2: Use Case / Application -->
+            <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-industry text-blue-500"></i> <span data-i18n="projUseCaseTitle">Use Case / Application</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-amber-500 flex flex-col items-center text-center">
+                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase1Title">Packaging Line Automation</h4>
+                    <p class="text-sm text-slate-600" data-i18n="usecase1Desc">ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ</p>
+                </div>
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-snap-green flex flex-col items-center text-center">
+                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase2Title">Conveyor System Control</h4>
+                    <p class="text-sm text-slate-600" data-i18n="usecase2Desc">ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน</p>
+                </div>
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-blue-500 flex flex-col items-center text-center">
+                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase3Title">Machine Health Monitoring</h4>
+                    <p class="text-sm text-slate-600" data-i18n="usecase3Desc">ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก</p>
                 </div>
             </div>
         </div>
@@ -792,25 +751,64 @@ snapcon_html = """
         let currentLang = 'th';
         let isLoggedIn = false;
         let cart = [];
-        let memoryUsers = { '001': '123' };
+        
+        // 🔐 ระบบ User Isolation (ผู้ใช้งานแยกกัน)
+        let currentUserId = null;
+        let activeDashInterval = null;
 
-        // 📊 DASHBOARD STATE (100 Machines)
-        let dashState = {
-            isRunning: false, target: 50000, carbonFactor: 0.0072, energyFactor: 0.015,
-            intervalId: null, elapsedSeconds: 0,
-            nodes: [
-                { id: 1, name: "M-01 Main", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
-                { id: 2, name: "M-02 Sort", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
-                { id: 3, name: "M-03 Pack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
-                { id: 4, name: "M-04 Seal", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
-                { id: 5, name: "M-05 Label", output: 0, status: 'Offline', health: 100.0, wearRate: 0.6 },
-                { id: 6, name: "M-06 Load", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
-                { id: 7, name: "M-07 Scan", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
-                { id: 8, name: "M-08 Wrap", output: 0, status: 'Offline', health: 100.0, wearRate: 0.7 },
-                { id: 9, name: "M-09 Stack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
-                { id: 10, name: "M-10 Exp", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 }
-            ]
+        // ข้อมูลจำลองของผู้ใช้แต่ละคน (Mock Data Database)
+        let memoryUsers = { '001': '123', 'admin': 'admin' };
+        
+        let userDashboards = {
+            '001': {
+                isRunning: false, target: 50000, carbonFactor: 0.0072, energyFactor: 0.015,
+                elapsedSeconds: 0,
+                nodes: [
+                    { id: 1, name: "M-01 Main", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                    { id: 2, name: "M-02 Sort", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
+                    { id: 3, name: "M-03 Pack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
+                    { id: 4, name: "M-04 Seal", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                    { id: 5, name: "M-05 Label", output: 0, status: 'Offline', health: 100.0, wearRate: 0.6 },
+                    { id: 6, name: "M-06 Load", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                    { id: 7, name: "M-07 Scan", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
+                    { id: 8, name: "M-08 Wrap", output: 0, status: 'Offline', health: 100.0, wearRate: 0.7 },
+                    { id: 9, name: "M-09 Stack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                    { id: 10, name: "M-10 Exp", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 }
+                ]
+            },
+            'admin': {
+                isRunning: false, target: 150000, carbonFactor: 0.0050, energyFactor: 0.010,
+                elapsedSeconds: 0,
+                nodes: [
+                    { id: 1, name: "Admin-Line 1", output: 5000, status: 'Offline', health: 95.0, wearRate: 0.1 },
+                    { id: 2, name: "Admin-Line 2", output: 4200, status: 'Offline', health: 88.0, wearRate: 0.2 },
+                    { id: 3, name: "Admin-Line 3", output: 6100, status: 'Offline', health: 92.0, wearRate: 0.15 },
+                    { id: 4, name: "Admin-Line 4", output: 3000, status: 'Offline', health: 75.0, wearRate: 0.4 },
+                    { id: 5, name: "Admin-Line 5", output: 1200, status: 'Offline', health: 99.0, wearRate: 0.05 }
+                ]
+            }
         };
+
+        // ฟังก์ชันสร้าง Dashboard ใหม่สำหรับ User ที่เพิ่งสมัคร
+        function createDefaultDash() {
+            return {
+                isRunning: false, target: 10000, carbonFactor: 0.0070, energyFactor: 0.015,
+                elapsedSeconds: 0,
+                nodes: [
+                    { id: 1, name: "Node-01 Main", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                    { id: 2, name: "Node-02 Sub", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                    { id: 3, name: "Node-03 Aux", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
+                    { id: 4, name: "Node-04 QC", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
+                    { id: 5, name: "Node-05 Pack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 }
+                ]
+            };
+        }
+
+        // ดึงข้อมูล Dashboard ของผู้ใช้ปัจจุบัน
+        function getDash() {
+            if (!currentUserId || !userDashboards[currentUserId]) return null;
+            return userDashboards[currentUserId];
+        }
 
         // 🔧 DATA GENERATION
         let products = [
@@ -871,7 +869,7 @@ snapcon_html = """
                 aboutMissionTitle: "Mission", aboutMissionDesc: "พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาติดตั้ง และยกระดับอุตสาหกรรม",
                 regTitle: "Create Account", regDesc: "ลงทะเบียนเพื่อเข้าถึงระบบ", btnSubmitReg: "CONFIRM",
                 regId: "User ID", regPass: "Password", regName: "Name / Company", regContact: "Email / Phone",
-                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System",
+                dashSubTitle: "ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์ (แสดงข้อมูลเฉพาะบัญชีของคุณ)",
                 dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
                 dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Power Use",
                 dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status",
@@ -920,7 +918,7 @@ snapcon_html = """
                 aboutMissionTitle: "Mission", aboutMissionDesc: "Develop innovations that reduce complexity and elevate industrial efficiency.",
                 regTitle: "Create Account", regDesc: "Register to access the system", btnSubmitReg: "CONFIRM",
                 regId: "User ID", regPass: "Password", regName: "Name / Company", regContact: "Email / Phone",
-                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System",
+                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System (Private View)",
                 dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
                 dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power Use",
                 dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status & Health",
@@ -938,6 +936,14 @@ snapcon_html = """
             const target = document.getElementById('page-' + pageId);
             if(target) target.classList.add('page-active');
             if(pageId === 'cart') renderCart();
+            if(pageId === 'dashboard') {
+                if(!isLoggedIn) {
+                    navigate('home');
+                    checkDashboardAuth();
+                    return;
+                }
+                renderDashboard();
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -947,18 +953,30 @@ snapcon_html = """
         }
 
         function handleLogin() {
-            const id = document.getElementById('userId').value;
-            const pass = document.getElementById('userPass').value;
-            if (memoryUsers[id] === pass || (id==='001' && pass==='123')) {
+            const id = document.getElementById('userId').value.trim();
+            const pass = document.getElementById('userPass').value.trim();
+            
+            if (memoryUsers[id] === pass) {
                 isLoggedIn = true;
-                document.getElementById('displayUser').innerText = id || '001';
+                currentUserId = id;
+                
+                // ตรวจสอบว่าเคยมี Dashboard หรือยัง ถ้าไม่มีให้สร้างใหม่
+                if (!userDashboards[id]) {
+                    userDashboards[id] = createDefaultDash();
+                }
+
+                document.getElementById('displayUser').innerText = id;
+                document.getElementById('dash-user-name').innerText = id; // อัปเดตชื่อใน Dashboard
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('login-section').classList.remove('lg:flex');
                 document.getElementById('user-section').classList.remove('hidden');
                 document.getElementById('user-section').classList.add('flex');
+                
                 alert(dict[currentLang].alertLoginSuccess);
                 document.getElementById('userId').value = ''; document.getElementById('userPass').value = '';
-            } else alert(currentLang === 'th' ? "ID หรือ Password ไม่ถูกต้อง" : "Invalid ID or Password");
+            } else {
+                alert(currentLang === 'th' ? "ID หรือ Password ไม่ถูกต้อง" : "Invalid ID or Password");
+            }
         }
 
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
@@ -987,12 +1005,16 @@ snapcon_html = """
             }
 
             memoryUsers[id] = pass;
+            userDashboards[id] = createDefaultDash(); // สร้าง Dashboard ส่วนตัวให้เลย
+
             try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name }) }); } catch(e) {}
             
             alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบกำลังนำเข้าสู่ระบบอัตโนมัติ..." : "Registered successfully! Auto-logging in...");
             
             isLoggedIn = true;
+            currentUserId = id;
             document.getElementById('displayUser').innerText = id;
+            document.getElementById('dash-user-name').innerText = id;
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('login-section').classList.remove('lg:flex');
             document.getElementById('user-section').classList.remove('hidden');
@@ -1007,83 +1029,108 @@ snapcon_html = """
         }
 
         function handleLogout() {
+            if (currentUserId) stopSystem(); // หยุดระบบของคนปัจจุบันก่อนออก
             isLoggedIn = false;
+            currentUserId = null;
             document.getElementById('login-section').classList.remove('hidden'); document.getElementById('login-section').classList.add('lg:flex');
             document.getElementById('user-section').classList.add('hidden'); document.getElementById('user-section').classList.remove('flex');
-            stopSystem(); navigate('home');
+            navigate('home');
         }
 
-        // ================= DASHBOARD CORE LOGIC =================
+        // ================= DASHBOARD CORE LOGIC (USER SPECIFIC) =================
         function startSystem() {
-            dashState.isRunning = true;
-            dashState.nodes.forEach(n => { if(n.health > 30) n.status = 'Running'; else n.status = 'Maintenance'; });
-            if(!dashState.intervalId) dashState.intervalId = setInterval(simulateProduction, 500);
+            let dash = getDash(); if(!dash) return;
+            dash.isRunning = true;
+            dash.nodes.forEach(n => { if(n.health > 30) n.status = 'Running'; else n.status = 'Maintenance'; });
+            if(!activeDashInterval) activeDashInterval = setInterval(simulateProduction, 500);
             renderDashboard();
         }
+        
         function stopSystem() {
-            dashState.isRunning = false;
-            dashState.nodes.forEach(n => { if(n.status !== 'Maintenance') n.status = 'Stopped'; });
-            if(dashState.intervalId) { clearInterval(dashState.intervalId); dashState.intervalId = null; }
+            let dash = getDash(); if(!dash) return;
+            dash.isRunning = false;
+            dash.nodes.forEach(n => { if(n.status !== 'Maintenance') n.status = 'Stopped'; });
+            if(activeDashInterval) { clearInterval(activeDashInterval); activeDashInterval = null; }
             renderDashboard();
         }
+        
         function resetSystem() { 
-            dashState.nodes.forEach(n => { n.output = 0; n.health = 100.0; n.status = dashState.isRunning ? 'Running' : 'Offline'; }); 
-            dashState.elapsedSeconds = 0; renderDashboard(); 
+            let dash = getDash(); if(!dash) return;
+            dash.nodes.forEach(n => { n.output = 0; n.health = 100.0; n.status = dash.isRunning ? 'Running' : 'Offline'; }); 
+            dash.elapsedSeconds = 0; renderDashboard(); 
         }
+        
         function updateDashboardConfig() {
-            dashState.target = parseInt(document.getElementById('cfg-target').value) || 1;
-            dashState.carbonFactor = parseFloat(document.getElementById('cfg-carbon').value) || 0;
-            dashState.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
+            let dash = getDash(); if(!dash) return;
+            dash.target = parseInt(document.getElementById('cfg-target').value) || 1;
+            dash.carbonFactor = parseFloat(document.getElementById('cfg-carbon').value) || 0;
+            dash.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
             renderDashboard();
         }
+        
         function simulateProduction() {
-            if(!dashState.isRunning) return;
-            dashState.elapsedSeconds += 0.5;
-            dashState.nodes.forEach(n => { 
+            let dash = getDash(); if(!dash || !dash.isRunning) return;
+            dash.elapsedSeconds += 0.5;
+            dash.nodes.forEach(n => { 
                 if(n.status === 'Running' || n.status === 'Warning') {
                     if(Math.random() > 0.5) { n.output += 1; n.health -= n.wearRate; if(n.health < 0) n.health = 0; }
                     if(n.health <= 30) n.status = 'Maintenance'; else if (n.health <= 70) n.status = 'Warning';
                 }
             });
-            renderDashboard();
+            // อัปเดตเฉพาะหน้าที่เปิดอยู่
+            if(document.getElementById('page-dashboard').classList.contains('page-active')) {
+                renderDashboard();
+            }
         }
+        
         function exportCSV() {
+            let dash = getDash(); if(!dash) return;
             let bom = "\\uFEFF";
             let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
             let totalOut = 0;
-            dashState.nodes.forEach(n => {
-                let c = (n.output * dashState.carbonFactor).toFixed(4); let e = (n.output * dashState.energyFactor).toFixed(4); totalOut += n.output;
+            dash.nodes.forEach(n => {
+                let c = (n.output * dash.carbonFactor).toFixed(4); let e = (n.output * dash.energyFactor).toFixed(4); totalOut += n.output;
                 csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\\n`;
             });
-            csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dashState.carbonFactor).toFixed(4)},${(totalOut * dashState.energyFactor).toFixed(4)}\\n`;
+            csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dash.carbonFactor).toFixed(4)},${(totalOut * dash.energyFactor).toFixed(4)}\\n`;
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_Report.csv`; link.click();
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_Report_${currentUserId}.csv`; link.click();
         }
+        
         function formatTimeStr(totalSecs) {
             if (!isFinite(totalSecs) || totalSecs < 0) return "--:--:--";
             const h = Math.floor(totalSecs / 3600); const m = Math.floor((totalSecs % 3600) / 60); const s = Math.floor(totalSecs % 60);
             return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
+        
         function renderDashboard() {
             const grid = document.getElementById('dash-nodes-grid'); if(!grid) return;
-            const totalOutput = dashState.nodes.reduce((sum, n) => sum + n.output, 0);
+            let dash = getDash();
+            if (!dash) return;
+
+            // นำค่าของ User ปัจจุบันใส่ใน Input กลับให้ตรงกัน
+            document.getElementById('cfg-target').value = dash.target;
+            document.getElementById('cfg-carbon').value = dash.carbonFactor;
+            document.getElementById('cfg-energy').value = dash.energyFactor;
+
+            const totalOutput = dash.nodes.reduce((sum, n) => sum + n.output, 0);
             document.getElementById('dash-total-output').innerText = totalOutput.toLocaleString();
-            document.getElementById('dash-carbon').innerText = (totalOutput * dashState.carbonFactor).toFixed(2);
-            document.getElementById('dash-power').innerText = (totalOutput * dashState.energyFactor).toFixed(2);
+            document.getElementById('dash-carbon').innerText = (totalOutput * dash.carbonFactor).toFixed(2);
+            document.getElementById('dash-power').innerText = (totalOutput * dash.energyFactor).toFixed(2);
             
-            let progress = (totalOutput / dashState.target) * 100; if(progress > 100) progress = 100;
+            let progress = (totalOutput / dash.target) * 100; if(progress > 100) progress = 100;
             document.getElementById('dash-progress-bar').style.width = `${progress}%`;
             document.getElementById('dash-progress-text').innerText = `${progress.toFixed(1)}%`;
             
-            let elapsedStr = formatTimeStr(dashState.elapsedSeconds), remainStr = "--:--:--";
-            if (totalOutput > 0 && dashState.elapsedSeconds > 0) {
-                let ups = totalOutput / dashState.elapsedSeconds, remainUnits = dashState.target - totalOutput;
+            let elapsedStr = formatTimeStr(dash.elapsedSeconds), remainStr = "--:--:--";
+            if (totalOutput > 0 && dash.elapsedSeconds > 0) {
+                let ups = totalOutput / dash.elapsedSeconds, remainUnits = dash.target - totalOutput;
                 if (remainUnits > 0 && ups > 0) remainStr = formatTimeStr(remainUnits / ups); else if (remainUnits <= 0) remainStr = "00:00:00";
             }
             document.getElementById('dash-time-elapsed').innerText = elapsedStr;
             document.getElementById('dash-time-remain').innerText = remainStr;
 
-            grid.innerHTML = dashState.nodes.map(n => {
+            grid.innerHTML = dash.nodes.map(n => {
                 const isRun = n.status === 'Running', isWarn = n.status === 'Warning', isMaint = n.status === 'Maintenance';
                 let dotBg = 'bg-slate-300';
                 if (isRun) dotBg = 'bg-snap-green animate-pulse'; else if (isWarn) dotBg = 'bg-amber-400 animate-pulse'; else if (isMaint) dotBg = 'bg-red-500';
@@ -1254,7 +1301,9 @@ snapcon_html = """
             document.getElementById('btn-lang-th').className = lang === 'th' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
             document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
             
-            renderProducts(); renderDashboard(); if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+            renderProducts(); 
+            if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); 
+            if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
 
         setLanguage('th');
