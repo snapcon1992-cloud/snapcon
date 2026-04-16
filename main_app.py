@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่ปรับหน้าแรก (Animated Text Slider & Dark Dropdown Bar)
+# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่เพิ่มระบบเพิ่มลดจำนวนสินค้า (Quantity Selector)
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -239,8 +239,8 @@ snapcon_html = """
         <div class="flex items-center gap-5 shrink-0 ml-auto">
             <!-- Login Form (Desktop) -->
             <div id="login-section" class="hidden lg:flex items-center gap-2">
-                <input type="text" id="userId" placeholder="ID" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
-                <input type="password" id="userPass" placeholder="PW" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
+                <input type="text" id="userId" data-i18n-placeholder="phId" placeholder="ID" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
+                <input type="password" id="userPass" data-i18n-placeholder="phPass" placeholder="PW" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
                 <button type="button" onclick="handleLogin()" class="h-8 px-3 bg-snap-green text-white font-bold text-xs hover:bg-snap-green-hover sharp-btn"><i class="fas fa-sign-in-alt"></i></button>
                 <button type="button" onclick="openRegisterModal()" class="h-8 px-3 bg-slate-700 text-white font-bold text-xs hover:bg-slate-600 sharp-btn"><i class="fas fa-user-plus"></i></button>
             </div>
@@ -577,8 +577,9 @@ snapcon_html = """
                         Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด
                     </p>
                 </div>
-                <div class="bg-slate-100 h-64 sharp-card flex items-center justify-center text-slate-300">
-                    <i class="fas fa-industry text-6xl"></i>
+                <div class="h-64 md:h-80 sharp-card overflow-hidden relative group rounded-2xl shadow-lg">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Snapcon Automation Facility" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-snap-green/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
                 </div>
             </div>
 
@@ -619,7 +620,7 @@ snapcon_html = """
                     </div>
                     <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card">
                         <i class="fas fa-phone-alt text-slate-400"></i>
-                        <span class="font-bold text-slate-700 text-sm">097-926-1616</span>
+                        <span class="font-bold text-slate-700 text-sm">081-XXX-XXXX</span>
                     </div>
                 </div>
 
@@ -885,7 +886,6 @@ snapcon_html = """
             
             if(memoryUsers[id]) return alert(currentLang === 'th' ? "User ID นี้มีผู้ใช้งานแล้ว กรุณาตั้งใหม่" : "User ID already exists");
             
-            // ตรวจสอบความถูกต้องของข้อมูลเบื้องต้น (อีเมล หรือ เบอร์โทร 9-10 หลัก)
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const phoneRegex = /^[0-9]{9,10}$/;
             if (!emailRegex.test(contact) && !phoneRegex.test(contact)) {
@@ -900,7 +900,6 @@ snapcon_html = """
             
             alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบกำลังนำเข้าสู่ระบบอัตโนมัติ..." : "Registered successfully! Auto-logging in...");
             
-            // ใช้งาน Auto Login หลังจากการสมัครสมาชิก
             isLoggedIn = true;
             document.getElementById('displayUser').innerText = id;
             document.getElementById('login-section').classList.add('hidden');
@@ -908,7 +907,6 @@ snapcon_html = """
             document.getElementById('user-section').classList.remove('hidden');
             document.getElementById('user-section').classList.add('flex');
             
-            // ล้างข้อมูลในช่องกรอก
             document.getElementById('reg-id').value = '';
             document.getElementById('reg-pass').value = '';
             document.getElementById('reg-name').value = '';
@@ -1013,6 +1011,17 @@ snapcon_html = """
         }
 
         // 🛒 PRODUCT & CART SYSTEM
+        function updateBadge() {
+            const b = document.getElementById('cart-badge');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalItems > 0) {
+                b.innerText = totalItems > 99 ? '99+' : totalItems;
+                b.classList.remove('hidden');
+            } else {
+                b.classList.add('hidden');
+            }
+        }
+
         function createItemCard(p) {
             return `
                 <div class="bg-white sharp-card p-4 flex flex-col h-full">
@@ -1053,9 +1062,27 @@ snapcon_html = """
 
         function addToCart(id) {
             const p = allItems.find(i => i.id === id);
-            cart.push({ ...p, cartId: Date.now() + Math.random(), selected: true });
-            const b = document.getElementById('cart-badge'); b.innerText = cart.length; b.classList.remove('hidden');
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...p, cartId: Date.now() + Math.random(), selected: true, quantity: 1 });
+            }
+            updateBadge();
+            const b = document.getElementById('cart-badge');
+            b.classList.add('animate-bounce'); 
+            setTimeout(() => b.classList.remove('animate-bounce'), 1000);
             alert(dict[currentLang].alertAddCart);
+        }
+
+        function updateQuantity(cartId, delta) {
+            const item = cart.find(i => i.cartId === cartId);
+            if(item) {
+                item.quantity += delta;
+                if(item.quantity < 1) item.quantity = 1; // บังคับขั้นต่ำ 1 ชิ้น
+                renderCart();
+                updateBadge();
+            }
         }
 
         function renderCart() {
@@ -1069,24 +1096,40 @@ snapcon_html = """
                 return;
             }
             container.innerHTML = cart.map(item => `
-                <div class="flex items-center bg-white border border-slate-200 p-3 sharp-card gap-4">
-                    <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-4 h-4 accent-snap-green shrink-0">
-                    <img src="${item.img}" class="w-12 h-12 object-contain bg-slate-50 p-1 shrink-0 mix-blend-multiply">
-                    <div class="flex-1 min-w-0">
-                        <span class="font-bold text-slate-800 text-sm block truncate">${item.name}</span>
-                        <span class="text-[10px] text-slate-500 uppercase tracking-widest">${item.id}</span>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-4 sharp-card gap-4">
+                    <div class="flex items-center gap-4 w-full sm:w-auto flex-1">
+                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-5 h-5 accent-snap-green shrink-0 cursor-pointer">
+                        <img src="${item.img}" class="w-16 h-16 object-contain bg-slate-50 p-1 shrink-0 mix-blend-multiply rounded-lg border border-slate-100">
+                        <div class="flex-1 min-w-0 pr-4">
+                            <span class="font-bold text-slate-800 text-sm block truncate">${item.name}</span>
+                            <span class="text-[10px] text-slate-500 uppercase tracking-widest">${item.id}</span>
+                        </div>
                     </div>
-                    <span class="font-black text-slate-800 text-lg">฿${item.price.toLocaleString()}</span>
+                    
+                    <div class="flex items-center justify-between w-full sm:w-auto sm:gap-8 pl-10 sm:pl-0 mt-2 sm:mt-0">
+                        <!-- ปุ่มเพิ่มลดจำนวน (Quantity Selector) -->
+                        <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden shrink-0 h-8 shadow-sm">
+                            <button onclick="updateQuantity(${item.cartId}, -1)" class="px-3 h-full bg-slate-50 hover:bg-slate-200 text-slate-600 transition-colors font-bold border-r border-slate-200">-</button>
+                            <span class="px-3 h-full flex items-center justify-center text-xs font-black text-slate-800 bg-white min-w-[40px]">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.cartId}, 1)" class="px-3 h-full bg-slate-50 hover:bg-slate-200 text-slate-600 transition-colors font-bold border-l border-slate-200">+</button>
+                        </div>
+                        <span class="font-black text-slate-800 text-lg w-28 text-right shrink-0">฿${(item.price * item.quantity).toLocaleString()}</span>
+                    </div>
                 </div>
             `).join('');
-            const total = cart.filter(i => i.selected).reduce((s, i) => s + i.price, 0);
+            
+            const total = cart.filter(i => i.selected).reduce((s, i) => s + (i.price * i.quantity), 0);
             document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
 
         function toggleItem(cartId) { const item = cart.find(i => i.cartId === cartId); if(item) item.selected = !item.selected; renderCart(); }
         function toggleSelectAll(val) { cart.forEach(i => i.selected = val); renderCart(); }
-        function deleteSelected() { cart = cart.filter(i => !i.selected); document.getElementById('cart-badge').innerText = cart.length; if(cart.length === 0) document.getElementById('cart-badge').classList.add('hidden'); renderCart(); }
+        function deleteSelected() { 
+            cart = cart.filter(i => !i.selected); 
+            updateBadge();
+            renderCart(); 
+        }
 
         function requestQuote() {
             const selected = cart.filter(i => i.selected);
@@ -1095,9 +1138,9 @@ snapcon_html = """
             let info = isLoggedIn ? "Registered Account" : document.getElementById('guest-contact').value;
             if(!isLoggedIn && (!name || !info)) return alert(dict[currentLang].alertQuoteGuestReq);
             
-            let detailsForEmail = selected.map(i => `- ${i.name} (%E0%B8%BF${i.price.toLocaleString()})`).join('%0A');
-            let detailsForDB = selected.map(i => `- ${i.name} (฿${i.price.toLocaleString()})`).join('\\n');
-            let total = selected.reduce((s, i) => s + i.price, 0);
+            let detailsForEmail = selected.map(i => `- ${i.name} x${i.quantity} (%E0%B8%BF${(i.price * i.quantity).toLocaleString()})`).join('%0A');
+            let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
+            let total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
             
             try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Quotation", name_or_id: name, email: info, details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` }) }); } catch(e) {}
             
@@ -1105,7 +1148,10 @@ snapcon_html = """
             const body = "Request for Official Quotation:%0A%0AItems:%0A" + detailsForEmail + "%0A%0AEstimated Total: %E0%B8%BF" + total.toLocaleString() + "%0A%0AContact Info: " + encodeURIComponent(info);
             window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
             
-            cart = cart.filter(i => !i.selected); document.getElementById('cart-badge').innerText = cart.length; if(cart.length===0) document.getElementById('cart-badge').classList.add('hidden'); renderCart(); navigate('home');
+            cart = cart.filter(i => !i.selected); 
+            updateBadge(); 
+            renderCart(); 
+            navigate('home');
         }
 
         // 🌐 LANGUAGE SYSTEM
