@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ฉบับที่จัดการฐานข้อมูลแบบ Manual ง่ายต่อการอัปเดต
+# โค้ด HTML/CSS/JS ดีไซน์ใหม่สไตล์ Industrial Corporate (อ้างอิงจาก SEW Eurodrive แต่ใช้สี Snapcon)
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -17,16 +17,17 @@ snapcon_html = """
     <title>SNAPCON | Automation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Prompt:wght@400;700;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'nav-bg': '#1e2329',
+                        'snap-dark': '#1e2329',
+                        'snap-black': '#0f172a',
                         'snap-green': '#00B36E',
-                        'btn-bg': '#e2e2e2',
-                        'card-gray': '#a8a8a8',
+                        'snap-green-hover': '#00965c',
+                        'snap-gray': '#f1f5f9',
                     },
                     fontFamily: {
                         sans: ['Inter', 'Prompt', 'sans-serif'],
@@ -36,493 +37,558 @@ snapcon_html = """
         }
     </script>
     <style>
-        body { margin: 0; padding: 0; background-color: #F8F9FA; overflow-x: hidden; }
-        .hero-bg {
-            position: relative;
-            background-color: #0f172a;
-        }
+        body { margin: 0; padding: 0; background-color: #e2e8f0; overflow-x: hidden; }
         
-        .hero-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, #ffffff 40%, rgba(124, 224, 184, 0.9) 70%, rgba(124, 224, 184, 0.5) 100%);
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        /* ---- Image Slider Background Animations ---- */
-        .slide-img {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+        /* สไตล์ใหม่สำหรับ Hero Section แบบ SEW */
+        .hero-container {
+            background-image: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
-            opacity: 0;
-            animation: slideBgAnimation 20s infinite linear;
+            background-attachment: fixed;
+            position: relative;
         }
 
-        .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
-        .slide-2 { background-image: url('https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
-        .slide-3 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
-        .slide-4 { background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80'); animation-delay: 15s; }
-
-        @keyframes slideBgAnimation {
-            0% { opacity: 0; transform: scale(1.1) translateX(30px); }
-            5% { opacity: 1; transform: scale(1.1) translateX(20px); }
-            20% { opacity: 1; transform: scale(1.1) translateX(-10px); }
-            25% { opacity: 0; transform: scale(1.1) translateX(-20px); }
-            100% { opacity: 0; }
+        .hero-white-box {
+            background-color: white;
+            border-bottom: 6px solid #00B36E;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
+        .feature-bar {
+            background-color: #1e293b;
+            color: white;
+        }
+
+        .feature-bar-item {
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        .feature-bar-item:last-child {
+            border-right: none;
+        }
+
+        /* Nav & Menus */
+        .nav-link {
+            position: relative;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+        .nav-link:hover { color: #00B36E; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -4px; left: 0; background-color: #00B36E;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* Pages */
         .page-section { display: none !important; }
         .page-active { display: block !important; animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes modalShow { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        .modal-active { animation: modalShow 0.3s ease-out forwards; }
+        /* Dropdown */
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
         .dropdown-container:hover .dropdown-menu { display: block; }
         
-        /* ซ่อน Scrollbar แต่ยัง Scroll ได้ */
+        /* Scrollbars */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        .slider-container::-webkit-scrollbar { display: none; }
-        .slider-container { -ms-overflow-style: none; scrollbar-width: none; scroll-behavior: smooth; }
-
-        /* Custom Scrollbar for Dashboard Grid & Lists */
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* ---- Animation ---- */
-        .animate-gradient-text {
-            background: linear-gradient(90deg, #00B36E 0%, #06b6d4 25%, #3b82f6 50%, #00B36E 100%);
-            background-size: 300% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-sweep 4s linear infinite;
+        /* Cards */
+        .sharp-card {
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
         }
-        @keyframes gradient-sweep {
-            0% { background-position: 100% 0%; }
-            100% { background-position: 0% 0%; }
+        .sharp-card:hover {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #00B36E;
+            transform: translateY(-4px);
         }
         
-        .animate-speed-slide-1 { animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateX(-50px) skewX(-15deg); }
-        .animate-speed-slide-2 { animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; opacity: 0; transform: translateX(-50px) skewX(-15deg); }
-        .animate-speed-slide-3 { animation: speed-slide-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; opacity: 0; transform: translateY(30px); }
-        @keyframes speed-slide { 100% { opacity: 1; transform: translateX(0) skewX(0); } }
-        @keyframes speed-slide-up { 100% { opacity: 1; transform: translateY(0); } }
-        
-        .long-energy-line {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 480px; 
-            height: 6px;
-            background: rgba(0, 179, 110, 0.2);
-            border-radius: 9999px;
-            box-shadow: 0 0 15px rgba(0, 179, 110, 0.6);
+        .sharp-btn {
+            border-radius: 2px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        .long-energy-line::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), #00B36E, transparent);
-            animation: light-beam-fast 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-        }
-        @keyframes light-beam-fast { 0% { left: -100%; } 100% { left: 200%; } }
-        .logo-glow { filter: drop-shadow(0 0 8px rgba(0, 179, 110, 0.6)); }
+        .sharp-btn:active { transform: scale(0.98); }
     </style>
 </head>
-<body>
+<body class="font-sans text-slate-800">
 
-    <!-- 1. Top Navigation Bar -->
-    <nav class="bg-nav-bg h-[65px] w-full fixed top-0 z-50 flex items-center justify-between px-4 md:px-6 border-b-4 border-snap-green shadow-lg">
+    <!-- 1. Top Navigation Bar (Dark Theme) -->
+    <nav class="bg-snap-black h-[70px] w-full fixed top-0 z-50 flex items-center justify-between px-6 md:px-10 shadow-md">
         <!-- Logo -->
-        <div class="flex items-center gap-3 cursor-pointer h-full shrink-0 group" onclick="navigate('home')">
-            <div class="relative flex items-center justify-center w-10 h-10 bg-gradient-to-br from-snap-green to-emerald-900 rounded-xl shadow-[0_0_15px_rgba(0,179,110,0.4)] group-hover:shadow-[0_0_25px_rgba(0,179,110,0.8)] transition-all overflow-hidden">
-                <i class="fas fa-bolt text-white text-xl animate-pulse relative z-10"></i>
-                <div class="absolute inset-0 bg-white/20 energy-line"></div>
-            </div>
-            <div class="flex flex-col justify-center">
-                <span class="font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-snap-green to-emerald-400 tracking-tight leading-none mt-1 logo-glow transition-all">SNAPCON</span>
-                <div class="flex items-center gap-1.5 mt-0.5">
-                    <div class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping"></div>
-                    <span class="font-bold text-[9px] md:text-[10px] text-slate-400 tracking-[0.2em] leading-none uppercase">Automation</span>
-                </div>
-            </div>
+        <div class="flex items-center gap-2 cursor-pointer shrink-0" onclick="navigate('home')">
+            <span class="font-black text-3xl text-snap-green tracking-tighter">SNAPCON</span>
         </div>
         
         <!-- Center Menus -->
-        <div class="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar px-2 mx-2">
-            <button type="button" onclick="navigate('product')" data-i18n="navProduct" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Products</button>
-            <button type="button" onclick="navigate('spare')" data-i18n="navSpare" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Spare Parts</button>
-            <button type="button" onclick="checkDashboardAuth()" data-i18n="navDashboard" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Dashboard</button>
-            <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">Contact</button>
-            <button type="button" onclick="navigate('about')" data-i18n="navAbout" class="bg-white/10 text-white font-bold text-xs md:text-sm px-4 py-2 hover:bg-white/20 rounded-lg whitespace-nowrap transition-colors">About Us</button>
+        <div class="hidden md:flex items-center gap-8 ml-8">
+            <button type="button" onclick="navigate('product')" data-i18n="navProduct" class="nav-link">Products</button>
+            <button type="button" onclick="navigate('spare')" data-i18n="navSpare" class="nav-link">Spare Parts</button>
+            <button type="button" onclick="checkDashboardAuth()" data-i18n="navDashboard" class="nav-link">Dashboard</button>
+            <button type="button" onclick="navigate('about')" data-i18n="navAbout" class="nav-link">Company</button>
+            <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="nav-link">Support</button>
         </div>
 
         <!-- Right Side: Login, Lang, Cart -->
-        <div class="flex items-center gap-3 shrink-0">
-            <div id="login-section" class="hidden md:flex items-center gap-2">
-                <span class="text-slate-400 text-xs font-bold px-1">ID:</span>
-                <input type="text" id="userId" data-i18n-placeholder="phId" placeholder="ID" class="h-[26px] w-16 px-2 text-xs outline-none text-black rounded border-none focus:ring-2 ring-snap-green">
-                <span class="text-slate-400 text-xs font-bold px-1">PW:</span>
-                <input type="password" id="userPass" data-i18n-placeholder="phPass" placeholder="PW" class="h-[26px] w-16 px-2 text-xs outline-none text-black rounded border-none focus:ring-2 ring-snap-green">
-                <div class="flex flex-col gap-0.5 ml-1">
-                    <button type="button" onclick="handleLogin()" data-i18n="navLogin" class="bg-snap-green text-white font-bold text-[9px] px-3 py-0.5 hover:bg-green-600 rounded transition-colors">Login</button>
-                    <button type="button" onclick="openRegisterModal()" data-i18n="navRegister" class="bg-slate-600 text-white font-bold text-[9px] px-3 py-0.5 hover:bg-slate-500 rounded transition-colors">Register</button>
-                </div>
+        <div class="flex items-center gap-5 shrink-0 ml-auto">
+            <!-- Login Form (Desktop) -->
+            <div id="login-section" class="hidden lg:flex items-center gap-2">
+                <input type="text" id="userId" placeholder="ID" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
+                <input type="password" id="userPass" placeholder="PW" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
+                <button type="button" onclick="handleLogin()" class="h-8 px-3 bg-snap-green text-white font-bold text-xs hover:bg-snap-green-hover sharp-btn"><i class="fas fa-sign-in-alt"></i></button>
+                <button type="button" onclick="openRegisterModal()" class="h-8 px-3 bg-slate-700 text-white font-bold text-xs hover:bg-slate-600 sharp-btn"><i class="fas fa-user-plus"></i></button>
             </div>
             
-            <div id="user-section" class="hidden items-center gap-3 mr-2 bg-white/5 px-3 py-1 rounded-full border border-white/10">
-                <span class="text-snap-green font-bold text-xs">Hi, <span id="displayUser" class="text-white">User</span></span>
-                <button type="button" onclick="handleLogout()" data-i18n="navLogout" class="text-slate-400 text-[10px] font-bold uppercase hover:text-white transition-colors">Logout</button>
+            <!-- User Status -->
+            <div id="user-section" class="hidden items-center gap-3">
+                <span class="text-white text-sm"><i class="far fa-user-circle text-snap-green mr-1"></i> <span id="displayUser" class="font-bold">User</span></span>
+                <button type="button" onclick="handleLogout()" class="text-slate-400 hover:text-white text-xs underline"><i class="fas fa-sign-out-alt"></i></button>
             </div>
 
-            <!-- Lang Switch -->
-            <div class="flex items-center bg-black/30 rounded-full p-0.5 border border-white/10">
-                <button type="button" id="btn-lang-th" onclick="setLanguage('th')" class="text-[9px] font-bold px-2.5 py-1 rounded-full bg-snap-green text-white transition-colors">TH</button>
-                <button type="button" id="btn-lang-en" onclick="setLanguage('en')" class="text-[9px] font-bold px-2.5 py-1 rounded-full text-slate-400 hover:text-white transition-colors">EN</button>
-            </div>
-
-            <!-- Cart Icon -->
-            <div class="flex items-center gap-4 ml-1 text-white text-lg">
-                <div class="relative cursor-pointer hover:text-snap-green transition-transform hover:scale-110" onclick="navigate('cart')">
+            <!-- Icons -->
+            <div class="flex items-center gap-4 text-white text-lg border-l border-slate-700 pl-5">
+                <button type="button" id="btn-lang-th" onclick="setLanguage('th')" class="text-xs font-bold text-snap-green hover:text-white">TH</button>
+                <span class="text-slate-600 text-xs">|</span>
+                <button type="button" id="btn-lang-en" onclick="setLanguage('en')" class="text-xs font-bold text-slate-400 hover:text-white">EN</button>
+                
+                <div class="relative cursor-pointer hover:text-snap-green ml-2" onclick="navigate('cart')">
                     <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-badge" class="absolute -top-2.5 -right-2.5 w-4 h-4 bg-red-500 text-white text-[9px] font-black flex items-center justify-center rounded-full border-2 border-nav-bg hidden shadow-lg">0</span>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 w-4 h-4 bg-snap-green text-white text-[9px] font-black flex items-center justify-center rounded-full hidden">0</span>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class="h-[65px]"></div>
+    <div class="h-[70px]"></div>
 
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
-        <section class="w-full h-[350px] md:h-[450px] hero-bg relative flex items-center border-b border-gray-200 overflow-hidden">
-            <div class="absolute inset-0 z-0">
-                <div class="slide-img slide-1"></div>
-                <div class="slide-img slide-2"></div>
-                <div class="slide-img slide-3"></div>
-                <div class="slide-img slide-4"></div>
-            </div>
-            <div class="hero-overlay"></div>
-
-            <div class="bg-white/90 backdrop-blur-md pl-6 md:pl-12 pr-12 md:pr-20 py-10 md:py-16 ml-0 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.15)] absolute left-0 z-10 h-full flex flex-col justify-center border-r border-white/50 overflow-hidden">
-                <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+        
+        <!-- Hero Section (Industrial Look) -->
+        <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0">
+            <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
                 
-                <div class="relative z-10">
-                    <div class="flex items-center gap-3 mb-1 animate-speed-slide-1">
-                        <i class="fas fa-angle-double-right text-snap-green animate-pulse"></i>
-                        <p data-i18n="heroText1" class="text-xl md:text-[28px] text-slate-600 font-black tracking-widest uppercase italic drop-shadow-sm">Snap to Connect.</p>
-                    </div>
-                    <div class="flex items-center gap-3 mb-4 pl-4 md:pl-8 animate-speed-slide-2">
-                        <i class="fas fa-angle-double-right text-blue-500 animate-pulse"></i>
-                        <p data-i18n="heroText2" class="text-xl md:text-[28px] text-slate-800 font-black tracking-widest uppercase italic drop-shadow-sm">Ready to Control.</p>
-                    </div>
-                    <h1 class="animate-speed-slide-3 text-6xl md:text-[85px] font-black tracking-tighter pl-8 md:pl-12 mt-2 mb-2 leading-[1.1]">
-                        <span data-i18n="heroText3" class="animate-gradient-text drop-shadow-xl pb-2">Plug & Play</span>
+                <!-- White Box (Left) -->
+                <div class="hero-white-box w-full md:w-[500px] p-10 md:p-12 z-10 mt-10 md:mt-0">
+                    <p class="text-slate-500 font-bold text-xs tracking-widest uppercase mb-4" data-i18n="heroSub">PLUG & PLAY AUTOMATION</p>
+                    <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight mb-8">
+                        <span data-i18n="heroText1">Snap to Connect.</span><br>
+                        <span data-i18n="heroText2">Ready to Control.</span>
                     </h1>
-                    
-                    <div class="animate-speed-slide-3 mt-6 md:mt-8 ml-8 md:ml-12 long-energy-line"></div>
-                    
-                    <div class="flex flex-wrap items-center gap-5 mt-8 md:mt-10 ml-8 md:ml-12 animate-speed-slide-3" style="animation-delay: 0.6s;">
-                        <a href="tel:0812345678" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-snap-green hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fas fa-phone-alt"></i></a>
-                        <a href="https://facebook.com" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#1877F2] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://line.me" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-[#00B900] hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fab fa-line text-lg"></i></a>
-                        <a href="mailto:snapcon1992@gmail.com" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-all hover:scale-110 shadow-sm"><i class="fas fa-envelope"></i></a>
+                    <button onclick="navigate('product')" class="text-snap-green font-bold text-lg hover:text-snap-green-hover flex items-center gap-2 group">
+                        <i class="fas fa-chevron-right text-sm transition-transform group-hover:translate-x-1"></i>
+                        <span data-i18n="heroLink">Find out more</span>
+                    </button>
+                </div>
+
+                <!-- Floating Products (Right) -->
+                <div class="hidden md:flex gap-6 z-10 items-center justify-center flex-1">
+                    <div class="w-48 h-64 bg-transparent flex items-center justify-center hover:-translate-y-4 transition-transform duration-500">
+                        <img src="https://i.ibb.co/bZ7TKQg/01.png" class="w-full h-auto drop-shadow-2xl mix-blend-screen opacity-90 hover:opacity-100 filter contrast-125" alt="Product 1">
+                    </div>
+                    <div class="w-56 h-72 bg-transparent flex items-center justify-center hover:-translate-y-4 transition-transform duration-500 delay-100 mt-10">
+                        <img src="https://i.ibb.co/tTCb2j0h/02.png" class="w-full h-auto drop-shadow-2xl mix-blend-screen opacity-90 hover:opacity-100 filter contrast-125" alt="Product 2">
+                    </div>
+                    <div class="w-48 h-64 bg-transparent flex items-center justify-center hover:-translate-y-4 transition-transform duration-500 delay-200">
+                        <img src="https://i.ibb.co/PGNt8dfj/03.png" class="w-full h-auto drop-shadow-2xl mix-blend-screen opacity-90 hover:opacity-100 filter contrast-125" alt="Product 3">
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Google Drive Cards Section -->
-        <section class="w-full max-w-6xl mx-auto px-6 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <!-- Data sheet -->
-                <div class="dropdown-container relative flex flex-col items-center cursor-pointer group">
-                    <div class="bg-white border-2 border-slate-100 w-full py-16 px-6 flex flex-col items-center justify-center group-hover:border-snap-green group-hover:shadow-[0_20px_40px_rgba(0,179,110,0.1)] transition-all rounded-[2rem] shadow-sm">
-                        <div class="w-16 h-16 bg-snap-green/10 text-snap-green rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform"><i class="fas fa-file-pdf"></i></div>
-                        <h3 data-i18n="cardDataSheet" class="text-xl font-black text-slate-800 tracking-tight">Download Data Sheet</h3>
+        <!-- Dark Feature Bar (Bottom of Hero) -->
+        <section class="feature-bar w-full relative z-20 shadow-xl">
+            <div class="max-w-[1400px] mx-auto flex items-center">
+                <button class="w-12 h-20 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"><i class="fas fa-chevron-left"></i></button>
+                
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-4 w-full">
+                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat1Sub">SNAPCON MODEL 01</p>
+                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat1Title">Compact and powerful mini conveyors.</h4>
                     </div>
-                    <div class="dropdown-menu top-[180px] w-11/12 bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden py-2">
-                        <a href="https://drive.google.com/file/d/1HY0dUjYJZgxRVYYgN5DOV6Ymm9ARCGUW/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green/10 hover:text-snap-green border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 01</a>
-                        <a href="https://drive.google.com/file/d/1TC_cXAy7gbgBx0QI0TiL7Kdt1ICljnHj/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green/10 hover:text-snap-green border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 02</a>
-                        <a href="https://drive.google.com/file/d/1Yv_gJWWxTL4H_5YmCDAOCnI33gdfcj4j/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green/10 hover:text-snap-green border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 03</a>
-                        <a href="https://drive.google.com/file/d/1KtCARlKphuuIqUOU6xg5mnPf99sjCjHD/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green/10 hover:text-snap-green border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 04</a>
-                        <a href="https://drive.google.com/file/d/1dlOS1HSYy1qjWASPGQiKRvQsSyZ-lFs4/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-snap-green/10 hover:text-snap-green text-sm font-bold text-slate-600 transition-colors">Model 05</a>
+                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat2Sub">SMART DASHBOARD</p>
+                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat2Title">Real-time monitoring & AI prediction.</h4>
+                    </div>
+                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat3Sub">SPARE PARTS</p>
+                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat3Title">Over 200 genuine components ready.</h4>
+                    </div>
+                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat4Sub">SUPPORT 24/7</p>
+                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat4Title">Expert engineering team at your service.</h4>
+                    </div>
+                </div>
+
+                <button class="w-12 h-20 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Google Drive Cards Section (Sharp Design) -->
+        <section class="w-full bg-white py-16">
+            <div class="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Data sheet -->
+                <div class="dropdown-container relative flex flex-col group">
+                    <div class="bg-slate-50 sharp-card p-10 flex flex-col items-start h-full cursor-pointer">
+                        <i class="fas fa-file-pdf text-3xl text-snap-green mb-4"></i>
+                        <h3 class="text-xl font-black text-slate-900 mb-2" data-i18n="cardDataSheet">Download Data Sheet</h3>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow" data-i18n="cardDesc1">Technical specifications and manuals.</p>
+                        <div class="text-xs font-bold text-snap-green uppercase tracking-widest group-hover:underline">Select Model <i class="fas fa-angle-down ml-1"></i></div>
+                    </div>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-xl z-50">
+                        <a href="https://drive.google.com/file/d/1HY0dUjYJZgxRVYYgN5DOV6Ymm9ARCGUW/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
+                        <a href="https://drive.google.com/file/d/1TC_cXAy7gbgBx0QI0TiL7Kdt1ICljnHj/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
+                        <a href="https://drive.google.com/file/d/1Yv_gJWWxTL4H_5YmCDAOCnI33gdfcj4j/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
+                        <a href="https://drive.google.com/file/d/1KtCARlKphuuIqUOU6xg5mnPf99sjCjHD/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
+                        <a href="https://drive.google.com/file/d/1dlOS1HSYy1qjWASPGQiKRvQsSyZ-lFs4/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 05</a>
                     </div>
                 </div>
 
                 <!-- Drawing -->
-                <div class="dropdown-container relative flex flex-col items-center cursor-pointer group">
-                    <div class="bg-white border-2 border-slate-100 w-full py-16 px-6 flex flex-col items-center justify-center group-hover:border-blue-500 group-hover:shadow-[0_20px_40px_rgba(59,130,246,0.1)] transition-all rounded-[2rem] shadow-sm">
-                        <div class="w-16 h-16 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform"><i class="fas fa-drafting-compass"></i></div>
-                        <h3 data-i18n="cardDrawing" class="text-xl font-black text-slate-800 tracking-tight">Download Drawing</h3>
+                <div class="dropdown-container relative flex flex-col group">
+                    <div class="bg-slate-50 sharp-card p-10 flex flex-col items-start h-full cursor-pointer">
+                        <i class="fas fa-drafting-compass text-3xl text-snap-green mb-4"></i>
+                        <h3 class="text-xl font-black text-slate-900 mb-2" data-i18n="cardDrawing">Download Drawing</h3>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow" data-i18n="cardDesc2">2D and 3D CAD models for integration.</p>
+                        <div class="text-xs font-bold text-snap-green uppercase tracking-widest group-hover:underline">Select Model <i class="fas fa-angle-down ml-1"></i></div>
                     </div>
-                    <div class="dropdown-menu top-[180px] w-11/12 bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden py-2">
-                        <a href="https://drive.google.com/file/d/1CisPrHXeoJgspikAzAOwH0rdhNtQiviy/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 01</a>
-                        <a href="https://drive.google.com/file/d/1Gt8onVT7dsyJQkmxdY6s1GZTX4_oUNuB/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 02</a>
-                        <a href="https://drive.google.com/file/d/1zesePgsPwZDTUpKzLrmesdnuY6usfe2P/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 03</a>
-                        <a href="https://drive.google.com/file/d/1I-63QRJrJksO6xQb1cCWaq9HoDZJ6qBl/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-50 text-sm font-bold text-slate-600 transition-colors">Model 04</a>
-                        <a href="https://drive.google.com/file/d/16z8m9S06kGhyO0C6Tb0mMQ0L4bk5wTDz/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-600 transition-colors">Model 05</a>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-xl z-50">
+                        <a href="https://drive.google.com/file/d/1CisPrHXeoJgspikAzAOwH0rdhNtQiviy/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
+                        <a href="https://drive.google.com/file/d/1Gt8onVT7dsyJQkmxdY6s1GZTX4_oUNuB/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
+                        <a href="https://drive.google.com/file/d/1zesePgsPwZDTUpKzLrmesdnuY6usfe2P/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
+                        <a href="https://drive.google.com/file/d/1I-63QRJrJksO6xQb1cCWaq9HoDZJ6qBl/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
+                        <a href="https://drive.google.com/file/d/16z8m9S06kGhyO0C6Tb0mMQ0L4bk5wTDz/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 05</a>
                     </div>
                 </div>
 
                 <!-- Catalog -->
-                <div class="dropdown-container relative flex flex-col items-center cursor-pointer group">
-                    <div class="bg-white border-2 border-slate-100 w-full py-16 px-6 flex flex-col items-center justify-center group-hover:border-amber-500 group-hover:shadow-[0_20px_40px_rgba(245,158,11,0.1)] transition-all rounded-[2rem] shadow-sm">
-                        <div class="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform"><i class="fas fa-book-open"></i></div>
-                        <h3 data-i18n="cardCatalog" class="text-xl font-black text-slate-800 tracking-tight">Product Catalog</h3>
+                <div class="dropdown-container relative flex flex-col group">
+                    <div class="bg-slate-50 sharp-card p-10 flex flex-col items-start h-full cursor-pointer">
+                        <i class="fas fa-book-open text-3xl text-snap-green mb-4"></i>
+                        <h3 class="text-xl font-black text-slate-900 mb-2" data-i18n="cardCatalog">Product Catalog</h3>
+                        <p class="text-sm text-slate-500 mb-6 flex-grow" data-i18n="cardDesc3">Full overview of Snapcon solutions.</p>
+                        <div class="text-xs font-bold text-snap-green uppercase tracking-widest group-hover:underline">Download <i class="fas fa-angle-down ml-1"></i></div>
                     </div>
-                    <div class="dropdown-menu top-[180px] w-11/12 bg-white border border-slate-100 shadow-2xl rounded-2xl overflow-hidden py-2">
-                        <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" data-i18n="cardCatalogFull" class="block px-6 py-3 hover:bg-amber-50 hover:text-amber-600 text-sm font-bold text-slate-600 transition-colors">Download Full Catalog</a>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-xl z-50">
+                        <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" data-i18n="cardCatalogFull" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Download Full Catalog</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 🎉 Home Product Slider -->
-        <section class="w-full max-w-7xl mx-auto px-6 py-12 border-t border-slate-200/60 bg-slate-50/50 rounded-t-[3rem]">
-            <div class="flex justify-between items-end mb-8">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-black text-slate-800 tracking-tight" data-i18n="homeProductsTitle">สินค้าของเรา</h2>
-                    <p class="text-slate-500 mt-2 font-medium" data-i18n="homeProductsSub">เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด</p>
-                </div>
-                <div class="hidden sm:flex gap-3">
-                    <button onclick="scrollSlider('left')" class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white hover:border-snap-green transition-all shadow-sm active:scale-95"><i class="fas fa-chevron-left"></i></button>
-                    <button onclick="scrollSlider('right')" class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white hover:border-snap-green transition-all shadow-sm active:scale-95"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-            
-            <div id="home-product-slider" class="slider-container flex gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-2 px-2 -mx-2">
-                <!-- Products injected by JS -->
-            </div>
-            
-            <div class="text-center mt-4">
-                <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-snap-green font-bold text-sm hover:underline" data-i18n="viewAllProducts">ดูสินค้าทั้งหมด <i class="fas fa-arrow-right"></i></button>
-            </div>
-        </section>
     </div>
 
     <!-- ==================== PAGE: PRODUCT ==================== -->
-    <div id="page-product" class="page-section max-w-7xl mx-auto px-6 py-16">
-        <h2 data-i18n="pageProductTitle" class="text-4xl font-black mb-4 border-l-8 border-snap-green pl-6 text-slate-800">SNAPCON Conveyor Systems</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageProductSub">รวมเครื่องจักรสายพานลำเลียงอัจฉริยะทุกรุ่นที่ครอบคลุมทุกอุตสาหกรรม</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-h-[75vh] overflow-y-auto custom-scrollbar p-2" id="product-grid"></div>
+    <div id="page-product" class="page-section bg-white min-h-screen pt-10">
+        <div class="max-w-[1400px] mx-auto px-6 py-10">
+            <h2 data-i18n="pageProductTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Conveyor Systems</h2>
+            <div class="w-16 h-1 bg-snap-green mb-8"></div>
+            <p class="text-slate-600 mb-10 max-w-2xl" data-i18n="pageProductSub">รวมเครื่องจักรสายพานลำเลียงอัจฉริยะทุกรุ่นที่ครอบคลุมทุกอุตสาหกรรม</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="product-grid"></div>
+        </div>
     </div>
 
     <!-- ==================== PAGE: SPARE PARTS ==================== -->
-    <div id="page-spare" class="page-section max-w-7xl mx-auto px-6 py-16">
-        <h2 data-i18n="pageSpareTitle" class="text-4xl font-black mb-4 border-l-8 border-blue-500 pl-6 text-slate-800">SNAPCON Spare Parts</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="pageSpareSub">อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงของแท้ 100%</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-h-[75vh] overflow-y-auto custom-scrollbar p-2" id="spare-grid"></div>
+    <div id="page-spare" class="page-section bg-white min-h-screen pt-10">
+        <div class="max-w-[1400px] mx-auto px-6 py-10">
+            <h2 data-i18n="pageSpareTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Spare Parts</h2>
+            <div class="w-16 h-1 bg-snap-green mb-8"></div>
+            <p class="text-slate-600 mb-10 max-w-2xl" data-i18n="pageSpareSub">อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงของแท้ 100%</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="spare-grid"></div>
+        </div>
     </div>
 
     <!-- ==================== PAGE: CART ==================== -->
-    <div id="page-cart" class="page-section max-w-5xl mx-auto px-6 py-16">
-        <h2 data-i18n="pageCartTitle" class="text-4xl font-black mb-10 border-l-8 border-snap-green pl-6 text-slate-800">รถเข็นขอใบเสนอราคา</h2>
-        <div class="bg-white p-8 md:p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100">
-            <div id="cart-header" class="flex justify-between items-center mb-8 pb-6 border-b border-slate-100">
-                <div class="flex items-center gap-3">
-                    <input type="checkbox" id="cart-select-all" onclick="toggleSelectAll(this.checked)" class="w-6 h-6 accent-snap-green cursor-pointer rounded">
-                    <label for="cart-select-all" class="font-black text-slate-700 cursor-pointer text-lg" data-i18n="selectAll">เลือกทั้งหมด</label>
+    <div id="page-cart" class="page-section bg-snap-gray min-h-screen pt-10">
+        <div class="max-w-4xl mx-auto px-6 py-10">
+            <h2 data-i18n="pageCartTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Quotation Request</h2>
+            <div class="w-16 h-1 bg-snap-green mb-8"></div>
+            
+            <div class="bg-white sharp-card p-8 md:p-10">
+                <div id="cart-header" class="flex justify-between items-center mb-6 pb-4 border-b border-slate-200">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="cart-select-all" onclick="toggleSelectAll(this.checked)" class="w-4 h-4 accent-snap-green cursor-pointer">
+                        <label for="cart-select-all" class="font-bold text-slate-700 cursor-pointer text-sm" data-i18n="selectAll">เลือกทั้งหมด</label>
+                    </div>
+                    <button type="button" onclick="deleteSelected()" class="text-red-500 font-bold hover:underline text-sm" data-i18n="deleteSelected">ลบที่เลือก</button>
                 </div>
-                <button type="button" onclick="deleteSelected()" class="text-red-500 font-bold hover:text-red-600 transition-colors flex items-center gap-2 bg-red-50 px-4 py-2 rounded-xl" data-i18n="deleteSelected">
-                    <i class="fas fa-trash-alt"></i> ลบที่เลือก
-                </button>
-            </div>
 
-            <div id="cart-items" class="space-y-4 mb-10 min-h-[150px] max-h-[50vh] overflow-y-auto custom-scrollbar pr-2">
-                <p data-i18n="cartEmpty" class="text-center py-10 text-slate-400 font-bold text-lg">ยังไม่มีสินค้าในรถเข็น</p>
-            </div>
+                <div id="cart-items" class="space-y-3 mb-10 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2">
+                    <p data-i18n="cartEmpty" class="text-center py-10 text-slate-400 font-bold">ยังไม่มีสินค้าในรถเข็น</p>
+                </div>
 
-            <div id="guest-form" class="bg-slate-50 p-8 rounded-3xl mb-10 border-2 border-dashed border-slate-200 hidden">
-                <p class="font-black text-slate-700 mb-6 uppercase text-sm tracking-widest flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center"><i class="fas fa-info"></i></span> 
-                    <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ (Contact Info)</span>
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="text" id="guest-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-6 py-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-snap-green transition-all shadow-sm font-bold text-slate-700">
-                    <input type="text" id="guest-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-6 py-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-snap-green transition-all shadow-sm font-bold text-slate-700">
+                <div id="guest-form" class="bg-slate-50 p-6 sharp-card mb-8 hidden">
+                    <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest flex items-center gap-2">
+                        <i class="fas fa-info-circle text-snap-green"></i> 
+                        <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ (Contact Info)</span>
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" id="guest-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                        <input type="text" id="guest-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row justify-between items-center border-t border-slate-200 pt-8 gap-6">
+                    <div>
+                        <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1" data-i18n="cartTotalLabel">ราคากลางประเมินรวม</p>
+                        <h3 id="cart-total" class="text-4xl font-black text-snap-green tracking-tighter">฿0</h3>
+                    </div>
+                    <button type="button" onclick="requestQuote()" class="w-full md:w-auto bg-snap-black text-white px-8 py-4 font-bold hover:bg-snap-green sharp-btn text-sm" data-i18n="btnRequestQuote">
+                        ยื่นขอใบเสนอราคา
+                    </button>
                 </div>
             </div>
-
-            <div class="flex flex-col md:flex-row justify-between items-center border-t border-slate-100 pt-10 gap-6">
-                <div class="text-center md:text-left">
-                    <p class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1" data-i18n="cartTotalLabel">ราคากลางประเมินรวม</p>
-                    <h3 id="cart-total" class="text-5xl font-black text-snap-green">฿0</h3>
-                </div>
-                <button type="button" onclick="requestQuote()" class="w-full md:w-auto bg-nav-bg text-white px-10 py-5 rounded-2xl font-black hover:bg-snap-green transition-all shadow-xl active:scale-95 text-lg" data-i18n="btnRequestQuote">
-                    ยื่นขอใบเสนอราคา
-                </button>
-            </div>
-            <p class="text-[11px] text-slate-400 mt-6 text-center font-bold bg-slate-50 py-3 rounded-xl"><i class="fas fa-shield-alt text-snap-green mr-1"></i> <span data-i18n="guestNotice">ข้อมูลจะถูกบันทึกลงระบบ Google Drive อย่างปลอดภัย</span></p>
         </div>
     </div>
 
     <!-- ==================== PAGE: DASHBOARD ==================== -->
-    <div id="page-dashboard" class="page-section max-w-[1600px] mx-auto px-6 py-16">
-        <h2 class="text-4xl font-black mb-2 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navDashboard">Dashboard</h2>
-        <p class="text-slate-500 mb-10 pl-8 font-medium" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
-        
-        <div class="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 mb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div>
-                <h3 class="font-black text-slate-700 mb-4 flex items-center gap-2 uppercase tracking-wider text-sm" data-i18n="dashCtrlTitle"><i class="fas fa-gamepad text-blue-500"></i> การควบคุมระบบ</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <button onclick="startSystem()" id="btn-start" class="bg-snap-green text-white py-3 md:py-4 rounded-2xl font-black shadow-md hover:bg-green-600 active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-play mr-1 md:mr-2"></i> START</button>
-                    <button onclick="stopSystem()" id="btn-stop" class="bg-slate-100 text-slate-600 py-3 md:py-4 rounded-2xl font-black shadow-sm hover:bg-red-500 hover:text-white active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-stop mr-1 md:mr-2"></i> STOP</button>
-                    <button onclick="resetSystem()" class="bg-slate-800 text-white py-3 md:py-4 rounded-2xl font-black shadow-md hover:bg-slate-700 active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-sync-alt mr-1 md:mr-2"></i> REFRESH</button>
-                    <button onclick="exportCSV()" class="bg-blue-500 text-white py-3 md:py-4 rounded-2xl font-black shadow-md hover:bg-blue-600 active:scale-95 transition-all text-xs lg:text-sm"><i class="fas fa-file-csv mr-1 md:mr-2"></i> REPORT</button>
+    <div id="page-dashboard" class="page-section bg-snap-gray min-h-screen pt-10">
+        <div class="max-w-[1400px] mx-auto px-6 py-10">
+            <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2" data-i18n="navDashboard">Dashboard</h2>
+            <div class="w-16 h-1 bg-snap-green mb-8"></div>
+            <p class="text-slate-600 mb-8" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Controls -->
+                <div class="bg-white p-6 sharp-card lg:col-span-2 flex flex-col justify-center">
+                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest" data-i18n="dashCtrlTitle">System Controls</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <button onclick="startSystem()" id="btn-start" class="bg-snap-green text-white py-3 font-bold hover:bg-snap-green-hover sharp-btn text-xs"><i class="fas fa-play mr-2"></i> START</button>
+                        <button onclick="stopSystem()" id="btn-stop" class="bg-slate-200 text-slate-700 py-3 font-bold hover:bg-red-500 hover:text-white sharp-btn text-xs"><i class="fas fa-stop mr-2"></i> STOP</button>
+                        <button onclick="resetSystem()" class="bg-snap-black text-white py-3 font-bold hover:bg-slate-800 sharp-btn text-xs"><i class="fas fa-sync-alt mr-2"></i> REFRESH</button>
+                        <button onclick="exportCSV()" class="bg-blue-600 text-white py-3 font-bold hover:bg-blue-700 sharp-btn text-xs"><i class="fas fa-file-csv mr-2"></i> REPORT</button>
+                    </div>
+                </div>
+                
+                <!-- Config -->
+                <div class="bg-white p-6 sharp-card">
+                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest" data-i18n="dashCfgTitle">Configuration</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashTarget">Target</label>
+                            <input type="number" id="cfg-target" value="50000" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                        </div>
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashCarbon">Carbon Factor</label>
+                            <input type="number" step="0.0001" id="cfg-carbon" value="0.0072" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashEnergy">Energy Factor</label>
+                            <input type="number" step="0.001" id="cfg-energy" value="0.015" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div>
-                <h3 class="font-black text-slate-700 mb-4 flex items-center gap-2 uppercase tracking-wider text-sm" data-i18n="dashCfgTitle"><i class="fas fa-sliders-h text-amber-500"></i> ตั้งค่าพารามิเตอร์</h3>
-                <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1" data-i18n="dashTarget">เป้าหมาย (ชิ้น)</label>
-                        <input type="number" id="cfg-target" value="50000" onchange="updateDashboardConfig()" class="w-full bg-transparent outline-none font-bold text-slate-800">
+
+            <!-- KPIs -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-blue-500">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotOut">Total Output</p>
+                    <h3 id="dash-total-output" class="text-4xl font-black text-slate-900 tracking-tighter">0</h3>
+                </div>
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-snap-green">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashCalCarbon">Cal Carbon</p>
+                    <h3 id="dash-carbon" class="text-4xl font-black text-slate-900 tracking-tighter">0.00</h3>
+                </div>
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-amber-500">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotPower">Total Power</p>
+                    <h3 id="dash-power" class="text-4xl font-black text-slate-900 tracking-tighter">0.00</h3>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="bg-white p-8 sharp-card mb-8">
+                <div class="flex justify-between items-end mb-4">
+                    <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashPlanTitle">Production Planning</h3>
+                    <span id="dash-progress-text" class="text-2xl font-black text-snap-green">0.0%</span>
+                </div>
+                <div class="w-full h-4 bg-slate-100 rounded-sm overflow-hidden mb-6">
+                    <div id="dash-progress-bar" class="h-full bg-snap-green transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-widest">
+                    <span><i class="far fa-clock mr-1"></i> <span data-i18n="dashTimeElapsed">Elapsed</span>: <span id="dash-time-elapsed" class="text-slate-800">00:00:00</span></span>
+                    <span><i class="fas fa-hourglass-half mr-1"></i> <span data-i18n="dashTimeRemain">ETA</span>: <span id="dash-time-remain" class="text-slate-800">--:--:--</span></span>
+                </div>
+            </div>
+
+            <!-- Nodes Grid -->
+            <div class="bg-white p-6 sharp-card">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashMacStatus2">Machine Status</h3>
+                    <div class="flex gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-500">
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-snap-green"></div> <span data-i18n="statusNormal">Normal</span></span>
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-amber-400"></div> <span data-i18n="statusWarning">Warning</span></span>
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-red-500"></div> <span data-i18n="statusMaint">Maint.</span></span>
                     </div>
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1" data-i18n="dashCarbon">ค่าคาร์บอน</label>
-                        <input type="number" step="0.0001" id="cfg-carbon" value="0.0072" onchange="updateDashboardConfig()" class="w-full bg-transparent outline-none font-bold text-slate-800">
-                    </div>
-                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                        <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1" data-i18n="dashEnergy">ค่าพลังงาน</label>
-                        <input type="number" step="0.001" id="cfg-energy" value="0.015" onchange="updateDashboardConfig()" class="w-full bg-transparent outline-none font-bold text-slate-800">
-                    </div>
+                </div>
+                <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-2 max-h-[60vh] overflow-y-auto custom-scrollbar p-1">
+                    <!-- Nodes injected here -->
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="bg-white p-8 md:p-10 rounded-[2rem] shadow-sm border border-slate-100 mb-8 relative overflow-hidden">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 relative z-10">
+    <!-- ==================== PAGE: COMPANY (ABOUT) ==================== -->
+    <div id="page-about" class="page-section bg-white min-h-screen pt-10">
+        <div class="max-w-[1000px] mx-auto px-6 py-10">
+            <h2 data-i18n="navAbout" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Company</h2>
+            <div class="w-16 h-1 bg-snap-green mb-10"></div>
+            
+            <div class="grid md:grid-cols-2 gap-10 items-center mb-16">
                 <div>
-                    <h3 class="text-2xl font-black text-slate-800 tracking-tight" data-i18n="dashPlanTitle">แผนการทำงานวันนี้ (Production Planning)</h3>
+                    <h3 class="text-4xl font-black text-snap-black tracking-tighter mb-6 leading-tight">Driving the future of <span class="text-snap-green">industrial automation.</span></h3>
+                    <p class="text-slate-600 leading-relaxed mb-6" data-i18n="aboutDesc">
+                        Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด
+                    </p>
                 </div>
-                <div class="mt-4 sm:mt-0 text-right">
-                    <span id="dash-progress-text" class="text-4xl font-black text-snap-green">0.0%</span>
-                </div>
-            </div>
-            
-            <div class="w-full h-6 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50 mb-4">
-                <div id="dash-progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-snap-green transition-all duration-300 relative" style="width: 0%"></div>
-            </div>
-            
-            <div class="flex flex-col sm:flex-row justify-between gap-3">
-                <div class="flex items-center gap-2 text-slate-500 text-xs font-bold uppercase bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
-                    <i class="fas fa-clock text-slate-400"></i> <span data-i18n="dashTimeElapsed">เวลาที่ใช้ (Elapsed)</span>: 
-                    <span id="dash-time-elapsed" class="text-slate-700 font-black ml-1">00:00:00</span>
-                </div>
-                <div class="flex items-center gap-2 text-amber-600 text-xs font-bold uppercase bg-amber-50 px-4 py-2 rounded-xl border border-amber-200">
-                    <i class="fas fa-stopwatch text-amber-500"></i> <span data-i18n="dashTimeRemain">เวลาคงเหลือ (ETA)</span>: 
-                    <span id="dash-time-remain" class="text-amber-700 font-black ml-1">--:--:--</span>
+                <div class="bg-slate-100 h-64 sharp-card flex items-center justify-center text-slate-300">
+                    <i class="fas fa-industry text-6xl"></i>
                 </div>
             </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 border-l-8 border-l-blue-500">
-                <p class="text-xs text-slate-400 font-bold uppercase" data-i18n="dashTotOut">ยอดผลิตรวม (Total Output)</p>
-                <h3 id="dash-total-output" class="text-5xl font-black text-slate-800 mt-2">0</h3>
-            </div>
-            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 border-l-8 border-l-emerald-500">
-                <p class="text-xs text-slate-400 font-bold uppercase" data-i18n="dashCalCarbon">คาร์บอนฟุตพริ้นท์ (Cal Carbon)</p>
-                <h3 id="dash-carbon" class="text-5xl font-black text-slate-800 mt-2">0.00</h3>
-            </div>
-            <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 border-l-8 border-l-amber-500">
-                <p class="text-xs text-slate-400 font-bold uppercase" data-i18n="dashTotPower">พลังงานไฟฟ้ารวม (Power Use)</p>
-                <h3 id="dash-power" class="text-5xl font-black text-slate-800 mt-2">0.00</h3>
-            </div>
-        </div>
-
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-black text-slate-800 flex items-center gap-3">
-                <i class="fas fa-server text-slate-400"></i> <span data-i18n="dashMacStatus2">สถานะการทำงานและสุขภาพเครื่อง</span>
-            </h3>
-            <div class="hidden sm:flex gap-3 text-[10px] font-bold uppercase tracking-widest bg-white px-4 py-2 rounded-xl border border-slate-200">
-                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-snap-green"></div> <span data-i18n="statusNormal">ปกติ (>70%)</span></span>
-                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-amber-400"></div> <span data-i18n="statusWarning">เฝ้าระวัง (<70%)</span></span>
-                <span class="flex items-center gap-1"><div class="w-2 h-2 rounded-full bg-red-500"></div> <span data-i18n="statusMaint">ซ่อมบำรุง (<30%)</span></span>
-            </div>
-        </div>
-        <div class="bg-slate-50/50 p-4 rounded-3xl border border-slate-200">
-            <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-3 max-h-[65vh] overflow-y-auto custom-scrollbar p-2">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-snap-black text-white p-10 sharp-card">
+                    <i class="fas fa-eye text-3xl text-snap-green mb-6"></i>
+                    <h4 class="text-xl font-bold mb-4 uppercase tracking-wider" data-i18n="aboutVisionTitle">Vision</h4>
+                    <p class="text-slate-400 leading-relaxed text-sm" data-i18n="aboutVisionDesc">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
+                </div>
+                <div class="bg-snap-green text-white p-10 sharp-card">
+                    <i class="fas fa-bullseye text-3xl text-snap-black mb-6"></i>
+                    <h4 class="text-xl font-bold mb-4 uppercase tracking-wider text-snap-black" data-i18n="aboutMissionTitle">Mission</h4>
+                    <p class="text-emerald-900 leading-relaxed text-sm font-medium" data-i18n="aboutMissionDesc">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== PAGE: CONTACT ==================== -->
-    <div id="page-contact" class="page-section max-w-4xl mx-auto px-6 py-16 text-center">
-        <h2 class="text-4xl font-black mb-12 text-slate-800" data-i18n="navContact">Contact Us</h2>
-        <div class="bg-white p-16 rounded-[4rem] shadow-2xl border border-slate-100 relative overflow-hidden">
-            <div class="absolute -top-20 -right-20 w-64 h-64 bg-snap-green/10 blur-[80px] rounded-full"></div>
-            <div class="w-24 h-24 bg-snap-green/10 text-snap-green rounded-[2rem] flex items-center justify-center text-4xl mx-auto mb-8 relative z-10 shadow-inner border border-snap-green/20">
-                <i class="fas fa-envelope-open-text"></i>
-            </div>
-            <p class="text-3xl font-black text-slate-800 mb-4 relative z-10">snapcon1992@gmail.com</p>
-            <p class="text-slate-500 font-medium mb-12 relative z-10 text-lg" data-i18n="contactSub">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ</p>
-            <button onclick="window.location.href='mailto:snapcon1992@gmail.com'" class="relative z-10 bg-snap-green text-white px-14 py-5 rounded-2xl font-black text-lg hover:bg-green-600 transition-all shadow-[0_15px_30px_rgba(0,179,110,0.3)] active:scale-95 tracking-wide" data-i18n="btnEmail">ส่งอีเมลติดต่อเรา</button>
-        </div>
-    </div>
-
-    <!-- ==================== PAGE: ABOUT US ==================== -->
-    <div id="page-about" class="page-section max-w-5xl mx-auto px-6 py-16">
-        <h2 class="text-4xl font-black mb-10 border-l-8 border-snap-green pl-6 text-slate-800" data-i18n="navAbout">เกี่ยวกับเรา</h2>
-        <div class="bg-white p-12 md:p-16 rounded-[4rem] shadow-xl border border-slate-100 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-snap-green/5 blur-[80px] rounded-full -mr-20 -mt-20"></div>
+    <!-- ==================== PAGE: SUPPORT (CONTACT) ==================== -->
+    <div id="page-contact" class="page-section bg-snap-gray min-h-screen pt-10">
+        <div class="max-w-[1000px] mx-auto px-6 py-10">
+            <h2 data-i18n="navContact" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Support</h2>
+            <div class="w-16 h-1 bg-snap-green mb-10"></div>
             
-            <p class="text-3xl font-black text-slate-900 mb-6 leading-tight">
-                SNAPCON AUTOMATION
-            </p>
-            <p class="text-lg text-slate-600 leading-relaxed mb-12 font-medium" data-i18n="aboutDesc">
-                Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด เพื่อเตรียมความพร้อมอุตสาหกรรมสู่อนาคต
-            </p>
+            <div class="bg-white sharp-card p-12 text-center max-w-2xl mx-auto">
+                <i class="fas fa-headset text-5xl text-snap-green mb-6"></i>
+                <h3 class="text-2xl font-black text-slate-900 mb-2">Technical Support 24/7</h3>
+                <p class="text-slate-500 mb-8 text-sm" data-i18n="contactSub">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ</p>
+                
+                <div class="space-y-4 max-w-xs mx-auto mb-10 text-left">
+                    <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card">
+                        <i class="fas fa-envelope text-slate-400"></i>
+                        <span class="font-bold text-slate-700 text-sm">snapcon1992@gmail.com</span>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card">
+                        <i class="fab fa-line text-slate-400"></i>
+                        <span class="font-bold text-slate-700 text-sm">@SnapconAuto</span>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card">
+                        <i class="fas fa-phone-alt text-slate-400"></i>
+                        <span class="font-bold text-slate-700 text-sm">081-XXX-XXXX</span>
+                    </div>
+                </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Vision Card -->
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 hover:border-snap-green transition-colors group">
-                    <div class="w-14 h-14 bg-snap-green/10 text-snap-green rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-eye"></i>
-                    </div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-4" data-i18n="aboutVisionTitle">วิสัยทัศน์ (Vision)</h3>
-                    <p class="text-slate-500 font-medium leading-relaxed" data-i18n="aboutVisionDesc">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
-                </div>
-                <!-- Mission Card -->
-                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 hover:border-blue-500 transition-colors group">
-                    <div class="w-14 h-14 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-bullseye"></i>
-                    </div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-4" data-i18n="aboutMissionTitle">พันธกิจ (Mission)</h3>
-                    <p class="text-slate-500 font-medium leading-relaxed" data-i18n="aboutMissionDesc">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
-                </div>
+                <button onclick="window.location.href='mailto:snapcon1992@gmail.com'" class="bg-snap-black text-white px-10 py-4 font-bold hover:bg-snap-green sharp-btn text-sm w-full max-w-xs" data-i18n="btnEmail">SEND DIRECT EMAIL</button>
             </div>
         </div>
     </div>
 
     <!-- ==================== MODAL: REGISTER ==================== -->
-    <div id="modal-register" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
-            <button onclick="closeRegisterModal()" class="absolute top-6 right-6 text-slate-400 hover:text-red-500 transition-colors z-10"><i class="fas fa-times text-xl"></i></button>
-            <div class="p-8 pb-6 border-b border-slate-100 shrink-0">
-                <h3 class="text-2xl font-black text-slate-800" data-i18n="regTitle">สร้างบัญชีผู้ใช้</h3>
+    <div id="modal-register" class="fixed inset-0 bg-snap-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md sharp-card flex flex-col shadow-2xl relative">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button>
+            
+            <div class="p-8 border-b border-slate-100 bg-slate-50">
+                <h3 class="text-xl font-black text-slate-900 uppercase tracking-tight" data-i18n="regTitle">Create Account</h3>
+                <p class="text-xs text-slate-500 mt-1" data-i18n="regDesc">ลงทะเบียนเพื่อเข้าถึงระบบและขอใบเสนอราคา</p>
             </div>
-            <div class="p-8 space-y-5 overflow-y-auto no-scrollbar flex-1">
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regId">User ID</label><input type="text" id="reg-id" data-i18n-placeholder="phRegId" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regPass">Password</label><input type="password" id="reg-pass" data-i18n-placeholder="phRegPass" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regName">Name / Company</label><input type="text" id="reg-name" data-i18n-placeholder="phRegName" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
-                <div><label class="block text-[10px] font-black text-slate-400 uppercase mb-2" data-i18n="regContact">Email / Phone</label><input type="text" id="reg-contact" data-i18n-placeholder="phRegContact" class="w-full px-5 py-3 rounded-xl bg-slate-50 border outline-none focus:ring-2 focus:border-snap-green"></div>
+            
+            <div class="p-8 space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1" data-i18n="regId">User ID</label>
+                    <input type="text" id="reg-id" class="w-full px-3 py-2 bg-white border border-slate-300 outline-none focus:border-snap-green text-sm font-bold sharp-card">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1" data-i18n="regPass">Password</label>
+                    <input type="password" id="reg-pass" class="w-full px-3 py-2 bg-white border border-slate-300 outline-none focus:border-snap-green text-sm font-bold sharp-card">
+                </div>
+                <div class="h-px bg-slate-100 my-4"></div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1" data-i18n="regName">Name / Company</label>
+                    <input type="text" id="reg-name" class="w-full px-3 py-2 bg-white border border-slate-300 outline-none focus:border-snap-green text-sm font-bold sharp-card">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1" data-i18n="regContact">Email / Phone</label>
+                    <input type="text" id="reg-contact" class="w-full px-3 py-2 bg-white border border-slate-300 outline-none focus:border-snap-green text-sm font-bold sharp-card">
+                </div>
             </div>
-            <div class="p-8 pt-6 border-t bg-slate-50 shrink-0">
-                <button type="button" onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4 rounded-xl font-black hover:bg-green-600" data-i18n="btnSubmitReg">ยืนยันลงทะเบียน</button>
+            
+            <div class="p-6 border-t border-slate-100 bg-slate-50">
+                <button type="button" onclick="submitRegistration()" class="w-full bg-snap-green text-white py-3 font-bold hover:bg-snap-green-hover sharp-btn text-sm" data-i18n="btnSubmitReg">Confirm</button>
             </div>
         </div>
     </div>
+
+    <!-- ==================== MODAL: SOCIAL CONTACT (TECHNICIAN) ==================== -->
+    <div id="modal-social" class="fixed inset-0 bg-snap-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm sharp-card flex flex-col shadow-2xl relative overflow-hidden">
+            <button onclick="closeSocialModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition-colors z-10">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div class="p-8 pb-6 border-b border-slate-100 bg-slate-50 text-center">
+                <div class="w-20 h-20 bg-snap-green/10 text-snap-green rounded-full flex items-center justify-center text-4xl mx-auto mb-4 border-2 border-snap-green/20 shadow-inner group-hover:scale-110 transition-transform">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <h3 class="text-2xl font-black text-slate-900 uppercase tracking-tight" data-i18n="socialTitle">ติดต่อช่างผู้เชี่ยวชาญ</h3>
+                <p class="text-xs text-slate-500 mt-2 font-bold" data-i18n="socialDesc">เลือกช่องทางที่สะดวกเพื่อรับคำปรึกษาทันที</p>
+            </div>
+            
+            <div class="p-6 space-y-3 bg-white">
+                <a href="tel:0812345678" class="flex items-center gap-4 p-4 rounded-2xl border border-slate-200 hover:border-snap-green hover:shadow-md transition-all group cursor-pointer bg-white hover:bg-slate-50">
+                    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-snap-green group-hover:text-white transition-colors text-xl shadow-sm">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hotline</p>
+                        <p class="text-sm font-black text-slate-800">081-XXX-XXXX</p>
+                    </div>
+                </a>
+                <a href="https://line.me" target="_blank" class="flex items-center gap-4 p-4 rounded-2xl border border-slate-200 hover:border-[#00B900] hover:shadow-md transition-all group cursor-pointer bg-white hover:bg-slate-50">
+                    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-[#00B900] group-hover:text-white transition-colors text-2xl shadow-sm">
+                        <i class="fab fa-line"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Line Official</p>
+                        <p class="text-sm font-black text-slate-800">@SnapconAuto</p>
+                    </div>
+                </a>
+                <a href="https://facebook.com" target="_blank" class="flex items-center gap-4 p-4 rounded-2xl border border-slate-200 hover:border-[#1877F2] hover:shadow-md transition-all group cursor-pointer bg-white hover:bg-slate-50">
+                    <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-[#1877F2] group-hover:text-white transition-colors text-xl shadow-sm">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Facebook</p>
+                        <p class="text-sm font-black text-slate-800">Snapcon Automation</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Chatbot/Support Button (Technician) -->
+    <button onclick="openSocialModal()" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 active:scale-95 cursor-pointer">
+        <i class="fas fa-user-cog group-hover:animate-pulse"></i>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-bounce"></span>
+    </button>
 
     <script>
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTXYEcWYEsbcwL0ipt5vl1azB-C8psZUuwpjfIirzCdH2mBE2OHNdKSMoNPhklRt2M/exec';
@@ -531,148 +597,108 @@ snapcon_html = """
         let cart = [];
         let memoryUsers = { '001': '123' };
 
-        // กำหนดข้อมูล Dashboard แบบ Manual
+        // 📊 DASHBOARD STATE (100 Machines)
         let dashState = {
             isRunning: false, target: 50000, carbonFactor: 0.0072, energyFactor: 0.015,
             intervalId: null, elapsedSeconds: 0,
             nodes: [
-                { id: 1, name: "Machine 01 (Main)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
-                { id: 2, name: "Machine 02 (Sorter)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
-                { id: 3, name: "Machine 03 (Packer)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
-                { id: 4, name: "Machine 04 (Sealer)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
-                { id: 5, name: "Machine 05 (Labeler)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.6 },
-                { id: 6, name: "Machine 06 (Loader)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
-                { id: 7, name: "Machine 07 (Scanner)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
-                { id: 8, name: "Machine 08 (Wrapper)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.7 },
-                { id: 9, name: "Machine 09 (Stacker)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
-                { id: 10, name: "Machine 10 (Export)", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 }
-                // เพิ่มเครื่องที่ 11, 12... ต่อตรงนี้ได้เลย คั่นด้วยลูกน้ำ (,)
+                { id: 1, name: "M-01 Main", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                { id: 2, name: "M-02 Sort", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
+                { id: 3, name: "M-03 Pack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
+                { id: 4, name: "M-04 Seal", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                { id: 5, name: "M-05 Label", output: 0, status: 'Offline', health: 100.0, wearRate: 0.6 },
+                { id: 6, name: "M-06 Load", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                { id: 7, name: "M-07 Scan", output: 0, status: 'Offline', health: 100.0, wearRate: 0.5 },
+                { id: 8, name: "M-08 Wrap", output: 0, status: 'Offline', health: 100.0, wearRate: 0.7 },
+                { id: 9, name: "M-09 Stack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                { id: 10, name: "M-10 Exp", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 }
             ]
         };
 
-        // กำหนดข้อมูลสินค้า (Products) แบบ Manual
+        // 🔧 DATA GENERATION
         let products = [
-            { 
-                id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://i.ibb.co/bZ7TKQg/01.png',
-                specs: { th: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg", "Speed: 5-20m/min", "Material: Painted/AL"], en: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg", "Speed: 5-20m/min", "Material: Painted/AL"] }
-            },
-            { 
-                id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png',
-                specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg", "Speed: 10-30m/min", "Material: Steel/SUS"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg", "Speed: 10-30m/min", "Material: Steel/SUS"] }
-            },
-            { 
-                id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://i.ibb.co/PGNt8dfj/03.png',
-                specs: { th: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg", "Speed: 5-25m/min", "Material: Heavy Steel"], en: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg", "Speed: 5-25m/min", "Material: Heavy Steel"] }
-            },
-            { 
-                id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://i.ibb.co/mVfD9H0B/04.png',
-                specs: { th: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg", "Speed: 20-60m/min", "Material: SUS 304"], en: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg", "Speed: 20-60m/min", "Material: SUS 304"] }
-            },
-            { 
-                id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://i.ibb.co/x4SGKtb/05.png',
-                specs: { th: ["L: 5-100m", "W: 500-1500mm", "Load: 0-400kg", "Speed: 1-50m/min", "Material: Full Custom"], en: ["L: 5-100m", "W: 500-1500mm", "Load: 0-400kg", "Speed: 1-50m/min", "Material: Full Custom"] }
-            }
-            // เพิ่มข้อมูลสินค้าชิ้นที่ 6, 7, 8... ต่อตรงนี้ได้เลย
+            { id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://i.ibb.co/bZ7TKQg/01.png', specs: { th: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"], en: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"] } },
+            { id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png', specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"] } },
+            { id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://i.ibb.co/PGNt8dfj/03.png', specs: { th: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"], en: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"] } },
+            { id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://i.ibb.co/mVfD9H0B/04.png', specs: { th: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg"], en: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg"] } },
+            { id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://i.ibb.co/x4SGKtb/05.png', specs: { th: ["L: Custom", "W: Custom", "Load: Custom"], en: ["L: Custom", "W: Custom", "Load: Custom"] } }
         ];
 
-        // กำหนดข้อมูลอะไหล่ (Spare Parts) แบบ Manual
         let spares = [
-            {
-                id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
-                specs: { th: ["Type: Roller Series", "Status: Ready"], en: ["Type: Roller Series", "Status: Ready"] }
-            },
-            {
-                id: 'SP002', name: 'Conveyor Belt PU - P002', price: 550, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
-                specs: { th: ["Type: Belt PU", "Status: Ready"], en: ["Type: Belt PU", "Status: Ready"] }
-            },
-            {
-                id: 'SP003', name: 'Drive Motor AC - P003', price: 1500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
-                specs: { th: ["Type: Motor AC", "Status: Ready"], en: ["Type: Motor AC", "Status: Ready"] }
-            },
-            {
-                id: 'SP004', name: 'Sensor Switch - P004', price: 300, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
-                specs: { th: ["Type: Sensor", "Status: Ready"], en: ["Type: Sensor", "Status: Ready"] }
-            },
-            {
-                id: 'SP005', name: 'Control Board - P005', price: 2500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80',
-                specs: { th: ["Type: Board", "Status: Ready"], en: ["Type: Board", "Status: Ready"] }
-            }
-            // เพิ่มข้อมูลอะไหล่ชิ้นที่ 6, 7, 8... ต่อตรงนี้ได้เลย
+            { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } },
+            { id: 'SP002', name: 'Conveyor Belt PU', price: 550, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Belt PU", "Stock: Ready"], en: ["Type: Belt PU", "Stock: Ready"] } },
+            { id: 'SP003', name: 'Drive Motor AC', price: 1500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Motor", "Stock: Ready"], en: ["Type: Motor", "Stock: Ready"] } },
+            { id: 'SP004', name: 'Sensor Switch', price: 300, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Sensor", "Stock: Ready"], en: ["Type: Sensor", "Stock: Ready"] } },
+            { id: 'SP005', name: 'Control Board', price: 2500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Board", "Stock: Ready"], en: ["Type: Board", "Stock: Ready"] } }
         ];
         
-        let allItems = []; // จะถูกรวมข้อมูลจาก products และ spares ตอนโหลด
+        const allItems = [...products, ...spares];
 
-        // 🌐 DICTIONARY: ระบบภาษาที่สมบูรณ์
+        // 🌐 DICTIONARY
         const dict = {
             th: {
-                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
-                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
-                cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
-                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "รวมเครื่องจักรสายพานลำเลียงอัจฉริยะทุกรุ่นที่ครอบคลุมทุกอุตสาหกรรม",
-                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "อะไหล่เครื่องจักรและชิ้นส่วนสายพานลำเลียงของแท้ 100%",
-                btnAddToCart: "หยิบใส่รถเข็น",
-                pageCartTitle: "รถเข็นขอใบเสนอราคา", cartEmpty: "ยังไม่มีสินค้าในรถเข็น", cartTotalLabel: "ราคากลางประเมินรวม:",
-                btnRequestQuote: "ยื่นขอใบเสนอราคา", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก", specTitle: "สเปค:",
-                alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว!",
-                alertQuoteReq: "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับ",
-                
-                contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ", btnEmail: "ส่งอีเมลติดต่อเรา",
-                aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด เพื่อเตรียมความพร้อมอุตสาหกรรมสู่อนาคต",
-                aboutVisionTitle: "วิสัยทัศน์ (Vision)", aboutVisionDesc: "มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้",
-                aboutMissionTitle: "พันธกิจ (Mission)", aboutMissionDesc: "พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก",
-
-                regTitle: "สร้างบัญชีผู้ใช้", regDesc: "ลงทะเบียนเพื่อเข้าถึงระบบและขอใบเสนอราคา", btnSubmitReg: "ยืนยันการลงทะเบียน",
-                regId: "รหัสผู้ใช้ (User ID)", regPass: "รหัสผ่าน (Password)", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์",
-                
-                homeProductsTitle: "สินค้าของเรา", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "ดูสินค้าทั้งหมด",
-                
-                dashSubTitle: "ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์",
-                dashCtrlTitle: "การควบคุมระบบ", dashCfgTitle: "ตั้งค่าพารามิเตอร์", dashTarget: "เป้าหมาย (ชิ้น)", dashCarbon: "ค่าคาร์บอน", dashEnergy: "ค่าพลังงาน",
-                dashPlanTitle: "แผนการทำงานวันนี้ (Production Planning)", dashTotOut: "ยอดผลิตรวม", dashCalCarbon: "คาร์บอน (Cal Carbon)", dashTotPower: "พลังงานรวม (Power)",
-                dashTimeElapsed: "เวลาที่ใช้ (Elapsed)", dashTimeRemain: "เวลาคงเหลือ (ETA)", dashMacStatus2: "สถานะการทำงานและสุขภาพเครื่อง",
-                statusNormal: "ปกติ (>70%)", statusWarning: "เฝ้าระวัง (<70%)", statusMaint: "ซ่อมบำรุง (<30%)",
-                
-                guestContactTitle: "ข้อมูลติดต่อกลับ (Contact Info)", guestNotice: "ข้อมูลจะถูกบันทึกลงระบบ Google Drive อย่างปลอดภัย",
-                
-                phId: "ID", phPass: "PW",
-                phGuestName: "ชื่อผู้ติดต่อ / ชื่อบริษัท", phGuestContact: "อีเมล หรือ เบอร์โทรศัพท์",
-                phRegId: "ตั้งรหัส ID สำหรับเข้าระบบ", phRegPass: "ตั้งรหัสผ่านของคุณ", phRegName: "ระบุชื่อสำหรับติดต่อ", phRegContact: "ระบุช่องทางติดต่อกลับ"
+                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
+                feat1Sub: "SNAPCON MODEL 01", feat1Title: "Compact and powerful mini conveyors.",
+                feat2Sub: "SMART DASHBOARD", feat2Title: "Real-time monitoring & AI prediction.",
+                feat3Sub: "SPARE PARTS", feat3Title: "Over 200 genuine components ready.",
+                feat4Sub: "SUPPORT 24/7", feat4Title: "Expert engineering team at your service.",
+                cardDataSheet: "Data Sheet", cardDesc1: "Technical specs and manuals.",
+                cardDrawing: "2D/3D Drawings", cardDesc2: "CAD models for integration.",
+                cardCatalog: "Catalog", cardDesc3: "Full overview of solutions.", cardCatalogFull: "Download Full Catalog",
+                pageProductTitle: "Conveyor Systems", pageProductSub: "ระบบสายพานลำเลียงอัจฉริยะสำหรับอุตสาหกรรมยุคใหม่",
+                pageSpareTitle: "Spare Parts", pageSpareSub: "อะไหล่และชิ้นส่วนสายพานลำเลียงคุณภาพสูง",
+                btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
+                cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "SPECS",
+                alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว", alertQuoteReq: "กรุณาเลือกสินค้า", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อ",
+                contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ", btnEmail: "SEND DIRECT EMAIL",
+                aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System",
+                aboutVisionTitle: "Vision", aboutVisionDesc: "มุ่งมั่นที่จะเป็นผู้นำด้านระบบอัตโนมัติที่ล้ำสมัยที่สุดในภูมิภาค",
+                aboutMissionTitle: "Mission", aboutMissionDesc: "พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาติดตั้ง และยกระดับอุตสาหกรรม",
+                regTitle: "Create Account", regDesc: "ลงทะเบียนเพื่อเข้าถึงระบบ", btnSubmitReg: "CONFIRM",
+                regId: "User ID", regPass: "Password", regName: "Name / Company", regContact: "Email / Phone",
+                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System",
+                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
+                dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Power Use",
+                dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status",
+                statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint.",
+                guestContactTitle: "Contact Info", guestNotice: "ข้อมูลปลอดภัยด้วยมาตรฐาน Google",
+                phId: "ID", phPass: "PW", phGuestName: "Name / Company", phGuestContact: "Email or Phone",
+                phRegId: "Create ID", phRegPass: "Create PW", phRegName: "Company Name", phRegContact: "Email/Phone",
+                socialTitle: "ติดต่อช่างผู้เชี่ยวชาญ", socialDesc: "เลือกช่องทางที่สะดวกเพื่อรับคำปรึกษาทันที"
             },
             en: {
-                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Contact", navAbout: "About Us",
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
-                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroText3: "Plug & Play",
-                cardDataSheet: "Download Data Sheet", cardDrawing: "Download Drawing", cardCatalog: "Product Catalog", cardCatalogFull: "Download Full Catalog",
-                pageProductTitle: "SNAPCON Conveyor Systems", pageProductSub: "Explore our intelligent conveyor models covering all industries.",
-                pageSpareTitle: "SNAPCON Spare Parts", pageSpareSub: "Genuine spare parts and conveyor components. 100% Authentic.",
-                btnAddToCart: "Add to Cart",
-                pageCartTitle: "Quotation Cart", cartEmpty: "Your cart is empty", cartTotalLabel: "Estimated Total:",
-                btnRequestQuote: "Submit Quotation Request", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "Specs:",
-                alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart!",
-                alertQuoteReq: "Please select at least 1 item", alertQuoteGuestReq: "Please provide contact info.",
-                
+                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
+                feat1Sub: "SNAPCON MODEL 01", feat1Title: "Compact and powerful mini conveyors.",
+                feat2Sub: "SMART DASHBOARD", feat2Title: "Real-time monitoring & AI prediction.",
+                feat3Sub: "SPARE PARTS", feat3Title: "Over 200 genuine components ready.",
+                feat4Sub: "SUPPORT 24/7", feat4Title: "Expert engineering team at your service.",
+                cardDataSheet: "Data Sheet", cardDesc1: "Technical specs and manuals.",
+                cardDrawing: "2D/3D Drawings", cardDesc2: "CAD models for integration.",
+                cardCatalog: "Catalog", cardDesc3: "Full overview of solutions.", cardCatalogFull: "Download Full Catalog",
+                pageProductTitle: "Conveyor Systems", pageProductSub: "Intelligent conveyor systems for modern industries.",
+                pageSpareTitle: "Spare Parts", pageSpareSub: "High-quality genuine conveyor components.",
+                btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty",
+                cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "SPECS",
+                alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart", alertQuoteReq: "Select an item", alertQuoteGuestReq: "Provide contact info",
                 contactSub: "Official Technical Support & Inquiries", btnEmail: "SEND DIRECT EMAIL",
-                aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems. We are committed to revolutionizing the automation industry with solutions that reduce complexity, minimize installation time, and maximize production efficiency.",
-                aboutVisionTitle: "Our Vision", aboutVisionDesc: "To be the leading provider of the most accessible and advanced Plug & Play automation systems in Southeast Asia.",
-                aboutMissionTitle: "Our Mission", aboutMissionDesc: "Develop innovations that reduce complexity, minimize installation time, and elevate the operational efficiency of industries of all sizes to compete globally.",
-
-                regTitle: "Create Account", regDesc: "Register to access the system and request quotes", btnSubmitReg: "Confirm Registration",
-                regId: "User ID", regPass: "Password", regName: "Full Name / Company", regContact: "Email / Phone",
-                
-                homeProductsTitle: "Our Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products",
-                
-                dashSubTitle: "Enterprise Monitoring System with Predictive Maintenance",
-                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target (Units)", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
-                dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon Footprint", dashTotPower: "Total Power Use",
-                dashTimeElapsed: "Elapsed Time", dashTimeRemain: "Est. Remaining (ETA)", dashMacStatus2: "Machine Status & Health",
+                aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems.",
+                aboutVisionTitle: "Vision", aboutVisionDesc: "To be the leading provider of advanced automation systems in the region.",
+                aboutMissionTitle: "Mission", aboutMissionDesc: "Develop innovations that reduce complexity and elevate industrial efficiency.",
+                regTitle: "Create Account", regDesc: "Register to access the system", btnSubmitReg: "CONFIRM",
+                regId: "User ID", regPass: "Password", regName: "Name / Company", regContact: "Email / Phone",
+                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System",
+                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
+                dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power Use",
+                dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status & Health",
                 statusNormal: "Optimal (>70%)", statusWarning: "Warning (<70%)", statusMaint: "Maintenance (<30%)",
-                
-                guestContactTitle: "Contact Info", guestNotice: "Information will be securely saved to Google Drive",
-                
-                phId: "ID", phPass: "PW",
-                phGuestName: "Contact Name / Company", phGuestContact: "Email or Phone Number",
-                phRegId: "Create your User ID", phRegPass: "Create your Password", phRegName: "Enter your full name", phRegContact: "Enter email or phone"
+                guestContactTitle: "Contact Info", guestNotice: "Securely saved via Google standard",
+                phId: "ID", phPass: "PW", phGuestName: "Contact Name / Company", phGuestContact: "Email or Phone Number",
+                phRegId: "Create your User ID", phRegPass: "Create your Password", phRegName: "Enter your full name", phRegContact: "Enter email or phone",
+                socialTitle: "Technical Support", socialDesc: "Choose a channel for immediate consultation"
             }
         };
 
@@ -686,7 +712,7 @@ snapcon_html = """
 
         function checkDashboardAuth() {
             if (isLoggedIn) navigate('dashboard');
-            else { alert(currentLang === 'th' ? "กรุณา Login ก่อน" : "Please Login first"); document.getElementById('userId').focus(); }
+            else { alert(currentLang === 'th' ? "กรุณา Login ก่อนเข้าสู่ Dashboard" : "Please Login to access Dashboard"); document.getElementById('userId').focus(); }
         }
 
         function handleLogin() {
@@ -696,36 +722,36 @@ snapcon_html = """
                 isLoggedIn = true;
                 document.getElementById('displayUser').innerText = id || '001';
                 document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('login-section').classList.remove('md:flex');
+                document.getElementById('login-section').classList.remove('lg:flex');
                 document.getElementById('user-section').classList.remove('hidden');
                 document.getElementById('user-section').classList.add('flex');
                 alert(dict[currentLang].alertLoginSuccess);
                 document.getElementById('userId').value = ''; document.getElementById('userPass').value = '';
-            } else alert(currentLang === 'th' ? "ID/Pass ไม่ถูกต้อง" : "Invalid ID/Pass");
+            } else alert(currentLang === 'th' ? "ID หรือ Password ไม่ถูกต้อง" : "Invalid ID or Password");
         }
 
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
         function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex', 'hidden'); }
+
+        function openSocialModal() { document.getElementById('modal-social').classList.replace('hidden', 'flex'); }
+        function closeSocialModal() { document.getElementById('modal-social').classList.replace('flex', 'hidden'); }
 
         function submitRegistration() {
             const id = document.getElementById('reg-id').value;
             const pass = document.getElementById('reg-pass').value;
             const name = document.getElementById('reg-name').value;
             const contact = document.getElementById('reg-contact').value;
-            if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบ" : "Please fill all fields");
-            if(memoryUsers[id]) return alert(currentLang === 'th' ? "ID นี้มีผู้ใช้งานแล้ว" : "ID already exists");
-            
+            if(!id || !pass || !name || !contact) return alert("Please fill all fields");
+            if(memoryUsers[id]) return alert("ID already exists");
             memoryUsers[id] = pass;
             try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name }) }); } catch(e) {}
-            
-            alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ!" : "Registered successfully!");
-            document.getElementById('userId').value = id; document.getElementById('userPass').value = pass;
+            alert("Registered successfully!");
             closeRegisterModal();
         }
 
         function handleLogout() {
             isLoggedIn = false;
-            document.getElementById('login-section').classList.remove('hidden'); document.getElementById('login-section').classList.add('md:flex');
+            document.getElementById('login-section').classList.remove('hidden'); document.getElementById('login-section').classList.add('lg:flex');
             document.getElementById('user-section').classList.add('hidden'); document.getElementById('user-section').classList.remove('flex');
             stopSystem(); navigate('home');
         }
@@ -773,7 +799,6 @@ snapcon_html = """
                 csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\\n`;
             });
             csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dashState.carbonFactor).toFixed(4)},${(totalOut * dashState.energyFactor).toFixed(4)}\\n`;
-            
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_Report.csv`; link.click();
         }
@@ -799,33 +824,22 @@ snapcon_html = """
                 if (remainUnits > 0 && ups > 0) remainStr = formatTimeStr(remainUnits / ups); else if (remainUnits <= 0) remainStr = "00:00:00";
             }
             document.getElementById('dash-time-elapsed').innerText = elapsedStr;
-            document.getElementById('dash-time-remain').innerText = remainStr + (dashState.target <= totalOutput && totalOutput > 0 ? " (Completed)" : "");
+            document.getElementById('dash-time-remain').innerText = remainStr;
 
             grid.innerHTML = dashState.nodes.map(n => {
                 const isRun = n.status === 'Running', isWarn = n.status === 'Warning', isMaint = n.status === 'Maintenance';
-                let dotBg = 'bg-slate-300', borderCol = 'border-slate-200', alertOverlay = '';
-                if (isRun) { dotBg = 'bg-snap-green animate-pulse'; borderCol = 'hover:border-snap-green'; }
-                else if (isWarn) { dotBg = 'bg-amber-400 animate-pulse'; borderCol = 'border-amber-300'; alertOverlay = '<div class="absolute inset-0 bg-amber-400/5 z-0 pointer-events-none"></div>'; }
-                else if (isMaint) { dotBg = 'bg-red-500'; borderCol = 'border-red-300'; alertOverlay = '<div class="absolute inset-0 bg-red-500/10 z-0 pointer-events-none"></div>'; }
+                let dotBg = 'bg-slate-300';
+                if (isRun) dotBg = 'bg-snap-green animate-pulse'; else if (isWarn) dotBg = 'bg-amber-400 animate-pulse'; else if (isMaint) dotBg = 'bg-red-500';
                 let healthBarCol = n.health > 70 ? 'bg-snap-green' : (n.health > 30 ? 'bg-amber-400' : 'bg-red-500');
-
-                let statusLoc = isRun ? dict[currentLang].statusNormal : (isWarn ? dict[currentLang].statusWarning : (isMaint ? dict[currentLang].statusMaint : n.status));
                 
                 return `
-                <div class="bg-white border ${borderCol} p-3 rounded-xl shadow-sm flex flex-col justify-between transition-all relative overflow-hidden">
-                    ${alertOverlay}
-                    <div class="flex justify-between items-center mb-2 relative z-10">
-                        <span class="text-[10px] font-black text-slate-500">${n.name}</span>
-                        <div class="w-2 h-2 rounded-full ${dotBg}" title="${statusLoc}"></div>
+                <div class="bg-slate-50 border border-slate-200 p-2 rounded-sm flex flex-col justify-between">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[8px] font-bold text-slate-500 truncate" title="${n.name}">${n.name}</span>
+                        <div class="w-1.5 h-1.5 rounded-full ${dotBg} shrink-0"></div>
                     </div>
-                    <h4 class="text-xl font-black text-slate-800 text-center relative z-10">${n.output.toLocaleString()}</h4>
-                    <div class="mt-3 relative z-10">
-                        <div class="flex justify-between items-end mb-1">
-                            <span class="text-[8px] font-bold uppercase tracking-wider ${isMaint ? 'text-red-500' : 'text-slate-400'}">Health</span>
-                            <span class="text-[9px] font-black ${isMaint ? 'text-red-500' : 'text-slate-600'}">${n.health.toFixed(0)}%</span>
-                        </div>
-                        <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full ${healthBarCol} transition-all duration-300" style="width: ${n.health}%"></div></div>
-                    </div>
+                    <h4 class="text-sm font-black text-slate-800 text-center leading-none">${n.output}</h4>
+                    <div class="w-full h-1 bg-slate-200 rounded-none overflow-hidden mt-1"><div class="h-full ${healthBarCol}" style="width: ${n.health}%"></div></div>
                 </div>`;
             }).join('');
         }
@@ -833,50 +847,29 @@ snapcon_html = """
         // 🛒 PRODUCT & CART SYSTEM
         function createItemCard(p) {
             return `
-                <div class="bg-white border border-slate-100 p-5 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all flex flex-col h-full group hover:-translate-y-1">
-                    <div class="overflow-hidden rounded-xl mb-4 h-32 relative bg-slate-50">
-                        <img src="${p.img}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 mix-blend-multiply">
+                <div class="bg-white sharp-card p-4 flex flex-col h-full">
+                    <div class="bg-slate-50 mb-3 h-40 flex items-center justify-center p-2">
+                        <img src="${p.img}" loading="lazy" class="max-h-full max-w-full object-contain mix-blend-multiply">
                     </div>
-                    <h4 class="font-black text-sm text-slate-800 mb-3 tracking-tight truncate" title="${p.name}">${p.name}</h4>
-                    <div class="bg-slate-50 p-3 rounded-xl mb-4 flex-grow border border-slate-100/50">
-                        <ul class="text-[10px] text-slate-500 space-y-1 font-medium">
-                            ${p.specs[currentLang].map(s => `<li class="truncate">• ${s}</li>`).join('')}
-                        </ul>
+                    <h4 class="font-black text-sm text-slate-900 mb-2 truncate" title="${p.name}">${p.name}</h4>
+                    <div class="bg-slate-50 p-2 mb-3 flex-grow text-[10px] text-slate-600 font-medium space-y-1">
+                        ${p.specs[currentLang].map(s => `<div class="truncate border-b border-slate-200 last:border-0 pb-1 last:pb-0">${s}</div>`).join('')}
                     </div>
-                    <p class="text-snap-green font-black text-xl mb-3">฿${p.price.toLocaleString()}</p>
-                    <button type="button" onclick="addToCart('${p.id}')" class="w-full bg-nav-bg text-white py-2.5 rounded-xl font-black text-xs hover:bg-snap-green transition-all active:scale-95">${dict[currentLang].btnAddToCart}</button>
+                    <p class="text-snap-green font-black text-lg mb-3">฿${p.price.toLocaleString()}</p>
+                    <button type="button" onclick="addToCart('${p.id}')" class="w-full bg-slate-100 text-slate-700 py-2 font-bold text-xs hover:bg-snap-green hover:text-white sharp-btn border border-slate-200 hover:border-transparent">${dict[currentLang].btnAddToCart}</button>
                 </div>
             `;
         }
 
         function renderProducts() {
-            allItems = [...products, ...spares];
             const pGrid = document.getElementById('product-grid'); if(pGrid) pGrid.innerHTML = products.map(p => createItemCard(p)).join('');
             const sGrid = document.getElementById('spare-grid'); if(sGrid) sGrid.innerHTML = spares.map(p => createItemCard(p)).join('');
-            const slider = document.getElementById('home-product-slider');
-            if(slider) {
-                slider.innerHTML = products.slice(0, 10).map(p => `
-                    <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all cursor-pointer">
-                        <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50">
-                            <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform mix-blend-multiply">
-                        </div>
-                        <h4 class="font-black text-sm text-slate-800 mb-1 truncate">${p.name}</h4>
-                        <p class="text-snap-green font-black text-lg mt-auto">฿${p.price.toLocaleString()}</p>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function scrollSlider(dir) {
-            const slider = document.getElementById('home-product-slider');
-            slider.scrollBy({ left: dir === 'left' ? -300 : 300, behavior: 'smooth' });
         }
 
         function addToCart(id) {
             const p = allItems.find(i => i.id === id);
             cart.push({ ...p, cartId: Date.now() + Math.random(), selected: true });
             const b = document.getElementById('cart-badge'); b.innerText = cart.length; b.classList.remove('hidden');
-            b.classList.add('animate-bounce'); setTimeout(() => b.classList.remove('animate-bounce'), 1000);
             alert(dict[currentLang].alertAddCart);
         }
 
@@ -886,21 +879,19 @@ snapcon_html = """
             if (isLoggedIn) guestForm.classList.add('hidden'); else guestForm.classList.remove('hidden');
 
             if(cart.length === 0) {
-                container.innerHTML = `<p class="text-center py-12 text-slate-400 font-bold text-lg bg-slate-50 rounded-3xl border border-dashed border-slate-200">${dict[currentLang].cartEmpty}</p>`;
+                container.innerHTML = `<p class="text-center py-8 text-slate-400 font-bold text-sm bg-slate-50 border border-slate-100">${dict[currentLang].cartEmpty}</p>`;
                 document.getElementById('cart-total').innerText = '฿0';
                 return;
             }
             container.innerHTML = cart.map(item => `
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-100 shadow-sm p-4 md:p-6 rounded-2xl gap-4 hover:shadow-md transition-shadow">
-                    <div class="flex items-center gap-4 w-full sm:w-auto">
-                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-6 h-6 accent-snap-green cursor-pointer shrink-0 rounded">
-                        <img src="${item.img}" class="w-20 h-20 object-cover rounded-xl shadow-sm border border-slate-100 shrink-0">
-                        <div>
-                            <span class="font-black text-slate-800 text-lg block leading-tight mb-1">${item.name}</span>
-                            <span class="text-xs text-slate-400 font-bold uppercase tracking-widest bg-slate-50 px-2 py-1 rounded-md">ID: ${item.id}</span>
-                        </div>
+                <div class="flex items-center bg-white border border-slate-200 p-3 sharp-card gap-4">
+                    <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-4 h-4 accent-snap-green shrink-0">
+                    <img src="${item.img}" class="w-12 h-12 object-contain bg-slate-50 p-1 shrink-0 mix-blend-multiply">
+                    <div class="flex-1 min-w-0">
+                        <span class="font-bold text-slate-800 text-sm block truncate">${item.name}</span>
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest">${item.id}</span>
                     </div>
-                    <span class="font-black text-slate-700 text-2xl self-end sm:self-auto">฿${item.price.toLocaleString()}</span>
+                    <span class="font-black text-slate-800 text-lg">฿${item.price.toLocaleString()}</span>
                 </div>
             `).join('');
             const total = cart.filter(i => i.selected).reduce((s, i) => s + i.price, 0);
@@ -925,36 +916,25 @@ snapcon_html = """
             
             try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Quotation", name_or_id: name, email: info, details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` }) }); } catch(e) {}
             
-            const subject = encodeURIComponent("Quotation Request - Snapcon (" + name + ")");
+            const subject = encodeURIComponent("Quotation Request - Snapcon");
             const body = "Request for Official Quotation:%0A%0AItems:%0A" + detailsForEmail + "%0A%0AEstimated Total: %E0%B8%BF" + total.toLocaleString() + "%0A%0AContact Info: " + encodeURIComponent(info);
             window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
             
-            cart = cart.filter(i => !i.selected); document.getElementById('cart-badge').innerText = cart.length; if(cart.length === 0) document.getElementById('cart-badge').classList.add('hidden'); renderCart(); navigate('home');
+            cart = cart.filter(i => !i.selected); document.getElementById('cart-badge').innerText = cart.length; if(cart.length===0) document.getElementById('cart-badge').classList.add('hidden'); renderCart(); navigate('home');
         }
 
         // 🌐 LANGUAGE SYSTEM
         function setLanguage(lang) {
             currentLang = lang;
-            // Update Texts
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (dict[lang][key]) el.innerHTML = dict[lang][key];
-            });
-            // Update Placeholders
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (dict[lang][key]) el.placeholder = dict[lang][key];
-            });
-            // Update Lang Buttons Style
-            document.getElementById('btn-lang-th').className = lang === 'th' ? "text-[9px] font-bold px-2.5 py-1 rounded-full bg-snap-green text-white transition-colors" : "text-[9px] font-bold px-2.5 py-1 rounded-full text-slate-400 hover:text-white transition-colors";
-            document.getElementById('btn-lang-en').className = lang === 'en' ? "text-[9px] font-bold px-2.5 py-1 rounded-full bg-snap-green text-white transition-colors" : "text-[9px] font-bold px-2.5 py-1 rounded-full text-slate-400 hover:text-white transition-colors";
+            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const key = el.getAttribute('data-i18n-placeholder'); if (dict[lang][key]) el.placeholder = dict[lang][key]; });
             
-            renderProducts();
-            renderDashboard(); // Update dashboard localization
-            if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+            document.getElementById('btn-lang-th').className = lang === 'th' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
+            document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
+            
+            renderProducts(); renderDashboard(); if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
 
-        // INIT
         setLanguage('th');
     </script>
 </body>
