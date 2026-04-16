@@ -39,13 +39,21 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #e2e8f0; overflow-x: hidden; }
         
-        /* สไตล์ใหม่สำหรับ Hero Section แบบ SEW */
+        /* สไตล์ใหม่สำหรับ Hero Section แบบ Green Technology */
         .hero-container {
-            background-image: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1565514020179-026b92b84bb6?auto=format&fit=crop&w=1920&q=80');
+            background-image: linear-gradient(rgba(2, 44, 34, 0.7), rgba(2, 44, 34, 0.9)), url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             position: relative;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.85) 75%, rgba(2, 44, 34, 0.6) 100%);
+            z-index: 5;
+            pointer-events: none;
         }
 
         .hero-white-box {
@@ -57,6 +65,33 @@ snapcon_html = """
         .feature-bar {
             background-color: #1e293b;
             color: white;
+        }
+
+        /* ---- Image Slider Background Animations (Green Tech Theme) ---- */
+        .slide-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            animation: slideBgAnimation 20s infinite linear;
+        }
+
+        /* ภาพที่ 1: พลังงานแสงอาทิตย์ (Solar Energy) */
+        .slide-1 { background-image: url('https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
+        /* ภาพที่ 2: พลังงานลม (Wind Energy / Eco Industry) */
+        .slide-2 { background-image: url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
+        /* ภาพที่ 3: นวัตกรรมสีเขียว (Plant in lightbulb / Eco concept) */
+        .slide-3 { background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
+        /* ภาพที่ 4: สถาปัตยกรรมสีเขียว (Eco-friendly modern factory/building) */
+        .slide-4 { background-image: url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1920&q=80'); animation-delay: 15s; }
+
+        @keyframes slideBgAnimation {
+            0% { opacity: 0; transform: scale(1.1) translateX(30px); }
+            5% { opacity: 1; transform: scale(1.1) translateX(20px); }
+            20% { opacity: 1; transform: scale(1.1) translateX(-10px); }
+            25% { opacity: 0; transform: scale(1.1) translateX(-20px); }
+            100% { opacity: 0; }
         }
 
         /* Nav & Menus */
@@ -140,6 +175,46 @@ snapcon_html = """
             20% { opacity: 0; transform: translateY(-30px); }
             100% { opacity: 0; }
         }
+        
+        /* ---- Animation ---- */
+        .animate-gradient-text {
+            background: linear-gradient(90deg, #00B36E 0%, #06b6d4 25%, #3b82f6 50%, #00B36E 100%);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-sweep 4s linear infinite;
+        }
+        @keyframes gradient-sweep {
+            0% { background-position: 100% 0%; }
+            100% { background-position: 0% 0%; }
+        }
+        
+        .animate-speed-slide-1 { animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; transform: translateX(-50px) skewX(-15deg); }
+        .animate-speed-slide-2 { animation: speed-slide 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards; opacity: 0; transform: translateX(-50px) skewX(-15deg); }
+        .animate-speed-slide-3 { animation: speed-slide-up 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards; opacity: 0; transform: translateY(30px); }
+        @keyframes speed-slide { 100% { opacity: 1; transform: translateX(0) skewX(0); } }
+        @keyframes speed-slide-up { 100% { opacity: 1; transform: translateY(0); } }
+        
+        .long-energy-line {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 480px; 
+            height: 6px;
+            background: rgba(0, 179, 110, 0.2);
+            border-radius: 9999px;
+            box-shadow: 0 0 15px rgba(0, 179, 110, 0.6);
+        }
+        .long-energy-line::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), #00B36E, transparent);
+            animation: light-beam-fast 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        @keyframes light-beam-fast { 0% { left: -100%; } 100% { left: 200%; } }
+        .logo-glow { filter: drop-shadow(0 0 8px rgba(0, 179, 110, 0.6)); }
     </style>
 </head>
 <body class="font-sans text-slate-800">
@@ -195,12 +270,29 @@ snapcon_html = """
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         
-        <!-- Hero Section (Industrial Look) -->
+        <!-- Hero Section (Industrial Look & Green Tech Theme) -->
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
+            
+            <!-- Animated Background Slider -->
+            <div class="absolute inset-0 z-0">
+                <div class="slide-img slide-1"></div>
+                <div class="slide-img slide-2"></div>
+                <div class="slide-img slide-3"></div>
+                <div class="slide-img slide-4"></div>
+            </div>
+            
+            <!-- Gradient Overlay (White to Emerald to Deep Forest) -->
+            <div class="hero-overlay"></div>
+
             <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
                 
                 <!-- White Box (Left) -->
-                <div class="hero-white-box w-full md:w-[500px] p-10 md:p-12 z-10 mt-10 md:mt-0">
+                <div class="hero-white-box w-full md:w-[500px] p-10 md:p-12 z-10 mt-10 md:mt-0 relative">
+                    <!-- Green Technology Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-emerald-200 shadow-sm">
+                        <i class="fas fa-leaf"></i> <span data-i18n="heroEco">Green Technology</span>
+                    </div>
+                    
                     <p class="text-slate-500 font-bold text-xs tracking-widest uppercase mb-4" data-i18n="heroSub">PLUG & PLAY AUTOMATION</p>
                     <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] tracking-tight mb-8">
                         <span data-i18n="heroText1">Snap to Connect.</span><br>
@@ -212,10 +304,10 @@ snapcon_html = """
                     </button>
                 </div>
 
-                <!-- Animated Text Slider (Right) -->
+                <!-- Animated Text Slider (Right) - Adjusted for Green Theme -->
                 <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
-                    <div class="bg-snap-black/60 backdrop-blur-md border border-white/10 p-8 md:p-10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-                        <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/10 pb-4">Why Snapcon?</h3>
+                    <div class="bg-emerald-950/70 backdrop-blur-md border border-emerald-500/20 p-8 md:p-10 rounded-2xl shadow-[0_20px_50px_rgba(0,179,110,0.15)]">
+                        <h3 class="text-emerald-400 font-black tracking-widest uppercase text-xs mb-6 border-b border-white/10 pb-4">Why Snapcon?</h3>
                         <div class="feature-text-container">
                             <div class="feature-text-slide">
                                 <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs1Title">⚡ Easy Setup</h4>
@@ -244,7 +336,7 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- Dark Feature Bar (Google Drive Links replacing the old one) -->
+        <!-- Dark Feature Bar (Google Drive Links) -->
         <section class="feature-bar w-full relative z-40 shadow-2xl border-t border-slate-800">
             <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
                 
@@ -674,6 +766,8 @@ snapcon_html = """
             th: {
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
+                
+                heroEco: "Green Technology",
                 heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
                 
                 fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ใช้งานได้ทันที",
@@ -710,6 +804,8 @@ snapcon_html = """
             en: {
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
+                
+                heroEco: "Green Technology",
                 heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
                 
                 fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ready to use",
