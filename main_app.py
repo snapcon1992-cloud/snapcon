@@ -174,11 +174,14 @@ snapcon_html = """
 </head>
 <body class="font-sans text-slate-800">
 
+    <!-- 1. Top Navigation Bar -->
     <nav class="bg-snap-black h-[70px] w-full fixed top-0 z-50 flex items-center justify-between px-6 md:px-10 shadow-md">
+        <!-- Logo -->
         <div class="flex items-center gap-2 cursor-pointer shrink-0" onclick="navigate('home')">
             <span class="font-black text-3xl text-snap-green tracking-tighter">SNAPCON</span>
         </div>
         
+        <!-- Center Menus -->
         <div class="hidden md:flex items-center gap-8 ml-8">
             <button type="button" onclick="navigate('product')" data-i18n="navProduct" class="nav-link">Products</button>
             <button type="button" onclick="navigate('spare')" data-i18n="navSpare" class="nav-link">Spare Parts</button>
@@ -188,7 +191,9 @@ snapcon_html = """
             <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="nav-link">Support</button>
         </div>
 
+        <!-- Right Side: Login, Lang, Cart -->
         <div class="flex items-center gap-5 shrink-0 ml-auto">
+            <!-- Login Form (Desktop) -->
             <div id="login-section" class="hidden lg:flex items-center gap-2">
                 <input type="text" id="userId" data-i18n-placeholder="phId" placeholder="ID" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
                 <input type="password" id="userPass" data-i18n-placeholder="phPass" placeholder="PW" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
@@ -196,11 +201,13 @@ snapcon_html = """
                 <button type="button" onclick="openRegisterModal()" class="h-8 px-3 bg-slate-700 text-white font-bold text-xs hover:bg-slate-600 sharp-btn"><i class="fas fa-user-plus"></i></button>
             </div>
             
+            <!-- User Status -->
             <div id="user-section" class="hidden items-center gap-3">
                 <span class="text-white text-sm"><i class="far fa-user-circle text-snap-green mr-1"></i> <span id="displayUser" class="font-bold">User</span></span>
                 <button type="button" onclick="handleLogout()" class="text-slate-400 hover:text-white text-xs underline"><i class="fas fa-sign-out-alt"></i></button>
             </div>
 
+            <!-- Icons -->
             <div class="flex items-center gap-4 text-white text-lg border-l border-slate-700 pl-5">
                 <button type="button" id="btn-lang-th" onclick="setLanguage('th')" class="text-xs font-bold text-snap-green hover:text-white">TH</button>
                 <span class="text-slate-600 text-xs">|</span>
@@ -216,8 +223,10 @@ snapcon_html = """
 
     <div class="h-[70px]"></div>
 
+    <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         
+        <!-- Hero Section -->
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <div class="slide-img slide-1"></div>
@@ -230,6 +239,7 @@ snapcon_html = """
 
             <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
                 
+                <!-- White Box (Left) -->
                 <div class="hero-white-box w-full md:w-[500px] p-10 md:p-12 z-10 mt-10 md:mt-0 relative">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-emerald-200 shadow-sm">
                         <i class="fas fa-leaf"></i> <span data-i18n="heroEco">Green Technology</span>
@@ -245,6 +255,7 @@ snapcon_html = """
                     </button>
                 </div>
 
+                <!-- Animated Text Slider (Right) -->
                 <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
                     <div>
                         <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/20 pb-4 inline-block drop-shadow-md">Why Snapcon?</h3>
@@ -280,6 +291,7 @@ snapcon_html = """
             </div>
         </section>
 
+        <!-- Dark Feature Bar -->
         <section class="feature-bar w-full relative z-40 shadow-2xl border-t border-slate-800">
             <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
                 <div class="dropdown-container relative flex flex-col group">
@@ -340,7 +352,8 @@ snapcon_html = """
                 </div>
                 
                 <div id="home-product-slider" class="slider-container flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4">
-                    </div>
+                    <!-- Products injected by JS -->
+                </div>
                 
                 <div class="text-center mt-8">
                     <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-slate-800 font-black text-sm uppercase tracking-widest hover:text-snap-green transition-colors" data-i18n="viewAllProducts">View All Products <i class="fas fa-arrow-right"></i></button>
@@ -349,6 +362,7 @@ snapcon_html = """
         </section>
     </div>
 
+    <!-- ==================== PAGE: PRODUCT ==================== -->
     <div id="page-product" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 data-i18n="pageProductTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Conveyor Systems</h2>
@@ -358,6 +372,7 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- ==================== PAGE: SPARE PARTS ==================== -->
     <div id="page-spare" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 data-i18n="pageSpareTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Spare Parts</h2>
@@ -367,6 +382,7 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- ==================== PAGE: CART ==================== -->
     <div id="page-cart" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-w-4xl mx-auto px-6 py-10">
             <h2 data-i18n="pageCartTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Quotation Request</h2>
@@ -409,6 +425,7 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- ==================== PAGE: DASHBOARD ==================== -->
     <div id="page-dashboard" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">
@@ -485,11 +502,12 @@ snapcon_html = """
                     </div>
                 </div>
                 <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-2 max-h-[60vh] overflow-y-auto custom-scrollbar p-1">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ==================== PAGE: PROJECT REFERENCE ==================== -->
     <div id="page-project" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Project Reference</h2>
@@ -552,6 +570,7 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- ==================== PAGE: COMPANY (ABOUT) ==================== -->
     <div id="page-about" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1000px] mx-auto px-6 py-10">
             <h2 data-i18n="navAbout" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Company</h2>
@@ -585,6 +604,7 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- ==================== PAGE: SUPPORT (CONTACT) ==================== -->
     <div id="page-contact" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-w-[1000px] mx-auto px-6 py-10">
             <h2 data-i18n="navContact" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Support</h2>
@@ -615,6 +635,7 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- ==================== MODALS ==================== -->
     <div id="modal-register" class="fixed inset-0 bg-snap-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-md sharp-card flex flex-col shadow-2xl relative">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button>
@@ -696,6 +717,7 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- Floating Support Button -->
     <button onclick="openSocialModal()" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 active:scale-95 cursor-pointer">
         <i class="fas fa-user-cog group-hover:animate-pulse"></i>
         <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-bounce"></span>
@@ -761,43 +783,61 @@ snapcon_html = """
         // ==========================================
         async function loadDataFromSheet() {
             try {
-                console.log("Fetching dynamic data...");
-                const response = await fetch(GOOGLE_SCRIPT_URL);
+                console.log("Fetching dynamic data from Google Sheets...");
+                const response = await fetch(GOOGLE_SCRIPT_URL, { redirect: "follow" });
+                
+                if (!response.ok) throw new Error("Network response was not ok");
+                
                 const data = await response.json();
+                console.log("Raw data from Google Sheets:", data);
                 
                 if (data.products && data.products.length > 0) {
                     products = data.products.map(p => ({
-                        id: p.id,
-                        name: p.name,
-                        price: parseFloat(p.price) || 0,
-                        img: p.img,
-                        specs: { th: p.specs_th || [], en: p.specs_en || [] }
+                        id: p.id || p.ID || p.Id || "N/A",
+                        name: p.name || p.Name || "Unnamed",
+                        price: parseFloat(p.price || p.Price) || 0,
+                        img: p.img || p.Img || p.IMG || "https://i.ibb.co/bZ7TKQg/01.png",
+                        specs: { 
+                            th: Array.isArray(p.specs_th) ? p.specs_th : (typeof p.specs_th === 'string' ? p.specs_th.split(',') : ["-"]), 
+                            en: Array.isArray(p.specs_en) ? p.specs_en : (typeof p.specs_en === 'string' ? p.specs_en.split(',') : ["-"]) 
+                        }
                     }));
                 }
                 
                 if (data.spares && data.spares.length > 0) {
                     spares = data.spares.map(s => ({
-                        id: s.id,
-                        name: s.name,
-                        price: parseFloat(s.price) || 0,
-                        img: s.img,
-                        specs: { th: s.specs_th || [], en: s.specs_en || [] }
+                        id: s.id || s.ID || "N/A",
+                        name: s.name || s.Name || "Unnamed",
+                        price: parseFloat(s.price || s.Price) || 0,
+                        img: s.img || s.Img || "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80",
+                        specs: { 
+                            th: Array.isArray(s.specs_th) ? s.specs_th : (typeof s.specs_th === 'string' ? s.specs_th.split(',') : ["-"]), 
+                            en: Array.isArray(s.specs_en) ? s.specs_en : (typeof s.specs_en === 'string' ? s.specs_en.split(',') : ["-"]) 
+                        }
                     }));
                 }
-                console.log("Data loaded successfully.");
+                
+                console.log("Data mapped successfully.");
+                allItems = [...products, ...spares];
+                
+                if (products.length > 0 || spares.length > 0) {
+                    renderProducts();
+                    if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+                    return; 
+                }
+                
             } catch (e) {
-                console.warn("Using fallback data due to fetch error or empty sheet.", e);
-                // Fallback Data just in case sheet is empty or fetch fails
-                products = [
-                    { id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://i.ibb.co/bZ7TKQg/01.png', specs: { th: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"], en: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"] } },
-                    { id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png', specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"] } },
-                    { id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://i.ibb.co/PGNt8dfj/03.png', specs: { th: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"], en: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"] } }
-                ];
-                spares = [
-                    { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } },
-                    { id: 'SP002', name: 'Conveyor Belt PU', price: 550, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Belt PU", "Stock: Ready"], en: ["Type: Belt PU", "Stock: Ready"] } }
-                ];
+                console.error("Fetch Error: ไม่สามารถเชื่อมต่อ Google Sheets ได้", e);
             }
+            
+            console.warn("Using fallback mock data due to empty sheet or fetch error.");
+            products = [
+                { id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://i.ibb.co/bZ7TKQg/01.png', specs: { th: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"], en: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"] } },
+                { id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png', specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"] } }
+            ];
+            spares = [
+                { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } }
+            ];
             
             allItems = [...products, ...spares];
             renderProducts();
@@ -839,8 +879,8 @@ snapcon_html = """
                 usecase3Title: "Machine Health Monitoring", usecase3Desc: "ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก",
                 
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
-                cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "SPECS",
-                alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว", alertQuoteReq: "กรุณาเลือกสินค้า", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อ",
+                cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "ลบที่เลือก", specTitle: "SPECS",
+                alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว", alertQuoteReq: "กรุณาเลือกสินค้า", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับ",
                 
                 contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ", btnEmail: "SEND DIRECT EMAIL",
                 aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System",
@@ -856,9 +896,9 @@ snapcon_html = """
                 dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status",
                 statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint.",
                 
-                guestContactTitle: "Contact Info", guestNotice: "ข้อมูลปลอดภัยด้วยมาตรฐาน Google",
-                phId: "ID", phPass: "PW", phGuestName: "Name / Company", phGuestContact: "Email or Phone",
-                phRegId: "Create ID", phRegPass: "Create PW", phRegName: "Company Name", phRegContact: "Email/Phone",
+                guestContactTitle: "ข้อมูลติดต่อกลับ (Contact Info)", guestNotice: "ข้อมูลปลอดภัยด้วยมาตรฐาน Google",
+                phId: "ID", phPass: "PW", phGuestName: "ชื่อผู้ติดต่อ / ชื่อบริษัท", phGuestContact: "อีเมล หรือ เบอร์โทรศัพท์",
+                phRegId: "ตั้งรหัส ID สำหรับเข้าระบบ", phRegPass: "ตั้งรหัสผ่านของคุณ", phRegName: "ชื่อ-นามสกุล หรือชื่อบริษัท", phRegContact: "อีเมล หรือ เบอร์โทรศัพท์",
                 socialTitle: "ติดต่อช่างผู้เชี่ยวชาญ", socialDesc: "เลือกช่องทางที่สะดวกเพื่อรับคำปรึกษาทันที",
                 homeProductsTitle: "Featured Products", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "View All Products"
             },
@@ -990,7 +1030,7 @@ snapcon_html = """
                 return alert(currentLang === 'th' ? "กรุณากรอกรูปแบบอีเมลหรือเบอร์โทรศัพท์ให้ถูกต้อง" : "Please enter a valid email or phone format");
             }
             if (name.length < 2) {
-                return alert(currentLang === 'th' ? "กรุณากรอกชื่อ-นามสกุล หรือชื่อบริษัทให้ชัดเจน" : "Please enter a valid name");
+                return alert(currentLang === 'th' ? "กรุณากรอกชื่อให้ชัดเจน" : "Please enter a valid name");
             }
 
             memoryUsers[id] = pass;
@@ -1267,7 +1307,6 @@ snapcon_html = """
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert(dict[currentLang].alertQuoteReq);
             
-            // ดึงค่าจากฟอร์มและบังคับให้ต้องมีข้อมูล
             let name = document.getElementById('quote-name').value.trim();
             let info = document.getElementById('quote-contact').value.trim();
             
@@ -1279,20 +1318,17 @@ snapcon_html = """
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
             let total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
             
-            // เตรียมข้อมูลส่งไปที่ Google Sheet
-            const payload = { 
-                type: "Quotation", 
-                name_or_id: name, 
-                email: info, 
-                details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` 
-            };
-            
             try { 
                 fetch(GOOGLE_SCRIPT_URL, { 
                     method: 'POST', 
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload) 
+                    body: JSON.stringify({ 
+                        type: "Quotation", 
+                        name_or_id: name, 
+                        email: info, 
+                        details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` 
+                    }) 
                 }); 
             } catch(e) { console.error("Error sending to sheets", e); }
             
@@ -1306,7 +1342,27 @@ snapcon_html = """
             navigate('home');
         }
 
-        // 🌐 LANGUAGE SYSTEM
+        // ==========================================
+        // 9. INITIALIZATION & I18N
+        // ==========================================
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const key = el.getAttribute('data-i18n-placeholder'); if (dict[lang][key]) el.placeholder = dict[lang][key]; });
+            
+            document.getElementById('btn-lang-th').className = lang === 'th' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
+            document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
+            
+            renderProducts(); 
+            if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); 
+            if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+        }
+
+        // โหลดข้อมูลอัตโนมัติเมื่อเปิดเว็บ
+        window.onload = () => {
+            loadDataFromSheet();
+            setLanguage('th');
+        };
     </script>
 </body>
 </html>
