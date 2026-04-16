@@ -727,7 +727,7 @@ snapcon_html = """
         // ==========================================
         // 1. GLOBAL VARIABLES & CONFIG
         // ==========================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxSZATEkvW5qisAjCg8IONTJV9CbCpPwRoGhHkMRwlG5FXD9MCIF5eh36Sz1MwIP2vA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTXYEcWYEsbcwL0ipt5vl1azB-C8psZUuwpjfIirzCdH2mBE2OHNdKSMoNPhklRt2M/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
@@ -833,10 +833,17 @@ snapcon_html = """
             console.warn("Using fallback mock data due to empty sheet or fetch error.");
             products = [
                 { id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://i.ibb.co/bZ7TKQg/01.png', specs: { th: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"], en: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"] } },
-                { id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png', specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"] } }
+                { id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png', specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"] } },
+                { id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://i.ibb.co/PGNt8dfj/03.png', specs: { th: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"], en: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"] } },
+                { id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://i.ibb.co/mVfD9H0B/04.png', specs: { th: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg"], en: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg"] } },
+                { id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://i.ibb.co/x4SGKtb/05.png', specs: { th: ["L: Custom", "W: Custom", "Load: Custom"], en: ["L: Custom", "W: Custom", "Load: Custom"] } }
             ];
             spares = [
-                { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } }
+                { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } },
+                { id: 'SP002', name: 'Conveyor Belt PU', price: 550, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Belt PU", "Stock: Ready"], en: ["Type: Belt PU", "Stock: Ready"] } },
+                { id: 'SP003', name: 'Drive Motor AC', price: 1500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Motor", "Stock: Ready"], en: ["Type: Motor", "Stock: Ready"] } },
+                { id: 'SP004', name: 'Sensor Switch', price: 300, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Sensor", "Stock: Ready"], en: ["Type: Sensor", "Stock: Ready"] } },
+                { id: 'SP005', name: 'Control Board', price: 2500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Board", "Stock: Ready"], en: ["Type: Board", "Stock: Ready"] } }
             ];
             
             allItems = [...products, ...spares];
