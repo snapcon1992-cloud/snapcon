@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ดีไซน์ใหม่สไตล์ Industrial Corporate (อ้างอิงจาก SEW Eurodrive แต่ใช้สี Snapcon)
+# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่ปรับหน้าแรก (Animated Text Slider & Dark Dropdown Bar)
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -57,13 +57,6 @@ snapcon_html = """
         .feature-bar {
             background-color: #1e293b;
             color: white;
-        }
-
-        .feature-bar-item {
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
-        .feature-bar-item:last-child {
-            border-right: none;
         }
 
         /* Nav & Menus */
@@ -118,6 +111,35 @@ snapcon_html = """
             letter-spacing: 0.05em;
         }
         .sharp-btn:active { transform: scale(0.98); }
+
+        /* ---- Animated Text Slider (Hero Right Side) ---- */
+        .feature-text-container {
+            position: relative;
+            height: 140px; 
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .feature-text-slide {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeSlideText 15s infinite;
+        }
+        .feature-text-slide:nth-child(1) { animation-delay: 0s; }
+        .feature-text-slide:nth-child(2) { animation-delay: 3s; }
+        .feature-text-slide:nth-child(3) { animation-delay: 6s; }
+        .feature-text-slide:nth-child(4) { animation-delay: 9s; }
+        .feature-text-slide:nth-child(5) { animation-delay: 12s; }
+
+        @keyframes fadeSlideText {
+            0% { opacity: 0; transform: translateY(30px); }
+            5% { opacity: 1; transform: translateY(0); }
+            15% { opacity: 1; transform: translateY(0); }
+            20% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 0; }
+        }
     </style>
 </head>
 <body class="font-sans text-slate-800">
@@ -174,7 +196,7 @@ snapcon_html = """
     <div id="page-home" class="page-section page-active">
         
         <!-- Hero Section (Industrial Look) -->
-        <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0">
+        <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
                 
                 <!-- White Box (Left) -->
@@ -190,97 +212,110 @@ snapcon_html = """
                     </button>
                 </div>
 
-                <!-- Floating Products (Right) -->
-                <div class="hidden md:flex gap-6 z-10 items-center justify-center flex-1">
-                    <div class="w-48 h-64 bg-transparent flex items-center justify-center hover:-translate-y-4 transition-transform duration-500">
-                        <img src="https://i.ibb.co/bZ7TKQg/01.png" class="w-full h-auto drop-shadow-2xl mix-blend-screen opacity-90 hover:opacity-100 filter contrast-125" alt="Product 1">
-                    </div>
-                    <div class="w-56 h-72 bg-transparent flex items-center justify-center hover:-translate-y-4 transition-transform duration-500 delay-100 mt-10">
-                        <img src="https://i.ibb.co/tTCb2j0h/02.png" class="w-full h-auto drop-shadow-2xl mix-blend-screen opacity-90 hover:opacity-100 filter contrast-125" alt="Product 2">
-                    </div>
-                    <div class="w-48 h-64 bg-transparent flex items-center justify-center hover:-translate-y-4 transition-transform duration-500 delay-200">
-                        <img src="https://i.ibb.co/PGNt8dfj/03.png" class="w-full h-auto drop-shadow-2xl mix-blend-screen opacity-90 hover:opacity-100 filter contrast-125" alt="Product 3">
+                <!-- Animated Text Slider (Right) -->
+                <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
+                    <div class="bg-snap-black/60 backdrop-blur-md border border-white/10 p-8 md:p-10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+                        <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/10 pb-4">Why Snapcon?</h3>
+                        <div class="feature-text-container">
+                            <div class="feature-text-slide">
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs1Title">⚡ Easy Setup</h4>
+                                <p class="text-base md:text-lg text-emerald-400 font-medium" data-i18n="fs1Desc">Plug & Play ใช้งานได้ทันที</p>
+                            </div>
+                            <div class="feature-text-slide">
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs2Title">🔗 Seamless Connection</h4>
+                                <p class="text-base md:text-lg text-blue-400 font-medium" data-i18n="fs2Desc">เชื่อม PLC / Sensor ได้ง่าย</p>
+                            </div>
+                            <div class="feature-text-slide">
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs3Title">📊 Real-Time Monitoring</h4>
+                                <p class="text-base md:text-lg text-amber-400 font-medium" data-i18n="fs3Desc">เห็นข้อมูลทันที</p>
+                            </div>
+                            <div class="feature-text-slide">
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs4Title">🎛 All-in-One Control</h4>
+                                <p class="text-base md:text-lg text-purple-400 font-medium" data-i18n="fs4Desc">ควบคุมทุกเครื่องในที่เดียว</p>
+                            </div>
+                            <div class="feature-text-slide">
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs5Title">💰 Cost-Effective</h4>
+                                <p class="text-base md:text-lg text-green-400 font-medium" data-i18n="fs5Desc">ถูกกว่า SCADA แบบเดิม</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Dark Feature Bar (Bottom of Hero) -->
-        <section class="feature-bar w-full relative z-20 shadow-xl">
-            <div class="max-w-[1400px] mx-auto flex items-center">
-                <button class="w-12 h-20 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"><i class="fas fa-chevron-left"></i></button>
                 
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-4 w-full">
-                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat1Sub">SNAPCON MODEL 01</p>
-                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat1Title">Compact and powerful mini conveyors.</h4>
-                    </div>
-                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat2Sub">SMART DASHBOARD</p>
-                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat2Title">Real-time monitoring & AI prediction.</h4>
-                    </div>
-                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat3Sub">SPARE PARTS</p>
-                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat3Title">Over 200 genuine components ready.</h4>
-                    </div>
-                    <div class="feature-bar-item p-6 md:p-8 hover:bg-slate-700 transition-colors cursor-pointer group">
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1 group-hover:text-snap-green" data-i18n="feat4Sub">SUPPORT 24/7</p>
-                        <h4 class="text-white font-bold text-sm md:text-base" data-i18n="feat4Title">Expert engineering team at your service.</h4>
-                    </div>
-                </div>
-
-                <button class="w-12 h-20 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"><i class="fas fa-chevron-right"></i></button>
             </div>
         </section>
 
-        <!-- Google Drive Cards Section (Sharp Design) -->
-        <section class="w-full bg-white py-16">
-            <div class="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Dark Feature Bar (Google Drive Links replacing the old one) -->
+        <section class="feature-bar w-full relative z-40 shadow-2xl border-t border-slate-800">
+            <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                
                 <!-- Data sheet -->
                 <div class="dropdown-container relative flex flex-col group">
-                    <div class="bg-slate-50 sharp-card p-10 flex flex-col items-start h-full cursor-pointer">
-                        <i class="fas fa-file-pdf text-3xl text-snap-green mb-4"></i>
-                        <h3 class="text-xl font-black text-slate-900 mb-2" data-i18n="cardDataSheet">Download Data Sheet</h3>
-                        <p class="text-sm text-slate-500 mb-6 flex-grow" data-i18n="cardDesc1">Technical specifications and manuals.</p>
-                        <div class="text-xs font-bold text-snap-green uppercase tracking-widest group-hover:underline">Select Model <i class="fas fa-angle-down ml-1"></i></div>
+                    <div class="p-8 md:p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors h-full">
+                        <i class="fas fa-file-pdf text-4xl text-snap-green mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 data-i18n="cardDataSheet" class="text-xl font-black text-white tracking-wide uppercase">Data Sheet</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-snap-green transition-colors" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
-                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-xl z-50">
-                        <a href="https://drive.google.com/file/d/1HY0dUjYJZgxRVYYgN5DOV6Ymm9ARCGUW/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
-                        <a href="https://drive.google.com/file/d/1TC_cXAy7gbgBx0QI0TiL7Kdt1ICljnHj/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
-                        <a href="https://drive.google.com/file/d/1Yv_gJWWxTL4H_5YmCDAOCnI33gdfcj4j/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
-                        <a href="https://drive.google.com/file/d/1KtCARlKphuuIqUOU6xg5mnPf99sjCjHD/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
-                        <a href="https://drive.google.com/file/d/1dlOS1HSYy1qjWASPGQiKRvQsSyZ-lFs4/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 05</a>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
+                        <a href="https://drive.google.com/file/d/1HY0dUjYJZgxRVYYgN5DOV6Ymm9ARCGUW/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
+                        <a href="https://drive.google.com/file/d/1TC_cXAy7gbgBx0QI0TiL7Kdt1ICljnHj/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
+                        <a href="https://drive.google.com/file/d/1Yv_gJWWxTL4H_5YmCDAOCnI33gdfcj4j/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
+                        <a href="https://drive.google.com/file/d/1KtCARlKphuuIqUOU6xg5mnPf99sjCjHD/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
+                        <a href="https://drive.google.com/file/d/1dlOS1HSYy1qjWASPGQiKRvQsSyZ-lFs4/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 05</a>
                     </div>
                 </div>
 
                 <!-- Drawing -->
                 <div class="dropdown-container relative flex flex-col group">
-                    <div class="bg-slate-50 sharp-card p-10 flex flex-col items-start h-full cursor-pointer">
-                        <i class="fas fa-drafting-compass text-3xl text-snap-green mb-4"></i>
-                        <h3 class="text-xl font-black text-slate-900 mb-2" data-i18n="cardDrawing">Download Drawing</h3>
-                        <p class="text-sm text-slate-500 mb-6 flex-grow" data-i18n="cardDesc2">2D and 3D CAD models for integration.</p>
-                        <div class="text-xs font-bold text-snap-green uppercase tracking-widest group-hover:underline">Select Model <i class="fas fa-angle-down ml-1"></i></div>
+                    <div class="p-8 md:p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors h-full">
+                        <i class="fas fa-drafting-compass text-4xl text-blue-500 mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 data-i18n="cardDrawing" class="text-xl font-black text-white tracking-wide uppercase">2D/3D Drawing</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-blue-400 transition-colors" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
-                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-xl z-50">
-                        <a href="https://drive.google.com/file/d/1CisPrHXeoJgspikAzAOwH0rdhNtQiviy/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
-                        <a href="https://drive.google.com/file/d/1Gt8onVT7dsyJQkmxdY6s1GZTX4_oUNuB/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
-                        <a href="https://drive.google.com/file/d/1zesePgsPwZDTUpKzLrmesdnuY6usfe2P/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
-                        <a href="https://drive.google.com/file/d/1I-63QRJrJksO6xQb1cCWaq9HoDZJ6qBl/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
-                        <a href="https://drive.google.com/file/d/16z8m9S06kGhyO0C6Tb0mMQ0L4bk5wTDz/view?usp=drive_link" target="_blank" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 05</a>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
+                        <a href="https://drive.google.com/file/d/1CisPrHXeoJgspikAzAOwH0rdhNtQiviy/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
+                        <a href="https://drive.google.com/file/d/1Gt8onVT7dsyJQkmxdY6s1GZTX4_oUNuB/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
+                        <a href="https://drive.google.com/file/d/1zesePgsPwZDTUpKzLrmesdnuY6usfe2P/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
+                        <a href="https://drive.google.com/file/d/1I-63QRJrJksO6xQb1cCWaq9HoDZJ6qBl/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
+                        <a href="https://drive.google.com/file/d/16z8m9S06kGhyO0C6Tb0mMQ0L4bk5wTDz/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-700">Model 05</a>
                     </div>
                 </div>
 
                 <!-- Catalog -->
                 <div class="dropdown-container relative flex flex-col group">
-                    <div class="bg-slate-50 sharp-card p-10 flex flex-col items-start h-full cursor-pointer">
-                        <i class="fas fa-book-open text-3xl text-snap-green mb-4"></i>
-                        <h3 class="text-xl font-black text-slate-900 mb-2" data-i18n="cardCatalog">Product Catalog</h3>
-                        <p class="text-sm text-slate-500 mb-6 flex-grow" data-i18n="cardDesc3">Full overview of Snapcon solutions.</p>
-                        <div class="text-xs font-bold text-snap-green uppercase tracking-widest group-hover:underline">Download <i class="fas fa-angle-down ml-1"></i></div>
+                    <div class="p-8 md:p-10 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors h-full">
+                        <i class="fas fa-book-open text-4xl text-amber-500 mb-4 group-hover:scale-110 transition-transform"></i>
+                        <h3 data-i18n="cardCatalog" class="text-xl font-black text-white tracking-wide uppercase">Catalog</h3>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-amber-400 transition-colors" data-i18n="btnDownload">Download <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
-                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-xl z-50">
-                        <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" data-i18n="cardCatalogFull" class="block px-6 py-3 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Download Full Catalog</a>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
+                        <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" data-i18n="cardCatalogFull" class="block px-8 py-4 hover:bg-amber-50 hover:text-amber-600 text-sm font-bold text-slate-700">Download Full Catalog</a>
                     </div>
+                </div>
+
+            </div>
+        </section>
+        
+        <!-- Product Slider (Home Page) -->
+        <section class="w-full bg-white py-16 z-10 relative">
+            <div class="max-w-[1400px] mx-auto px-6">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <h2 class="text-3xl font-black text-slate-900 tracking-tight uppercase" data-i18n="homeProductsTitle">Featured Products</h2>
+                        <div class="w-16 h-1 bg-snap-green mt-2 mb-3"></div>
+                        <p class="text-slate-500 text-sm font-medium" data-i18n="homeProductsSub">เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด</p>
+                    </div>
+                    <div class="hidden sm:flex gap-3">
+                        <button onclick="scrollSlider('left')" class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white transition-colors active:scale-95"><i class="fas fa-chevron-left"></i></button>
+                        <button onclick="scrollSlider('right')" class="w-10 h-10 rounded bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white transition-colors active:scale-95"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div id="home-product-slider" class="slider-container flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4">
+                    <!-- Products injected by JS -->
+                </div>
+                
+                <div class="text-center mt-8">
+                    <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-slate-800 font-black text-sm uppercase tracking-widest hover:text-snap-green transition-colors" data-i18n="viewAllProducts">View All Products <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
         </section>
@@ -640,13 +675,16 @@ snapcon_html = """
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
-                feat1Sub: "SNAPCON MODEL 01", feat1Title: "Compact and powerful mini conveyors.",
-                feat2Sub: "SMART DASHBOARD", feat2Title: "Real-time monitoring & AI prediction.",
-                feat3Sub: "SPARE PARTS", feat3Title: "Over 200 genuine components ready.",
-                feat4Sub: "SUPPORT 24/7", feat4Title: "Expert engineering team at your service.",
-                cardDataSheet: "Data Sheet", cardDesc1: "Technical specs and manuals.",
-                cardDrawing: "2D/3D Drawings", cardDesc2: "CAD models for integration.",
-                cardCatalog: "Catalog", cardDesc3: "Full overview of solutions.", cardCatalogFull: "Download Full Catalog",
+                
+                fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ใช้งานได้ทันที",
+                fs2Title: "🔗 Seamless Connection", fs2Desc: "เชื่อม PLC / Sensor ได้ง่าย",
+                fs3Title: "📊 Real-Time Monitoring", fs3Desc: "เห็นข้อมูลทันที",
+                fs4Title: "🎛 All-in-One Control", fs4Desc: "ควบคุมทุกเครื่องในที่เดียว",
+                fs5Title: "💰 Cost-Effective", fs5Desc: "ถูกกว่า SCADA แบบเดิม",
+                
+                cardDataSheet: "Data Sheet", selectModel: "Select Model",
+                cardDrawing: "2D/3D Drawing", 
+                cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
                 pageProductTitle: "Conveyor Systems", pageProductSub: "ระบบสายพานลำเลียงอัจฉริยะสำหรับอุตสาหกรรมยุคใหม่",
                 pageSpareTitle: "Spare Parts", pageSpareSub: "อะไหล่และชิ้นส่วนสายพานลำเลียงคุณภาพสูง",
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
@@ -666,19 +704,23 @@ snapcon_html = """
                 guestContactTitle: "Contact Info", guestNotice: "ข้อมูลปลอดภัยด้วยมาตรฐาน Google",
                 phId: "ID", phPass: "PW", phGuestName: "Name / Company", phGuestContact: "Email or Phone",
                 phRegId: "Create ID", phRegPass: "Create PW", phRegName: "Company Name", phRegContact: "Email/Phone",
-                socialTitle: "ติดต่อช่างผู้เชี่ยวชาญ", socialDesc: "เลือกช่องทางที่สะดวกเพื่อรับคำปรึกษาทันที"
+                socialTitle: "ติดต่อช่างผู้เชี่ยวชาญ", socialDesc: "เลือกช่องทางที่สะดวกเพื่อรับคำปรึกษาทันที",
+                homeProductsTitle: "Featured Products", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "View All Products"
             },
             en: {
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
-                feat1Sub: "SNAPCON MODEL 01", feat1Title: "Compact and powerful mini conveyors.",
-                feat2Sub: "SMART DASHBOARD", feat2Title: "Real-time monitoring & AI prediction.",
-                feat3Sub: "SPARE PARTS", feat3Title: "Over 200 genuine components ready.",
-                feat4Sub: "SUPPORT 24/7", feat4Title: "Expert engineering team at your service.",
-                cardDataSheet: "Data Sheet", cardDesc1: "Technical specs and manuals.",
-                cardDrawing: "2D/3D Drawings", cardDesc2: "CAD models for integration.",
-                cardCatalog: "Catalog", cardDesc3: "Full overview of solutions.", cardCatalogFull: "Download Full Catalog",
+                
+                fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ready to use",
+                fs2Title: "🔗 Seamless Connection", fs2Desc: "Easy PLC / Sensor integration",
+                fs3Title: "📊 Real-Time Monitoring", fs3Desc: "Instant data visibility",
+                fs4Title: "🎛 All-in-One Control", fs4Desc: "Manage all machines in one place",
+                fs5Title: "💰 Cost-Effective", fs5Desc: "More affordable than traditional SCADA",
+                
+                cardDataSheet: "Data Sheet", selectModel: "Select Model",
+                cardDrawing: "2D/3D Drawing", 
+                cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
                 pageProductTitle: "Conveyor Systems", pageProductSub: "Intelligent conveyor systems for modern industries.",
                 pageSpareTitle: "Spare Parts", pageSpareSub: "High-quality genuine conveyor components.",
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty",
@@ -698,7 +740,8 @@ snapcon_html = """
                 guestContactTitle: "Contact Info", guestNotice: "Securely saved via Google standard",
                 phId: "ID", phPass: "PW", phGuestName: "Contact Name / Company", phGuestContact: "Email or Phone Number",
                 phRegId: "Create your User ID", phRegPass: "Create your Password", phRegName: "Enter your full name", phRegContact: "Enter email or phone",
-                socialTitle: "Technical Support", socialDesc: "Choose a channel for immediate consultation"
+                socialTitle: "Technical Support", socialDesc: "Choose a channel for immediate consultation",
+                homeProductsTitle: "Featured Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products"
             }
         };
 
@@ -864,6 +907,23 @@ snapcon_html = """
         function renderProducts() {
             const pGrid = document.getElementById('product-grid'); if(pGrid) pGrid.innerHTML = products.map(p => createItemCard(p)).join('');
             const sGrid = document.getElementById('spare-grid'); if(sGrid) sGrid.innerHTML = spares.map(p => createItemCard(p)).join('');
+            const slider = document.getElementById('home-product-slider');
+            if(slider) {
+                slider.innerHTML = products.slice(0, 10).map(p => `
+                    <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                        <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50">
+                            <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform mix-blend-multiply">
+                        </div>
+                        <h4 class="font-black text-sm text-slate-800 mb-1 truncate">${p.name}</h4>
+                        <p class="text-snap-green font-black text-lg mt-auto">฿${p.price.toLocaleString()}</p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function scrollSlider(dir) {
+            const slider = document.getElementById('home-product-slider');
+            slider.scrollBy({ left: dir === 'left' ? -300 : 300, behavior: 'smooth' });
         }
 
         function addToCart(id) {
