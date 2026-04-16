@@ -385,14 +385,14 @@ snapcon_html = """
                     <p data-i18n="cartEmpty" class="text-center py-10 text-slate-400 font-bold">ยังไม่มีสินค้าในรถเข็น</p>
                 </div>
 
-                <div id="guest-form" class="bg-slate-50 p-6 sharp-card mb-8 hidden">
+                <div id="quote-contact-form" class="bg-slate-50 p-6 sharp-card mb-8">
                     <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest flex items-center gap-2">
                         <i class="fas fa-info-circle text-snap-green"></i> 
                         <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ (Contact Info)</span>
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="guest-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
-                        <input type="text" id="guest-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                        <input type="text" id="quote-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                        <input type="text" id="quote-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
                     </div>
                 </div>
 
@@ -1208,9 +1208,20 @@ snapcon_html = """
         }
 
         function renderCart() {
-            const container = document.getElementById('cart-items'); const guestForm = document.getElementById('guest-form');
+            const container = document.getElementById('cart-items'); 
+            const quoteForm = document.getElementById('quote-contact-form');
             if(!container) return;
-            if (isLoggedIn) guestForm.classList.add('hidden'); else guestForm.classList.remove('hidden');
+            
+            // แสดงฟอร์มเสมอ และช่วยกรอกชื่อให้ถ้าระบบจำได้ว่าล็อกอินแล้ว
+            if (quoteForm) {
+                quoteForm.classList.remove('hidden');
+                if (isLoggedIn) {
+                    const nameInput = document.getElementById('quote-name');
+                    if (nameInput && !nameInput.value) {
+                        nameInput.value = document.getElementById('displayUser').innerText;
+                    }
+                }
+            }
 
             if(cart.length === 0) {
                 container.innerHTML = `<p class="text-center py-8 text-slate-400 font-bold text-sm bg-slate-50 border border-slate-100">${dict[currentLang].cartEmpty}</p>`;
@@ -1255,18 +1266,38 @@ snapcon_html = """
         function requestQuote() {
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert(dict[currentLang].alertQuoteReq);
-            let name = isLoggedIn ? document.getElementById('displayUser').innerText : document.getElementById('guest-name').value;
-            let info = isLoggedIn ? "Registered Account" : document.getElementById('guest-contact').value;
-            if(!isLoggedIn && (!name || !info)) return alert(dict[currentLang].alertQuoteGuestReq);
+            
+            // ดึงค่าจากฟอร์มและบังคับให้ต้องมีข้อมูล
+            let name = document.getElementById('quote-name').value.trim();
+            let info = document.getElementById('quote-contact').value.trim();
+            
+            if(!name || !info) {
+                return alert(dict[currentLang].alertQuoteGuestReq);
+            }
             
             let detailsForEmail = selected.map(i => `- ${i.name} x${i.quantity} (%E0%B8%BF${(i.price * i.quantity).toLocaleString()})`).join('%0A');
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
             let total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
             
-            try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Quotation", name_or_id: name, email: info, details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` }) }); } catch(e) {}
+            // เตรียมข้อมูลส่งไปที่ Google Sheet
+            const payload = { 
+                type: "Quotation", 
+                name_or_id: name, 
+                email: info, 
+                details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` 
+            };
+            
+            try { 
+                fetch(GOOGLE_SCRIPT_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload) 
+                }); 
+            } catch(e) { console.error("Error sending to sheets", e); }
             
             const subject = encodeURIComponent("Quotation Request - Snapcon");
-            const body = "Request for Official Quotation:%0A%0AItems:%0A" + detailsForEmail + "%0A%0AEstimated Total: %E0%B8%BF" + total.toLocaleString() + "%0A%0AContact Info: " + encodeURIComponent(info);
+            const body = "Request for Official Quotation:%0A%0AItems:%0A" + detailsForEmail + "%0A%0AEstimated Total: %E0%B8%BF" + total.toLocaleString() + "%0A%0AContact Info: " + encodeURIComponent(info) + "%0A%0AName/Company: " + encodeURIComponent(name);
             window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
             
             cart = cart.filter(i => !i.selected); 
@@ -1275,27 +1306,7 @@ snapcon_html = """
             navigate('home');
         }
 
-        // ==========================================
-        // 9. INITIALIZATION & I18N
-        // ==========================================
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const key = el.getAttribute('data-i18n-placeholder'); if (dict[lang][key]) el.placeholder = dict[lang][key]; });
-            
-            document.getElementById('btn-lang-th').className = lang === 'th' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
-            document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
-            
-            renderProducts(); 
-            if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); 
-            if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
-        }
-
-        // โหลดข้อมูลอัตโนมัติเมื่อเปิดเว็บ
-        window.onload = () => {
-            loadDataFromSheet();
-            setLanguage('th');
-        };
+        // 🌐 LANGUAGE SYSTEM
     </script>
 </body>
 </html>
