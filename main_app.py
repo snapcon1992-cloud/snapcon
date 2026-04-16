@@ -230,6 +230,7 @@ snapcon_html = """
             <button type="button" onclick="navigate('product')" data-i18n="navProduct" class="nav-link">Products</button>
             <button type="button" onclick="navigate('spare')" data-i18n="navSpare" class="nav-link">Spare Parts</button>
             <button type="button" onclick="checkDashboardAuth()" data-i18n="navDashboard" class="nav-link">Dashboard</button>
+            <button type="button" onclick="navigate('project')" data-i18n="navProject" class="nav-link">Projects</button>
             <button type="button" onclick="navigate('about')" data-i18n="navAbout" class="nav-link">Company</button>
             <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="nav-link">Support</button>
         </div>
@@ -269,7 +270,7 @@ snapcon_html = """
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         
-        <!-- Hero Section (Industrial Look & Green Tech Theme) -->
+        <!-- Hero Section (Industrial Look) -->
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             
             <!-- Animated Background Slider -->
@@ -415,6 +416,71 @@ snapcon_html = """
             </div>
         </section>
 
+    </div>
+
+    <!-- ==================== PAGE: PROJECT REFERENCE ==================== -->
+    <div id="page-project" class="page-section bg-white min-h-screen pt-10">
+        <div class="max-w-[1400px] mx-auto px-6 py-10">
+            <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Project Reference</h2>
+            <div class="w-16 h-1 bg-snap-green mb-8"></div>
+            <p class="text-slate-600 mb-12 max-w-2xl font-medium" data-i18n="pageProjectSub">รวมผลงานการติดตั้งและตัวอย่างการประยุกต์ใช้งานระบบ Snapcon ในอุตสาหกรรมจริง</p>
+
+            <!-- Section 1: Pilot / Demo Project -->
+            <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-rocket text-snap-green"></i> <span data-i18n="projPilotTitle">Pilot / Demo Project</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-slate-50 p-8 sharp-card group">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-snap-green text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot1Title">Snapcon V1</h4>
+                    <p class="text-sm text-slate-600" data-i18n="pilot1Desc">Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว</p>
+                </div>
+                <div class="bg-slate-50 p-8 sharp-card group">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot2Title">Real-time Monitoring</h4>
+                    <p class="text-sm text-slate-600" data-i18n="pilot2Desc">ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที</p>
+                </div>
+                <div class="bg-slate-50 p-8 sharp-card group">
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-rose-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot3Title">Poka-Yoke Integrated</h4>
+                    <p class="text-sm text-slate-600" data-i18n="pilot3Desc">ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ</p>
+                </div>
+            </div>
+
+            <!-- Section 2: Use Case / Application -->
+            <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                <i class="fas fa-industry text-blue-500"></i> <span data-i18n="projUseCaseTitle">Use Case / Application</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-amber-500 flex flex-col items-center text-center">
+                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase1Title">Packaging Line Automation</h4>
+                    <p class="text-sm text-slate-600" data-i18n="usecase1Desc">ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ</p>
+                </div>
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-snap-green flex flex-col items-center text-center">
+                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase2Title">Conveyor System Control</h4>
+                    <p class="text-sm text-slate-600" data-i18n="usecase2Desc">ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน</p>
+                </div>
+                <div class="bg-white p-6 sharp-card border-t-4 border-t-blue-500 flex flex-col items-center text-center">
+                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase3Title">Machine Health Monitoring</h4>
+                    <p class="text-sm text-slate-600" data-i18n="usecase3Desc">ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ==================== PAGE: PRODUCT ==================== -->
@@ -768,7 +834,7 @@ snapcon_html = """
         // 🌐 DICTIONARY
         const dict = {
             th: {
-                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 
                 heroEco: "Green Technology",
@@ -786,6 +852,16 @@ snapcon_html = """
                 cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
                 pageProductTitle: "Conveyor Systems", pageProductSub: "ระบบสายพานลำเลียงอัจฉริยะสำหรับอุตสาหกรรมยุคใหม่",
                 pageSpareTitle: "Spare Parts", pageSpareSub: "อะไหล่และชิ้นส่วนสายพานลำเลียงคุณภาพสูง",
+                pageProjectTitle: "Project Reference", pageProjectSub: "รวมผลงานการติดตั้งและตัวอย่างการประยุกต์ใช้งานระบบ Snapcon ในอุตสาหกรรมจริง",
+                projPilotTitle: "Pilot / Demo Project",
+                pilot1Title: "Snapcon V1", pilot1Desc: "Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว",
+                pilot2Title: "Real-time Monitoring", pilot2Desc: "ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที",
+                pilot3Title: "Poka-Yoke Integrated", pilot3Desc: "ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ",
+                projUseCaseTitle: "Use Case / Application",
+                usecase1Title: "Packaging Line Automation", usecase1Desc: "ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ",
+                usecase2Title: "Conveyor System Control", usecase2Desc: "ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน",
+                usecase3Title: "Machine Health Monitoring", usecase3Desc: "ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก",
+                
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
                 cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "SPECS",
                 alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว", alertQuoteReq: "กรุณาเลือกสินค้า", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อ",
@@ -807,7 +883,7 @@ snapcon_html = """
                 homeProductsTitle: "Featured Products", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "View All Products"
             },
             en: {
-                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navContact: "Support", navAbout: "Company",
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 
                 heroEco: "Green Technology",
@@ -825,6 +901,16 @@ snapcon_html = """
                 cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
                 pageProductTitle: "Conveyor Systems", pageProductSub: "Intelligent conveyor systems for modern industries.",
                 pageSpareTitle: "Spare Parts", pageSpareSub: "High-quality genuine conveyor components.",
+                pageProjectTitle: "Project Reference", pageProjectSub: "Showcasing Snapcon installations and real-world industrial applications.",
+                projPilotTitle: "Pilot / Demo Project",
+                pilot1Title: "Snapcon V1", pilot1Desc: "Multi-machine control demo managing multiple units from a single hub.",
+                pilot2Title: "Real-time Monitoring", pilot2Desc: "Instant tracking of Temperature, Speed, and Output status.",
+                pilot3Title: "Poka-Yoke Integrated", pilot3Desc: "Human error prevention system. Alerts and halts machinery upon detecting anomalies.",
+                projUseCaseTitle: "Use Case / Application",
+                usecase1Title: "Packaging Line Automation", usecase1Desc: "Automated packaging line systems to reduce time and increase precision.",
+                usecase2Title: "Conveyor System Control", usecase2Desc: "Intelligent conveyor control system adjusting speed automatically based on workload.",
+                usecase3Title: "Machine Health Monitoring", usecase3Desc: "Predictive machine health monitoring. Alerts before critical failures occur.",
+
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty",
                 cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "SPECS",
                 alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart", alertQuoteReq: "Select an item", alertQuoteGuestReq: "Provide contact info",
