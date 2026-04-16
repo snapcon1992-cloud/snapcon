@@ -299,14 +299,14 @@ snapcon_html = """
                     <p data-i18n="cartEmpty" class="text-center py-10 text-slate-400 font-bold">ยังไม่มีสินค้าในรถเข็น</p>
                 </div>
 
-                <div id="guest-form" class="bg-slate-50 p-6 sharp-card mb-8 hidden">
+                <div id="quote-contact-form" class="bg-slate-50 p-6 sharp-card mb-8 hidden">
                     <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest flex items-center gap-2">
                         <i class="fas fa-info-circle text-snap-green"></i> 
                         <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ (Contact Info)</span>
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="guest-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
-                        <input type="text" id="guest-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                        <input type="text" id="quote-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                        <input type="text" id="quote-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
                     </div>
                 </div>
 
@@ -524,7 +524,7 @@ snapcon_html = """
                     </div>
                     <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card">
                         <i class="fas fa-phone-alt text-slate-400"></i>
-                        <span class="font-bold text-slate-700 text-sm">097-926-1616</span>
+                        <span class="font-bold text-slate-700 text-sm">081-XXX-XXXX</span>
                     </div>
                 </div>
 
@@ -626,7 +626,7 @@ snapcon_html = """
         // 1. GLOBAL VARIABLES & CONFIG
         // ==========================================
         // อัปเดตลิงก์ Google App Script ล่าสุดที่นี่
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSWFLXeBfRqKk6Nrz42qYxHTDS6xHxOG6MtIWGe8M0alIATWOTYBHBS9w82cIF1MA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyX2EvZJ-lYI54hJpL78sSS8KM2FYsS8_05uQO63iIa-TGzvYXQyCKtUDPP__CtZmhy/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
@@ -1215,7 +1215,7 @@ snapcon_html = """
             let info = document.getElementById('quote-contact').value.trim();
             
             if(!name || !info) {
-                return alert(dict[currentLang].alertQuoteGuestReq);
+                return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลติดต่อกลับให้ครบถ้วน" : "Please provide your contact info.");
             }
             
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
@@ -1235,7 +1235,6 @@ snapcon_html = """
                 }); 
                 
                 alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
-                
             } catch(e) { 
                 console.error("Error sending to sheets", e); 
                 alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
