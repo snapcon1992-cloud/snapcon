@@ -41,13 +41,13 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #e2e8f0; overflow-x: hidden; }
         
-        .hero-container { background-color: #1e293b; position: relative; }
+        .hero-container { background-color: #e2e8f0; position: relative; }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(2, 44, 34, 0.8) 100%);
+            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.85) 75%, rgba(2, 44, 34, 0.6) 100%);
             z-index: 5; pointer-events: none;
         }
-        .hero-white-box { background-color: white; border-bottom: 8px solid #00B36E; box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.3); border-radius: 0px; }
+        .hero-white-box { background-color: white; border-bottom: 6px solid #00B36E; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border-radius: 4px; }
         .feature-bar { background-color: #1e293b; color: white; }
 
         .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; animation: slideBgAnimation 20s infinite linear; }
@@ -313,7 +313,7 @@ snapcon_html = """
                 <div class="flex flex-col md:flex-row justify-between items-center border-t border-slate-200 pt-8 gap-6">
                     <div>
                         <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1" data-i18n="cartTotalLabel">ราคากลางประเมินรวม</p>
-                        <h3 id="cart-total" class="text-4xl font-black text-snap-green tracking-tighter">฿0</h3>
+                        <h3 id="cart-total" class="text-5xl font-black text-snap-green tracking-tighter">฿0</h3>
                     </div>
                     <button type="button" onclick="requestQuote()" class="w-full md:w-auto bg-snap-black text-white px-8 py-4 font-bold hover:bg-snap-green sharp-btn text-sm" data-i18n="btnRequestQuote">
                         ยื่นขอใบเสนอราคา
@@ -756,7 +756,7 @@ snapcon_html = """
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 
                 heroEco: "Green Technology",
-                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
+                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
                 
                 fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ใช้งานได้ทันที",
                 fs2Title: "🔗 Seamless Connection", fs2Desc: "เชื่อม PLC / Sensor ได้ง่าย",
@@ -810,7 +810,7 @@ snapcon_html = """
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 
                 heroEco: "Green Technology",
-                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "> Find out more",
+                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
                 
                 fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ready to use",
                 fs2Title: "🔗 Seamless Connection", fs2Desc: "Easy PLC / Sensor integration",
@@ -1171,23 +1171,25 @@ snapcon_html = """
                 return;
             }
             container.innerHTML = cart.map(item => `
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-4 sharp-card gap-4">
-                    <div class="flex items-center gap-4 w-full sm:w-auto flex-1">
-                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-5 h-5 accent-snap-green shrink-0 cursor-pointer">
-                        <img src="${item.img}" class="w-16 h-16 object-contain bg-slate-50 p-1 shrink-0 mix-blend-multiply rounded-lg border border-slate-100">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-5 rounded-xl mb-3 shadow-sm hover:border-snap-green transition-all gap-4">
+                    <div class="flex items-center gap-5 w-full sm:w-auto flex-1">
+                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${item.cartId})" class="w-6 h-6 accent-snap-green shrink-0 cursor-pointer rounded">
+                        <div class="w-16 h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1">
+                            <img src="${item.img}" class="max-w-full max-h-full object-contain mix-blend-multiply">
+                        </div>
                         <div class="flex-1 min-w-0 pr-4">
-                            <span class="font-bold text-slate-800 text-sm block truncate">${item.name}</span>
-                            <span class="text-[10px] text-slate-500 uppercase tracking-widest">${item.id}</span>
+                            <span class="font-black text-slate-900 text-base block truncate">${item.name}</span>
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-widest">${item.id}</span>
                         </div>
                     </div>
                     
-                    <div class="flex items-center justify-between w-full sm:w-auto sm:gap-8 pl-10 sm:pl-0 mt-2 sm:mt-0">
-                        <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden shrink-0 h-8 shadow-sm">
-                            <button onclick="updateQuantity(${item.cartId}, -1)" class="px-3 h-full bg-slate-50 hover:bg-slate-200 text-slate-600 transition-colors font-bold border-r border-slate-200">-</button>
-                            <span class="px-3 h-full flex items-center justify-center text-xs font-black text-slate-800 bg-white min-w-[40px]">${item.quantity}</span>
-                            <button onclick="updateQuantity(${item.cartId}, 1)" class="px-3 h-full bg-slate-50 hover:bg-slate-200 text-slate-600 transition-colors font-bold border-l border-slate-200">+</button>
+                    <div class="flex items-center justify-between w-full sm:w-auto sm:gap-8 pl-14 sm:pl-0 mt-3 sm:mt-0">
+                        <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden shrink-0 h-10 shadow-sm bg-white">
+                            <button onclick="updateQuantity(${item.cartId}, -1)" class="w-10 h-full bg-slate-50 hover:bg-slate-200 text-slate-600 transition-colors font-black border-r border-slate-200">-</button>
+                            <span class="w-12 h-full flex items-center justify-center text-sm font-black text-slate-900">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.cartId}, 1)" class="w-10 h-full bg-slate-50 hover:bg-slate-200 text-slate-600 transition-colors font-black border-l border-slate-200">+</button>
                         </div>
-                        <span class="font-black text-slate-800 text-lg w-28 text-right shrink-0">฿${(item.price * item.quantity).toLocaleString()}</span>
+                        <span class="font-black text-slate-900 text-xl w-32 text-right shrink-0">฿${(item.price * item.quantity).toLocaleString()}</span>
                     </div>
                 </div>
             `).join('');
