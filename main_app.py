@@ -41,69 +41,25 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #e2e8f0; overflow-x: hidden; }
         
-        /* สไตล์ใหม่สำหรับ Hero Section (Industrial Dark Background) */
-        .hero-container {
-            background-color: #1e293b;
-            position: relative;
-        }
-
+        .hero-container { background-color: #1e293b; position: relative; }
         .hero-overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to right, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(2, 44, 34, 0.8) 100%);
-            z-index: 5;
-            pointer-events: none;
+            z-index: 5; pointer-events: none;
         }
+        .hero-white-box { background-color: white; border-bottom: 8px solid #00B36E; box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.3); border-radius: 0px; }
+        .feature-bar { background-color: #1e293b; color: white; }
 
-        .hero-white-box {
-            background-color: white;
-            border-bottom: 8px solid #00B36E;
-            box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.3);
-            border-radius: 0px;
-        }
-
-        .feature-bar {
-            background-color: #1e293b;
-            color: white;
-        }
-
-        /* ---- Image Slider Background Animations ---- */
-        .slide-img {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            animation: slideBgAnimation 20s infinite linear;
-        }
-
+        .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; animation: slideBgAnimation 20s infinite linear; }
         .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
         .slide-2 { background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
         .slide-3 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
         .slide-4 { background-image: url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1920&q=80'); animation-delay: 15s; }
+        @keyframes slideBgAnimation { 0% { opacity: 0; transform: scale(1.05) translateX(20px); } 5% { opacity: 1; transform: scale(1.05) translateX(15px); } 20% { opacity: 1; transform: scale(1.05) translateX(-5px); } 25% { opacity: 0; transform: scale(1.05) translateX(-10px); } 100% { opacity: 0; } }
 
-        @keyframes slideBgAnimation {
-            0% { opacity: 0; transform: scale(1.05) translateX(20px); }
-            5% { opacity: 1; transform: scale(1.05) translateX(15px); }
-            20% { opacity: 1; transform: scale(1.05) translateX(-5px); }
-            25% { opacity: 0; transform: scale(1.05) translateX(-10px); }
-            100% { opacity: 0; }
-        }
-
-        /* Nav & Menus */
-        .nav-link {
-            position: relative;
-            color: white;
-            font-weight: 700;
-            font-size: 0.85rem;
-            transition: color 0.3s;
-        }
+        .nav-link { position: relative; color: white; font-weight: 700; font-size: 0.85rem; transition: color 0.3s; }
         .nav-link:hover { color: #00B36E; }
-        .nav-link::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -4px; left: 0; background-color: #00B36E;
-            transition: width 0.3s;
-        }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #00B36E; transition: width 0.3s; }
         .nav-link:hover::after { width: 100%; }
 
         .page-section { display: none !important; }
@@ -113,7 +69,6 @@ snapcon_html = """
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
         .dropdown-container:hover .dropdown-menu { display: block; }
         
-        /* Scrollbars */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -121,67 +76,26 @@ snapcon_html = """
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Cards */
-        .sharp-card {
-            border-radius: 4px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s;
-        }
-        .sharp-card:hover {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            border-color: #00B36E;
-            transform: translateY(-4px);
-        }
-        
-        .sharp-btn {
-            border-radius: 2px;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+        .sharp-card { border-radius: 4px; border: 1px solid #e2e8f0; transition: all 0.3s; }
+        .sharp-card:hover { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border-color: #00B36E; transform: translateY(-4px); }
+        .sharp-btn { border-radius: 2px; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
         .sharp-btn:active { transform: scale(0.98); }
 
-        /* ---- Animated Text Slider (Hero Right Side) 6 Items ---- */
-        .feature-text-container {
-            position: relative;
-            height: 140px; 
-            width: 100%;
-            display: flex;
-            align-items: center;
-        }
-        .feature-text-slide {
-            position: absolute;
-            width: 100%;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeSlideText 18s infinite;
-        }
-        .feature-text-slide:nth-child(1) { animation-delay: 0s; }
-        .feature-text-slide:nth-child(2) { animation-delay: 3s; }
-        .feature-text-slide:nth-child(3) { animation-delay: 6s; }
-        .feature-text-slide:nth-child(4) { animation-delay: 9s; }
-        .feature-text-slide:nth-child(5) { animation-delay: 12s; }
-        .feature-text-slide:nth-child(6) { animation-delay: 15s; }
-
-        @keyframes fadeSlideText {
-            0% { opacity: 0; transform: translateY(30px); }
-            4% { opacity: 1; transform: translateY(0); }
-            13% { opacity: 1; transform: translateY(0); }
-            17% { opacity: 0; transform: translateY(-30px); }
-            100% { opacity: 0; }
-        }
+        .feature-text-container { position: relative; height: 140px; width: 100%; display: flex; align-items: center; }
+        .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(30px); animation: fadeSlideText 18s infinite; }
+        .feature-text-slide:nth-child(1) { animation-delay: 0s; } .feature-text-slide:nth-child(2) { animation-delay: 3s; } .feature-text-slide:nth-child(3) { animation-delay: 6s; }
+        .feature-text-slide:nth-child(4) { animation-delay: 9s; } .feature-text-slide:nth-child(5) { animation-delay: 12s; } .feature-text-slide:nth-child(6) { animation-delay: 15s; }
+        @keyframes fadeSlideText { 0% { opacity: 0; transform: translateY(30px); } 4% { opacity: 1; transform: translateY(0); } 13% { opacity: 1; transform: translateY(0); } 17% { opacity: 0; transform: translateY(-30px); } 100% { opacity: 0; } }
     </style>
 </head>
 <body class="font-sans text-slate-800">
 
-    <!-- 1. Top Navigation Bar -->
+    <!-- Top Navigation Bar -->
     <nav class="bg-snap-black h-[70px] w-full fixed top-0 z-50 flex items-center justify-between px-6 md:px-10 shadow-md">
-        <!-- Logo -->
         <div class="flex items-center gap-2 cursor-pointer shrink-0" onclick="navigate('home')">
             <span class="font-black text-3xl text-snap-green tracking-tighter">SNAPCON</span>
         </div>
         
-        <!-- Center Menus -->
         <div class="hidden md:flex items-center gap-8 ml-8">
             <button type="button" onclick="navigate('product')" data-i18n="navProduct" class="nav-link">Products</button>
             <button type="button" onclick="navigate('spare')" data-i18n="navSpare" class="nav-link">Spare Parts</button>
@@ -191,9 +105,7 @@ snapcon_html = """
             <button type="button" onclick="navigate('contact')" data-i18n="navContact" class="nav-link">Support</button>
         </div>
 
-        <!-- Right Side: Login, Lang, Cart -->
         <div class="flex items-center gap-5 shrink-0 ml-auto">
-            <!-- Login Form (Desktop) -->
             <div id="login-section" class="hidden lg:flex items-center gap-2">
                 <input type="text" id="userId" data-i18n-placeholder="phId" placeholder="ID" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
                 <input type="password" id="userPass" data-i18n-placeholder="phPass" placeholder="PW" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
@@ -201,13 +113,11 @@ snapcon_html = """
                 <button type="button" onclick="openRegisterModal()" class="h-8 px-3 bg-slate-700 text-white font-bold text-xs hover:bg-slate-600 sharp-btn"><i class="fas fa-user-plus"></i></button>
             </div>
             
-            <!-- User Status -->
             <div id="user-section" class="hidden items-center gap-3">
                 <span class="text-white text-sm"><i class="far fa-user-circle text-snap-green mr-1"></i> <span id="displayUser" class="font-bold">User</span></span>
                 <button type="button" onclick="handleLogout()" class="text-slate-400 hover:text-white text-xs underline"><i class="fas fa-sign-out-alt"></i></button>
             </div>
 
-            <!-- Icons -->
             <div class="flex items-center gap-4 text-white text-lg border-l border-slate-700 pl-5">
                 <button type="button" id="btn-lang-th" onclick="setLanguage('th')" class="text-xs font-bold text-snap-green hover:text-white">TH</button>
                 <span class="text-slate-600 text-xs">|</span>
@@ -225,8 +135,6 @@ snapcon_html = """
 
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
-        
-        <!-- Hero Section -->
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <div class="slide-img slide-1"></div>
@@ -234,12 +142,9 @@ snapcon_html = """
                 <div class="slide-img slide-3"></div>
                 <div class="slide-img slide-4"></div>
             </div>
-            
             <div class="hero-overlay"></div>
 
             <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
-                
-                <!-- White Box (Left) -->
                 <div class="hero-white-box w-full md:w-[500px] p-10 md:p-12 z-10 mt-10 md:mt-0 relative">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-emerald-200 shadow-sm">
                         <i class="fas fa-leaf"></i> <span data-i18n="heroEco">Green Technology</span>
@@ -255,7 +160,6 @@ snapcon_html = """
                     </button>
                 </div>
 
-                <!-- Animated Text Slider (Right) -->
                 <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
                     <div>
                         <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/20 pb-4 inline-block drop-shadow-md">Why Snapcon?</h3>
@@ -287,7 +191,6 @@ snapcon_html = """
                         </div>
                     </div>
                 </div>
-                
             </div>
         </section>
 
@@ -301,11 +204,9 @@ snapcon_html = """
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-snap-green transition-colors" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
                     <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
-                        <a href="https://drive.google.com/file/d/1HY0dUjYJZgxRVYYgN5DOV6Ymm9ARCGUW/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
-                        <a href="https://drive.google.com/file/d/1TC_cXAy7gbgBx0QI0TiL7Kdt1ICljnHj/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
-                        <a href="https://drive.google.com/file/d/1Yv_gJWWxTL4H_5YmCDAOCnI33gdfcj4j/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
-                        <a href="https://drive.google.com/file/d/1KtCARlKphuuIqUOU6xg5mnPf99sjCjHD/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
-                        <a href="https://drive.google.com/file/d/1dlOS1HSYy1qjWASPGQiKRvQsSyZ-lFs4/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 05</a>
+                        <a href="#" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
+                        <a href="#" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
+                        <a href="#" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 03</a>
                     </div>
                 </div>
 
@@ -316,11 +217,9 @@ snapcon_html = """
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-blue-400 transition-colors" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
                     <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
-                        <a href="https://drive.google.com/file/d/1CisPrHXeoJgspikAzAOwH0rdhNtQiviy/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
-                        <a href="https://drive.google.com/file/d/1Gt8onVT7dsyJQkmxdY6s1GZTX4_oUNuB/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
-                        <a href="https://drive.google.com/file/d/1zesePgsPwZDTUpKzLrmesdnuY6usfe2P/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 03</a>
-                        <a href="https://drive.google.com/file/d/1I-63QRJrJksO6xQb1cCWaq9HoDZJ6qBl/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 04</a>
-                        <a href="https://drive.google.com/file/d/16z8m9S06kGhyO0C6Tb0mMQ0L4bk5wTDz/view?usp=drive_link" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-700">Model 05</a>
+                        <a href="#" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
+                        <a href="#" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
+                        <a href="#" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-700">Model 03</a>
                     </div>
                 </div>
 
@@ -331,7 +230,7 @@ snapcon_html = """
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-amber-400 transition-colors" data-i18n="btnDownload">Download <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
                     <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
-                        <a href="https://drive.google.com/file/d/1_-OdU-N7CnKfG6qY6WV7hW59vL1LX7KD/view?usp=drive_link" target="_blank" data-i18n="cardCatalogFull" class="block px-8 py-4 hover:bg-amber-50 hover:text-amber-600 text-sm font-bold text-slate-700">Download Full Catalog</a>
+                        <a href="#" data-i18n="cardCatalogFull" class="block px-8 py-4 hover:bg-amber-50 hover:text-amber-600 text-sm font-bold text-slate-700">Download Full Catalog</a>
                     </div>
                 </div>
             </div>
@@ -352,8 +251,7 @@ snapcon_html = """
                 </div>
                 
                 <div id="home-product-slider" class="slider-container flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4">
-                    <!-- Products injected by JS -->
-                </div>
+                    </div>
                 
                 <div class="text-center mt-8">
                     <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-slate-800 font-black text-sm uppercase tracking-widest hover:text-snap-green transition-colors" data-i18n="viewAllProducts">View All Products <i class="fas fa-arrow-right"></i></button>
@@ -401,14 +299,14 @@ snapcon_html = """
                     <p data-i18n="cartEmpty" class="text-center py-10 text-slate-400 font-bold">ยังไม่มีสินค้าในรถเข็น</p>
                 </div>
 
-                <div id="quote-contact-form" class="bg-slate-50 p-6 sharp-card mb-8">
+                <div id="guest-form" class="bg-slate-50 p-6 sharp-card mb-8 hidden">
                     <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest flex items-center gap-2">
                         <i class="fas fa-info-circle text-snap-green"></i> 
                         <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ (Contact Info)</span>
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="quote-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
-                        <input type="text" id="quote-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                        <input type="text" id="guest-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อผู้ติดต่อ / ชื่อบริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
+                        <input type="text" id="guest-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล หรือ เบอร์โทรศัพท์" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green text-sm font-bold sharp-card w-full">
                     </div>
                 </div>
 
@@ -432,7 +330,7 @@ snapcon_html = """
                 <span data-i18n="navDashboard">Dashboard</span> : <span id="dash-user-name" class="text-snap-green"></span>
             </h2>
             <div class="w-16 h-1 bg-snap-green mb-8"></div>
-            <p class="text-slate-600 mb-8" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์ (แสดงข้อมูลเฉพาะบัญชีของคุณ)</p>
+            <p class="text-slate-600 mb-8" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white p-6 sharp-card lg:col-span-2 flex flex-col justify-center">
@@ -626,7 +524,7 @@ snapcon_html = """
                     </div>
                     <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card">
                         <i class="fas fa-phone-alt text-slate-400"></i>
-                        <span class="font-bold text-slate-700 text-sm">081-XXX-XXXX</span>
+                        <span class="font-bold text-slate-700 text-sm">097-926-1616</span>
                     </div>
                 </div>
 
@@ -727,7 +625,8 @@ snapcon_html = """
         // ==========================================
         // 1. GLOBAL VARIABLES & CONFIG
         // ==========================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTXYEcWYEsbcwL0ipt5vl1azB-C8psZUuwpjfIirzCdH2mBE2OHNdKSMoNPhklRt2M/exec';
+        // อัปเดตลิงก์ Google App Script ล่าสุดที่นี่
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSWFLXeBfRqKk6Nrz42qYxHTDS6xHxOG6MtIWGe8M0alIATWOTYBHBS9w82cIF1MA/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
@@ -783,8 +682,11 @@ snapcon_html = """
         // ==========================================
         async function loadDataFromSheet() {
             try {
+                // เติมพารามิเตอร์ป้องกัน Cache ของ Browser
+                const fetchUrl = GOOGLE_SCRIPT_URL + "?t=" + new Date().getTime();
                 console.log("Fetching dynamic data from Google Sheets...");
-                const response = await fetch(GOOGLE_SCRIPT_URL, { redirect: "follow" });
+                
+                const response = await fetch(fetchUrl, { redirect: "follow" });
                 
                 if (!response.ok) throw new Error("Network response was not ok");
                 
@@ -828,22 +730,16 @@ snapcon_html = """
                 
             } catch (e) {
                 console.error("Fetch Error: ไม่สามารถเชื่อมต่อ Google Sheets ได้", e);
+                alert("⚠️ ระบบไม่สามารถดึงข้อมูลสินค้าจาก Google Sheets ได้\\nกำลังใช้ข้อมูลจำลอง (Mock Data)\\n\\nกรุณาตรวจสอบว่า App Script ของคุณ:\\n1. ตั้งค่า Deploy ให้เข้าถึงโดย 'Anyone' (ทุกคน) หรือไม่\\n2. ฟังก์ชัน doGet ทำงานถูกต้องหรือไม่");
             }
             
             console.warn("Using fallback mock data due to empty sheet or fetch error.");
             products = [
                 { id: 'M01', name: 'Snapcon Model 01 (Mini)', price: 15000, img: 'https://i.ibb.co/bZ7TKQg/01.png', specs: { th: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"], en: ["L: 0.5-5m", "W: 200-400mm", "Load: 0-50kg"] } },
-                { id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png', specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"] } },
-                { id: 'M03', name: 'Snapcon Model 03 (Heavy)', price: 28500, img: 'https://i.ibb.co/PGNt8dfj/03.png', specs: { th: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"], en: ["L: 2-30m", "W: 500-1000mm", "Load: 0-300kg"] } },
-                { id: 'M04', name: 'Snapcon Model 04 (Speed)', price: 35000, img: 'https://i.ibb.co/mVfD9H0B/04.png', specs: { th: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg"], en: ["L: 1-20m", "W: 400-800mm", "Load: 0-80kg"] } },
-                { id: 'M05', name: 'Snapcon Pro 05 (Custom)', price: 45000, img: 'https://i.ibb.co/x4SGKtb/05.png', specs: { th: ["L: Custom", "W: Custom", "Load: Custom"], en: ["L: Custom", "W: Custom", "Load: Custom"] } }
+                { id: 'M02', name: 'Snapcon Model 02 (Std)', price: 22000, img: 'https://i.ibb.co/tTCb2j0h/02.png', specs: { th: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"], en: ["L: 1-15m", "W: 300-600mm", "Load: 0-100kg"] } }
             ];
             spares = [
-                { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } },
-                { id: 'SP002', name: 'Conveyor Belt PU', price: 550, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Belt PU", "Stock: Ready"], en: ["Type: Belt PU", "Stock: Ready"] } },
-                { id: 'SP003', name: 'Drive Motor AC', price: 1500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Motor", "Stock: Ready"], en: ["Type: Motor", "Stock: Ready"] } },
-                { id: 'SP004', name: 'Sensor Switch', price: 300, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Sensor", "Stock: Ready"], en: ["Type: Sensor", "Stock: Ready"] } },
-                { id: 'SP005', name: 'Control Board', price: 2500, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Board", "Stock: Ready"], en: ["Type: Board", "Stock: Ready"] } }
+                { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } }
             ];
             
             allItems = [...products, ...spares];
@@ -1248,21 +1144,21 @@ snapcon_html = """
             const item = cart.find(i => i.cartId === cartId);
             if(item) {
                 item.quantity += delta;
-                if(item.quantity < 1) item.quantity = 1; // บังคับขั้นต่ำ 1 ชิ้น
+                if(item.quantity < 1) item.quantity = 1; 
                 renderCart();
                 updateBadge();
             }
         }
 
         function renderCart() {
-            const container = document.getElementById('cart-items'); const guestForm = document.getElementById('guest-form');
+            const container = document.getElementById('cart-items'); 
+            const quoteForm = document.getElementById('quote-contact-form');
             if(!container) return;
             
-            // แสดงฟอร์มเสมอ และช่วยกรอกชื่อให้ถ้าระบบจำได้ว่าล็อกอินแล้ว
-            if (guestForm) {
-                guestForm.classList.remove('hidden');
+            if (quoteForm) {
+                quoteForm.classList.remove('hidden');
                 if (isLoggedIn) {
-                    const nameInput = document.getElementById('guest-name');
+                    const nameInput = document.getElementById('quote-name');
                     if (nameInput && !nameInput.value) {
                         nameInput.value = document.getElementById('displayUser').innerText;
                     }
@@ -1313,18 +1209,17 @@ snapcon_html = """
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert(dict[currentLang].alertQuoteReq);
             
-            let name = document.getElementById('guest-name').value.trim();
-            let info = document.getElementById('guest-contact').value.trim();
+            let name = document.getElementById('quote-name').value.trim();
+            let info = document.getElementById('quote-contact').value.trim();
             
             if(!name || !info) {
-                return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลติดต่อกลับให้ครบถ้วน" : "Please provide your contact info.");
+                return alert(dict[currentLang].alertQuoteGuestReq);
             }
             
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
             let total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
             
             try { 
-                // ใช้ await เพื่อรอให้ส่งข้อมูลเข้า Google Sheets ให้เสร็จก่อน
                 await fetch(GOOGLE_SCRIPT_URL, { 
                     method: 'POST', 
                     mode: 'no-cors',
@@ -1337,8 +1232,8 @@ snapcon_html = """
                     }) 
                 }); 
                 
-                // แจ้งเตือนเมื่อส่งข้อมูลสำเร็จ
                 alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
+                
             } catch(e) { 
                 console.error("Error sending to sheets", e); 
                 alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
@@ -1350,7 +1245,9 @@ snapcon_html = """
             navigate('home');
         }
 
-        // 🌐 LANGUAGE SYSTEM
+        // ==========================================
+        // 9. INITIALIZATION & I18N
+        // ==========================================
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
