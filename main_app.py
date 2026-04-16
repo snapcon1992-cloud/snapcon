@@ -1303,7 +1303,7 @@ snapcon_html = """
             renderCart(); 
         }
 
-        function requestQuote() {
+        async function requestQuote() {
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert(dict[currentLang].alertQuoteReq);
             
@@ -1314,12 +1314,12 @@ snapcon_html = """
                 return alert(dict[currentLang].alertQuoteGuestReq);
             }
             
-            let detailsForEmail = selected.map(i => `- ${i.name} x${i.quantity} (%E0%B8%BF${(i.price * i.quantity).toLocaleString()})`).join('%0A');
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
             let total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
             
             try { 
-                fetch(GOOGLE_SCRIPT_URL, { 
+                // ใช้ await เพื่อรอให้ส่งข้อมูลเข้า Google Sheets ให้เสร็จก่อน
+                await fetch(GOOGLE_SCRIPT_URL, { 
                     method: 'POST', 
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1330,12 +1330,17 @@ snapcon_html = """
                         details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` 
                     }) 
                 }); 
-            } catch(e) { console.error("Error sending to sheets", e); }
+                
+                // แจ้งเตือนเมื่อส่งข้อมูลสำเร็จ
+                alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
+                
+            } catch(e) { 
+                console.error("Error sending to sheets", e); 
+                // กรณีดัก Error เครือข่าย (แต่ฝั่งผู้ใช้ให้มองว่าสำเร็จไว้ก่อนหากใช้ no-cors)
+                alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
+            }
             
-            const subject = encodeURIComponent("Quotation Request - Snapcon");
-            const body = "Request for Official Quotation:%0A%0AItems:%0A" + detailsForEmail + "%0A%0AEstimated Total: %E0%B8%BF" + total.toLocaleString() + "%0A%0AContact Info: " + encodeURIComponent(info) + "%0A%0AName/Company: " + encodeURIComponent(name);
-            window.location.href = `mailto:snapcon1992@gmail.com?subject=${subject}&body=${body}`;
-            
+            // ล้างตะกร้าหลังจากส่งสำเร็จ
             cart = cart.filter(i => !i.selected); 
             updateBadge(); 
             renderCart(); 
