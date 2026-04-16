@@ -1248,22 +1248,21 @@ snapcon_html = """
             const item = cart.find(i => i.cartId === cartId);
             if(item) {
                 item.quantity += delta;
-                if(item.quantity < 1) item.quantity = 1; 
+                if(item.quantity < 1) item.quantity = 1; // บังคับขั้นต่ำ 1 ชิ้น
                 renderCart();
                 updateBadge();
             }
         }
 
         function renderCart() {
-            const container = document.getElementById('cart-items'); 
-            const quoteForm = document.getElementById('quote-contact-form');
+            const container = document.getElementById('cart-items'); const guestForm = document.getElementById('guest-form');
             if(!container) return;
             
             // แสดงฟอร์มเสมอ และช่วยกรอกชื่อให้ถ้าระบบจำได้ว่าล็อกอินแล้ว
-            if (quoteForm) {
-                quoteForm.classList.remove('hidden');
+            if (guestForm) {
+                guestForm.classList.remove('hidden');
                 if (isLoggedIn) {
-                    const nameInput = document.getElementById('quote-name');
+                    const nameInput = document.getElementById('guest-name');
                     if (nameInput && !nameInput.value) {
                         nameInput.value = document.getElementById('displayUser').innerText;
                     }
@@ -1314,11 +1313,11 @@ snapcon_html = """
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert(dict[currentLang].alertQuoteReq);
             
-            let name = document.getElementById('quote-name').value.trim();
-            let info = document.getElementById('quote-contact').value.trim();
+            let name = document.getElementById('guest-name').value.trim();
+            let info = document.getElementById('guest-contact').value.trim();
             
             if(!name || !info) {
-                return alert(dict[currentLang].alertQuoteGuestReq);
+                return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลติดต่อกลับให้ครบถ้วน" : "Please provide your contact info.");
             }
             
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
@@ -1340,23 +1339,18 @@ snapcon_html = """
                 
                 // แจ้งเตือนเมื่อส่งข้อมูลสำเร็จ
                 alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
-                
             } catch(e) { 
                 console.error("Error sending to sheets", e); 
-                // กรณีดัก Error เครือข่าย (แต่ฝั่งผู้ใช้ให้มองว่าสำเร็จไว้ก่อนหากใช้ no-cors)
                 alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
             }
             
-            // ล้างตะกร้าหลังจากส่งสำเร็จ
             cart = cart.filter(i => !i.selected); 
             updateBadge(); 
             renderCart(); 
             navigate('home');
         }
 
-        // ==========================================
-        // 9. INITIALIZATION & I18N
-        // ==========================================
+        // 🌐 LANGUAGE SYSTEM
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
