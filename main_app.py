@@ -876,15 +876,44 @@ snapcon_html = """
         function closeSocialModal() { document.getElementById('modal-social').classList.replace('flex', 'hidden'); }
 
         function submitRegistration() {
-            const id = document.getElementById('reg-id').value;
-            const pass = document.getElementById('reg-pass').value;
-            const name = document.getElementById('reg-name').value;
-            const contact = document.getElementById('reg-contact').value;
-            if(!id || !pass || !name || !contact) return alert("Please fill all fields");
-            if(memoryUsers[id]) return alert("ID already exists");
+            const id = document.getElementById('reg-id').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const contact = document.getElementById('reg-contact').value.trim();
+            
+            if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วน" : "Please fill all fields");
+            
+            if(memoryUsers[id]) return alert(currentLang === 'th' ? "User ID นี้มีผู้ใช้งานแล้ว กรุณาตั้งใหม่" : "User ID already exists");
+            
+            // ตรวจสอบความถูกต้องของข้อมูลเบื้องต้น (อีเมล หรือ เบอร์โทร 9-10 หลัก)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^[0-9]{9,10}$/;
+            if (!emailRegex.test(contact) && !phoneRegex.test(contact)) {
+                return alert(currentLang === 'th' ? "กรุณากรอกรูปแบบอีเมลหรือเบอร์โทรศัพท์ให้ถูกต้อง" : "Please enter a valid email or phone format");
+            }
+            if (name.length < 2) {
+                return alert(currentLang === 'th' ? "กรุณากรอกชื่อ-นามสกุล หรือชื่อบริษัทให้ชัดเจน" : "Please enter a valid name");
+            }
+
             memoryUsers[id] = pass;
             try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name }) }); } catch(e) {}
-            alert("Registered successfully!");
+            
+            alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบกำลังนำเข้าสู่ระบบอัตโนมัติ..." : "Registered successfully! Auto-logging in...");
+            
+            // ใช้งาน Auto Login หลังจากการสมัครสมาชิก
+            isLoggedIn = true;
+            document.getElementById('displayUser').innerText = id;
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('lg:flex');
+            document.getElementById('user-section').classList.remove('hidden');
+            document.getElementById('user-section').classList.add('flex');
+            
+            // ล้างข้อมูลในช่องกรอก
+            document.getElementById('reg-id').value = '';
+            document.getElementById('reg-pass').value = '';
+            document.getElementById('reg-name').value = '';
+            document.getElementById('reg-contact').value = '';
+            
             closeRegisterModal();
         }
 
