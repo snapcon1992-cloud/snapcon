@@ -267,7 +267,7 @@ snapcon_html = """
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         
-        <!-- Hero Section (Industrial Look & Green Tech Theme) -->
+        <!-- Hero Section (Industrial Look) -->
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             
             <!-- Animated Background Slider -->
@@ -1167,3 +1167,7 @@ snapcon_html = """
     </script>
 </body>
 </html>
+"""
+
+# แสดงผลหน้าเว็บผ่าน Streamlit
+st.components.v1.html(snapcon_html, height=2100, scrolling=True)
