@@ -7,7 +7,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# โค้ด HTML/CSS/JS ฉบับสมบูรณ์ที่เพิ่มระบบเพิ่มลดจำนวนสินค้า (Quantity Selector)
+# โค้ด HTML/CSS/JS ปรับ UI หน้าแรกให้ดุดันและเป๊ะตามแบบ SEW Eurodrive มากขึ้น
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -39,27 +39,27 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #e2e8f0; overflow-x: hidden; }
         
-        /* สไตล์ใหม่สำหรับ Hero Section แบบ Green Technology */
+        /* สไตล์ใหม่สำหรับ Hero Section (Industrial Dark Background) */
         .hero-container {
-            background-image: linear-gradient(rgba(2, 44, 34, 0.7), rgba(2, 44, 34, 0.9)), url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-color: #1e293b;
             position: relative;
         }
 
+        /* เอา overlay gradient สีขาวเขียวออก ใช้แค่สีเข้มบางๆ คลุมภาพ */
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.85) 75%, rgba(2, 44, 34, 0.6) 100%);
+            background: linear-gradient(to right, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.6) 50%, rgba(2, 44, 34, 0.8) 100%);
             z-index: 5;
             pointer-events: none;
         }
 
+        /* กล่องสีขาว ทรงเหลี่ยมคมขอบล่างสีเขียว (SEW Style) */
         .hero-white-box {
             background-color: white;
-            border-bottom: 6px solid #00B36E;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-bottom: 8px solid #00B36E;
+            box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.3);
+            border-radius: 0px; /* Sharp corners */
         }
 
         .feature-bar {
@@ -67,7 +67,7 @@ snapcon_html = """
             color: white;
         }
 
-        /* ---- Image Slider Background Animations (Green Tech Theme) ---- */
+        /* ---- Image Slider Background Animations ---- */
         .slide-img {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -77,20 +77,17 @@ snapcon_html = """
             animation: slideBgAnimation 20s infinite linear;
         }
 
-        /* ภาพที่ 1: พลังงานแสงอาทิตย์ (Solar Energy) */
-        .slide-1 { background-image: url('https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
-        /* ภาพที่ 2: พลังงานลม (Wind Energy / Eco Industry) */
-        .slide-2 { background-image: url('https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
-        /* ภาพที่ 3: นวัตกรรมสีเขียว (Plant in lightbulb / Eco concept) */
-        .slide-3 { background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
-        /* ภาพที่ 4: สถาปัตยกรรมสีเขียว (Eco-friendly modern factory/building) */
-        .slide-4 { background-image: url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1920&q=80'); animation-delay: 15s; }
+        /* ภาพพื้นหลังสไตล์อุตสาหกรรม/เทคโนโลยี */
+        .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
+        .slide-2 { background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
+        .slide-3 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
+        .slide-4 { background-image: url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1920&q=80'); animation-delay: 15s; }
 
         @keyframes slideBgAnimation {
-            0% { opacity: 0; transform: scale(1.1) translateX(30px); }
-            5% { opacity: 1; transform: scale(1.1) translateX(20px); }
-            20% { opacity: 1; transform: scale(1.1) translateX(-10px); }
-            25% { opacity: 0; transform: scale(1.1) translateX(-20px); }
+            0% { opacity: 0; transform: scale(1.05) translateX(20px); }
+            5% { opacity: 1; transform: scale(1.05) translateX(15px); }
+            20% { opacity: 1; transform: scale(1.05) translateX(-5px); }
+            25% { opacity: 0; transform: scale(1.05) translateX(-10px); }
             100% { opacity: 0; }
         }
 
@@ -281,12 +278,12 @@ snapcon_html = """
                 <div class="slide-img slide-4"></div>
             </div>
             
-            <!-- Gradient Overlay (White to Emerald to Deep Forest) -->
+            <!-- Dark Industrial Overlay (No white gradient) -->
             <div class="hero-overlay"></div>
 
             <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-10">
                 
-                <!-- White Box (Left) -->
+                <!-- White Box (Left) - Sharp corners like SEW -->
                 <div class="hero-white-box w-full md:w-[500px] p-10 md:p-12 z-10 mt-10 md:mt-0 relative">
                     <!-- Green Technology Badge -->
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-emerald-200 shadow-sm">
@@ -304,30 +301,30 @@ snapcon_html = """
                     </button>
                 </div>
 
-                <!-- Animated Text Slider (Right) - Adjusted for Green Theme -->
+                <!-- Animated Text Slider (Right) - Transparent/Floating -->
                 <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
-                    <div class="bg-emerald-950/70 backdrop-blur-md border border-emerald-500/20 p-8 md:p-10 rounded-2xl shadow-[0_20px_50px_rgba(0,179,110,0.15)]">
-                        <h3 class="text-emerald-400 font-black tracking-widest uppercase text-xs mb-6 border-b border-white/10 pb-4">Why Snapcon?</h3>
+                    <div>
+                        <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/20 pb-4 inline-block drop-shadow-md">Why Snapcon?</h3>
                         <div class="feature-text-container">
-                            <div class="feature-text-slide">
-                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs1Title">⚡ Easy Setup</h4>
-                                <p class="text-base md:text-lg text-emerald-400 font-medium" data-i18n="fs1Desc">Plug & Play ใช้งานได้ทันที</p>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs1Title">⚡ Easy Setup</h4>
+                                <p class="text-lg md:text-xl text-emerald-400 font-bold" data-i18n="fs1Desc">Plug & Play ใช้งานได้ทันที</p>
                             </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs2Title">🔗 Seamless Connection</h4>
-                                <p class="text-base md:text-lg text-blue-400 font-medium" data-i18n="fs2Desc">เชื่อม PLC / Sensor ได้ง่าย</p>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs2Title">🔗 Seamless Connection</h4>
+                                <p class="text-lg md:text-xl text-blue-400 font-bold" data-i18n="fs2Desc">เชื่อม PLC / Sensor ได้ง่าย</p>
                             </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs3Title">📊 Real-Time Monitoring</h4>
-                                <p class="text-base md:text-lg text-amber-400 font-medium" data-i18n="fs3Desc">เห็นข้อมูลทันที</p>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs3Title">📊 Real-Time Monitoring</h4>
+                                <p class="text-lg md:text-xl text-amber-400 font-bold" data-i18n="fs3Desc">เห็นข้อมูลทันที</p>
                             </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs4Title">🎛 All-in-One Control</h4>
-                                <p class="text-base md:text-lg text-purple-400 font-medium" data-i18n="fs4Desc">ควบคุมทุกเครื่องในที่เดียว</p>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs4Title">🎛 All-in-One Control</h4>
+                                <p class="text-lg md:text-xl text-purple-400 font-bold" data-i18n="fs4Desc">ควบคุมทุกเครื่องในที่เดียว</p>
                             </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2" data-i18n="fs5Title">💰 Cost-Effective</h4>
-                                <p class="text-base md:text-lg text-green-400 font-medium" data-i18n="fs5Desc">ถูกกว่า SCADA แบบเดิม</p>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs5Title">💰 Cost-Effective</h4>
+                                <p class="text-lg md:text-xl text-emerald-400 font-bold" data-i18n="fs5Desc">ถูกกว่า SCADA แบบเดิม</p>
                             </div>
                         </div>
                     </div>
@@ -1170,7 +1167,3 @@ snapcon_html = """
     </script>
 </body>
 </html>
-"""
-
-# แสดงผลหน้าเว็บผ่าน Streamlit
-st.components.v1.html(snapcon_html, height=2100, scrolling=True)
