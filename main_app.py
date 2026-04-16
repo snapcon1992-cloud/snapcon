@@ -144,7 +144,7 @@ snapcon_html = """
         }
         .sharp-btn:active { transform: scale(0.98); }
 
-        /* ---- Animated Text Slider (Hero Right Side) ---- */
+        /* ---- Animated Text Slider (Hero Right Side) 6 Items ---- */
         .feature-text-container {
             position: relative;
             height: 140px; 
@@ -157,19 +157,21 @@ snapcon_html = """
             width: 100%;
             opacity: 0;
             transform: translateY(30px);
-            animation: fadeSlideText 15s infinite;
+            /* วนลูปที่ 18 วินาที สำหรับ 6 slide (slide ละ 3 วินาที) */
+            animation: fadeSlideText 18s infinite;
         }
         .feature-text-slide:nth-child(1) { animation-delay: 0s; }
         .feature-text-slide:nth-child(2) { animation-delay: 3s; }
         .feature-text-slide:nth-child(3) { animation-delay: 6s; }
         .feature-text-slide:nth-child(4) { animation-delay: 9s; }
         .feature-text-slide:nth-child(5) { animation-delay: 12s; }
+        .feature-text-slide:nth-child(6) { animation-delay: 15s; }
 
         @keyframes fadeSlideText {
             0% { opacity: 0; transform: translateY(30px); }
-            5% { opacity: 1; transform: translateY(0); }
-            15% { opacity: 1; transform: translateY(0); }
-            20% { opacity: 0; transform: translateY(-30px); }
+            4% { opacity: 1; transform: translateY(0); }
+            13% { opacity: 1; transform: translateY(0); }
+            17% { opacity: 0; transform: translateY(-30px); }
             100% { opacity: 0; }
         }
         
@@ -267,7 +269,7 @@ snapcon_html = """
     <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         
-        <!-- Hero Section (Industrial Look) -->
+        <!-- Hero Section (Industrial Look & Green Tech Theme) -->
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             
             <!-- Animated Background Slider -->
@@ -325,6 +327,10 @@ snapcon_html = """
                             <div class="feature-text-slide drop-shadow-xl">
                                 <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs5Title">💰 Cost-Effective</h4>
                                 <p class="text-lg md:text-xl text-emerald-400 font-bold" data-i18n="fs5Desc">ถูกกว่า SCADA แบบเดิม</p>
+                            </div>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs6Title">🛡️ Built-in Poka-Yoke</h4>
+                                <p class="text-lg md:text-xl text-rose-400 font-bold" data-i18n="fs6Desc">ระบบป้องกันความผิดพลาดของคน</p>
                             </div>
                         </div>
                     </div>
@@ -773,6 +779,7 @@ snapcon_html = """
                 fs3Title: "📊 Real-Time Monitoring", fs3Desc: "เห็นข้อมูลทันที",
                 fs4Title: "🎛 All-in-One Control", fs4Desc: "ควบคุมทุกเครื่องในที่เดียว",
                 fs5Title: "💰 Cost-Effective", fs5Desc: "ถูกกว่า SCADA แบบเดิม",
+                fs6Title: "🛡️ Built-in Poka-Yoke", fs6Desc: "ระบบป้องกันความผิดพลาดของคน",
                 
                 cardDataSheet: "Data Sheet", selectModel: "Select Model",
                 cardDrawing: "2D/3D Drawing", 
@@ -811,6 +818,7 @@ snapcon_html = """
                 fs3Title: "📊 Real-Time Monitoring", fs3Desc: "Instant data visibility",
                 fs4Title: "🎛 All-in-One Control", fs4Desc: "Manage all machines in one place",
                 fs5Title: "💰 Cost-Effective", fs5Desc: "More affordable than traditional SCADA",
+                fs6Title: "🛡️ Built-in Poka-Yoke", fs6Desc: "Fool-proof system to prevent human errors",
                 
                 cardDataSheet: "Data Sheet", selectModel: "Select Model",
                 cardDrawing: "2D/3D Drawing", 
