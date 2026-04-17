@@ -506,6 +506,19 @@ snapcon_html = """
             return url;
         }
 
+        // Helper: จัดการหัวตารางที่มีช่องว่าง ตัวพิมพ์เล็กพิมพ์ใหญ่ ให้อ่านได้ 100%
+        function normalizeKeys(arr) {
+            if (!arr || arr.length === 0) return [];
+            return arr.map(obj => {
+                const newObj = {};
+                for (let key in obj) {
+                    const cleanKey = key.toLowerCase().replace(/[\s_]+/g, '');
+                    newObj[cleanKey] = obj[key];
+                }
+                return newObj;
+            });
+        }
+
         // 2. โหลดข้อมูลทั้งหมดจาก Google Sheets
         async function loadDataFromSheet() {
             try {
@@ -516,26 +529,14 @@ snapcon_html = """
                 const data = await response.json();
                 console.log("Data successfully loaded:", data);
                 
-                products = data.products || [];
-                spares = data.spares || [];
-                documents = data.documents || [];
-                articles = data.articles || [];
-                allItems = [...products, ...spares];
+                // นำข้อมูลไป Normalize เพื่อให้โค้ดอ่านได้เสมอ ไม่ว่าผู้ใช้จะพิมพ์หัวตารางแบบไหน
+                products = normalizeKeys(data.products);
+                spares = normalizeKeys(data.spares);
+                documents = normalizeKeys(data.documents);
+                projects = normalizeKeys(data.projects);
+                articles = normalizeKeys(data.articles);
                 
-                // แมปข้อมูล Projects ให้ตรงกับชื่อคอลัมน์ใน Sheet 100%
-                if (data.projects && data.projects.length > 0) {
-                    projects = data.projects.map(p => ({
-                        id: p.id || p.ID || "N/A",
-                        category: (p.category || p.Category || "UseCase").toLowerCase(),
-                        title: p.title || p.Title || "Unnamed Project",
-                        description_th: p.description_th || p.Description_th || "",
-                        description_en: p.description_en || p.Description_en || "",
-                        img: p.img_url || p.img || p.Img || p.imageurl || "",
-                        icon: p.icon || p.Icon || ""
-                    }));
-                } else {
-                    projects = []; 
-                }
+                allItems = [...products, ...spares];
                 
                 // สั่ง Render หน้าจอต่างๆ
                 try { renderProducts(); } catch(e) { console.error("Error products", e); }
@@ -558,9 +559,9 @@ snapcon_html = """
             const makeCard = (p) => `
                 <div class="bg-white sharp-card p-4 flex flex-col h-full rounded-2xl shadow-sm">
                     <div class="bg-slate-50 h-40 flex items-center justify-center p-2 mb-3 overflow-hidden rounded-xl border border-slate-100">
-                        <img src="${getValidImageUrl(p.img || p.imageurl)}" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
+                        <img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
                     </div>
-                    <h4 class="font-black text-sm text-slate-900 mb-2 truncate" title="${p.name}">${p.name}</h4>
+                    <h4 class="font-black text-sm text-slate-900 mb-2 truncate" title="${p.name || p.title}">${p.name || p.title}</h4>
                     <p class="text-snap-green font-black text-lg mb-4 mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
                     <button onclick="addToCart('${p.id}')" class="w-full bg-slate-100 text-slate-700 py-3 rounded-lg font-bold text-xs hover:bg-snap-green hover:text-white transition-colors">ADD TO CART</button>
                 </div>`;
@@ -569,8 +570,8 @@ snapcon_html = """
             if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
             if(slider) slider.innerHTML = products.slice(0, 10).map(p => `
                 <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50 border border-slate-100"><img src="${getValidImageUrl(p.img)}" class="w-full h-full object-contain mix-blend-multiply p-2"></div>
-                    <h4 class="font-black text-sm text-slate-800 mb-1 truncate">${p.name}</h4>
+                    <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50 border border-slate-100"><img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" class="w-full h-full object-contain mix-blend-multiply p-2"></div>
+                    <h4 class="font-black text-sm text-slate-800 mb-1 truncate">${p.name || p.title}</h4>
                     <p class="text-snap-green font-black text-lg mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
                 </div>`).join('');
         }
@@ -585,15 +586,14 @@ snapcon_html = """
                 pilotGrid.innerHTML = pilots.map(p => {
                     let visual = '<i class="fas fa-cogs text-snap-green text-3xl"></i>';
                     
-                    // ระบบดึงภาพอัตโนมัติ: ถ้า img_url หรือ icon เป็นลิงก์ จะแสดงรูปภาพทันที
-                    let imgSrc = getValidImageUrl(p.img || p.icon);
+                    let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
                     if (imgSrc && imgSrc.includes('http')) {
                         visual = `<img src="${imgSrc}" class="w-full h-full object-contain p-2">`;
                     } else if (p.icon && !p.icon.includes('http')) {
                         visual = `<i class="${p.icon} text-3xl text-snap-green"></i>`;
                     }
                     
-                    const desc = currentLang === 'th' ? p.description_th : p.description_en;
+                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
 
                     return `
                     <div class="bg-slate-50 p-8 sharp-card border border-slate-100 rounded-2xl group flex flex-col items-start h-full">
@@ -610,10 +610,10 @@ snapcon_html = """
                 const usecases = projects.filter(p => (p.category||'').toLowerCase().includes('usecase'));
                 usecaseGrid.innerHTML = usecases.map((p, idx) => {
                     let borderCol = ['border-t-amber-500', 'border-t-snap-green', 'border-t-blue-500'][idx % 3];
-                    let imgSrc = getValidImageUrl(p.img || p.icon);
+                    let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
                     if(!imgSrc || !imgSrc.includes('http')) imgSrc = 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
                     
-                    const desc = currentLang === 'th' ? p.description_th : p.description_en;
+                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
 
                     return `
                     <div class="bg-white p-6 sharp-card rounded-2xl shadow-sm border-t-4 ${borderCol} flex flex-col items-center text-center h-full">
@@ -641,9 +641,11 @@ snapcon_html = """
                 if (art.youtube1) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/${art.youtube1}" frameborder="0" allowfullscreen></iframe></div>`;
                 if (art.youtube2) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/${art.youtube2}" frameborder="0" allowfullscreen></iframe></div>`;
                 if (!mediaHtml) {
-                    let imgSrc = getValidImageUrl(art.imageurl || art.img);
+                    let imgSrc = getValidImageUrl(art.imageurl || art.img || art.image);
                     mediaHtml = `<img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-44 object-cover rounded-xl border border-slate-100">`;
                 }
+
+                const articleUrl = art.link || art.url || '#';
 
                 return `
                 <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
@@ -654,29 +656,29 @@ snapcon_html = """
                         <p class="text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">${art.summary || ''}</p>
                         <div class="mt-auto flex justify-between items-center pt-5 border-t border-slate-100">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">${art.date || ''}</span>
-                            ${art.link ? `<a href="${art.link}" target="_blank" class="bg-slate-900 text-white px-5 py-2.5 rounded-lg text-xs font-bold hover:bg-snap-green transition-colors">อ่านต่อ</a>` : ''}
+                            ${articleUrl !== '#' ? `<a href="${articleUrl}" target="_blank" class="bg-slate-900 text-white px-5 py-2.5 rounded-lg text-xs font-bold hover:bg-snap-green transition-colors">อ่านต่อ</a>` : ''}
                         </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // 6. Render: Documents Dropdown (แก้ปัญหาดึงข้อมูลจาก Tab ย่อย)
+        // 6. Render: Documents Dropdown (แก้ปัญหาดึงข้อมูลจาก Tab ย่อยแบบ Bulletproof)
         function renderDocuments() {
-            // ระบบค้นหาข้อมูลยืดหยุ่น: ไม่ว่าหัวตารางจะชื่ออะไร ก็ค้นหาเจอ
             const makeMenu = (typeStr) => {
                 const filteredDocs = documents.filter(d => {
-                    const t = (d.type || d.category || d.Type || '').toLowerCase();
+                    const t = (d.type || d.category || '').toLowerCase();
                     return t.includes(typeStr);
                 });
                 
                 if (filteredDocs.length === 0) {
-                    return '<div class="px-8 py-6 text-sm text-slate-400 font-medium text-center bg-slate-50">กำลังอัปเดตไฟล์...</div>';
+                    return '<div class="px-8 py-6 text-sm text-slate-400 font-medium text-center bg-slate-50">ไม่มีข้อมูล (No Data)</div>';
                 }
                 
                 return filteredDocs.map(d => {
-                    const name = d.model_name || d.name || d.model || d.title || 'Untitled Document';
-                    const url = getValidImageUrl(d.file_url || d.link || d.url || d.file || '#');
+                    const name = d.modelname || d.name || d.model || d.title || 'Untitled Document';
+                    const url = getValidImageUrl(d.fileurl || d.link || d.url || d.file || '#');
+                    if(url === '#' || url === '') return '';
                     return `<a href="${url}" target="_blank" class="block px-8 py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-sm font-bold text-slate-700 transition-colors">${name}</a>`;
                 }).join('');
             };
@@ -716,8 +718,8 @@ snapcon_html = """
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-5 rounded-xl mb-3 shadow-sm gap-4">
                     <div class="flex items-center gap-5 w-full sm:w-auto flex-1">
                         <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem('${item.cartId}')" class="w-6 h-6 accent-snap-green cursor-pointer rounded">
-                        <div class="w-16 h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1"><img src="${getValidImageUrl(item.img)}" class="max-w-full max-h-full object-contain"></div>
-                        <div class="flex-1 min-w-0"><span class="font-black text-slate-900 block truncate">${item.name}</span><span class="text-xs text-slate-400 font-bold">${item.id}</span></div>
+                        <div class="w-16 h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1"><img src="${getValidImageUrl(item.img || item.imageurl)}" class="max-w-full max-h-full object-contain"></div>
+                        <div class="flex-1 min-w-0"><span class="font-black text-slate-900 block truncate">${item.name || item.title}</span><span class="text-xs text-slate-400 font-bold">${item.id}</span></div>
                     </div>
                     <div class="flex items-center justify-between w-full sm:w-auto gap-4 mt-3 sm:mt-0">
                         <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden h-10 bg-white">
@@ -725,11 +727,11 @@ snapcon_html = """
                             <span class="w-12 h-full flex items-center justify-center text-sm font-black">${item.quantity}</span>
                             <button onclick="updateQuantity('${item.cartId}', 1)" class="w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-l border-slate-200 transition-colors">+</button>
                         </div>
-                        <span class="font-black text-slate-900 text-xl w-32 text-right shrink-0">฿${(item.price * item.quantity).toLocaleString()}</span>
+                        <span class="font-black text-slate-900 text-xl w-32 text-right shrink-0">฿${(parseFloat(item.price||0) * item.quantity).toLocaleString()}</span>
                     </div>
                 </div>`).join('');
             
-            const total = cart.filter(i => i.selected).reduce((s, i) => s + (i.price * i.quantity), 0);
+            const total = cart.filter(i => i.selected).reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
             document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
@@ -752,8 +754,8 @@ snapcon_html = """
             const info = document.getElementById('quote-contact').value.trim();
             if(!name || !info) return alert("กรุณากรอกชื่อและข้อมูลติดต่อกลับให้ครบถ้วน");
             
-            const detailsStr = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
-            const total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
+            const detailsStr = selected.map(i => `- ${i.name||i.title} x${i.quantity} (฿${(parseFloat(i.price||0) * i.quantity).toLocaleString()})`).join('\\n');
+            const total = selected.reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
             const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
             
             try { 
@@ -843,13 +845,13 @@ snapcon_html = """
         function exportCSV() {
             let dash = getDash(); if(!dash) return;
             let bom = "\uFEFF";
-            let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\n";
+            let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
             let totalOut = 0;
             dash.nodes.forEach(n => {
                 let c = (n.output * dash.carbonFactor).toFixed(4); let e = (n.output * dash.energyFactor).toFixed(4); totalOut += n.output;
-                csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\n`;
+                csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\\n`;
             });
-            csvContent += `\nTOTAL,, ,${totalOut},-,${(totalOut * dash.carbonFactor).toFixed(4)},${(totalOut * dash.energyFactor).toFixed(4)}\n`;
+            csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dash.carbonFactor).toFixed(4)},${(totalOut * dash.energyFactor).toFixed(4)}\\n`;
             
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_Report_${currentUserId}.csv`; link.click();
@@ -966,3 +968,7 @@ snapcon_html = """
     </script>
 </body>
 </html>
+"""
+
+# แสดงผลหน้าเว็บผ่าน Streamlit
+st.components.v1.html(snapcon_html, height=2500, scrolling=True)
