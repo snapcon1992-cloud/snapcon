@@ -681,8 +681,8 @@ snapcon_html = """
                             th: p.description_th || p.Description_th || "",
                             en: p.description_en || p.Description_en || ""
                         },
-                        img: p.img_url || p.img || p.Img || "https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80",
-                        icon: p.icon || p.Icon || "fas fa-cogs text-snap-green"
+                        img: p.img_url || p.img || p.Img || "",
+                        icon: p.icon || p.Icon || ""
                     }));
                 }
                 
@@ -1100,30 +1100,42 @@ snapcon_html = """
 
             if (pilotGrid) {
                 const pilots = projects.filter(p => p.category.includes('pilot'));
-                pilotGrid.innerHTML = pilots.map(p => `
+                pilotGrid.innerHTML = pilots.map(p => {
+                    let visualHtml = '<i class="fas fa-cogs text-snap-green"></i>'; // ไอคอนเริ่มต้นถ้าไม่ได้ใส่ลิงก์
+                    if (p.icon && p.icon.startsWith('http')) {
+                        visualHtml = `<img src="${p.icon}" class="max-w-full max-h-full object-contain mix-blend-multiply p-1">`;
+                    } else if (p.img && p.img.startsWith('http')) {
+                        visualHtml = `<img src="${p.img}" class="max-w-full max-h-full object-contain mix-blend-multiply p-1">`;
+                    } else if (p.icon) {
+                        visualHtml = `<i class="${p.icon}"></i>`;
+                    }
+
+                    return `
                     <div class="bg-slate-50 p-8 sharp-card group">
-                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                            <i class="${p.icon}"></i>
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform overflow-hidden">
+                            ${visualHtml}
                         </div>
                         <h4 class="text-lg font-black text-slate-900 mb-3">${p.title}</h4>
                         <p class="text-sm text-slate-600">${p.description[currentLang] || p.description.th}</p>
                     </div>
-                `).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
+                `}).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
             }
 
             if (usecaseGrid) {
                 const borderColors = ['border-t-amber-500', 'border-t-snap-green', 'border-t-blue-500'];
                 const usecases = projects.filter(p => p.category.includes('usecase') || p.category.includes('use case'));
                 
-                usecaseGrid.innerHTML = usecases.map((p, index) => `
+                usecaseGrid.innerHTML = usecases.map((p, index) => {
+                    let imgSrc = (p.img && p.img.startsWith('http')) ? p.img : 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
+                    return `
                     <div class="bg-white p-6 sharp-card border-t-4 ${borderColors[index % borderColors.length]} flex flex-col items-center text-center">
                         <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
-                            <img src="${p.img || 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80'}" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                            <img src="${imgSrc}" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
                         </div>
                         <h4 class="text-lg font-black text-slate-900 mb-2">${p.title}</h4>
                         <p class="text-sm text-slate-600">${p.description[currentLang] || p.description.th}</p>
                     </div>
-                `).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
+                `}).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
             }
         }
 
