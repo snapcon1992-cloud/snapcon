@@ -831,16 +831,17 @@ snapcon_html = """
         }
 
         // --- ระบบส่งข้อมูล ---
-        async function sendDataToServer(payloadObj) {
-            return fetch(GOOGLE_SCRIPT_URL, {
+        function sendDataToServer(payloadObj) {
+            // ทำงานแบบ Background ไม่รอผลตอบกลับ เพื่อไม่ให้ Block กระบวนการ UI ของหน้าเว็บ
+            fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payloadObj)
-            });
+            }).catch(e => console.log("Background Sync Error:", e));
         }
 
-        async function requestQuote() {
+        function requestQuote() {
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
             
@@ -852,69 +853,61 @@ snapcon_html = """
             const total = selected.reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
             const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
             
-            try { 
-                await sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
-                alert("ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ");
-                cart = cart.filter(i => !i.selected); 
-                updateBadge(); renderCart(); navigate('home');
-            } catch(e) { console.error("Error", e); }
+            // 1. ตอบสนองผู้ใช้ทันที
+            alert("ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ");
+            cart = cart.filter(i => !i.selected); 
+            updateBadge(); 
+            renderCart(); 
+            navigate('home');
+
+            // 2. ส่งข้อมูลไปเซิร์ฟเวอร์
+            sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
         }
 
-        // ✅ อัปเดต: สมัครสมาชิกเสร็จแล้วให้ Login อัตโนมัติทันที
-        async function submitRegistration() {
+        function submitRegistration() {
             const id = document.getElementById('reg-id').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
             const name = document.getElementById('reg-name').value.trim();
             const contact = document.getElementById('reg-contact').value.trim();
             if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
             
-            try {
-                // ส่งข้อมูลไปบันทึกลง Google Sheets
-                await sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
-                alert("ลงทะเบียนสำเร็จ! ระบบกำลังนำคุณเข้าสู่ระบบ...");
-                
-                // Auto-Login ล็อกอินอัตโนมัติ
-                memoryUsers[id] = pass;
-                isLoggedIn = true;
-                currentUserId = id;
-                
-                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
-                
-                document.getElementById('displayUser').innerText = id;
-                document.getElementById('dash-user-name').innerText = id; 
-                document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
-                document.getElementById('user-section').classList.replace('hidden', 'flex');
-                
-                // ปิดหน้าต่างลงทะเบียน และล้างข้อมูล
-                closeRegisterModal();
-                document.getElementById('reg-id').value = '';
-                document.getElementById('reg-pass').value = '';
-                document.getElementById('reg-name').value = '';
-                document.getElementById('reg-contact').value = '';
+            // 1. ตอบสนองผู้ใช้ แจ้งเตือนและล็อกอินทันที
+            memoryUsers[id] = pass;
+            isLoggedIn = true;
+            currentUserId = id;
+            
+            if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+            
+            document.getElementById('displayUser').innerText = id;
+            document.getElementById('dash-user-name').innerText = id; 
+            document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
+            document.getElementById('user-section').classList.replace('hidden', 'flex');
+            
+            closeRegisterModal();
+            document.getElementById('reg-id').value = '';
+            document.getElementById('reg-pass').value = '';
+            document.getElementById('reg-name').value = '';
+            document.getElementById('reg-contact').value = '';
 
-            } catch(e) { 
-                console.error("Error", e); 
-                alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
-            }
+            alert("ลงทะเบียนสำเร็จ! ระบบนำคุณเข้าสู่ระบบอัตโนมัติแล้ว");
+
+            // 2. ส่งข้อมูลไปเก็บไว้หลังบ้านเป็น Background
+            sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
         }
 
-        async function submitContactForm() {
+        function submitContactForm() {
             const name = document.getElementById('contact-name').value.trim();
             const info = document.getElementById('contact-info').value.trim();
             const msg = document.getElementById('contact-message').value.trim();
 
             if(!name || !info || !msg) return alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งข้อความ");
 
-            try {
-                await sendDataToServer({ type: "Contact Support", name_or_id: name, email: info, details: msg });
-                alert("ส่งข้อความสำเร็จ! ทีมงานเทคนิคจะรีบติดต่อกลับครับ");
-                document.getElementById('contact-name').value = '';
-                document.getElementById('contact-info').value = '';
-                document.getElementById('contact-message').value = '';
-            } catch(e) {
-                console.error("Error", e);
-                alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
-            }
+            alert("ส่งข้อความสำเร็จ! ทีมงานเทคนิคจะรีบติดต่อกลับครับ");
+            document.getElementById('contact-name').value = '';
+            document.getElementById('contact-info').value = '';
+            document.getElementById('contact-message').value = '';
+
+            sendDataToServer({ type: "Contact Support", name_or_id: name, email: info, details: msg });
         }
 
         // ==========================================
