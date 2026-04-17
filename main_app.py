@@ -68,7 +68,7 @@ snapcon_html = """
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
-        .dropdown-container:hover .dropdown-menu { display: block; }
+        .dropdown-container:hover .dropdown-menu, .dropdown-container:focus-within .dropdown-menu { display: block; }
         
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
@@ -176,22 +176,22 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- Feature Dropdowns -->
+        <!-- Feature Dropdowns (แก้ไขเรื่องการดึงข้อมูลจาก Sheets) -->
         <section class="feature-bar w-full relative z-40 border-t border-slate-800">
             <div class="max-container grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
-                <div class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors">
+                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors focus:outline-none">
                     <i class="fas fa-file-pdf text-4xl text-snap-green mb-4"></i>
                     <h3 data-i18n="cardDataSheet" class="text-xl font-black text-white uppercase">Data Sheet</h3>
                     <p class="text-xs text-slate-400 mt-2" data-i18n="selectModel">Select Model <i class="fas fa-angle-down"></i></p>
                     <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl" id="menu-datasheet"></div>
                 </div>
-                <div class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors">
+                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors focus:outline-none">
                     <i class="fas fa-drafting-compass text-4xl text-blue-500 mb-4"></i>
                     <h3 data-i18n="cardDrawing" class="text-xl font-black text-white uppercase">2D/3D Drawing</h3>
                     <p class="text-xs text-slate-400 mt-2" data-i18n="selectModel">Select Model <i class="fas fa-angle-down"></i></p>
                     <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl" id="menu-drawing"></div>
                 </div>
-                <div class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors">
+                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors focus:outline-none">
                     <i class="fas fa-book-open text-4xl text-amber-500 mb-4"></i>
                     <h3 data-i18n="cardCatalog" class="text-xl font-black text-white uppercase">Catalog</h3>
                     <p class="text-xs text-slate-400 mt-2" data-i18n="btnDownload">Download <i class="fas fa-angle-down"></i></p>
@@ -304,38 +304,117 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- PAGE: COMPANY -->
+    <!-- PAGE: COMPANY (อัปเดตใหม่ สมบูรณ์แบบ) -->
     <div id="page-about" class="page-section bg-white min-h-screen pt-10">
-        <div class="max-container max-w-4xl py-10">
-            <h2 class="text-3xl font-black text-slate-900 uppercase mb-2">Company</h2>
+        <div class="max-container py-10">
+            <h2 data-i18n="navAbout" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Company</h2>
             <div class="w-16 h-1 bg-snap-green mb-10"></div>
-            <p class="text-slate-600 leading-relaxed mb-6 text-lg">Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System...</p>
+            
+            <div class="grid md:grid-cols-2 gap-10 items-center mb-16">
+                <div>
+                    <h3 class="text-4xl font-black text-snap-black tracking-tighter mb-6 leading-tight">Driving the future of <br><span class="text-snap-green">industrial automation.</span></h3>
+                    <p class="text-slate-600 leading-relaxed mb-6">
+                        Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด
+                    </p>
+                </div>
+                <div class="h-64 md:h-80 sharp-card overflow-hidden relative group rounded-2xl shadow-lg border border-slate-200">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-snap-green/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-snap-black text-white p-10 sharp-card border-none rounded-2xl">
+                    <i class="fas fa-eye text-4xl text-snap-green mb-6"></i>
+                    <h4 class="text-2xl font-bold mb-4 uppercase tracking-wider">Vision</h4>
+                    <p class="text-slate-400 leading-relaxed">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
+                </div>
+                <div class="bg-snap-green text-white p-10 sharp-card border-none rounded-2xl">
+                    <i class="fas fa-bullseye text-4xl text-snap-black mb-6"></i>
+                    <h4 class="text-2xl font-bold mb-4 uppercase tracking-wider text-snap-black">Mission</h4>
+                    <p class="text-emerald-900 leading-relaxed font-medium">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE: SUPPORT / CONTACT (อัปเดตใหม่ให้ใช้งานฟอร์มส่งเข้า Sheet ได้) -->
+    <div id="page-contact" class="page-section bg-snap-gray min-h-screen pt-10">
+        <div class="max-container max-w-5xl py-10">
+            <h2 data-i18n="navContact" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Support</h2>
+            <div class="w-16 h-1 bg-snap-green mb-10"></div>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <!-- ข้อมูลติดต่อด่วน -->
+                <div class="bg-white sharp-card p-10 text-left rounded-2xl shadow-sm h-full border border-slate-200">
+                    <i class="fas fa-headset text-5xl text-snap-green mb-6"></i>
+                    <h3 class="text-2xl font-black text-slate-900 mb-2">Technical Support 24/7</h3>
+                    <p class="text-slate-500 mb-8 text-sm">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ</p>
+                    
+                    <div class="space-y-4 mb-10">
+                        <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card rounded-xl border border-slate-100">
+                            <i class="fas fa-envelope text-slate-400 text-xl"></i>
+                            <span class="font-bold text-slate-700">snapcon1992@gmail.com</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card rounded-xl border border-slate-100">
+                            <i class="fab fa-line text-[#00B900] text-2xl"></i>
+                            <span class="font-bold text-slate-700">@SnapconAuto</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card rounded-xl border border-slate-100">
+                            <i class="fas fa-phone-alt text-slate-400 text-xl"></i>
+                            <span class="font-bold text-slate-700">081-XXX-XXXX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ฟอร์มติดต่อส่งเข้า Google Sheets -->
+                <div class="bg-white p-10 sharp-card shadow-sm rounded-2xl h-full border border-slate-200">
+                    <h3 class="text-xl font-black text-slate-900 mb-6 uppercase tracking-widest"><i class="fas fa-paper-plane text-snap-green mr-2"></i> ส่งข้อความถึงเรา</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">ชื่อ-นามสกุล / บริษัท</label>
+                            <input type="text" id="contact-name" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green sharp-card text-sm rounded-lg" placeholder="กรอกชื่อของคุณ">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">อีเมล / เบอร์โทรติดต่อกลับ</label>
+                            <input type="text" id="contact-info" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green sharp-card text-sm rounded-lg" placeholder="กรอกข้อมูลติดต่อกลับ">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">รายละเอียด / คำถาม</label>
+                            <textarea id="contact-message" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green sharp-card text-sm rounded-lg custom-scrollbar" placeholder="พิมพ์ข้อความของคุณที่นี่..."></textarea>
+                        </div>
+                        <button onclick="submitContactForm()" class="w-full bg-snap-black text-white px-8 py-4 font-bold hover:bg-snap-green sharp-btn text-sm transition-all rounded-lg mt-2">
+                            SEND MESSAGE
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- MODAL: REGISTER -->
     <div id="modal-register" class="fixed inset-0 bg-snap-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md sharp-card shadow-2xl relative p-8">
-            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button>
+        <div class="bg-white w-full max-w-md sharp-card shadow-2xl relative p-8 rounded-2xl">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
             <h3 class="text-xl font-black text-slate-900 uppercase mb-6" data-i18n="regTitle">Create Account</h3>
             <div class="space-y-4">
-                <input type="text" id="reg-id" placeholder="User ID" class="w-full px-3 py-2 border outline-none focus:border-snap-green sharp-card">
-                <input type="password" id="reg-pass" placeholder="Password" class="w-full px-3 py-2 border outline-none focus:border-snap-green sharp-card">
-                <input type="text" id="reg-name" placeholder="Name / Company" class="w-full px-3 py-2 border outline-none focus:border-snap-green sharp-card">
-                <input type="text" id="reg-contact" placeholder="Email / Phone" class="w-full px-3 py-2 border outline-none focus:border-snap-green sharp-card">
-                <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-3 font-bold hover:bg-snap-green-hover sharp-btn" data-i18n="btnSubmitReg">Confirm</button>
+                <input type="text" id="reg-id" placeholder="User ID" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
+                <input type="password" id="reg-pass" placeholder="Password" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
+                <input type="text" id="reg-name" placeholder="Name / Company" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
+                <input type="text" id="reg-contact" placeholder="Email / Phone" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
+                <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4 font-bold hover:bg-snap-green-hover rounded-lg uppercase tracking-widest mt-2" data-i18n="btnSubmitReg">Confirm</button>
             </div>
         </div>
     </div>
     
     <!-- Floating Support Button -->
     <button onclick="navigate('contact')" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 cursor-pointer">
-        <i class="fas fa-user-cog"></i>
+        <i class="fas fa-headset group-hover:animate-pulse"></i>
     </button>
 
     <script>
         // =========================================================================
-        // JAVASCRIPT SYSTEM (STABLE VERSION 3.0)
+        // JAVASCRIPT SYSTEM (STABLE VERSION 4.0 - AUTO FALLBACK & ROBUST MAPPING)
         // =========================================================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         
@@ -359,12 +438,12 @@ snapcon_html = """
         // 2. โหลดข้อมูลทั้งหมดจาก Google Sheets
         async function loadDataFromSheet() {
             try {
-                console.log("Loading data from Google Sheets...");
+                console.log("Fetching data from Google Sheets...");
                 const response = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
                 if (!response.ok) throw new Error("Network response was not ok");
                 
                 const data = await response.json();
-                console.log("Data received:", data);
+                console.log("Data successfully loaded:", data);
                 
                 products = data.products || [];
                 spares = data.spares || [];
@@ -372,7 +451,7 @@ snapcon_html = """
                 articles = data.articles || [];
                 allItems = [...products, ...spares];
                 
-                // แมปข้อมูล Projects ให้ตรงกับชื่อคอลัมน์ใน Sheet ใหม่
+                // แมปข้อมูล Projects ให้ตรงกับชื่อคอลัมน์ใน Sheet 100%
                 if (data.projects && data.projects.length > 0) {
                     projects = data.projects.map(p => ({
                         id: p.id || p.ID || "N/A",
@@ -384,7 +463,7 @@ snapcon_html = """
                         icon: p.icon || p.Icon || ""
                     }));
                 } else {
-                    projects = []; // ไม่มี Fallback
+                    projects = []; 
                 }
                 
                 // สั่ง Render หน้าจอต่างๆ
@@ -406,26 +485,26 @@ snapcon_html = """
             const slider = document.getElementById('home-product-slider');
 
             const makeCard = (p) => `
-                <div class="bg-white sharp-card p-4 flex flex-col h-full">
-                    <div class="bg-slate-50 h-40 flex items-center justify-center p-2 mb-3 overflow-hidden rounded">
+                <div class="bg-white sharp-card p-4 flex flex-col h-full rounded-2xl shadow-sm">
+                    <div class="bg-slate-50 h-40 flex items-center justify-center p-2 mb-3 overflow-hidden rounded-xl border border-slate-100">
                         <img src="${getValidImageUrl(p.img || p.imageurl)}" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
                     </div>
                     <h4 class="font-black text-sm text-slate-900 mb-2 truncate" title="${p.name}">${p.name}</h4>
-                    <p class="text-snap-green font-black text-lg mb-3 mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full bg-slate-100 text-slate-700 py-2 font-bold text-xs hover:bg-snap-green hover:text-white sharp-btn border border-slate-200">ADD TO CART</button>
+                    <p class="text-snap-green font-black text-lg mb-4 mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
+                    <button onclick="addToCart('${p.id}')" class="w-full bg-slate-100 text-slate-700 py-3 rounded-lg font-bold text-xs hover:bg-snap-green hover:text-white transition-colors">ADD TO CART</button>
                 </div>`;
 
             if(pGrid) pGrid.innerHTML = products.map(makeCard).join('');
             if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
             if(slider) slider.innerHTML = products.slice(0, 10).map(p => `
-                <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50"><img src="${getValidImageUrl(p.img)}" class="w-full h-full object-contain mix-blend-multiply p-2"></div>
+                <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50 border border-slate-100"><img src="${getValidImageUrl(p.img)}" class="w-full h-full object-contain mix-blend-multiply p-2"></div>
                     <h4 class="font-black text-sm text-slate-800 mb-1 truncate">${p.name}</h4>
                     <p class="text-snap-green font-black text-lg mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
                 </div>`).join('');
         }
 
-        // 4. Render: Project Reference
+        // 4. Render: Project Reference (แก้ปัญหารูป Pilot อัตโนมัติ)
         function renderProjects() {
             const pilotGrid = document.getElementById('project-pilot-grid');
             const usecaseGrid = document.getElementById('project-usecase-grid');
@@ -434,24 +513,26 @@ snapcon_html = """
                 const pilots = projects.filter(p => (p.category||'').toLowerCase().includes('pilot'));
                 pilotGrid.innerHTML = pilots.map(p => {
                     let visual = '<i class="fas fa-cogs text-snap-green text-3xl"></i>';
-                    // ยึดข้อมูลจาก img_url เป็นหลัก ตามตาราง
-                    let imgSrc = getValidImageUrl(p.img || p.icon);
                     
+                    // ระบบดึงภาพอัตโนมัติ: ถ้า img_url หรือ icon เป็นลิงก์ จะแสดงรูปภาพทันที
+                    let imgSrc = getValidImageUrl(p.img || p.icon);
                     if (imgSrc && imgSrc.includes('http')) {
                         visual = `<img src="${imgSrc}" class="w-full h-full object-contain p-2">`;
                     } else if (p.icon && !p.icon.includes('http')) {
-                        visual = `<i class="${p.icon} text-2xl text-snap-green"></i>`;
+                        visual = `<i class="${p.icon} text-3xl text-snap-green"></i>`;
                     }
                     
                     const desc = currentLang === 'th' ? p.description_th : p.description_en;
 
                     return `
-                    <div class="bg-slate-50 p-8 sharp-card group flex flex-col items-start h-full">
-                        <div class="w-16 h-16 bg-white border border-slate-200 rounded-xl flex items-center justify-center mb-6 shadow-sm overflow-hidden shrink-0">${visual}</div>
+                    <div class="bg-slate-50 p-8 sharp-card border border-slate-100 rounded-2xl group flex flex-col items-start h-full">
+                        <div class="w-20 h-20 bg-white border border-slate-200 rounded-2xl flex items-center justify-center mb-6 shadow-sm overflow-hidden shrink-0 group-hover:scale-110 transition-transform">
+                            ${visual}
+                        </div>
                         <h4 class="text-lg font-black text-slate-900 mb-3">${p.title || 'Untitled'}</h4>
                         <p class="text-sm text-slate-600">${desc || ''}</p>
                     </div>`;
-                }).join('') || '<p class="col-span-full text-slate-400 font-bold">ไม่มีข้อมูล (No Pilot Projects)</p>';
+                }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Pilot Projects)</p>';
             }
 
             if (usecaseGrid) {
@@ -464,14 +545,14 @@ snapcon_html = """
                     const desc = currentLang === 'th' ? p.description_th : p.description_en;
 
                     return `
-                    <div class="bg-white p-6 sharp-card border-t-4 ${borderCol} flex flex-col items-center text-center h-full">
-                        <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
-                            <img src="${imgSrc}" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                    <div class="bg-white p-6 sharp-card rounded-2xl shadow-sm border-t-4 ${borderCol} flex flex-col items-center text-center h-full">
+                        <div class="w-full h-40 bg-slate-100 rounded-xl mb-6 overflow-hidden flex items-center justify-center">
+                            <img src="${imgSrc}" class="w-full h-full object-cover mix-blend-multiply opacity-90 hover:scale-110 transition-transform duration-500">
                         </div>
                         <h4 class="text-lg font-black text-slate-900 mb-2">${p.title || 'Untitled'}</h4>
                         <p class="text-sm text-slate-600">${desc || ''}</p>
                     </div>`;
-                }).join('') || '<p class="col-span-full text-slate-400 font-bold">ไม่มีข้อมูล (No Use Cases)</p>';
+                }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Use Cases)</p>';
             }
         }
 
@@ -480,44 +561,61 @@ snapcon_html = """
             const container = document.getElementById('article-list');
             if (!container) return;
             if (!articles || articles.length === 0) {
-                container.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold">ยังไม่มีบทความในขณะนี้</p>';
+                container.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold">กำลังอัปเดตบทความใหม่เร็วๆ นี้...</p>';
                 return;
             }
             
             container.innerHTML = articles.map(art => {
                 let mediaHtml = '';
-                if (art.youtube1) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded" src="https://www.youtube.com/embed/${art.youtube1}" frameborder="0" allowfullscreen></iframe></div>`;
-                if (art.youtube2) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded" src="https://www.youtube.com/embed/${art.youtube2}" frameborder="0" allowfullscreen></iframe></div>`;
+                if (art.youtube1) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/${art.youtube1}" frameborder="0" allowfullscreen></iframe></div>`;
+                if (art.youtube2) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/${art.youtube2}" frameborder="0" allowfullscreen></iframe></div>`;
                 if (!mediaHtml) {
                     let imgSrc = getValidImageUrl(art.imageurl || art.img);
-                    mediaHtml = `<img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-44 object-cover rounded-lg border border-slate-100">`;
+                    mediaHtml = `<img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-44 object-cover rounded-xl border border-slate-100">`;
                 }
 
                 return `
-                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
-                    <div class="p-2">${mediaHtml}</div>
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
+                    <div class="p-3">${mediaHtml}</div>
                     <div class="p-6 pt-2 flex flex-col flex-1">
                         <span class="text-snap-green text-[10px] font-black uppercase tracking-widest">${art.category || 'INSIGHT'}</span>
-                        <h3 class="text-xl font-black text-slate-900 mt-1 mb-2 line-clamp-2">${art.title || 'Untitled'}</h3>
-                        <p class="text-slate-500 text-sm mb-4 line-clamp-2">${art.summary || ''}</p>
-                        <div class="mt-auto flex justify-between items-center pt-4 border-t border-slate-100">
+                        <h3 class="text-xl font-black text-slate-900 mt-2 mb-3 line-clamp-2">${art.title || 'Untitled'}</h3>
+                        <p class="text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">${art.summary || ''}</p>
+                        <div class="mt-auto flex justify-between items-center pt-5 border-t border-slate-100">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">${art.date || ''}</span>
-                            ${art.link ? `<a href="${art.link}" target="_blank" class="bg-slate-900 text-white px-4 py-2 rounded text-xs font-bold hover:bg-snap-green transition">อ่านต่อ</a>` : ''}
+                            ${art.link ? `<a href="${art.link}" target="_blank" class="bg-slate-900 text-white px-5 py-2.5 rounded-lg text-xs font-bold hover:bg-snap-green transition-colors">อ่านต่อ</a>` : ''}
                         </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // 6. Render: Documents Dropdown
+        // 6. Render: Documents Dropdown (แก้ปัญหาดึงข้อมูลจาก Tab ย่อย)
         function renderDocuments() {
-            const makeMenu = (type) => documents.filter(d => (d.type || '').toLowerCase() === type).map(d => `<a href="${d.file_url}" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold">${d.model_name}</a>`).join('') || '<div class="px-8 py-4 text-sm text-slate-400">No data</div>';
+            // ระบบค้นหาข้อมูลยืดหยุ่น: ไม่ว่าหัวตารางจะชื่ออะไร ก็ค้นหาเจอ
+            const makeMenu = (typeStr) => {
+                const filteredDocs = documents.filter(d => {
+                    const t = (d.type || d.category || d.Type || '').toLowerCase();
+                    return t.includes(typeStr);
+                });
+                
+                if (filteredDocs.length === 0) {
+                    return '<div class="px-8 py-6 text-sm text-slate-400 font-medium text-center bg-slate-50">กำลังอัปเดตไฟล์...</div>';
+                }
+                
+                return filteredDocs.map(d => {
+                    const name = d.model_name || d.name || d.model || d.title || 'Untitled Document';
+                    const url = getValidImageUrl(d.file_url || d.link || d.url || d.file || '#');
+                    return `<a href="${url}" target="_blank" class="block px-8 py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-sm font-bold text-slate-700 transition-colors">${name}</a>`;
+                }).join('');
+            };
+
             const ds = document.getElementById('menu-datasheet'); if(ds) ds.innerHTML = makeMenu('datasheet');
             const dw = document.getElementById('menu-drawing'); if(dw) dw.innerHTML = makeMenu('drawing');
             const ca = document.getElementById('menu-catalog'); if(ca) ca.innerHTML = makeMenu('catalog');
         }
 
-        // 7. Cart & Quotation System
+        // 7. Cart & Post Data System
         function addToCart(id) {
             const item = allItems.find(i => i.id === id);
             if(item) {
@@ -540,21 +638,21 @@ snapcon_html = """
             if (quoteForm) quoteForm.classList.remove('hidden');
 
             if(cart.length === 0) {
-                container.innerHTML = `<p class="text-center py-8 text-slate-400 font-bold bg-slate-50 border border-slate-100">ไม่มีสินค้าในรถเข็น</p>`;
+                container.innerHTML = `<p class="text-center py-10 text-slate-400 font-bold bg-slate-50 border border-slate-100 rounded-xl">ไม่มีสินค้าในรถเข็น</p>`;
                 document.getElementById('cart-total').innerText = '฿0'; return;
             }
             container.innerHTML = cart.map(item => `
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-5 rounded-xl mb-3 shadow-sm gap-4">
                     <div class="flex items-center gap-5 w-full sm:w-auto flex-1">
-                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem('${item.cartId}')" class="w-6 h-6 accent-snap-green cursor-pointer">
-                        <div class="w-16 h-16 bg-white border rounded flex items-center justify-center shrink-0 p-1"><img src="${getValidImageUrl(item.img)}" class="max-w-full max-h-full object-contain"></div>
+                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem('${item.cartId}')" class="w-6 h-6 accent-snap-green cursor-pointer rounded">
+                        <div class="w-16 h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1"><img src="${getValidImageUrl(item.img)}" class="max-w-full max-h-full object-contain"></div>
                         <div class="flex-1 min-w-0"><span class="font-black text-slate-900 block truncate">${item.name}</span><span class="text-xs text-slate-400 font-bold">${item.id}</span></div>
                     </div>
                     <div class="flex items-center justify-between w-full sm:w-auto gap-4 mt-3 sm:mt-0">
-                        <div class="flex items-center border rounded overflow-hidden h-10 bg-white">
-                            <button onclick="updateQuantity('${item.cartId}', -1)" class="w-10 h-full bg-slate-50 font-black border-r">-</button>
+                        <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden h-10 bg-white">
+                            <button onclick="updateQuantity('${item.cartId}', -1)" class="w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-r border-slate-200 transition-colors">-</button>
                             <span class="w-12 h-full flex items-center justify-center text-sm font-black">${item.quantity}</span>
-                            <button onclick="updateQuantity('${item.cartId}', 1)" class="w-10 h-full bg-slate-50 font-black border-l">+</button>
+                            <button onclick="updateQuantity('${item.cartId}', 1)" class="w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-l border-slate-200 transition-colors">+</button>
                         </div>
                         <span class="font-black text-slate-900 text-xl w-32 text-right shrink-0">฿${(item.price * item.quantity).toLocaleString()}</span>
                     </div>
@@ -565,7 +663,7 @@ snapcon_html = """
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
 
-        // --- ระบบส่งข้อมูลกลับไปที่โหมด JSON ที่ปลอดภัยจาก CORS ---
+        // --- ระบบส่งข้อมูลที่เสถียร ---
         async function sendDataToServer(payloadObj) {
             return fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -589,12 +687,10 @@ snapcon_html = """
             
             try { 
                 await sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
-                alert("ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด");
+                alert("ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ");
                 cart = cart.filter(i => !i.selected); 
                 updateBadge(); renderCart(); navigate('home');
-            } catch(e) { 
-                console.error("Error", e); 
-            }
+            } catch(e) { console.error("Error", e); }
         }
 
         async function submitRegistration() {
@@ -602,15 +698,32 @@ snapcon_html = """
             const pass = document.getElementById('reg-pass').value.trim();
             const name = document.getElementById('reg-name').value.trim();
             const contact = document.getElementById('reg-contact').value.trim();
-            
             if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
             
             try {
                 await sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
                 alert("ลงทะเบียนสำเร็จ!");
                 closeRegisterModal();
-            } catch(e) { 
-                console.error("Error", e); 
+            } catch(e) { console.error("Error", e); }
+        }
+
+        // ฟังก์ชันใหม่: สำหรับส่งฟอร์มติดต่อ (Contact Form)
+        async function submitContactForm() {
+            const name = document.getElementById('contact-name').value.trim();
+            const info = document.getElementById('contact-info').value.trim();
+            const msg = document.getElementById('contact-message').value.trim();
+
+            if(!name || !info || !msg) return alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งข้อความ");
+
+            try {
+                await sendDataToServer({ type: "Contact Support", name_or_id: name, email: info, details: msg });
+                alert("ส่งข้อความสำเร็จ! ทีมงานเทคนิคจะรีบติดต่อกลับครับ");
+                document.getElementById('contact-name').value = '';
+                document.getElementById('contact-info').value = '';
+                document.getElementById('contact-message').value = '';
+            } catch(e) {
+                console.error("Error", e);
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
             }
         }
 
