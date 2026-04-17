@@ -45,7 +45,7 @@ snapcon_html = """
         .hero-container { background-color: #e2e8f0; position: relative; }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.9) 75%, rgba(2, 44, 34, 0.8) 100%);
+            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.85) 65%, rgba(2, 44, 34, 0.95) 100%);
             z-index: 5; pointer-events: none;
         }
         .hero-white-box { background-color: white; border-bottom: 6px solid #00B36E; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border-radius: 1rem; }
@@ -79,8 +79,19 @@ snapcon_html = """
         .sharp-btn { border-radius: 0.5rem; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
         .sharp-btn:active { transform: scale(0.98); }
         
-        .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(30px); animation: fadeSlideText 18s infinite; }
-        @keyframes fadeSlideText { 0% { opacity: 0; transform: translateY(30px); } 4% { opacity: 1; transform: translateY(0); } 13% { opacity: 1; transform: translateY(0); } 17% { opacity: 0; transform: translateY(-30px); } 100% { opacity: 0; } }
+        /* แก้ไข Animation ตัวหนังสือให้จังหวะแม่นยำขึ้นสำหรับ 3 ข้อความ */
+        .feature-text-container { position: relative; height: 100px; width: 100%; display: flex; align-items: flex-start; }
+        .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(20px); animation: fadeSlideText 18s infinite; }
+        .feature-text-slide:nth-child(1) { animation-delay: 0s; } 
+        .feature-text-slide:nth-child(2) { animation-delay: 6s; } 
+        .feature-text-slide:nth-child(3) { animation-delay: 12s; }
+        @keyframes fadeSlideText { 
+            0% { opacity: 0; transform: translateY(20px); } 
+            5% { opacity: 1; transform: translateY(0); } 
+            28% { opacity: 1; transform: translateY(0); } 
+            33% { opacity: 0; transform: translateY(-20px); } 
+            100% { opacity: 0; transform: translateY(-20px); } 
+        }
         
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
@@ -157,21 +168,23 @@ snapcon_html = """
                     </button>
                 </div>
 
+                <!-- แก้ไข UI ส่วน Slide ข้อความให้ดูเด่นชัด พรีเมียม และอ่านง่าย -->
                 <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
-                    <div>
-                        <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/20 pb-4 inline-block drop-shadow-md">Why Snapcon?</h3>
-                        <div class="feature-text-container">
-                            <div class="feature-text-slide drop-shadow-xl">
-                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs1Title">⚡ Easy Setup</h4>
-                                <p class="text-lg md:text-xl text-emerald-400 font-bold" data-i18n="fs1Desc">Plug & Play ใช้งานได้ทันที</p>
+                    <div class="bg-snap-black/60 backdrop-blur-md border border-white/10 p-8 md:p-10 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-[40px] rounded-full pointer-events-none"></div>
+                        <h3 class="text-emerald-400 font-black tracking-widest uppercase text-xs mb-8 border-b border-white/10 pb-4 inline-block relative z-10">Why Snapcon?</h3>
+                        <div class="feature-text-container relative z-10">
+                            <div class="feature-text-slide">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight" data-i18n="fs1Title">⚡ Easy Setup</h4>
+                                <p class="text-lg md:text-xl text-emerald-300 font-bold" data-i18n="fs1Desc">Plug & Play ใช้งานได้ทันที</p>
                             </div>
-                            <div class="feature-text-slide drop-shadow-xl">
-                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs2Title">🔗 Seamless Connection</h4>
-                                <p class="text-lg md:text-xl text-blue-400 font-bold" data-i18n="fs2Desc">เชื่อม PLC / Sensor ได้ง่าย</p>
+                            <div class="feature-text-slide">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight" data-i18n="fs2Title">🔗 Seamless Connection</h4>
+                                <p class="text-lg md:text-xl text-blue-300 font-bold" data-i18n="fs2Desc">เชื่อม PLC / Sensor ได้ง่าย</p>
                             </div>
-                            <div class="feature-text-slide drop-shadow-xl">
-                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs3Title">📊 Real-Time Monitoring</h4>
-                                <p class="text-lg md:text-xl text-amber-400 font-bold" data-i18n="fs3Desc">เห็นข้อมูลทันที</p>
+                            <div class="feature-text-slide">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight" data-i18n="fs3Title">📊 Real-Time Monitoring</h4>
+                                <p class="text-lg md:text-xl text-amber-300 font-bold" data-i18n="fs3Desc">เห็นข้อมูลทันที</p>
                             </div>
                         </div>
                     </div>
@@ -559,13 +572,12 @@ snapcon_html = """
         let cart = [], products = [], spares = [], documents = [], projects = [], articles = [], allItems = [];
         
         // -------------------------------------------------------------------------
-        // กู้คืนฟังก์ชัน Dashboard State ที่ทำให้ระบบค้าง
+        // กู้คืนฟังก์ชัน Dashboard State
         // -------------------------------------------------------------------------
         let currentUserId = null;
         let memoryUsers = { '001': '123', 'admin': 'admin' };
         let activeDashInterval = null;
         
-        // ฟังก์ชันสร้างข้อมูลเริ่มต้นสำหรับ Dashboard เมื่อลงทะเบียนใหม่
         function createDefaultDash() {
             return {
                 isRunning: false, target: 10000, carbonFactor: 0.0070, energyFactor: 0.015, elapsedSeconds: 0,
@@ -579,20 +591,17 @@ snapcon_html = """
             };
         }
 
-        // เก็บข้อมูล Dashboard ของแต่ละ User แยกกัน
         let userDashboards = {
             '001': createDefaultDash(),
             'admin': createDefaultDash()
         };
 
-        // ฟังก์ชันช่วยดึงข้อมูล Dashboard ของ User ปัจจุบัน
         function getDash() {
             if (!currentUserId || !userDashboards[currentUserId]) return null;
             return userDashboards[currentUserId];
         }
         // -------------------------------------------------------------------------
 
-        // 1. Helper: แปลงลิงก์ Google Drive ให้เป็น Direct Image Link
         function getValidImageUrl(url) {
             if (!url) return '';
             if (url.includes('drive.google.com/file/d/')) {
@@ -604,7 +613,6 @@ snapcon_html = """
             return url;
         }
 
-        // 1.1 Helper: แปลงลิงก์ Google Drive Video ให้เป็น Embed Player
         function getEmbedVideoUrl(url) {
             if (!url) return '';
             if (url.includes('drive.google.com/file/d/')) {
@@ -618,7 +626,6 @@ snapcon_html = """
             return url;
         }
 
-        // Helper: จัดการหัวตารางที่มีช่องว่าง ตัวพิมพ์เล็กพิมพ์ใหญ่ ให้อ่านได้ 100%
         function normalizeKeys(arr) {
             if (!arr || arr.length === 0) return [];
             return arr.map(obj => {
@@ -631,7 +638,6 @@ snapcon_html = """
             });
         }
 
-        // 2. โหลดข้อมูลทั้งหมดจาก Google Sheets
         async function loadDataFromSheet() {
             try {
                 console.log("Fetching data from Google Sheets...");
@@ -639,7 +645,6 @@ snapcon_html = """
                 if (!response.ok) throw new Error("Network response was not ok");
                 
                 const data = await response.json();
-                console.log("Data successfully loaded:", data);
                 
                 products = normalizeKeys(data.products);
                 spares = normalizeKeys(data.spares);
@@ -660,7 +665,6 @@ snapcon_html = """
             }
         }
 
-        // 3. Render: สินค้าและอะไหล่
         function renderProducts() {
             const pGrid = document.getElementById('product-grid');
             const sGrid = document.getElementById('spare-grid');
@@ -686,7 +690,6 @@ snapcon_html = """
                 </div>`).join('');
         }
 
-        // 4. Render: Project Reference
         function renderProjects() {
             const pilotGrid = document.getElementById('project-pilot-grid');
             const usecaseGrid = document.getElementById('project-usecase-grid');
@@ -734,7 +737,6 @@ snapcon_html = """
             }
         }
 
-        // 5. Render: Articles (Knowledge & Insight)
         function renderArticles() {
             const container = document.getElementById('article-list');
             if (!container) return;
@@ -780,12 +782,10 @@ snapcon_html = """
             }).join('');
         }
 
-        // 6. Render: Documents Dropdown
         function renderDocuments() {
             const makeMenu = (typeStr) => {
                 const filteredDocs = documents.filter(d => {
                     const t = (d.type || d.category || '').toLowerCase();
-                    // แก้ปัญหาปุ่มดาวน์โหลดเอกสาร (CAD, Data sheet)
                     if (typeStr === 'drawing') return t.includes('drawing') || t.includes('cad') || t.includes('2d') || t.includes('3d') || t.includes('model');
                     return t.includes(typeStr);
                 });
@@ -804,7 +804,7 @@ snapcon_html = """
             const ca = document.getElementById('menu-catalog'); if(ca) ca.innerHTML = makeMenu('catalog');
         }
 
-        // 7. Cart & Post Data System (FIRE AND FORGET)
+        // 7. Cart System
         function addToCart(id) {
             const item = allItems.find(i => i.id === id);
             if(item) {
@@ -852,14 +852,98 @@ snapcon_html = """
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
 
-        // --- ระบบส่งข้อมูล Background Sync ป้องกันเบราว์เซอร์เด้ง Error ---
+        // ==========================================
+        // 🚀 FIRE AND FORGET SYNC SYSTEM 
+        // (แก้ปัญหากดส่งข้อมูลแล้วค้าง/Error เด้ง)
+        // ==========================================
         function sendDataToServer(payloadObj) {
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payloadObj)
-            }).catch(e => console.log("Background sync done"));
+            // ใช้ setTimeout ดัน fetch ออกจาก Main Thread ของเบราว์เซอร์
+            // เพื่อให้ UI เปลี่ยนแปลงเสร็จก่อน 100% จึงจะไม่เกิดการค้าง
+            setTimeout(() => {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payloadObj)
+                }).catch(e => console.log("Background sync done"));
+            }, 100);
+        }
+
+        function submitRegistration() {
+            const id = document.getElementById('reg-id').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const contact = document.getElementById('reg-contact').value.trim();
+            
+            if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+            
+            // 1. จัดการตัวแปรระบบทันที
+            memoryUsers[id] = pass;
+            isLoggedIn = true;
+            currentUserId = id;
+            if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+            
+            // 2. อัปเดตหน้าจอทันที (เปลี่ยนเป็นโหมด Login แล้ว)
+            document.getElementById('displayUser').innerText = id;
+            document.getElementById('dash-user-name').innerText = id; 
+            
+            // ใช้ classList.remove/add ที่แน่นอนกว่า replace
+            const loginSec = document.getElementById('login-section');
+            const userSec = document.getElementById('user-section');
+            loginSec.className = "hidden items-center gap-2";
+            userSec.className = "flex items-center gap-3";
+            
+            // 3. ล้างฟอร์ม
+            closeRegisterModal();
+            document.getElementById('reg-id').value = '';
+            document.getElementById('reg-pass').value = '';
+            document.getElementById('reg-name').value = '';
+            document.getElementById('reg-contact').value = '';
+
+            // 4. แจ้งเตือนผู้ใช้
+            alert("ลงทะเบียนสำเร็จ! ระบบพาคุณเข้าสู่ระบบอัตโนมัติแล้ว");
+
+            // 5. ส่งข้อมูลเงียบๆ (ไม่สะดุด UI)
+            sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
+        }
+
+        function handleLogin() { 
+            const id = document.getElementById('userId').value.trim();
+            const pass = document.getElementById('userPass').value.trim();
+            
+            if(!id || !pass) return alert("กรุณากรอก ID และ Password");
+
+            if (memoryUsers[id] === pass) {
+                isLoggedIn = true; currentUserId = id;
+                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+                
+                document.getElementById('displayUser').innerText = id;
+                document.getElementById('dash-user-name').innerText = id; 
+                
+                const loginSec = document.getElementById('login-section');
+                const userSec = document.getElementById('user-section');
+                loginSec.className = "hidden items-center gap-2";
+                userSec.className = "flex items-center gap-3";
+                
+                document.getElementById('userId').value = '';
+                document.getElementById('userPass').value = '';
+                
+                alert("เข้าสู่ระบบสำเร็จ!");
+            } else {
+                alert("ID หรือ Password ไม่ถูกต้อง");
+            }
+        }
+
+        function handleLogout() { 
+            if (currentUserId) stopSystem();
+            isLoggedIn = false; currentUserId = null; 
+            
+            const loginSec = document.getElementById('login-section');
+            const userSec = document.getElementById('user-section');
+            userSec.className = "hidden items-center gap-3";
+            loginSec.className = "hidden lg:flex items-center gap-2";
+            
+            navigate('home'); 
         }
 
         function requestQuote() {
@@ -874,49 +958,14 @@ snapcon_html = """
             const total = selected.reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
             const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
             
-            // อัปเดต UI ทันทีให้ผู้ใช้รู้สึกว่าระบบลื่นไหล
+            // ตอบสนองทันที
             alert("ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ");
             cart = cart.filter(i => !i.selected); 
             updateBadge(); 
             renderCart(); 
             navigate('home');
 
-            // แอบส่งข้อมูลอยู่เบื้องหลัง
             sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
-        }
-
-        function submitRegistration() {
-            const id = document.getElementById('reg-id').value.trim();
-            const pass = document.getElementById('reg-pass').value.trim();
-            const name = document.getElementById('reg-name').value.trim();
-            const contact = document.getElementById('reg-contact').value.trim();
-            
-            if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-            
-            // อัปเดตสถานะการ Login ของผู้ใช้ทันที
-            memoryUsers[id] = pass;
-            isLoggedIn = true;
-            currentUserId = id;
-            
-            // ป้องกันการ Error จากการเรียกหา Dashboard ที่ยังไม่ถูกสร้าง
-            if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
-            
-            document.getElementById('displayUser').innerText = id;
-            document.getElementById('dash-user-name').innerText = id; 
-            document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
-            document.getElementById('user-section').classList.replace('hidden', 'flex');
-            
-            // ปิด Modal และแจ้งเตือน
-            closeRegisterModal();
-            document.getElementById('reg-id').value = '';
-            document.getElementById('reg-pass').value = '';
-            document.getElementById('reg-name').value = '';
-            document.getElementById('reg-contact').value = '';
-
-            alert("ลงทะเบียนสำเร็จ! ระบบพาคุณเข้าสู่ระบบอัติโนมัติแล้ว");
-
-            // แอบส่งข้อมูลให้ Google Sheets บันทึกเบื้องหลัง
-            sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
         }
 
         function submitContactForm() {
@@ -935,7 +984,7 @@ snapcon_html = """
         }
 
         // ==========================================
-        // 8. DASHBOARD LOGIC & SIMULATION
+        // 8. DASHBOARD LOGIC
         // ==========================================
         function startSystem() {
             let dash = getDash(); if(!dash) return;
@@ -1058,7 +1107,7 @@ snapcon_html = """
             }).join('');
         }
 
-        // 9. Navigation & UI States
+        // 9. Navigation & General UI
         function navigate(p) { 
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); 
             const t = document.getElementById('page-'+p); 
@@ -1070,28 +1119,6 @@ snapcon_html = """
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
         function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex', 'hidden'); }
         function setLanguage(l) { currentLang = l; renderProjects(); renderArticles(); if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); }
-        
-        function handleLogin() { 
-            const id = document.getElementById('userId').value.trim();
-            if (memoryUsers[id] === document.getElementById('userPass').value) {
-                isLoggedIn = true; currentUserId = id;
-                
-                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
-                
-                document.getElementById('displayUser').innerText = id;
-                document.getElementById('dash-user-name').innerText = id; 
-                document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
-                document.getElementById('user-section').classList.replace('hidden', 'flex');
-                alert("Login Successful");
-            } else alert("Invalid ID/PW");
-        }
-        function handleLogout() { 
-            if (currentUserId) stopSystem();
-            isLoggedIn = false; currentUserId = null; 
-            document.getElementById('user-section').classList.replace('flex', 'hidden'); 
-            document.getElementById('login-section').classList.replace('hidden', 'lg:flex'); 
-            navigate('home'); 
-        }
         function checkDashboardAuth() { 
             if (isLoggedIn) navigate('dashboard'); 
             else { alert("Please Login First to access Dashboard"); document.getElementById('userId').focus(); } 
