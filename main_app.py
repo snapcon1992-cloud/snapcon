@@ -400,55 +400,15 @@ snapcon_html = """
             <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
                 <i class="fas fa-rocket text-snap-green"></i> <span data-i18n="projPilotTitle">Pilot / Demo Project</span>
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                <div class="bg-slate-50 p-8 sharp-card group">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-snap-green text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot1Title">Snapcon V1</h4>
-                    <p class="text-sm text-slate-600" data-i18n="pilot1Desc">Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว</p>
-                </div>
-                <div class="bg-slate-50 p-8 sharp-card group">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-blue-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot2Title">Real-time Monitoring</h4>
-                    <p class="text-sm text-slate-600" data-i18n="pilot2Desc">ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที</p>
-                </div>
-                <div class="bg-slate-50 p-8 sharp-card group">
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-rose-500 text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-3" data-i18n="pilot3Title">Poka-Yoke Integrated</h4>
-                    <p class="text-sm text-slate-600" data-i18n="pilot3Desc">ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ</p>
-                </div>
+            <div id="project-pilot-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <!-- Pilot projects injected here -->
             </div>
 
             <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
                 <i class="fas fa-industry text-blue-500"></i> <span data-i18n="projUseCaseTitle">Use Case / Application</span>
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 sharp-card border-t-4 border-t-amber-500 flex flex-col items-center text-center">
-                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase1Title">Packaging Line Automation</h4>
-                    <p class="text-sm text-slate-600" data-i18n="usecase1Desc">ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ</p>
-                </div>
-                <div class="bg-white p-6 sharp-card border-t-4 border-t-snap-green flex flex-col items-center text-center">
-                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase2Title">Conveyor System Control</h4>
-                    <p class="text-sm text-slate-600" data-i18n="usecase2Desc">ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน</p>
-                </div>
-                <div class="bg-white p-6 sharp-card border-t-4 border-t-blue-500 flex flex-col items-center text-center">
-                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-2" data-i18n="usecase3Title">Machine Health Monitoring</h4>
-                    <p class="text-sm text-slate-600" data-i18n="usecase3Desc">ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก</p>
-                </div>
+            <div id="project-usecase-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Use Case projects injected here -->
             </div>
         </div>
     </div>
@@ -606,14 +566,15 @@ snapcon_html = """
         // 1. GLOBAL VARIABLES & CONFIG
         // ==========================================
         // อัปเดตลิงก์ Google App Script ล่าสุดที่นี่
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhedlEULYND-svmiHN-qz-u7gk3cPR2a8EV05oYyFO8uNhIcfoCChZrpGZOz_wUEkC/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
         let cart = [];
         let products = [];
         let spares = [];
-        let documents = []; // เก็บลิงก์เอกสาร
+        let documents = []; 
+        let projects = []; // เก็บข้อมูล Project
         let allItems = [];
         
         // ==========================================
@@ -664,7 +625,6 @@ snapcon_html = """
         function parseGoogleDriveLink(url) {
             if(!url) return '#';
             if(url.includes('/view')) {
-                // แปลงลิงก์ Drive แบบ view ให้กลายเป็น direct download ถ้าทำได้ (ทางเลือก)
                 return url; 
             }
             return url;
@@ -707,24 +667,38 @@ snapcon_html = """
                     }));
                 }
 
-                // ดึงข้อมูลเอกสาร (ถ้ามี)
                 if (data.documents && data.documents.length > 0) {
                     documents = data.documents;
+                }
+
+                // ดึงข้อมูล Project Reference
+                if (data.projects && data.projects.length > 0) {
+                    projects = data.projects.map(p => ({
+                        id: p.id || p.ID || "N/A",
+                        category: (p.category || p.Category || "UseCase").toLowerCase(),
+                        title: p.title || p.Title || "Unnamed Project",
+                        description: {
+                            th: p.description_th || p.Description_th || "",
+                            en: p.description_en || p.Description_en || ""
+                        },
+                        img: p.img_url || p.img || p.Img || "https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80",
+                        icon: p.icon || p.Icon || "fas fa-cogs text-snap-green"
+                    }));
                 }
                 
                 console.log("Data mapped successfully.");
                 allItems = [...products, ...spares];
                 
-                if (products.length > 0 || spares.length > 0) {
+                if (products.length > 0 || spares.length > 0 || projects.length > 0) {
                     renderProducts();
-                    renderDocuments(); // เรียกฟังก์ชันแสดงเมนูเอกสาร
+                    renderDocuments(); 
+                    renderProjects();
                     if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
                     return; 
                 }
                 
             } catch (e) {
                 console.error("Fetch Error: ไม่สามารถเชื่อมต่อ Google Sheets ได้", e);
-                // alert("⚠️ ระบบไม่สามารถดึงข้อมูลสินค้าจาก Google Sheets ได้\\nกำลังใช้ข้อมูลจำลอง (Mock Data)\\n\\nกรุณาตรวจสอบว่า App Script ของคุณ:\\n1. ตั้งค่า Deploy ให้เข้าถึงโดย 'Anyone' (ทุกคน) หรือไม่\\n2. ฟังก์ชัน doGet ทำงานถูกต้องหรือไม่");
             }
             
             console.warn("Using fallback mock data due to empty sheet or fetch error.");
@@ -735,9 +709,18 @@ snapcon_html = """
             spares = [
                 { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } }
             ];
+            projects = [
+                { id: 'PL1', category: 'pilot', title: 'Snapcon V1', description: { th: 'Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว', en: 'Multi-machine control demo managing multiple units from a single hub.' }, icon: 'fas fa-network-wired text-snap-green', img: '' },
+                { id: 'PL2', category: 'pilot', title: 'Real-time Monitoring', description: { th: 'ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที', en: 'Instant tracking of Temperature, Speed, and Output status.' }, icon: 'fas fa-chart-line text-blue-500', img: '' },
+                { id: 'PL3', category: 'pilot', title: 'Poka-Yoke Integrated', description: { th: 'ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ', en: 'Human error prevention system. Alerts and halts machinery upon detecting anomalies.' }, icon: 'fas fa-shield-alt text-rose-500', img: '' },
+                { id: 'UC1', category: 'usecase', title: 'Packaging Line Automation', description: { th: 'ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ', en: 'Automated packaging line systems to reduce time and increase precision.' }, icon: '', img: 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80' },
+                { id: 'UC2', category: 'usecase', title: 'Conveyor System Control', description: { th: 'ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน', en: 'Intelligent conveyor control system adjusting speed automatically based on workload.' }, icon: '', img: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80' },
+                { id: 'UC3', category: 'usecase', title: 'Machine Health Monitoring', description: { th: 'ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก', en: 'Predictive machine health monitoring. Alerts before critical failures occur.' }, icon: '', img: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80' }
+            ];
             
             allItems = [...products, ...spares];
             renderProducts();
+            renderProjects();
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
 
@@ -767,13 +750,7 @@ snapcon_html = """
                 pageSpareTitle: "Spare Parts", pageSpareSub: "อะไหล่และชิ้นส่วนสายพานลำเลียงคุณภาพสูง",
                 pageProjectTitle: "Project Reference", pageProjectSub: "รวมผลงานการติดตั้งและตัวอย่างการประยุกต์ใช้งานระบบ Snapcon ในอุตสาหกรรมจริง",
                 projPilotTitle: "Pilot / Demo Project",
-                pilot1Title: "Snapcon V1", pilot1Desc: "Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว",
-                pilot2Title: "Real-time Monitoring", pilot2Desc: "ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที",
-                pilot3Title: "Poka-Yoke Integrated", pilot3Desc: "ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ",
                 projUseCaseTitle: "Use Case / Application",
-                usecase1Title: "Packaging Line Automation", usecase1Desc: "ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ",
-                usecase2Title: "Conveyor System Control", usecase2Desc: "ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน",
-                usecase3Title: "Machine Health Monitoring", usecase3Desc: "ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก",
                 
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
                 cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "ลบที่เลือก", specTitle: "SPECS",
@@ -821,13 +798,7 @@ snapcon_html = """
                 pageSpareTitle: "Spare Parts", pageSpareSub: "High-quality genuine conveyor components.",
                 pageProjectTitle: "Project Reference", pageProjectSub: "Showcasing Snapcon installations and real-world industrial applications.",
                 projPilotTitle: "Pilot / Demo Project",
-                pilot1Title: "Snapcon V1", pilot1Desc: "Multi-machine control demo managing multiple units from a single hub.",
-                pilot2Title: "Real-time Monitoring", pilot2Desc: "Instant tracking of Temperature, Speed, and Output status.",
-                pilot3Title: "Poka-Yoke Integrated", pilot3Desc: "Human error prevention system. Alerts and halts machinery upon detecting anomalies.",
                 projUseCaseTitle: "Use Case / Application",
-                usecase1Title: "Packaging Line Automation", usecase1Desc: "Automated packaging line systems to reduce time and increase precision.",
-                usecase2Title: "Conveyor System Control", usecase2Desc: "Intelligent conveyor control system adjusting speed automatically based on workload.",
-                usecase3Title: "Machine Health Monitoring", usecase3Desc: "Predictive machine health monitoring. Alerts before critical failures occur.",
 
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty",
                 cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "SPECS",
@@ -1122,6 +1093,39 @@ snapcon_html = """
             if(dwMenu) dwMenu.innerHTML = documents.filter(d => (d.type || '').toLowerCase() === 'drawing').map(d => `<a href="${parseGoogleDriveLink(d.file_url)}" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">${d.model_name}</a>`).join('') || '<div class="px-8 py-4 text-sm text-slate-400">No documents</div>';
             if(catMenu) catMenu.innerHTML = documents.filter(d => (d.type || '').toLowerCase() === 'catalog').map(d => `<a href="${parseGoogleDriveLink(d.file_url)}" target="_blank" class="block px-8 py-4 hover:bg-amber-50 hover:text-amber-600 border-b border-slate-100 text-sm font-bold text-slate-700">${d.model_name}</a>`).join('') || '<div class="px-8 py-4 text-sm text-slate-400">No documents</div>';
         }
+        
+        function renderProjects() {
+            const pilotGrid = document.getElementById('project-pilot-grid');
+            const usecaseGrid = document.getElementById('project-usecase-grid');
+
+            if (pilotGrid) {
+                const pilots = projects.filter(p => p.category.includes('pilot'));
+                pilotGrid.innerHTML = pilots.map(p => `
+                    <div class="bg-slate-50 p-8 sharp-card group">
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                            <i class="${p.icon}"></i>
+                        </div>
+                        <h4 class="text-lg font-black text-slate-900 mb-3">${p.title}</h4>
+                        <p class="text-sm text-slate-600">${p.description[currentLang] || p.description.th}</p>
+                    </div>
+                `).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
+            }
+
+            if (usecaseGrid) {
+                const borderColors = ['border-t-amber-500', 'border-t-snap-green', 'border-t-blue-500'];
+                const usecases = projects.filter(p => p.category.includes('usecase') || p.category.includes('use case'));
+                
+                usecaseGrid.innerHTML = usecases.map((p, index) => `
+                    <div class="bg-white p-6 sharp-card border-t-4 ${borderColors[index % borderColors.length]} flex flex-col items-center text-center">
+                        <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
+                            <img src="${p.img || 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80'}" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <h4 class="text-lg font-black text-slate-900 mb-2">${p.title}</h4>
+                        <p class="text-sm text-slate-600">${p.description[currentLang] || p.description.th}</p>
+                    </div>
+                `).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
+            }
+        }
 
         function scrollSlider(dir) {
             const slider = document.getElementById('home-product-slider');
@@ -1262,6 +1266,7 @@ snapcon_html = """
             document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
             
             renderProducts(); 
+            renderProjects(); // วาดข้อมูลโปรเจกต์ใหม่เมื่อเปลี่ยนภาษา
             if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); 
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
