@@ -874,7 +874,7 @@ snapcon_html = """
             }
         }
 
-        async function submitRegistration() {
+        function submitRegistration() {
             const id = document.getElementById('reg-id').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
             const name = document.getElementById('reg-name').value.trim();
@@ -895,14 +895,13 @@ snapcon_html = """
             memoryUsers[id] = pass;
             userDashboards[id] = createDefaultDash(); 
 
-            try { 
-                await fetch(GOOGLE_SCRIPT_URL, { 
-                    method: 'POST', 
-                    mode: 'no-cors', 
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name }) 
-                }); 
-            } catch(e) { console.error("Error sending registration", e); }
+            // ปรับการใช้ Fetch โดยนำคำสั่ง await ออก เพื่อให้ระบบไม่ค้างและส่งข้อมูลแบบ Background
+            const payload = JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name });
+            fetch(GOOGLE_SCRIPT_URL, { 
+                method: 'POST', 
+                mode: 'no-cors',
+                body: payload 
+            }).catch(e => console.error("Error sending registration", e));
             
             alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบกำลังนำเข้าสู่ระบบอัตโนมัติ..." : "Registered successfully! Auto-logging in...");
             
@@ -1227,7 +1226,7 @@ snapcon_html = """
             renderCart(); 
         }
 
-        async function requestQuote() {
+        function requestQuote() {
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert(dict[currentLang].alertQuoteReq);
             
@@ -1241,24 +1240,21 @@ snapcon_html = """
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
             let total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
             
-            try { 
-                await fetch(GOOGLE_SCRIPT_URL, { 
-                    method: 'POST', 
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ 
-                        type: "Quotation", 
-                        name_or_id: name, 
-                        email: info, 
-                        details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` 
-                    }) 
-                }); 
-                
-                alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
-            } catch(e) { 
-                console.error("Error sending to sheets", e); 
-                alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
-            }
+            // ปรับการใช้ Fetch โดยนำคำสั่ง await ออก เพื่อให้ระบบส่งข้อมูลแบบ Background ได้ราบรื่นขึ้น
+            const payload = JSON.stringify({ 
+                type: "Quotation", 
+                name_or_id: name, 
+                email: info, 
+                details: `Items:\\n${detailsForDB}\\n\\nTotal: ฿${total.toLocaleString()}` 
+            });
+
+            fetch(GOOGLE_SCRIPT_URL, { 
+                method: 'POST', 
+                mode: 'no-cors',
+                body: payload 
+            }).catch(e => console.error("Error sending quotation", e));
+            
+            alert(currentLang === 'th' ? "ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด" : "Successfully submitted! We will contact you shortly.");
             
             cart = cart.filter(i => !i.selected); 
             updateBadge(); 
