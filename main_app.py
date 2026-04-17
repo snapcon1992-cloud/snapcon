@@ -595,8 +595,7 @@ snapcon_html = """
                 </a>
             </div>
         </div>
-    </div>
-
+    <!-- Floating Support Button -->
     <button onclick="openSocialModal()" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 active:scale-95 cursor-pointer">
         <i class="fas fa-user-cog group-hover:animate-pulse"></i>
         <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-bounce"></span>
@@ -606,7 +605,8 @@ snapcon_html = """
         // ==========================================
         // 1. GLOBAL VARIABLES & CONFIG
         // ==========================================
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyX2EvZJ-lYI54hJpL78sSS8KM2FYsS8_05uQO63iIa-TGzvYXQyCKtUDPP__CtZmhy/exec';
+        // อัปเดตลิงก์ Google App Script ล่าสุดที่นี่
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhedlEULYND-svmiHN-qz-u7gk3cPR2a8EV05oYyFO8uNhIcfoCChZrpGZOz_wUEkC/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
