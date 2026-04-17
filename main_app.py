@@ -555,18 +555,20 @@ snapcon_html = """
                 </a>
             </div>
         </div>
+    </div>
+
     <!-- Floating Support Button -->
     <button onclick="openSocialModal()" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 active:scale-95 cursor-pointer">
         <i class="fas fa-user-cog group-hover:animate-pulse"></i>
         <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-bounce"></span>
     </button>
 
+    <!-- ==========================================
+         JAVASCRIPT SECTION (ระบบหลักทั้งหมด)
+    ========================================== -->
     <script>
-        // ==========================================
         // 1. GLOBAL VARIABLES & CONFIG
-        // ==========================================
-        // อัปเดตลิงก์ Google App Script ล่าสุดที่นี่
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhedlEULYND-svmiHN-qz-u7gk3cPR2a8EV05oYyFO8uNhIcfoCChZrpGZOz_wUEkC/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
@@ -574,12 +576,10 @@ snapcon_html = """
         let products = [];
         let spares = [];
         let documents = []; 
-        let projects = []; // เก็บข้อมูล Project
+        let projects = [];
         let allItems = [];
         
-        // ==========================================
         // 2. USER ISOLATION & MOCK DATA
-        // ==========================================
         let currentUserId = null;
         let activeDashInterval = null;
         let memoryUsers = { '001': '123', 'admin': 'admin' };
@@ -619,14 +619,9 @@ snapcon_html = """
             return userDashboards[currentUserId];
         }
 
-        // ==========================================
         // 3. FETCH DYNAMIC DATA (GOOGLE SHEETS)
-        // ==========================================
         function parseGoogleDriveLink(url) {
             if(!url) return '#';
-            if(url.includes('/view')) {
-                return url; 
-            }
             return url;
         }
 
@@ -671,7 +666,6 @@ snapcon_html = """
                     documents = data.documents;
                 }
 
-                // ดึงข้อมูล Project Reference
                 if (data.projects && data.projects.length > 0) {
                     projects = data.projects.map(p => ({
                         id: p.id || p.ID || "N/A",
@@ -724,16 +718,13 @@ snapcon_html = """
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
 
-        // ==========================================
         // 4. DICTIONARY (i18n)
-        // ==========================================
         const dict = {
             th: {
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 
-                heroEco: "Green Technology",
-                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
+                heroEco: "Green Technology", heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
                 
                 fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ใช้งานได้ทันที",
                 fs2Title: "🔗 Seamless Connection", fs2Desc: "เชื่อม PLC / Sensor ได้ง่าย",
@@ -743,18 +734,16 @@ snapcon_html = """
                 fs6Title: "🛡️ Built-in Poka-Yoke", fs6Desc: "ระบบป้องกันความผิดพลาดของคน",
                 
                 cardDataSheet: "Data Sheet", selectModel: "Select Model",
-                cardDrawing: "2D/3D Drawing", 
-                cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
+                cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
                 
                 pageProductTitle: "Conveyor Systems", pageProductSub: "ระบบสายพานลำเลียงอัจฉริยะสำหรับอุตสาหกรรมยุคใหม่",
                 pageSpareTitle: "Spare Parts", pageSpareSub: "อะไหล่และชิ้นส่วนสายพานลำเลียงคุณภาพสูง",
                 pageProjectTitle: "Project Reference", pageProjectSub: "รวมผลงานการติดตั้งและตัวอย่างการประยุกต์ใช้งานระบบ Snapcon ในอุตสาหกรรมจริง",
-                projPilotTitle: "Pilot / Demo Project",
-                projUseCaseTitle: "Use Case / Application",
+                projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
                 
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
                 cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "ลบที่เลือก", specTitle: "SPECS",
-                alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว", alertQuoteReq: "กรุณาเลือกสินค้า", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับ",
+                alertLoginSuccess: "เข้าสู่ระบบสำเร็จ!", alertAddCart: "เพิ่มลงรถเข็นแล้ว", alertQuoteReq: "กรุณาเลือกสินค้า", alertQuoteGuestReq: "กรุณากรอกข้อมูลติดต่อกลับให้ครบถ้วน",
                 
                 contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ", btnEmail: "SEND DIRECT EMAIL",
                 aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System",
@@ -780,8 +769,7 @@ snapcon_html = """
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 
-                heroEco: "Green Technology",
-                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
+                heroEco: "Green Technology", heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
                 
                 fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ready to use",
                 fs2Title: "🔗 Seamless Connection", fs2Desc: "Easy PLC / Sensor integration",
@@ -791,18 +779,16 @@ snapcon_html = """
                 fs6Title: "🛡️ Built-in Poka-Yoke", fs6Desc: "Fool-proof system to prevent human errors",
                 
                 cardDataSheet: "Data Sheet", selectModel: "Select Model",
-                cardDrawing: "2D/3D Drawing", 
-                cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
+                cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
                 
                 pageProductTitle: "Conveyor Systems", pageProductSub: "Intelligent conveyor systems for modern industries.",
                 pageSpareTitle: "Spare Parts", pageSpareSub: "High-quality genuine conveyor components.",
                 pageProjectTitle: "Project Reference", pageProjectSub: "Showcasing Snapcon installations and real-world industrial applications.",
-                projPilotTitle: "Pilot / Demo Project",
-                projUseCaseTitle: "Use Case / Application",
+                projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
 
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty",
                 cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", specTitle: "SPECS",
-                alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart", alertQuoteReq: "Select an item", alertQuoteGuestReq: "Provide contact info",
+                alertLoginSuccess: "Login Successful!", alertAddCart: "Added to cart", alertQuoteReq: "Select an item", alertQuoteGuestReq: "Please provide your contact info.",
                 
                 contactSub: "Official Technical Support & Inquiries", btnEmail: "SEND DIRECT EMAIL",
                 aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems.",
@@ -826,9 +812,7 @@ snapcon_html = """
             }
         };
 
-        // ==========================================
         // 5. NAVIGATION & MODALS
-        // ==========================================
         function navigate(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
             const target = document.getElementById('page-' + pageId);
@@ -856,9 +840,7 @@ snapcon_html = """
         function openSocialModal() { document.getElementById('modal-social').classList.replace('hidden', 'flex'); }
         function closeSocialModal() { document.getElementById('modal-social').classList.replace('flex', 'hidden'); }
 
-        // ==========================================
         // 6. AUTHENTICATION (LOGIN / REGISTER)
-        // ==========================================
         function handleLogin() {
             const id = document.getElementById('userId').value.trim();
             const pass = document.getElementById('userPass').value.trim();
@@ -866,7 +848,6 @@ snapcon_html = """
             if (memoryUsers[id] === pass) {
                 isLoggedIn = true;
                 currentUserId = id;
-                
                 if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
 
                 document.getElementById('displayUser').innerText = id;
@@ -883,7 +864,7 @@ snapcon_html = """
             }
         }
 
-        function submitRegistration() {
+        async function submitRegistration() {
             const id = document.getElementById('reg-id').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
             const name = document.getElementById('reg-name').value.trim();
@@ -904,7 +885,14 @@ snapcon_html = """
             memoryUsers[id] = pass;
             userDashboards[id] = createDefaultDash(); 
 
-            try { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name }) }); } catch(e) {}
+            try { 
+                await fetch(GOOGLE_SCRIPT_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ type: "Registration", name_or_id: id, email: contact, details: name }) 
+                }); 
+            } catch(e) { console.error("Error sending registration", e); }
             
             alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบกำลังนำเข้าสู่ระบบอัตโนมัติ..." : "Registered successfully! Auto-logging in...");
             
@@ -934,9 +922,7 @@ snapcon_html = """
             navigate('home');
         }
 
-        // ==========================================
         // 7. DASHBOARD LOGIC
-        // ==========================================
         function startSystem() {
             let dash = getDash(); if(!dash) return;
             dash.isRunning = true;
@@ -1037,9 +1023,7 @@ snapcon_html = """
             }).join('');
         }
 
-        // ==========================================
         // 8. E-COMMERCE / CART LOGIC
-        // ==========================================
         function updateBadge() {
             const b = document.getElementById('cart-badge');
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -1101,7 +1085,7 @@ snapcon_html = """
             if (pilotGrid) {
                 const pilots = projects.filter(p => p.category.includes('pilot'));
                 pilotGrid.innerHTML = pilots.map(p => {
-                    let visualHtml = '<i class="fas fa-cogs text-snap-green"></i>'; // ไอคอนเริ่มต้นถ้าไม่ได้ใส่ลิงก์
+                    let visualHtml = '<i class="fas fa-cogs text-snap-green"></i>';
                     if (p.icon && p.icon.startsWith('http')) {
                         visualHtml = `<img src="${p.icon}" class="max-w-full max-h-full object-contain mix-blend-multiply p-1">`;
                     } else if (p.img && p.img.startsWith('http')) {
@@ -1235,7 +1219,7 @@ snapcon_html = """
             let info = document.getElementById('quote-contact').value.trim();
             
             if(!name || !info) {
-                return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลติดต่อกลับให้ครบถ้วน" : "Please provide your contact info.");
+                return alert(dict[currentLang].alertQuoteGuestReq);
             }
             
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
@@ -1266,9 +1250,7 @@ snapcon_html = """
             navigate('home');
         }
 
-        // ==========================================
         // 9. INITIALIZATION & I18N
-        // ==========================================
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
@@ -1278,7 +1260,7 @@ snapcon_html = """
             document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
             
             renderProducts(); 
-            renderProjects(); // วาดข้อมูลโปรเจกต์ใหม่เมื่อเปลี่ยนภาษา
+            renderProjects();
             if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); 
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
