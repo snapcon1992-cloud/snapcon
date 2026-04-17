@@ -39,17 +39,16 @@ snapcon_html = """
         }
     </script>
     <style>
-        body { margin: 0; padding: 0; background-color: #e2e8f0; overflow-x: hidden; }
+        body { margin: 0; padding: 0; background-color: #f8fafc; overflow-x: hidden; }
         .max-container { max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
         
         .hero-container { background-color: #e2e8f0; position: relative; }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.85) 75%, rgba(2, 44, 34, 0.6) 100%);
+            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.9) 75%, rgba(2, 44, 34, 0.8) 100%);
             z-index: 5; pointer-events: none;
         }
-        .hero-white-box { background-color: white; border-bottom: 6px solid #00B36E; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border-radius: 4px; }
-        .feature-bar { background-color: #1e293b; color: white; }
+        .hero-white-box { background-color: white; border-bottom: 6px solid #00B36E; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border-radius: 1rem; }
 
         .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; animation: slideBgAnimation 20s infinite linear; }
         .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
@@ -72,12 +71,13 @@ snapcon_html = """
         
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .sharp-card { border-radius: 4px; border: 1px solid #e2e8f0; transition: all 0.3s; }
-        .sharp-card:hover { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border-color: #00B36E; transform: translateY(-4px); }
-        .sharp-btn { border-radius: 2px; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
+        .sharp-card { border-radius: 1rem; transition: all 0.3s; }
+        .sharp-card:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); transform: translateY(-4px); }
+        .sharp-btn { border-radius: 0.5rem; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
+        .sharp-btn:active { transform: scale(0.98); }
         
         .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(30px); animation: fadeSlideText 18s infinite; }
         @keyframes fadeSlideText { 0% { opacity: 0; transform: translateY(30px); } 4% { opacity: 1; transform: translateY(0); } 13% { opacity: 1; transform: translateY(0); } 17% { opacity: 0; transform: translateY(-30px); } 100% { opacity: 0; } }
@@ -104,24 +104,24 @@ snapcon_html = """
 
         <div class="flex items-center gap-5 shrink-0 ml-auto">
             <div id="login-section" class="hidden lg:flex items-center gap-2">
-                <input type="text" id="userId" data-i18n-placeholder="phId" placeholder="ID" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
-                <input type="password" id="userPass" data-i18n-placeholder="phPass" placeholder="PW" class="h-8 w-20 px-2 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green sharp-card">
-                <button onclick="handleLogin()" class="h-8 px-3 bg-snap-green text-white font-bold text-xs hover:bg-snap-green-hover sharp-btn"><i class="fas fa-sign-in-alt"></i></button>
-                <button onclick="openRegisterModal()" class="h-8 px-3 bg-slate-700 text-white font-bold text-xs hover:bg-slate-600 sharp-btn"><i class="fas fa-user-plus"></i></button>
+                <input type="text" id="userId" data-i18n-placeholder="phId" placeholder="ID" class="h-9 w-24 px-3 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green rounded-lg transition-colors">
+                <input type="password" id="userPass" data-i18n-placeholder="phPass" placeholder="PW" class="h-9 w-24 px-3 text-xs outline-none bg-slate-800 text-white border border-slate-700 focus:border-snap-green rounded-lg transition-colors">
+                <button onclick="handleLogin()" class="h-9 px-4 bg-snap-green text-white font-bold text-xs hover:bg-snap-green-hover rounded-lg transition-colors"><i class="fas fa-sign-in-alt"></i></button>
+                <button onclick="openRegisterModal()" class="h-9 px-4 bg-slate-700 text-white font-bold text-xs hover:bg-slate-600 rounded-lg transition-colors"><i class="fas fa-user-plus"></i></button>
             </div>
             
             <div id="user-section" class="hidden items-center gap-3">
-                <span class="text-white text-sm"><i class="far fa-user-circle text-snap-green mr-1"></i> <span id="displayUser" class="font-bold">User</span></span>
-                <button onclick="handleLogout()" class="text-slate-400 hover:text-white text-xs underline"><i class="fas fa-sign-out-alt"></i></button>
+                <span class="text-white text-sm"><i class="far fa-user-circle text-snap-green mr-1 text-lg"></i> <span id="displayUser" class="font-bold">User</span></span>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-400 text-xs ml-2 bg-slate-800 px-3 py-1.5 rounded-lg transition-colors"><i class="fas fa-sign-out-alt mr-1"></i> ออกจากระบบ</button>
             </div>
 
             <div class="flex items-center gap-4 text-white text-lg border-l border-slate-700 pl-5">
-                <button id="btn-lang-th" onclick="setLanguage('th')" class="text-xs font-bold text-snap-green hover:text-white">TH</button>
+                <button id="btn-lang-th" onclick="setLanguage('th')" class="text-xs font-bold text-snap-green hover:text-white transition-colors">TH</button>
                 <span class="text-slate-600 text-xs">|</span>
-                <button id="btn-lang-en" onclick="setLanguage('en')" class="text-xs font-bold text-slate-400 hover:text-white">EN</button>
-                <div class="relative cursor-pointer hover:text-snap-green ml-2" onclick="navigate('cart')">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cart-badge" class="absolute -top-2 -right-2 w-4 h-4 bg-snap-green text-white text-[9px] font-black flex items-center justify-center rounded-full hidden">0</span>
+                <button id="btn-lang-en" onclick="setLanguage('en')" class="text-xs font-bold text-slate-400 hover:text-white transition-colors">EN</button>
+                <div class="relative cursor-pointer hover:text-snap-green ml-2 transition-colors" onclick="navigate('cart')">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 w-4 h-4 bg-red-500 text-white text-[9px] font-black flex items-center justify-center rounded-full hidden border border-snap-black">0</span>
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@ snapcon_html = """
 
     <!-- PAGE: HOME -->
     <div id="page-home" class="page-section page-active">
-        <section class="hero-container w-full min-h-[500px] flex items-center relative overflow-hidden">
+        <section class="hero-container w-full min-h-[550px] md:min-h-[650px] flex items-center relative overflow-hidden pb-16">
             <div class="absolute inset-0 z-0">
                 <div class="slide-img slide-1"></div>
                 <div class="slide-img slide-2"></div>
@@ -139,18 +139,21 @@ snapcon_html = """
                 <div class="slide-img slide-4"></div>
             </div>
             <div class="hero-overlay"></div>
-            <div class="max-container flex flex-col md:flex-row items-center justify-between gap-10 z-10">
-                <div class="hero-white-box w-full md:w-[500px] p-10 md:p-12 relative">
+            <div class="max-container flex flex-col md:flex-row items-center justify-between gap-10 z-10 w-full pt-10">
+                <div class="hero-white-box w-full md:w-[520px] p-10 md:p-12 relative bg-white/95 backdrop-blur-sm">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-emerald-200">
                         <i class="fas fa-leaf"></i> <span data-i18n="heroEco">Green Technology</span>
                     </div>
-                    <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] mb-8">
+                    <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] mb-6">
                         <span data-i18n="heroText1">Snap to Connect.</span><br>
-                        <span data-i18n="heroText2">Ready to Control.</span>
+                        <span data-i18n="heroText2" class="text-snap-green">Ready to Control.</span>
                     </h1>
-                    <button onclick="navigate('product')" class="text-snap-green font-bold text-lg hover:text-snap-green-hover flex items-center gap-2 group">
-                        <span data-i18n="heroLink">Find out more</span>
-                        <i class="fas fa-chevron-right text-sm transition-transform group-hover:translate-x-1"></i>
+                    <p class="text-slate-500 font-medium text-sm mb-8 leading-relaxed">
+                        เปลี่ยนความซับซ้อนให้เป็นเรื่องง่าย ด้วยระบบออโตเมชัน Plug & Play ที่พร้อมให้คุณควบคุมสายการผลิตได้ทันที
+                    </p>
+                    <button onclick="navigate('product')" class="bg-snap-black text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-snap-green flex items-center gap-2 group transition-all shadow-lg hover:shadow-snap-green/30">
+                        <span data-i18n="heroLink">ดูสินค้าทั้งหมด</span>
+                        <i class="fas fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
                     </button>
                 </div>
 
@@ -176,46 +179,71 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- Feature Dropdowns (แก้ไขเรื่องการดึงข้อมูลจาก Sheets) -->
-        <section class="feature-bar w-full relative z-40 border-t border-slate-800">
-            <div class="max-container grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
-                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors focus:outline-none">
-                    <i class="fas fa-file-pdf text-4xl text-snap-green mb-4"></i>
-                    <h3 data-i18n="cardDataSheet" class="text-xl font-black text-white uppercase">Data Sheet</h3>
-                    <p class="text-xs text-slate-400 mt-2" data-i18n="selectModel">Select Model <i class="fas fa-angle-down"></i></p>
-                    <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl" id="menu-datasheet"></div>
+        <!-- Feature Dropdowns (Overlap Design - จัดให้ดูดีเป็นระเบียบ) -->
+        <div class="relative z-40 max-container -mt-16 mb-16 px-6">
+            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
+                    <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-file-pdf text-3xl text-snap-green"></i>
+                    </div>
+                    <h3 data-i18n="cardDataSheet" class="text-lg font-black text-slate-800 uppercase tracking-tight">Data Sheet</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
+                    <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl border border-slate-100 rounded-b-2xl overflow-hidden mt-1" id="menu-datasheet"></div>
                 </div>
-                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors focus:outline-none">
-                    <i class="fas fa-drafting-compass text-4xl text-blue-500 mb-4"></i>
-                    <h3 data-i18n="cardDrawing" class="text-xl font-black text-white uppercase">2D/3D Drawing</h3>
-                    <p class="text-xs text-slate-400 mt-2" data-i18n="selectModel">Select Model <i class="fas fa-angle-down"></i></p>
-                    <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl" id="menu-drawing"></div>
+                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none">
+                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-drafting-compass text-3xl text-blue-500"></i>
+                    </div>
+                    <h3 data-i18n="cardDrawing" class="text-lg font-black text-slate-800 uppercase tracking-tight">2D/3D Drawing</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
+                    <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl border border-slate-100 rounded-b-2xl overflow-hidden mt-1" id="menu-drawing"></div>
                 </div>
-                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-800 transition-colors focus:outline-none">
-                    <i class="fas fa-book-open text-4xl text-amber-500 mb-4"></i>
-                    <h3 data-i18n="cardCatalog" class="text-xl font-black text-white uppercase">Catalog</h3>
-                    <p class="text-xs text-slate-400 mt-2" data-i18n="btnDownload">Download <i class="fas fa-angle-down"></i></p>
-                    <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl" id="menu-catalog"></div>
+                <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-b-2xl md:rounded-r-2xl md:rounded-bl-none">
+                    <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-book-open text-3xl text-amber-500"></i>
+                    </div>
+                    <h3 data-i18n="cardCatalog" class="text-lg font-black text-slate-800 uppercase tracking-tight">Catalog</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest" data-i18n="btnDownload">Download <i class="fas fa-angle-down ml-1"></i></p>
+                    <div class="dropdown-menu top-full left-0 w-full bg-white shadow-2xl border border-slate-100 rounded-b-2xl overflow-hidden mt-1" id="menu-catalog"></div>
                 </div>
             </div>
-        </section>
+        </div>
 
         <!-- Featured Products Slider -->
-        <section class="bg-white py-16">
+        <section class="bg-transparent py-10">
             <div class="max-container">
-                <h2 class="text-3xl font-black text-slate-900 uppercase" data-i18n="homeProductsTitle">Featured Products</h2>
-                <div class="w-16 h-1 bg-snap-green mt-2 mb-10"></div>
-                <div id="home-product-slider" class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 custom-scrollbar"></div>
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight" data-i18n="homeProductsTitle">Featured Products</h2>
+                        <div class="w-16 h-1.5 bg-snap-green rounded-full mt-3 mb-2"></div>
+                        <p class="text-slate-500 text-sm font-medium" data-i18n="homeProductsSub">เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด</p>
+                    </div>
+                    <div class="hidden sm:flex gap-2">
+                        <button onclick="scrollSlider('left')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white hover:border-snap-green transition-colors shadow-sm active:scale-95"><i class="fas fa-chevron-left"></i></button>
+                        <button onclick="scrollSlider('right')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white hover:border-snap-green transition-colors shadow-sm active:scale-95"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div id="home-product-slider" class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-6 custom-scrollbar px-2">
+                    <!-- Products inject here -->
+                </div>
+                
+                <div class="text-center mt-6">
+                    <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-snap-green transition-colors bg-white px-6 py-3 rounded-full border border-slate-200 hover:border-snap-green shadow-sm">
+                        <span data-i18n="viewAllProducts">View All Products</span> <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
             </div>
         </section>
 
         <!-- KNOWLEDGE & INSIGHT SECTION -->
-        <section class="bg-slate-50 py-20 border-t border-slate-200">
+        <section class="bg-white py-24 border-t border-slate-200 mt-10">
             <div class="max-container">
                 <div class="flex justify-between items-end mb-12">
                     <div>
-                        <h2 class="text-3xl font-black text-slate-900 uppercase">Knowledge & Insight</h2>
-                        <p class="text-slate-500 font-medium" data-i18n="knowledgeSub">บทความเทคนิคและคลังความรู้จากวิศวกรผู้เชี่ยวชาญ</p>
+                        <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight">Knowledge & Insight</h2>
+                        <div class="w-16 h-1.5 bg-snap-green rounded-full mt-3 mb-2"></div>
+                        <p class="text-slate-500 font-medium text-sm" data-i18n="knowledgeSub">บทความเทคนิค คลังความรู้ และวิดีโอจากวิศวกรผู้เชี่ยวชาญ</p>
                     </div>
                 </div>
                 <div id="article-list" class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -226,19 +254,19 @@ snapcon_html = """
     </div>
 
     <!-- PAGE: PRODUCT -->
-    <div id="page-product" class="page-section bg-white min-h-screen pt-10">
+    <div id="page-product" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container py-10">
-            <h2 data-i18n="pageProductTitle" class="text-3xl font-black text-slate-900 uppercase mb-2">Conveyor Systems</h2>
-            <div class="w-16 h-1 bg-snap-green mb-10"></div>
+            <h2 data-i18n="pageProductTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Conveyor Systems</h2>
+            <div class="w-16 h-1.5 bg-snap-green rounded-full mb-8"></div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="product-grid"></div>
         </div>
     </div>
 
     <!-- PAGE: SPARE PARTS -->
-    <div id="page-spare" class="page-section bg-white min-h-screen pt-10">
+    <div id="page-spare" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container py-10">
-            <h2 data-i18n="pageSpareTitle" class="text-3xl font-black text-slate-900 uppercase mb-2">Spare Parts</h2>
-            <div class="w-16 h-1 bg-snap-green mb-10"></div>
+            <h2 data-i18n="pageSpareTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Spare Parts</h2>
+            <div class="w-16 h-1.5 bg-snap-green rounded-full mb-8"></div>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="spare-grid"></div>
         </div>
     </div>
@@ -246,113 +274,120 @@ snapcon_html = """
     <!-- PAGE: PROJECT REFERENCE -->
     <div id="page-project" class="page-section bg-white min-h-screen pt-10">
         <div class="max-container py-10">
-            <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase mb-2">Project Reference</h2>
-            <div class="w-16 h-1 bg-snap-green mb-12"></div>
+            <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Project Reference</h2>
+            <div class="w-16 h-1.5 bg-snap-green rounded-full mb-12"></div>
             
             <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
-                <i class="fas fa-rocket text-snap-green"></i> <span data-i18n="projPilotTitle">Pilot / Demo Project</span>
+                <div class="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center"><i class="fas fa-rocket text-snap-green"></i></div> 
+                <span data-i18n="projPilotTitle">Pilot / Demo Project</span>
             </h3>
             <div id="project-pilot-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"></div>
             
             <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
-                <i class="fas fa-industry text-blue-500"></i> <span data-i18n="projUseCaseTitle">Use Case / Application</span>
+                <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center"><i class="fas fa-industry text-blue-500"></i></div>
+                <span data-i18n="projUseCaseTitle">Use Case / Application</span>
             </h3>
             <div id="project-usecase-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
     </div>
 
     <!-- PAGE: CART / QUOTATION -->
-    <div id="page-cart" class="page-section bg-snap-gray min-h-screen pt-10">
+    <div id="page-cart" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container max-w-4xl py-10">
-            <h2 data-i18n="pageCartTitle" class="text-3xl font-black text-slate-900 uppercase mb-2">Quotation Request</h2>
-            <div class="w-16 h-1 bg-snap-green mb-8"></div>
-            <div class="bg-white p-8 sharp-card">
-                <div id="cart-header" class="flex justify-between items-center mb-6 pb-4 border-b">
+            <h2 data-i18n="pageCartTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Quotation Request</h2>
+            <div class="w-16 h-1.5 bg-snap-green rounded-full mb-8"></div>
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+                <div id="cart-header" class="flex justify-between items-center mb-6 pb-4 border-b border-slate-100">
                     <div class="flex items-center gap-3">
-                        <input type="checkbox" id="cart-select-all" onclick="toggleSelectAll(this.checked)" class="w-4 h-4 accent-snap-green cursor-pointer">
+                        <input type="checkbox" id="cart-select-all" onclick="toggleSelectAll(this.checked)" class="w-5 h-5 accent-snap-green cursor-pointer rounded">
                         <label for="cart-select-all" class="font-bold text-sm cursor-pointer" data-i18n="selectAll">เลือกทั้งหมด</label>
                     </div>
-                    <button onclick="deleteSelected()" class="text-red-500 font-bold text-sm underline hover:text-red-700" data-i18n="deleteSelected">ลบที่เลือก</button>
+                    <button onclick="deleteSelected()" class="text-red-500 font-bold text-sm hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors" data-i18n="deleteSelected"><i class="fas fa-trash-alt mr-1"></i> ลบที่เลือก</button>
                 </div>
-                <div id="cart-items" class="space-y-3 mb-10 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2"></div>
-                <div id="quote-contact-form" class="bg-slate-50 p-6 sharp-card mb-8 hidden">
-                    <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest"><i class="fas fa-info-circle text-snap-green"></i> <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ</span></p>
+                <div id="cart-items" class="space-y-4 mb-10 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2"></div>
+                <div id="quote-contact-form" class="bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8 hidden">
+                    <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest"><i class="fas fa-info-circle text-snap-green mr-1"></i> <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ</span></p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="quote-name" placeholder="ชื่อ / บริษัท" class="px-4 py-3 bg-white border outline-none focus:border-snap-green sharp-card">
-                        <input type="text" id="quote-contact" placeholder="อีเมล / เบอร์โทร" class="px-4 py-3 bg-white border outline-none focus:border-snap-green sharp-card">
+                        <input type="text" id="quote-name" placeholder="ชื่อ / บริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green rounded-xl text-sm font-bold text-slate-700 shadow-sm transition-colors">
+                        <input type="text" id="quote-contact" placeholder="อีเมล / เบอร์โทร" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green rounded-xl text-sm font-bold text-slate-700 shadow-sm transition-colors">
                     </div>
                 </div>
-                <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t gap-6">
+                <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-100 gap-6">
                     <div>
-                        <p class="text-slate-500 text-xs font-bold uppercase tracking-widest" data-i18n="cartTotalLabel">ราคากลางประเมินรวม</p>
+                        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1" data-i18n="cartTotalLabel">ราคากลางประเมินรวม</p>
                         <h3 id="cart-total" class="text-5xl font-black text-snap-green tracking-tighter">฿0</h3>
                     </div>
-                    <button onclick="requestQuote()" class="w-full md:w-auto bg-snap-black text-white px-8 py-4 font-bold hover:bg-snap-green sharp-btn" data-i18n="btnRequestQuote">ยื่นขอใบเสนอราคา</button>
+                    <button onclick="requestQuote()" class="w-full md:w-auto bg-snap-black text-white px-10 py-4 font-bold hover:bg-snap-green rounded-xl transition-colors shadow-lg shadow-snap-black/20 uppercase tracking-widest text-sm" data-i18n="btnRequestQuote"><i class="fas fa-paper-plane mr-2"></i> ยื่นขอใบเสนอราคา</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- PAGE: DASHBOARD -->
-    <div id="page-dashboard" class="page-section bg-snap-gray min-h-screen pt-10">
+    <div id="page-dashboard" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container py-10">
             <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">
                 <span data-i18n="navDashboard">Dashboard</span> : <span id="dash-user-name" class="text-snap-green"></span>
             </h2>
-            <div class="w-16 h-1 bg-snap-green mb-8"></div>
+            <div class="w-16 h-1.5 bg-snap-green rounded-full mb-8"></div>
             <p class="text-slate-600 mb-8" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 sharp-card lg:col-span-2 flex flex-col justify-center rounded-2xl">
-                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest" data-i18n="dashCtrlTitle">System Controls</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <button onclick="startSystem()" id="btn-start" class="bg-snap-green text-white py-3 font-bold hover:bg-snap-green-hover rounded-xl text-xs"><i class="fas fa-play mr-2"></i> START</button>
-                        <button onclick="stopSystem()" id="btn-stop" class="bg-slate-200 text-slate-700 py-3 font-bold hover:bg-red-500 hover:text-white rounded-xl text-xs"><i class="fas fa-stop mr-2"></i> STOP</button>
-                        <button onclick="resetSystem()" class="bg-snap-black text-white py-3 font-bold hover:bg-slate-800 rounded-xl text-xs"><i class="fas fa-sync-alt mr-2"></i> REFRESH</button>
-                        <button onclick="exportCSV()" class="bg-blue-600 text-white py-3 font-bold hover:bg-blue-700 rounded-xl text-xs"><i class="fas fa-file-csv mr-2"></i> REPORT</button>
+                <div class="bg-white p-8 sharp-card lg:col-span-2 flex flex-col justify-center rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-6 uppercase text-xs tracking-widest" data-i18n="dashCtrlTitle">System Controls</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <button onclick="startSystem()" id="btn-start" class="bg-snap-green text-white py-4 font-bold hover:bg-snap-green-hover rounded-xl text-xs transition-colors shadow-sm"><i class="fas fa-play mb-1 text-lg block"></i> START</button>
+                        <button onclick="stopSystem()" id="btn-stop" class="bg-slate-100 text-slate-600 py-4 font-bold hover:bg-red-500 hover:text-white rounded-xl text-xs transition-colors shadow-sm border border-slate-200 hover:border-red-500"><i class="fas fa-stop mb-1 text-lg block"></i> STOP</button>
+                        <button onclick="resetSystem()" class="bg-snap-black text-white py-4 font-bold hover:bg-slate-800 rounded-xl text-xs transition-colors shadow-sm"><i class="fas fa-sync-alt mb-1 text-lg block"></i> REFRESH</button>
+                        <button onclick="exportCSV()" class="bg-blue-600 text-white py-4 font-bold hover:bg-blue-700 rounded-xl text-xs transition-colors shadow-sm"><i class="fas fa-file-csv mb-1 text-lg block"></i> REPORT</button>
                     </div>
                 </div>
-                <div class="bg-white p-6 sharp-card rounded-2xl">
-                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest" data-i18n="dashCfgTitle">Configuration</h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <div class="bg-white p-8 sharp-card rounded-3xl border border-slate-200 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-6 uppercase text-xs tracking-widest" data-i18n="dashCfgTitle">Configuration</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashTarget">Target</label>
-                            <input type="number" id="cfg-target" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                            <input type="number" id="cfg-target" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-slate-50 px-2 py-1 rounded">
                         </div>
-                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashCarbon">Carbon Factor</label>
-                            <input type="number" step="0.0001" id="cfg-carbon" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                            <input type="number" step="0.0001" id="cfg-carbon" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-slate-50 px-2 py-1 rounded">
                         </div>
                         <div class="flex justify-between items-center">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashEnergy">Energy Factor</label>
-                            <input type="number" step="0.001" id="cfg-energy" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                            <input type="number" step="0.001" id="cfg-energy" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-slate-50 px-2 py-1 rounded">
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-white p-6 sharp-card rounded-2xl border-t-4 border-t-blue-500">
-                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotOut">Total Output</p>
-                    <h3 id="dash-total-output" class="text-4xl font-black text-slate-900 tracking-tighter">0</h3>
+                <div class="bg-white p-8 sharp-card rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50 rounded-bl-[100px] flex items-top justify-right p-4"><i class="fas fa-box text-blue-500 text-xl opacity-50"></i></div>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotOut">Total Output</p>
+                    <h3 id="dash-total-output" class="text-5xl font-black text-slate-900 tracking-tighter">0</h3>
                 </div>
-                <div class="bg-white p-6 sharp-card rounded-2xl border-t-4 border-t-snap-green">
-                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashCalCarbon">Cal Carbon</p>
-                    <h3 id="dash-carbon" class="text-4xl font-black text-slate-900 tracking-tighter">0.00</h3>
+                <div class="bg-white p-8 sharp-card rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-emerald-50 rounded-bl-[100px] flex items-top justify-right p-4"><i class="fas fa-leaf text-emerald-500 text-xl opacity-50"></i></div>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashCalCarbon">Cal Carbon</p>
+                    <h3 id="dash-carbon" class="text-5xl font-black text-slate-900 tracking-tighter">0.00</h3>
                 </div>
-                <div class="bg-white p-6 sharp-card rounded-2xl border-t-4 border-t-amber-500">
-                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotPower">Total Power</p>
-                    <h3 id="dash-power" class="text-4xl font-black text-slate-900 tracking-tighter">0.00</h3>
+                <div class="bg-white p-8 sharp-card rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-amber-50 rounded-bl-[100px] flex items-top justify-right p-4"><i class="fas fa-bolt text-amber-500 text-xl opacity-50"></i></div>
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotPower">Total Power</p>
+                    <h3 id="dash-power" class="text-5xl font-black text-slate-900 tracking-tighter">0.00</h3>
                 </div>
             </div>
 
-            <div class="bg-white p-8 sharp-card rounded-2xl mb-8">
+            <div class="bg-white p-8 sharp-card rounded-3xl border border-slate-200 shadow-sm mb-8">
                 <div class="flex justify-between items-end mb-4">
                     <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashPlanTitle">Production Planning</h3>
                     <span id="dash-progress-text" class="text-2xl font-black text-snap-green">0.0%</span>
                 </div>
-                <div class="w-full h-4 bg-slate-100 rounded-full overflow-hidden mb-6">
-                    <div id="dash-progress-bar" class="h-full bg-snap-green transition-all duration-300" style="width: 0%"></div>
+                <div class="w-full h-5 bg-slate-100 rounded-full overflow-hidden mb-6 border border-slate-200">
+                    <div id="dash-progress-bar" class="h-full bg-snap-green transition-all duration-300 relative" style="width: 0%">
+                        <div class="absolute inset-0 bg-white/20 w-full h-full" style="background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent); background-size: 1rem 1rem;"></div>
+                    </div>
                 </div>
                 <div class="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-widest">
                     <span><i class="far fa-clock mr-1"></i> <span data-i18n="dashTimeElapsed">Elapsed</span>: <span id="dash-time-elapsed" class="text-slate-800">00:00:00</span></span>
@@ -360,101 +395,117 @@ snapcon_html = """
                 </div>
             </div>
 
-            <div class="bg-white p-6 sharp-card rounded-2xl">
-                <div class="flex justify-between items-center mb-6">
+            <div class="bg-white p-8 sharp-card rounded-3xl border border-slate-200 shadow-sm">
+                <div class="flex justify-between items-center mb-8 pb-4 border-b border-slate-100">
                     <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashMacStatus2">Machine Status</h3>
-                    <div class="flex gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-snap-green rounded-full"></div> <span data-i18n="statusNormal">Normal</span></span>
-                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-amber-400 rounded-full"></div> <span data-i18n="statusWarning">Warning</span></span>
-                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-red-500 rounded-full"></div> <span data-i18n="statusMaint">Maint.</span></span>
+                    <div class="flex gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50 px-4 py-2 rounded-full">
+                        <span class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-snap-green rounded-full shadow-sm"></div> <span data-i18n="statusNormal">Normal</span></span>
+                        <span class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-amber-400 rounded-full shadow-sm"></div> <span data-i18n="statusWarning">Warning</span></span>
+                        <span class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm"></div> <span data-i18n="statusMaint">Maint.</span></span>
                     </div>
                 </div>
-                <div id="dash-nodes-grid" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar p-1">
+                <div id="dash-nodes-grid" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar p-2">
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PAGE: COMPANY (อัปเดตใหม่ สมบูรณ์แบบ) -->
+    <!-- PAGE: COMPANY -->
     <div id="page-about" class="page-section bg-white min-h-screen pt-10">
         <div class="max-container py-10">
             <h2 data-i18n="navAbout" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Company</h2>
-            <div class="w-16 h-1 bg-snap-green mb-10"></div>
+            <div class="w-16 h-1.5 bg-snap-green rounded-full mb-10"></div>
             
-            <div class="grid md:grid-cols-2 gap-10 items-center mb-16">
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
                 <div>
-                    <h3 class="text-4xl font-black text-snap-black tracking-tighter mb-6 leading-tight">Driving the future of <br><span class="text-snap-green">industrial automation.</span></h3>
-                    <p class="text-slate-600 leading-relaxed mb-6">
+                    <h3 class="text-4xl md:text-5xl font-black text-snap-black tracking-tighter mb-8 leading-[1.1]">Driving the future of <br><span class="text-snap-green">industrial automation.</span></h3>
+                    <p class="text-slate-500 leading-relaxed mb-6 text-lg font-medium">
                         Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด
                     </p>
                 </div>
-                <div class="h-64 md:h-80 sharp-card overflow-hidden relative group rounded-2xl shadow-lg border border-slate-200">
+                <div class="h-80 md:h-[400px] overflow-hidden relative group rounded-[2rem] shadow-2xl shadow-slate-200">
                     <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-snap-green/10 group-hover:bg-transparent transition-colors duration-500 pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-snap-black/60 to-transparent"></div>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-snap-black text-white p-10 sharp-card border-none rounded-2xl">
-                    <i class="fas fa-eye text-4xl text-snap-green mb-6"></i>
-                    <h4 class="text-2xl font-bold mb-4 uppercase tracking-wider">Vision</h4>
-                    <p class="text-slate-400 leading-relaxed">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-snap-black text-white p-12 border-none rounded-[2rem] relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
+                    <i class="fas fa-eye text-5xl text-snap-green mb-8 relative z-10 drop-shadow-md"></i>
+                    <h4 class="text-3xl font-black mb-4 uppercase tracking-wider relative z-10">Vision</h4>
+                    <p class="text-slate-400 leading-relaxed text-lg relative z-10 font-medium">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
                 </div>
-                <div class="bg-snap-green text-white p-10 sharp-card border-none rounded-2xl">
-                    <i class="fas fa-bullseye text-4xl text-snap-black mb-6"></i>
-                    <h4 class="text-2xl font-bold mb-4 uppercase tracking-wider text-snap-black">Mission</h4>
-                    <p class="text-emerald-900 leading-relaxed font-medium">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
+                <div class="bg-snap-green text-white p-12 border-none rounded-[2rem] relative overflow-hidden group shadow-xl shadow-snap-green/20">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-black/10 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
+                    <i class="fas fa-bullseye text-5xl text-snap-black mb-8 relative z-10 drop-shadow-md"></i>
+                    <h4 class="text-3xl font-black mb-4 uppercase tracking-wider text-snap-black relative z-10">Mission</h4>
+                    <p class="text-emerald-900 leading-relaxed text-lg font-bold relative z-10">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PAGE: SUPPORT / CONTACT (อัปเดตใหม่ให้ใช้งานฟอร์มส่งเข้า Sheet ได้) -->
-    <div id="page-contact" class="page-section bg-snap-gray min-h-screen pt-10">
+    <!-- PAGE: SUPPORT / CONTACT -->
+    <div id="page-contact" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container max-w-5xl py-10">
             <h2 data-i18n="navContact" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Support</h2>
-            <div class="w-16 h-1 bg-snap-green mb-10"></div>
+            <div class="w-16 h-1.5 bg-snap-green rounded-full mb-10"></div>
             
-            <div class="grid md:grid-cols-2 gap-8 items-start">
+            <div class="grid md:grid-cols-2 gap-10 items-start">
                 <!-- ข้อมูลติดต่อด่วน -->
-                <div class="bg-white sharp-card p-10 text-left rounded-2xl shadow-sm h-full border border-slate-200">
-                    <i class="fas fa-headset text-5xl text-snap-green mb-6"></i>
-                    <h3 class="text-2xl font-black text-slate-900 mb-2">Technical Support 24/7</h3>
-                    <p class="text-slate-500 mb-8 text-sm">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ</p>
+                <div class="bg-white p-10 text-left rounded-[2rem] shadow-sm h-full border border-slate-200">
+                    <div class="w-20 h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mb-8">
+                        <i class="fas fa-headset text-4xl text-snap-green"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-slate-900 mb-3 tracking-tight">Technical Support</h3>
+                    <p class="text-slate-500 mb-10 text-sm font-medium">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ พร้อมให้บริการคุณตลอด 24 ชั่วโมง</p>
                     
                     <div class="space-y-4 mb-10">
-                        <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card rounded-xl border border-slate-100">
-                            <i class="fas fa-envelope text-slate-400 text-xl"></i>
-                            <span class="font-bold text-slate-700">snapcon1992@gmail.com</span>
+                        <div class="flex items-center gap-5 bg-slate-50 p-5 rounded-2xl border border-slate-100 hover:border-snap-green hover:shadow-md transition-all cursor-pointer group">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-snap-green group-hover:text-white transition-colors"><i class="fas fa-envelope text-slate-400 group-hover:text-white text-xl"></i></div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email</p>
+                                <span class="font-black text-slate-800">snapcon1992@gmail.com</span>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card rounded-xl border border-slate-100">
-                            <i class="fab fa-line text-[#00B900] text-2xl"></i>
-                            <span class="font-bold text-slate-700">@SnapconAuto</span>
+                        <div class="flex items-center gap-5 bg-slate-50 p-5 rounded-2xl border border-slate-100 hover:border-[#00B900] hover:shadow-md transition-all cursor-pointer group">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-[#00B900] group-hover:text-white transition-colors"><i class="fab fa-line text-[#00B900] group-hover:text-white text-2xl"></i></div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Line Official</p>
+                                <span class="font-black text-slate-800">@SnapconAuto</span>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-4 bg-slate-50 p-4 sharp-card rounded-xl border border-slate-100">
-                            <i class="fas fa-phone-alt text-slate-400 text-xl"></i>
-                            <span class="font-bold text-slate-700">081-XXX-XXXX</span>
+                        <div class="flex items-center gap-5 bg-slate-50 p-5 rounded-2xl border border-slate-100 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer group">
+                            <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors"><i class="fas fa-phone-alt text-slate-400 group-hover:text-white text-xl"></i></div>
+                            <div>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hotline</p>
+                                <span class="font-black text-slate-800">081-XXX-XXXX</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- ฟอร์มติดต่อส่งเข้า Google Sheets -->
-                <div class="bg-white p-10 sharp-card shadow-sm rounded-2xl h-full border border-slate-200">
-                    <h3 class="text-xl font-black text-slate-900 mb-6 uppercase tracking-widest"><i class="fas fa-paper-plane text-snap-green mr-2"></i> ส่งข้อความถึงเรา</h3>
-                    <div class="space-y-5">
+                <div class="bg-white p-10 shadow-sm rounded-[2rem] h-full border border-slate-200">
+                    <h3 class="text-xl font-black text-slate-900 mb-8 uppercase tracking-widest flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-50 rounded-lg flex items-center justify-center"><i class="fas fa-paper-plane text-snap-green"></i></div>
+                        ส่งข้อความถึงเรา
+                    </h3>
+                    <div class="space-y-6">
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">ชื่อ-นามสกุล / บริษัท</label>
-                            <input type="text" id="contact-name" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green sharp-card text-sm rounded-lg" placeholder="กรอกชื่อของคุณ">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">ชื่อ-นามสกุล / บริษัท</label>
+                            <input type="text" id="contact-name" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green focus:bg-white transition-colors text-sm font-bold text-slate-700 rounded-xl" placeholder="กรอกชื่อของคุณ">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">อีเมล / เบอร์โทรติดต่อกลับ</label>
-                            <input type="text" id="contact-info" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green sharp-card text-sm rounded-lg" placeholder="กรอกข้อมูลติดต่อกลับ">
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">อีเมล / เบอร์โทรติดต่อกลับ</label>
+                            <input type="text" id="contact-info" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green focus:bg-white transition-colors text-sm font-bold text-slate-700 rounded-xl" placeholder="กรอกข้อมูลติดต่อกลับ">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">รายละเอียด / คำถาม</label>
-                            <textarea id="contact-message" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green sharp-card text-sm rounded-lg custom-scrollbar" placeholder="พิมพ์ข้อความของคุณที่นี่..."></textarea>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">รายละเอียด / คำถาม</label>
+                            <textarea id="contact-message" rows="4" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 outline-none focus:border-snap-green focus:bg-white transition-colors text-sm font-bold text-slate-700 rounded-xl custom-scrollbar" placeholder="พิมพ์ข้อความของคุณที่นี่..."></textarea>
                         </div>
-                        <button onclick="submitContactForm()" class="w-full bg-snap-black text-white px-8 py-4 font-bold hover:bg-snap-green sharp-btn text-sm transition-all rounded-lg mt-2">
+                        <button onclick="submitContactForm()" class="w-full bg-snap-black text-white px-8 py-4.5 font-bold hover:bg-snap-green text-sm transition-all rounded-xl mt-2 shadow-lg shadow-snap-black/20 uppercase tracking-widest">
                             SEND MESSAGE
                         </button>
                     </div>
@@ -464,28 +515,42 @@ snapcon_html = """
     </div>
 
     <!-- MODAL: REGISTER -->
-    <div id="modal-register" class="fixed inset-0 bg-snap-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md sharp-card shadow-2xl relative p-8 rounded-2xl">
-            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button>
-            <h3 class="text-xl font-black text-slate-900 uppercase mb-6" data-i18n="regTitle">Create Account</h3>
+    <div id="modal-register" class="fixed inset-0 bg-snap-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md shadow-2xl relative p-10 rounded-[2rem]">
+            <button onclick="closeRegisterModal()" class="absolute top-5 right-5 w-10 h-10 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full flex items-center justify-center transition-colors text-lg"><i class="fas fa-times"></i></button>
+            
+            <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6">
+                <i class="fas fa-user-plus text-3xl text-snap-green"></i>
+            </div>
+            <h3 class="text-2xl font-black text-slate-900 uppercase mb-2 tracking-tight" data-i18n="regTitle">Create Account</h3>
+            <p class="text-slate-500 text-sm font-medium mb-8">ลงทะเบียนเพื่อเข้าถึงระบบ Dashboard และขอใบเสนอราคา</p>
+            
             <div class="space-y-4">
-                <input type="text" id="reg-id" placeholder="User ID" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
-                <input type="password" id="reg-pass" placeholder="Password" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
-                <input type="text" id="reg-name" placeholder="Name / Company" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
-                <input type="text" id="reg-contact" placeholder="Email / Phone" class="w-full px-4 py-3 border border-slate-200 rounded-lg outline-none focus:border-snap-green bg-slate-50">
-                <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4 font-bold hover:bg-snap-green-hover rounded-lg uppercase tracking-widest mt-2" data-i18n="btnSubmitReg">Confirm</button>
+                <div class="relative">
+                    <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="reg-id" placeholder="User ID" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="password" id="reg-pass" placeholder="Password" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                </div>
+                <div class="h-px w-full bg-slate-100 my-2"></div>
+                <div class="relative">
+                    <i class="fas fa-building absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="reg-name" placeholder="Name / Company" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="reg-contact" placeholder="Email / Phone" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                </div>
+                <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4.5 font-bold hover:bg-snap-green-hover rounded-xl uppercase tracking-widest mt-4 shadow-lg shadow-snap-green/30 transition-all active:scale-95 text-sm" data-i18n="btnSubmitReg">Confirm Registration</button>
             </div>
         </div>
     </div>
-    
-    <!-- Floating Support Button -->
-    <button onclick="navigate('contact')" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 cursor-pointer">
-        <i class="fas fa-headset group-hover:animate-pulse"></i>
-    </button>
 
     <script>
         // =========================================================================
-        // JAVASCRIPT SYSTEM (STABLE VERSION 4.0 - AUTO FALLBACK & ROBUST MAPPING)
+        // JAVASCRIPT SYSTEM (STABLE VERSION 5.0 - AUTO LOGIN & DRIVE VIDEO)
         // =========================================================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         
@@ -502,6 +567,26 @@ snapcon_html = """
                     const fileId = url.split('/d/')[1].split('/')[0];
                     return `https://drive.google.com/uc?export=view&id=${fileId}`;
                 } catch(e) { return url; }
+            }
+            return url;
+        }
+
+        // 1.1 Helper: แปลงลิงก์ Google Drive Video ให้เป็น Embed Player
+        function getEmbedVideoUrl(url) {
+            if (!url) return '';
+            // ถ้าเป็นลิงก์ Google Drive ให้บังคับใช้โหมด preview
+            if (url.includes('drive.google.com/file/d/')) {
+                try {
+                    const fileId = url.split('/d/')[1].split('/')[0];
+                    return `https://drive.google.com/file/d/${fileId}/preview`;
+                } catch(e) { return url; }
+            }
+            // เผื่อผู้ใช้ยังใส่ลิงก์ YouTube ไว้ ให้รองรับด้วย
+            if (url.includes('youtube.com/watch?v=')) {
+                return url.replace('watch?v=', 'embed/');
+            }
+            if (url.length === 11 && !url.includes('/')) {
+                return `https://www.youtube.com/embed/${url}`; // YouTube ID
             }
             return url;
         }
@@ -529,7 +614,6 @@ snapcon_html = """
                 const data = await response.json();
                 console.log("Data successfully loaded:", data);
                 
-                // นำข้อมูลไป Normalize เพื่อให้โค้ดอ่านได้เสมอ ไม่ว่าผู้ใช้จะพิมพ์หัวตารางแบบไหน
                 products = normalizeKeys(data.products);
                 spares = normalizeKeys(data.spares);
                 documents = normalizeKeys(data.documents);
@@ -557,26 +641,26 @@ snapcon_html = """
             const slider = document.getElementById('home-product-slider');
 
             const makeCard = (p) => `
-                <div class="bg-white sharp-card p-4 flex flex-col h-full rounded-2xl shadow-sm">
-                    <div class="bg-slate-50 h-40 flex items-center justify-center p-2 mb-3 overflow-hidden rounded-xl border border-slate-100">
+                <div class="bg-white sharp-card p-5 flex flex-col h-full rounded-[1.5rem] shadow-sm border border-slate-100">
+                    <div class="bg-slate-50 h-40 flex items-center justify-center p-3 mb-4 overflow-hidden rounded-xl border border-slate-100">
                         <img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
                     </div>
                     <h4 class="font-black text-sm text-slate-900 mb-2 truncate" title="${p.name || p.title}">${p.name || p.title}</h4>
-                    <p class="text-snap-green font-black text-lg mb-4 mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full bg-slate-100 text-slate-700 py-3 rounded-lg font-bold text-xs hover:bg-snap-green hover:text-white transition-colors">ADD TO CART</button>
+                    <p class="text-snap-green font-black text-xl mb-4 mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
+                    <button onclick="addToCart('${p.id}')" class="w-full bg-slate-50 text-slate-700 py-3 rounded-xl font-bold text-xs hover:bg-snap-green hover:text-white transition-all border border-slate-200 hover:border-transparent">ADD TO CART</button>
                 </div>`;
 
             if(pGrid) pGrid.innerHTML = products.map(makeCard).join('');
             if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
             if(slider) slider.innerHTML = products.slice(0, 10).map(p => `
-                <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-2xl shadow-sm hover:shadow-lg transition-all cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50 border border-slate-100"><img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" class="w-full h-full object-contain mix-blend-multiply p-2"></div>
-                    <h4 class="font-black text-sm text-slate-800 mb-1 truncate">${p.name || p.title}</h4>
+                <div onclick="navigate('product')" class="min-w-[280px] snap-center bg-white border border-slate-100 p-5 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all cursor-pointer">
+                    <div class="overflow-hidden rounded-xl mb-4 relative h-36 bg-slate-50 border border-slate-100"><img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" class="w-full h-full object-contain mix-blend-multiply p-3"></div>
+                    <h4 class="font-black text-[15px] text-slate-800 mb-1 truncate">${p.name || p.title}</h4>
                     <p class="text-snap-green font-black text-lg mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
                 </div>`).join('');
         }
 
-        // 4. Render: Project Reference (แก้ปัญหารูป Pilot อัตโนมัติ)
+        // 4. Render: Project Reference
         function renderProjects() {
             const pilotGrid = document.getElementById('project-pilot-grid');
             const usecaseGrid = document.getElementById('project-usecase-grid');
@@ -584,24 +668,22 @@ snapcon_html = """
             if (pilotGrid) {
                 const pilots = projects.filter(p => (p.category||'').toLowerCase().includes('pilot'));
                 pilotGrid.innerHTML = pilots.map(p => {
-                    let visual = '<i class="fas fa-cogs text-snap-green text-3xl"></i>';
-                    
+                    let visual = '<i class="fas fa-cogs text-snap-green text-4xl"></i>';
                     let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
                     if (imgSrc && imgSrc.includes('http')) {
                         visual = `<img src="${imgSrc}" class="w-full h-full object-contain p-2">`;
                     } else if (p.icon && !p.icon.includes('http')) {
-                        visual = `<i class="${p.icon} text-3xl text-snap-green"></i>`;
+                        visual = `<i class="${p.icon} text-4xl text-snap-green"></i>`;
                     }
-                    
                     const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
 
                     return `
-                    <div class="bg-slate-50 p-8 sharp-card border border-slate-100 rounded-2xl group flex flex-col items-start h-full">
-                        <div class="w-20 h-20 bg-white border border-slate-200 rounded-2xl flex items-center justify-center mb-6 shadow-sm overflow-hidden shrink-0 group-hover:scale-110 transition-transform">
+                    <div class="bg-slate-50 p-8 sharp-card border border-slate-100 rounded-[2rem] group flex flex-col items-start h-full">
+                        <div class="w-20 h-20 bg-white border border-slate-200 rounded-2xl flex items-center justify-center mb-8 shadow-sm overflow-hidden shrink-0 group-hover:scale-110 transition-transform">
                             ${visual}
                         </div>
-                        <h4 class="text-lg font-black text-slate-900 mb-3">${p.title || 'Untitled'}</h4>
-                        <p class="text-sm text-slate-600">${desc || ''}</p>
+                        <h4 class="text-xl font-black text-slate-900 mb-3 leading-tight">${p.title || 'Untitled'}</h4>
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed">${desc || ''}</p>
                     </div>`;
                 }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Pilot Projects)</p>';
             }
@@ -612,58 +694,70 @@ snapcon_html = """
                     let borderCol = ['border-t-amber-500', 'border-t-snap-green', 'border-t-blue-500'][idx % 3];
                     let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
                     if(!imgSrc || !imgSrc.includes('http')) imgSrc = 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
-                    
                     const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
 
                     return `
-                    <div class="bg-white p-6 sharp-card rounded-2xl shadow-sm border-t-4 ${borderCol} flex flex-col items-center text-center h-full">
-                        <div class="w-full h-40 bg-slate-100 rounded-xl mb-6 overflow-hidden flex items-center justify-center">
+                    <div class="bg-white p-8 sharp-card rounded-[2rem] shadow-sm border-t-[6px] ${borderCol} flex flex-col items-center text-center h-full">
+                        <div class="w-full h-44 bg-slate-100 rounded-2xl mb-8 overflow-hidden flex items-center justify-center">
                             <img src="${imgSrc}" class="w-full h-full object-cover mix-blend-multiply opacity-90 hover:scale-110 transition-transform duration-500">
                         </div>
-                        <h4 class="text-lg font-black text-slate-900 mb-2">${p.title || 'Untitled'}</h4>
-                        <p class="text-sm text-slate-600">${desc || ''}</p>
+                        <h4 class="text-xl font-black text-slate-900 mb-3 leading-tight">${p.title || 'Untitled'}</h4>
+                        <p class="text-sm text-slate-600 font-medium leading-relaxed">${desc || ''}</p>
                     </div>`;
                 }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Use Cases)</p>';
             }
         }
 
-        // 5. Render: Articles (Knowledge & Insight)
+        // 5. Render: Articles (Knowledge & Insight) แบบรองรับ Google Drive Video
         function renderArticles() {
             const container = document.getElementById('article-list');
             if (!container) return;
             if (!articles || articles.length === 0) {
-                container.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold">กำลังอัปเดตบทความใหม่เร็วๆ นี้...</p>';
+                container.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold bg-white border border-slate-100 py-10 rounded-2xl">กำลังอัปเดตบทความใหม่เร็วๆ นี้...</p>';
                 return;
             }
             
             container.innerHTML = articles.map(art => {
                 let mediaHtml = '';
-                if (art.youtube1) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/${art.youtube1}" frameborder="0" allowfullscreen></iframe></div>`;
-                if (art.youtube2) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded-xl" src="https://www.youtube.com/embed/${art.youtube2}" frameborder="0" allowfullscreen></iframe></div>`;
+                
+                // รองรับคอลัมน์ชื่อ youtube1, video1, หรือแค่ลิงก์วิดีโอจาก Google Drive
+                const vid1 = art.video1 || art.youtube1 || art.video;
+                const vid2 = art.video2 || art.youtube2;
+
+                if (vid1) {
+                    const embed1 = getEmbedVideoUrl(vid1);
+                    mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${embed1}" frameborder="0" allowfullscreen></iframe></div>`;
+                }
+                if (vid2) {
+                    const embed2 = getEmbedVideoUrl(vid2);
+                    mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${embed2}" frameborder="0" allowfullscreen></iframe></div>`;
+                }
+                
+                // ถ้าไม่มีวิดีโอ ให้โชว์รูปภาพหน้าปกแทน
                 if (!mediaHtml) {
                     let imgSrc = getValidImageUrl(art.imageurl || art.img || art.image);
-                    mediaHtml = `<img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-44 object-cover rounded-xl border border-slate-100">`;
+                    mediaHtml = `<div class="aspect-video mb-4"><img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-full object-cover rounded-2xl shadow-sm border border-slate-100"></div>`;
                 }
 
                 const articleUrl = art.link || art.url || '#';
 
                 return `
-                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
-                    <div class="p-3">${mediaHtml}</div>
+                <div class="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-snap-green/10 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group p-3">
+                    ${mediaHtml}
                     <div class="p-6 pt-2 flex flex-col flex-1">
-                        <span class="text-snap-green text-[10px] font-black uppercase tracking-widest">${art.category || 'INSIGHT'}</span>
-                        <h3 class="text-xl font-black text-slate-900 mt-2 mb-3 line-clamp-2">${art.title || 'Untitled'}</h3>
-                        <p class="text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">${art.summary || ''}</p>
+                        <span class="text-emerald-600 bg-emerald-50 self-start px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest mb-4">${art.category || 'INSIGHT'}</span>
+                        <h3 class="text-xl font-black text-slate-900 mb-3 line-clamp-2 leading-tight group-hover:text-snap-green transition-colors">${art.title || 'Untitled'}</h3>
+                        <p class="text-slate-500 text-sm mb-6 line-clamp-2 leading-relaxed font-medium">${art.summary || ''}</p>
                         <div class="mt-auto flex justify-between items-center pt-5 border-t border-slate-100">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase">${art.date || ''}</span>
-                            ${articleUrl !== '#' ? `<a href="${articleUrl}" target="_blank" class="bg-slate-900 text-white px-5 py-2.5 rounded-lg text-xs font-bold hover:bg-snap-green transition-colors">อ่านต่อ</a>` : ''}
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="far fa-calendar-alt mr-1"></i> ${art.date || 'Update'}</span>
+                            ${articleUrl !== '#' ? `<a href="${articleUrl}" target="_blank" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-snap-green transition-all shadow-md active:scale-95">อ่านบทความ</a>` : ''}
                         </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // 6. Render: Documents Dropdown (แก้ปัญหาดึงข้อมูลจาก Tab ย่อยแบบ Bulletproof)
+        // 6. Render: Documents Dropdown
         function renderDocuments() {
             const makeMenu = (typeStr) => {
                 const filteredDocs = documents.filter(d => {
@@ -679,7 +773,7 @@ snapcon_html = """
                     const name = d.modelname || d.name || d.model || d.title || 'Untitled Document';
                     const url = getValidImageUrl(d.fileurl || d.link || d.url || d.file || '#');
                     if(url === '#' || url === '') return '';
-                    return `<a href="${url}" target="_blank" class="block px-8 py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-sm font-bold text-slate-700 transition-colors">${name}</a>`;
+                    return `<a href="${url}" target="_blank" class="block px-8 py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-sm font-bold text-slate-700 transition-colors"><i class="fas fa-file-download mr-2 text-slate-400"></i> ${name}</a>`;
                 }).join('');
             };
 
@@ -736,7 +830,7 @@ snapcon_html = """
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
 
-        // --- ระบบส่งข้อมูลที่เสถียร ---
+        // --- ระบบส่งข้อมูล ---
         async function sendDataToServer(payloadObj) {
             return fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -766,6 +860,7 @@ snapcon_html = """
             } catch(e) { console.error("Error", e); }
         }
 
+        // ✅ อัปเดต: สมัครสมาชิกเสร็จแล้วให้ Login อัตโนมัติทันที
         async function submitRegistration() {
             const id = document.getElementById('reg-id').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
@@ -774,13 +869,35 @@ snapcon_html = """
             if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
             
             try {
+                // ส่งข้อมูลไปบันทึกลง Google Sheets
                 await sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
-                alert("ลงทะเบียนสำเร็จ!");
+                alert("ลงทะเบียนสำเร็จ! ระบบกำลังนำคุณเข้าสู่ระบบ...");
+                
+                // Auto-Login ล็อกอินอัตโนมัติ
+                memoryUsers[id] = pass;
+                isLoggedIn = true;
+                currentUserId = id;
+                
+                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+                
+                document.getElementById('displayUser').innerText = id;
+                document.getElementById('dash-user-name').innerText = id; 
+                document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
+                document.getElementById('user-section').classList.replace('hidden', 'flex');
+                
+                // ปิดหน้าต่างลงทะเบียน และล้างข้อมูล
                 closeRegisterModal();
-            } catch(e) { console.error("Error", e); }
+                document.getElementById('reg-id').value = '';
+                document.getElementById('reg-pass').value = '';
+                document.getElementById('reg-name').value = '';
+                document.getElementById('reg-contact').value = '';
+
+            } catch(e) { 
+                console.error("Error", e); 
+                alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+            }
         }
 
-        // ฟังก์ชันใหม่: สำหรับส่งฟอร์มติดต่อ (Contact Form)
         async function submitContactForm() {
             const name = document.getElementById('contact-name').value.trim();
             const info = document.getElementById('contact-info').value.trim();
