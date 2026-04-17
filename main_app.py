@@ -504,7 +504,7 @@ snapcon_html = """
                             <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors"><i class="fas fa-phone-alt text-slate-400 group-hover:text-white text-xl"></i></div>
                             <div>
                                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hotline</p>
-                                <span class="font-black text-slate-800">081-XXX-XXXX</span>
+                                <span class="font-black text-slate-800">097-926-1616</span>
                             </div>
                         </div>
                     </div>
