@@ -179,7 +179,7 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- Feature Dropdowns (Overlap Design - จัดให้ดูดีเป็นระเบียบ) -->
+        <!-- Feature Dropdowns (Overlap Design) -->
         <div class="relative z-40 max-container -mt-16 mb-16 px-6">
             <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                 <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
@@ -522,7 +522,7 @@ snapcon_html = """
             <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6">
                 <i class="fas fa-user-plus text-3xl text-snap-green"></i>
             </div>
-            <h3 class="text-2xl font-black text-slate-900 uppercase mb-2 tracking-tight" data-i18n="regTitle">Create Account</h3>
+            <h3 class="text-2xl font-black text-slate-900 uppercase mb-2 tracking-tight" data-i18n="regTitle">CREATE ACCOUNT</h3>
             <p class="text-slate-500 text-sm font-medium mb-8">ลงทะเบียนเพื่อเข้าถึงระบบ Dashboard และขอใบเสนอราคา</p>
             
             <div class="space-y-4">
@@ -543,14 +543,14 @@ snapcon_html = """
                     <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" id="reg-contact" placeholder="Email / Phone" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
                 </div>
-                <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4.5 font-bold hover:bg-snap-green-hover rounded-xl uppercase tracking-widest mt-4 shadow-lg shadow-snap-green/30 transition-all active:scale-95 text-sm" data-i18n="btnSubmitReg">Confirm Registration</button>
+                <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4.5 font-bold hover:bg-snap-green-hover rounded-xl uppercase tracking-widest mt-4 shadow-lg shadow-snap-green/30 transition-all active:scale-95 text-sm" data-i18n="btnSubmitReg">CONFIRM REGISTRATION</button>
             </div>
         </div>
     </div>
 
     <script>
         // =========================================================================
-        // JAVASCRIPT SYSTEM (STABLE VERSION 5.0 - AUTO LOGIN & DRIVE VIDEO)
+        // JAVASCRIPT SYSTEM (STABLE VERSION 6.0 - FIRE AND FORGET DATA SYNC)
         // =========================================================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         
@@ -574,20 +574,14 @@ snapcon_html = """
         // 1.1 Helper: แปลงลิงก์ Google Drive Video ให้เป็น Embed Player
         function getEmbedVideoUrl(url) {
             if (!url) return '';
-            // ถ้าเป็นลิงก์ Google Drive ให้บังคับใช้โหมด preview
             if (url.includes('drive.google.com/file/d/')) {
                 try {
                     const fileId = url.split('/d/')[1].split('/')[0];
                     return `https://drive.google.com/file/d/${fileId}/preview`;
                 } catch(e) { return url; }
             }
-            // เผื่อผู้ใช้ยังใส่ลิงก์ YouTube ไว้ ให้รองรับด้วย
-            if (url.includes('youtube.com/watch?v=')) {
-                return url.replace('watch?v=', 'embed/');
-            }
-            if (url.length === 11 && !url.includes('/')) {
-                return `https://www.youtube.com/embed/${url}`; // YouTube ID
-            }
+            if (url.includes('youtube.com/watch?v=')) return url.replace('watch?v=', 'embed/');
+            if (url.length === 11 && !url.includes('/')) return `https://www.youtube.com/embed/${url}`;
             return url;
         }
 
@@ -622,7 +616,6 @@ snapcon_html = """
                 
                 allItems = [...products, ...spares];
                 
-                // สั่ง Render หน้าจอต่างๆ
                 try { renderProducts(); } catch(e) { console.error("Error products", e); }
                 try { renderDocuments(); } catch(e) { console.error("Error documents", e); }
                 try { renderProjects(); } catch(e) { console.error("Error projects", e); }
@@ -708,7 +701,7 @@ snapcon_html = """
             }
         }
 
-        // 5. Render: Articles (Knowledge & Insight) แบบรองรับ Google Drive Video
+        // 5. Render: Articles (Knowledge & Insight)
         function renderArticles() {
             const container = document.getElementById('article-list');
             if (!container) return;
@@ -719,8 +712,6 @@ snapcon_html = """
             
             container.innerHTML = articles.map(art => {
                 let mediaHtml = '';
-                
-                // รองรับคอลัมน์ชื่อ youtube1, video1, หรือแค่ลิงก์วิดีโอจาก Google Drive
                 const vid1 = art.video1 || art.youtube1 || art.video;
                 const vid2 = art.video2 || art.youtube2;
 
@@ -733,7 +724,6 @@ snapcon_html = """
                     mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${embed2}" frameborder="0" allowfullscreen></iframe></div>`;
                 }
                 
-                // ถ้าไม่มีวิดีโอ ให้โชว์รูปภาพหน้าปกแทน
                 if (!mediaHtml) {
                     let imgSrc = getValidImageUrl(art.imageurl || art.img || art.image);
                     mediaHtml = `<div class="aspect-video mb-4"><img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-full object-cover rounded-2xl shadow-sm border border-slate-100"></div>`;
@@ -764,10 +754,7 @@ snapcon_html = """
                     const t = (d.type || d.category || '').toLowerCase();
                     return t.includes(typeStr);
                 });
-                
-                if (filteredDocs.length === 0) {
-                    return '<div class="px-8 py-6 text-sm text-slate-400 font-medium text-center bg-slate-50">ไม่มีข้อมูล (No Data)</div>';
-                }
+                if (filteredDocs.length === 0) return '<div class="px-8 py-6 text-sm text-slate-400 font-medium text-center bg-slate-50">ไม่มีข้อมูล (No Data)</div>';
                 
                 return filteredDocs.map(d => {
                     const name = d.modelname || d.name || d.model || d.title || 'Untitled Document';
@@ -782,7 +769,7 @@ snapcon_html = """
             const ca = document.getElementById('menu-catalog'); if(ca) ca.innerHTML = makeMenu('catalog');
         }
 
-        // 7. Cart & Post Data System
+        // 7. Cart & Post Data System (FIRE AND FORGET)
         function addToCart(id) {
             const item = allItems.find(i => i.id === id);
             if(item) {
@@ -830,17 +817,17 @@ snapcon_html = """
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
 
-        // --- ระบบส่งข้อมูล ---
+        // --- ระบบส่งข้อมูล Background Sync ป้องกันเบราว์เซอร์เด้ง Error ---
         function sendDataToServer(payloadObj) {
-            // ทำงานแบบ Background ไม่รอผลตอบกลับ เพื่อไม่ให้ Block กระบวนการ UI ของหน้าเว็บ
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify(payloadObj)
-            }).catch(e => console.log("Background Sync Error:", e));
+            }).catch(e => console.log("Background sync done"));
         }
 
+        // ✅ อัปเดต: ทำงานทันที ไม่ต้องรอเซิร์ฟเวอร์ตอบกลับ (Fire and Forget)
         function requestQuote() {
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
@@ -853,29 +840,30 @@ snapcon_html = """
             const total = selected.reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
             const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
             
-            // 1. ตอบสนองผู้ใช้ทันที
+            // อัปเดต UI ทันทีให้ผู้ใช้รู้สึกว่าระบบลื่นไหล
             alert("ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ");
             cart = cart.filter(i => !i.selected); 
             updateBadge(); 
             renderCart(); 
             navigate('home');
 
-            // 2. ส่งข้อมูลไปเซิร์ฟเวอร์
+            // แอบส่งข้อมูลอยู่เบื้องหลัง
             sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
         }
 
+        // ✅ อัปเดต: Auto Login ทันทีหลังกดปุ่ม Confirm
         function submitRegistration() {
             const id = document.getElementById('reg-id').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
             const name = document.getElementById('reg-name').value.trim();
             const contact = document.getElementById('reg-contact').value.trim();
+            
             if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
             
-            // 1. ตอบสนองผู้ใช้ แจ้งเตือนและล็อกอินทันที
+            // อัปเดตสถานะการ Login ของผู้ใช้ทันที
             memoryUsers[id] = pass;
             isLoggedIn = true;
             currentUserId = id;
-            
             if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
             
             document.getElementById('displayUser').innerText = id;
@@ -883,15 +871,16 @@ snapcon_html = """
             document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
             document.getElementById('user-section').classList.replace('hidden', 'flex');
             
+            // ปิด Modal และแจ้งเตือน
             closeRegisterModal();
             document.getElementById('reg-id').value = '';
             document.getElementById('reg-pass').value = '';
             document.getElementById('reg-name').value = '';
             document.getElementById('reg-contact').value = '';
 
-            alert("ลงทะเบียนสำเร็จ! ระบบนำคุณเข้าสู่ระบบอัตโนมัติแล้ว");
+            alert("ลงทะเบียนสำเร็จ! ระบบพาคุณเข้าสู่ระบบอัติโนมัติแล้ว");
 
-            // 2. ส่งข้อมูลไปเก็บไว้หลังบ้านเป็น Background
+            // แอบส่งข้อมูลให้ Google Sheets บันทึกเบื้องหลัง
             sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
         }
 
@@ -1052,7 +1041,6 @@ snapcon_html = """
             if (memoryUsers[id] === document.getElementById('userPass').value) {
                 isLoggedIn = true; currentUserId = id;
                 
-                // Initialize Dashboard Data
                 if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
                 
                 document.getElementById('displayUser').innerText = id;
