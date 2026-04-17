@@ -785,13 +785,15 @@ snapcon_html = """
             const makeMenu = (typeStr) => {
                 const filteredDocs = documents.filter(d => {
                     const t = (d.type || d.category || '').toLowerCase();
+                    // แก้ปัญหาปุ่มดาวน์โหลดเอกสาร (CAD, Data sheet)
+                    if (typeStr === 'drawing') return t.includes('drawing') || t.includes('cad') || t.includes('2d') || t.includes('3d') || t.includes('model');
                     return t.includes(typeStr);
                 });
                 if (filteredDocs.length === 0) return '<div class="px-8 py-6 text-sm text-slate-400 font-medium text-center bg-slate-50">ไม่มีข้อมูล (No Data)</div>';
                 
                 return filteredDocs.map(d => {
                     const name = d.modelname || d.name || d.model || d.title || 'Untitled Document';
-                    const url = getValidImageUrl(d.fileurl || d.link || d.url || d.file || '#');
+                    const url = d.fileurl || d.link || d.url || d.file || '#'; 
                     if(url === '#' || url === '') return '';
                     return `<a href="${url}" target="_blank" class="block px-8 py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-sm font-bold text-slate-700 transition-colors"><i class="fas fa-file-download mr-2 text-slate-400"></i> ${name}</a>`;
                 }).join('');
