@@ -557,7 +557,40 @@ snapcon_html = """
         let currentLang = 'th';
         let isLoggedIn = false;
         let cart = [], products = [], spares = [], documents = [], projects = [], articles = [], allItems = [];
-        let currentUserId = null, memoryUsers = { '001': '123', 'admin': 'admin' };
+        
+        // -------------------------------------------------------------------------
+        // กู้คืนฟังก์ชัน Dashboard State ที่ทำให้ระบบค้าง
+        // -------------------------------------------------------------------------
+        let currentUserId = null;
+        let memoryUsers = { '001': '123', 'admin': 'admin' };
+        let activeDashInterval = null;
+        
+        // ฟังก์ชันสร้างข้อมูลเริ่มต้นสำหรับ Dashboard เมื่อลงทะเบียนใหม่
+        function createDefaultDash() {
+            return {
+                isRunning: false, target: 10000, carbonFactor: 0.0070, energyFactor: 0.015, elapsedSeconds: 0,
+                nodes: [
+                    { id: 1, name: "Node-01 Main", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
+                    { id: 2, name: "Node-02 Sub", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                    { id: 3, name: "Node-03 Pack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
+                    { id: 4, name: "Node-04 Seal", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
+                    { id: 5, name: "Node-05 Label", output: 0, status: 'Offline', health: 100.0, wearRate: 0.6 }
+                ]
+            };
+        }
+
+        // เก็บข้อมูล Dashboard ของแต่ละ User แยกกัน
+        let userDashboards = {
+            '001': createDefaultDash(),
+            'admin': createDefaultDash()
+        };
+
+        // ฟังก์ชันช่วยดึงข้อมูล Dashboard ของ User ปัจจุบัน
+        function getDash() {
+            if (!currentUserId || !userDashboards[currentUserId]) return null;
+            return userDashboards[currentUserId];
+        }
+        // -------------------------------------------------------------------------
 
         // 1. Helper: แปลงลิงก์ Google Drive ให้เป็น Direct Image Link
         function getValidImageUrl(url) {
@@ -827,7 +860,6 @@ snapcon_html = """
             }).catch(e => console.log("Background sync done"));
         }
 
-        // ✅ อัปเดต: ทำงานทันที ไม่ต้องรอเซิร์ฟเวอร์ตอบกลับ (Fire and Forget)
         function requestQuote() {
             const selected = cart.filter(i => i.selected);
             if(selected.length === 0) return alert("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
@@ -851,7 +883,6 @@ snapcon_html = """
             sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
         }
 
-        // ✅ อัปเดต: Auto Login ทันทีหลังกดปุ่ม Confirm
         function submitRegistration() {
             const id = document.getElementById('reg-id').value.trim();
             const pass = document.getElementById('reg-pass').value.trim();
@@ -864,6 +895,8 @@ snapcon_html = """
             memoryUsers[id] = pass;
             isLoggedIn = true;
             currentUserId = id;
+            
+            // ป้องกันการ Error จากการเรียกหา Dashboard ที่ยังไม่ถูกสร้าง
             if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
             
             document.getElementById('displayUser').innerText = id;
