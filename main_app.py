@@ -296,11 +296,82 @@ snapcon_html = """
     <!-- PAGE: DASHBOARD -->
     <div id="page-dashboard" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-container py-10">
-            <h2 class="text-3xl font-black text-slate-900 uppercase">
+            <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">
                 <span data-i18n="navDashboard">Dashboard</span> : <span id="dash-user-name" class="text-snap-green"></span>
             </h2>
             <div class="w-16 h-1 bg-snap-green mb-8"></div>
-            <div id="dash-nodes-grid" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-2"></div>
+            <p class="text-slate-600 mb-8" data-i18n="dashSubTitle">ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 sharp-card lg:col-span-2 flex flex-col justify-center rounded-2xl">
+                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest" data-i18n="dashCtrlTitle">System Controls</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <button onclick="startSystem()" id="btn-start" class="bg-snap-green text-white py-3 font-bold hover:bg-snap-green-hover rounded-xl text-xs"><i class="fas fa-play mr-2"></i> START</button>
+                        <button onclick="stopSystem()" id="btn-stop" class="bg-slate-200 text-slate-700 py-3 font-bold hover:bg-red-500 hover:text-white rounded-xl text-xs"><i class="fas fa-stop mr-2"></i> STOP</button>
+                        <button onclick="resetSystem()" class="bg-snap-black text-white py-3 font-bold hover:bg-slate-800 rounded-xl text-xs"><i class="fas fa-sync-alt mr-2"></i> REFRESH</button>
+                        <button onclick="exportCSV()" class="bg-blue-600 text-white py-3 font-bold hover:bg-blue-700 rounded-xl text-xs"><i class="fas fa-file-csv mr-2"></i> REPORT</button>
+                    </div>
+                </div>
+                <div class="bg-white p-6 sharp-card rounded-2xl">
+                    <h3 class="font-bold text-slate-800 mb-4 uppercase text-xs tracking-widest" data-i18n="dashCfgTitle">Configuration</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashTarget">Target</label>
+                            <input type="number" id="cfg-target" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                        </div>
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashCarbon">Carbon Factor</label>
+                            <input type="number" step="0.0001" id="cfg-carbon" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashEnergy">Energy Factor</label>
+                            <input type="number" step="0.001" id="cfg-energy" onchange="updateDashboardConfig()" class="w-24 text-right outline-none font-black text-slate-800 bg-transparent">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 sharp-card rounded-2xl border-t-4 border-t-blue-500">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotOut">Total Output</p>
+                    <h3 id="dash-total-output" class="text-4xl font-black text-slate-900 tracking-tighter">0</h3>
+                </div>
+                <div class="bg-white p-6 sharp-card rounded-2xl border-t-4 border-t-snap-green">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashCalCarbon">Cal Carbon</p>
+                    <h3 id="dash-carbon" class="text-4xl font-black text-slate-900 tracking-tighter">0.00</h3>
+                </div>
+                <div class="bg-white p-6 sharp-card rounded-2xl border-t-4 border-t-amber-500">
+                    <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotPower">Total Power</p>
+                    <h3 id="dash-power" class="text-4xl font-black text-slate-900 tracking-tighter">0.00</h3>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 sharp-card rounded-2xl mb-8">
+                <div class="flex justify-between items-end mb-4">
+                    <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashPlanTitle">Production Planning</h3>
+                    <span id="dash-progress-text" class="text-2xl font-black text-snap-green">0.0%</span>
+                </div>
+                <div class="w-full h-4 bg-slate-100 rounded-full overflow-hidden mb-6">
+                    <div id="dash-progress-bar" class="h-full bg-snap-green transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-xs font-bold text-slate-500 uppercase tracking-widest">
+                    <span><i class="far fa-clock mr-1"></i> <span data-i18n="dashTimeElapsed">Elapsed</span>: <span id="dash-time-elapsed" class="text-slate-800">00:00:00</span></span>
+                    <span><i class="fas fa-hourglass-half mr-1"></i> <span data-i18n="dashTimeRemain">ETA</span>: <span id="dash-time-remain" class="text-slate-800">--:--:--</span></span>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 sharp-card rounded-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashMacStatus2">Machine Status</h3>
+                    <div class="flex gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-500">
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-snap-green rounded-full"></div> <span data-i18n="statusNormal">Normal</span></span>
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-amber-400 rounded-full"></div> <span data-i18n="statusWarning">Warning</span></span>
+                        <span class="flex items-center gap-1"><div class="w-2 h-2 bg-red-500 rounded-full"></div> <span data-i18n="statusMaint">Maint.</span></span>
+                    </div>
+                </div>
+                <div id="dash-nodes-grid" class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar p-1">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -727,28 +798,171 @@ snapcon_html = """
             }
         }
 
-        // 8. Navigation & UI States
-        function navigate(p) { document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); const t = document.getElementById('page-'+p); if(t) t.classList.add('page-active'); window.scrollTo(0,0); if(p==='cart') renderCart(); }
+        // ==========================================
+        // 8. DASHBOARD LOGIC & SIMULATION
+        // ==========================================
+        function startSystem() {
+            let dash = getDash(); if(!dash) return;
+            dash.isRunning = true;
+            dash.nodes.forEach(n => { if(n.health > 30) n.status = 'Running'; else n.status = 'Maintenance'; });
+            if(!activeDashInterval) activeDashInterval = setInterval(simulateProduction, 500);
+            renderDashboard();
+        }
+        function stopSystem() {
+            let dash = getDash(); if(!dash) return;
+            dash.isRunning = false;
+            dash.nodes.forEach(n => { if(n.status !== 'Maintenance') n.status = 'Stopped'; });
+            if(activeDashInterval) { clearInterval(activeDashInterval); activeDashInterval = null; }
+            renderDashboard();
+        }
+        function resetSystem() { 
+            let dash = getDash(); if(!dash) return;
+            dash.nodes.forEach(n => { n.output = 0; n.health = 100.0; n.status = dash.isRunning ? 'Running' : 'Offline'; }); 
+            dash.elapsedSeconds = 0; renderDashboard(); 
+        }
+        function updateDashboardConfig() {
+            let dash = getDash(); if(!dash) return;
+            dash.target = parseInt(document.getElementById('cfg-target').value) || 1;
+            dash.carbonFactor = parseFloat(document.getElementById('cfg-carbon').value) || 0;
+            dash.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
+            renderDashboard();
+        }
+        function simulateProduction() {
+            let dash = getDash(); if(!dash || !dash.isRunning) return;
+            dash.elapsedSeconds += 0.5;
+            dash.nodes.forEach(n => { 
+                if(n.status === 'Running' || n.status === 'Warning') {
+                    if(Math.random() > 0.5) { n.output += 1; n.health -= n.wearRate; if(n.health < 0) n.health = 0; }
+                    if(n.health <= 30) n.status = 'Maintenance'; else if (n.health <= 70) n.status = 'Warning';
+                }
+            });
+            if(document.getElementById('page-dashboard').classList.contains('page-active')) {
+                renderDashboard();
+            }
+        }
+        function exportCSV() {
+            let dash = getDash(); if(!dash) return;
+            let bom = "\uFEFF";
+            let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\n";
+            let totalOut = 0;
+            dash.nodes.forEach(n => {
+                let c = (n.output * dash.carbonFactor).toFixed(4); let e = (n.output * dash.energyFactor).toFixed(4); totalOut += n.output;
+                csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\n`;
+            });
+            csvContent += `\nTOTAL,, ,${totalOut},-,${(totalOut * dash.carbonFactor).toFixed(4)},${(totalOut * dash.energyFactor).toFixed(4)}\n`;
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_Report_${currentUserId}.csv`; link.click();
+        }
+        function formatTimeStr(totalSecs) {
+            if (!isFinite(totalSecs) || totalSecs < 0) return "--:--:--";
+            const h = Math.floor(totalSecs / 3600); const m = Math.floor((totalSecs % 3600) / 60); const s = Math.floor(totalSecs % 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+        function renderDashboard() {
+            const grid = document.getElementById('dash-nodes-grid'); if(!grid) return;
+            let dash = getDash(); if (!dash) return;
+
+            const cfgTarget = document.getElementById('cfg-target');
+            const cfgCarbon = document.getElementById('cfg-carbon');
+            const cfgEnergy = document.getElementById('cfg-energy');
+            if (cfgTarget) cfgTarget.value = dash.target;
+            if (cfgCarbon) cfgCarbon.value = dash.carbonFactor;
+            if (cfgEnergy) cfgEnergy.value = dash.energyFactor;
+
+            const totalOutput = dash.nodes.reduce((sum, n) => sum + n.output, 0);
+            
+            const dashTotalOutput = document.getElementById('dash-total-output');
+            const dashCarbon = document.getElementById('dash-carbon');
+            const dashPower = document.getElementById('dash-power');
+            
+            if(dashTotalOutput) dashTotalOutput.innerText = totalOutput.toLocaleString();
+            if(dashCarbon) dashCarbon.innerText = (totalOutput * dash.carbonFactor).toFixed(2);
+            if(dashPower) dashPower.innerText = (totalOutput * dash.energyFactor).toFixed(2);
+            
+            let progress = dash.target > 0 ? (totalOutput / dash.target) * 100 : 0; 
+            if(progress > 100) progress = 100;
+            
+            const dashProgressBar = document.getElementById('dash-progress-bar');
+            const dashProgressText = document.getElementById('dash-progress-text');
+            if(dashProgressBar) dashProgressBar.style.width = `${progress}%`;
+            if(dashProgressText) dashProgressText.innerText = `${progress.toFixed(1)}%`;
+            
+            let elapsedStr = formatTimeStr(dash.elapsedSeconds), remainStr = "--:--:--";
+            if (totalOutput > 0 && dash.elapsedSeconds > 0) {
+                let ups = totalOutput / dash.elapsedSeconds, remainUnits = dash.target - totalOutput;
+                if (remainUnits > 0 && ups > 0) remainStr = formatTimeStr(remainUnits / ups); else if (remainUnits <= 0) remainStr = "00:00:00";
+            }
+            
+            const dashTimeElapsed = document.getElementById('dash-time-elapsed');
+            const dashTimeRemain = document.getElementById('dash-time-remain');
+            if(dashTimeElapsed) dashTimeElapsed.innerText = elapsedStr;
+            if(dashTimeRemain) dashTimeRemain.innerText = remainStr;
+
+            grid.innerHTML = dash.nodes.map(n => {
+                const isRun = n.status === 'Running', isWarn = n.status === 'Warning', isMaint = n.status === 'Maintenance';
+                let dotBg = 'bg-slate-300';
+                if (isRun) dotBg = 'bg-snap-green animate-pulse'; else if (isWarn) dotBg = 'bg-amber-400 animate-pulse'; else if (isMaint) dotBg = 'bg-red-500';
+                let healthBarCol = n.health > 70 ? 'bg-snap-green' : (n.health > 30 ? 'bg-amber-400' : 'bg-red-500');
+                
+                return `
+                <div class="bg-slate-50 border border-slate-200 p-3 rounded-xl shadow-sm flex flex-col justify-between h-full">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-bold text-slate-500 truncate" title="${n.name}">${n.name}</span>
+                        <div class="w-2 h-2 rounded-full ${dotBg} shrink-0"></div>
+                    </div>
+                    <h4 class="text-xl font-black text-slate-800 text-center my-2">${n.output}</h4>
+                    <div>
+                        <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mt-1">
+                            <div class="h-full ${healthBarCol} transition-all duration-500" style="width: ${n.health}%"></div>
+                        </div>
+                        <p class="text-[9px] text-center mt-1 text-slate-400 font-bold uppercase tracking-widest">Health: ${n.health.toFixed(1)}%</p>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // 9. Navigation & UI States
+        function navigate(p) { 
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); 
+            const t = document.getElementById('page-'+p); 
+            if(t) t.classList.add('page-active'); 
+            window.scrollTo(0,0); 
+            if(p==='cart') renderCart(); 
+            if(p==='dashboard') renderDashboard(); 
+        }
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
         function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex', 'hidden'); }
-        function setLanguage(l) { currentLang = l; renderProjects(); renderArticles(); }
+        function setLanguage(l) { currentLang = l; renderProjects(); renderArticles(); if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); }
+        
         function handleLogin() { 
             const id = document.getElementById('userId').value.trim();
             if (memoryUsers[id] === document.getElementById('userPass').value) {
                 isLoggedIn = true; currentUserId = id;
+                
+                // Initialize Dashboard Data
+                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+                
                 document.getElementById('displayUser').innerText = id;
+                document.getElementById('dash-user-name').innerText = id; 
                 document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
                 document.getElementById('user-section').classList.replace('hidden', 'flex');
                 alert("Login Successful");
             } else alert("Invalid ID/PW");
         }
-        function handleLogout() { isLoggedIn = false; document.getElementById('user-section').classList.replace('flex', 'hidden'); document.getElementById('login-section').classList.replace('hidden', 'lg:flex'); navigate('home'); }
-        function checkDashboardAuth() { navigate('dashboard'); }
+        function handleLogout() { 
+            if (currentUserId) stopSystem();
+            isLoggedIn = false; currentUserId = null; 
+            document.getElementById('user-section').classList.replace('flex', 'hidden'); 
+            document.getElementById('login-section').classList.replace('hidden', 'lg:flex'); 
+            navigate('home'); 
+        }
+        function checkDashboardAuth() { 
+            if (isLoggedIn) navigate('dashboard'); 
+            else { alert("Please Login First to access Dashboard"); document.getElementById('userId').focus(); } 
+        }
 
         window.onload = loadDataFromSheet;
     </script>
 </body>
 </html>
-"""
-
-st.components.v1.html(snapcon_html, height=2500, scrolling=True)
