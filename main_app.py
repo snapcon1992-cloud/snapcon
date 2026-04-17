@@ -45,7 +45,7 @@ snapcon_html = """
         .hero-container { background-color: #e2e8f0; position: relative; }
         .hero-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.85) 65%, rgba(2, 44, 34, 0.95) 100%);
+            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.9) 65%, rgba(2, 44, 34, 0.95) 100%);
             z-index: 5; pointer-events: none;
         }
         .hero-white-box { background-color: white; border-bottom: 6px solid #00B36E; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border-radius: 1rem; }
@@ -79,17 +79,19 @@ snapcon_html = """
         .sharp-btn { border-radius: 0.5rem; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
         .sharp-btn:active { transform: scale(0.98); }
         
-        /* แก้ไข Animation ตัวหนังสือให้จังหวะแม่นยำขึ้นสำหรับ 3 ข้อความ */
+        /* Animation สำหรับข้อความ Slide 5 อัน (รวม 25 วินาที / อันละ 5 วินาที) */
         .feature-text-container { position: relative; height: 100px; width: 100%; display: flex; align-items: flex-start; }
-        .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(20px); animation: fadeSlideText 18s infinite; }
+        .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(20px); animation: fadeSlideText 25s infinite; }
         .feature-text-slide:nth-child(1) { animation-delay: 0s; } 
-        .feature-text-slide:nth-child(2) { animation-delay: 6s; } 
-        .feature-text-slide:nth-child(3) { animation-delay: 12s; }
+        .feature-text-slide:nth-child(2) { animation-delay: 5s; } 
+        .feature-text-slide:nth-child(3) { animation-delay: 10s; }
+        .feature-text-slide:nth-child(4) { animation-delay: 15s; }
+        .feature-text-slide:nth-child(5) { animation-delay: 20s; }
         @keyframes fadeSlideText { 
             0% { opacity: 0; transform: translateY(20px); } 
-            5% { opacity: 1; transform: translateY(0); } 
-            28% { opacity: 1; transform: translateY(0); } 
-            33% { opacity: 0; transform: translateY(-20px); } 
+            4% { opacity: 1; transform: translateY(0); } 
+            16% { opacity: 1; transform: translateY(0); } 
+            20% { opacity: 0; transform: translateY(-20px); } 
             100% { opacity: 0; transform: translateY(-20px); } 
         }
         
@@ -151,6 +153,7 @@ snapcon_html = """
             </div>
             <div class="hero-overlay"></div>
             <div class="max-container flex flex-col md:flex-row items-center justify-between gap-10 z-10 w-full pt-10">
+                <!-- กล่องขาวซ้ายมือ -->
                 <div class="hero-white-box w-full md:w-[520px] p-10 md:p-12 relative bg-white/95 backdrop-blur-sm">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-emerald-200">
                         <i class="fas fa-leaf"></i> <span data-i18n="heroEco">Green Technology</span>
@@ -159,7 +162,7 @@ snapcon_html = """
                         <span data-i18n="heroText1">Snap to Connect.</span><br>
                         <span data-i18n="heroText2" class="text-snap-green">Ready to Control.</span>
                     </h1>
-                    <p class="text-slate-500 font-medium text-sm mb-8 leading-relaxed">
+                    <p class="text-slate-500 font-medium text-sm mb-8 leading-relaxed" data-i18n="heroDesc">
                         เปลี่ยนความซับซ้อนให้เป็นเรื่องง่าย ด้วยระบบออโตเมชัน Plug & Play ที่พร้อมให้คุณควบคุมสายการผลิตได้ทันที
                     </p>
                     <button onclick="navigate('product')" class="bg-snap-black text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-snap-green flex items-center gap-2 group transition-all shadow-lg hover:shadow-snap-green/30">
@@ -168,23 +171,31 @@ snapcon_html = """
                     </button>
                 </div>
 
-                <!-- แก้ไข UI ส่วน Slide ข้อความให้ดูเด่นชัด พรีเมียม และอ่านง่าย -->
+                <!-- Slide 5 ข้อความ (ปรับดีไซน์ให้อ่านง่าย พรีเมียม) -->
                 <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
                     <div class="bg-snap-black/60 backdrop-blur-md border border-white/10 p-8 md:p-10 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative overflow-hidden">
                         <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-[40px] rounded-full pointer-events-none"></div>
                         <h3 class="text-emerald-400 font-black tracking-widest uppercase text-xs mb-8 border-b border-white/10 pb-4 inline-block relative z-10">Why Snapcon?</h3>
                         <div class="feature-text-container relative z-10">
                             <div class="feature-text-slide">
-                                <h4 class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight" data-i18n="fs1Title">⚡ Easy Setup</h4>
-                                <p class="text-lg md:text-xl text-emerald-300 font-bold" data-i18n="fs1Desc">Plug & Play ใช้งานได้ทันที</p>
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs1Title">⚡ Easy Setup (Plug & Play)</h4>
+                                <p class="text-base md:text-lg text-emerald-300 font-medium" data-i18n="fs1Desc">ติดตั้งง่าย ใช้งานได้ทันที</p>
                             </div>
                             <div class="feature-text-slide">
-                                <h4 class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight" data-i18n="fs2Title">🔗 Seamless Connection</h4>
-                                <p class="text-lg md:text-xl text-blue-300 font-bold" data-i18n="fs2Desc">เชื่อม PLC / Sensor ได้ง่าย</p>
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs2Title">📊 Real-Time Monitoring</h4>
+                                <p class="text-base md:text-lg text-blue-300 font-medium" data-i18n="fs2Desc">แสดงผลแบบเรียลไทม์ เห็นข้อมูลทันที</p>
                             </div>
                             <div class="feature-text-slide">
-                                <h4 class="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight" data-i18n="fs3Title">📊 Real-Time Monitoring</h4>
-                                <p class="text-lg md:text-xl text-amber-300 font-bold" data-i18n="fs3Desc">เห็นข้อมูลทันที</p>
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs3Title">🎛 Centralized Control</h4>
+                                <p class="text-base md:text-lg text-amber-300 font-medium" data-i18n="fs3Desc">ควบคุมทุกเครื่องจักรจากจุดเดียว</p>
+                            </div>
+                            <div class="feature-text-slide">
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs4Title">🛡 Built-in Poka-Yoke</h4>
+                                <p class="text-base md:text-lg text-rose-300 font-medium" data-i18n="fs4Desc">ระบบกันพลาดในตัว ป้องกันความผิดพลาดอัตโนมัติ</p>
+                            </div>
+                            <div class="feature-text-slide">
+                                <h4 class="text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs5Title">☁️ Cloud Ready</h4>
+                                <p class="text-base md:text-lg text-cyan-300 font-medium" data-i18n="fs5Desc">รองรับการเชื่อมต่อ Cloud พร้อมใช้งาน</p>
                             </div>
                         </div>
                     </div>
@@ -192,7 +203,7 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- Feature Dropdowns (Overlap Design) -->
+        <!-- Feature Dropdowns -->
         <div class="relative z-40 max-container -mt-16 mb-16 px-6">
             <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                 <div tabindex="0" class="dropdown-container relative group p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
@@ -321,8 +332,8 @@ snapcon_html = """
                 <div id="quote-contact-form" class="bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8 hidden">
                     <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest"><i class="fas fa-info-circle text-snap-green mr-1"></i> <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ</span></p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="quote-name" placeholder="ชื่อ / บริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green rounded-xl text-sm font-bold text-slate-700 shadow-sm transition-colors">
-                        <input type="text" id="quote-contact" placeholder="อีเมล / เบอร์โทร" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green rounded-xl text-sm font-bold text-slate-700 shadow-sm transition-colors">
+                        <input type="text" id="quote-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อ / บริษัท" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green rounded-xl text-sm font-bold text-slate-700 shadow-sm transition-colors">
+                        <input type="text" id="quote-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล / เบอร์โทร" class="px-4 py-3 bg-white border border-slate-200 outline-none focus:border-snap-green rounded-xl text-sm font-bold text-slate-700 shadow-sm transition-colors">
                     </div>
                 </div>
                 <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-100 gap-6">
@@ -432,7 +443,7 @@ snapcon_html = """
             <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
                 <div>
                     <h3 class="text-4xl md:text-5xl font-black text-snap-black tracking-tighter mb-8 leading-[1.1]">Driving the future of <br><span class="text-snap-green">industrial automation.</span></h3>
-                    <p class="text-slate-500 leading-relaxed mb-6 text-lg font-medium">
+                    <p class="text-slate-500 leading-relaxed mb-6 text-lg font-medium" data-i18n="aboutDesc">
                         Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด
                     </p>
                 </div>
@@ -446,14 +457,14 @@ snapcon_html = """
                 <div class="bg-snap-black text-white p-12 border-none rounded-[2rem] relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
                     <i class="fas fa-eye text-5xl text-snap-green mb-8 relative z-10 drop-shadow-md"></i>
-                    <h4 class="text-3xl font-black mb-4 uppercase tracking-wider relative z-10">Vision</h4>
-                    <p class="text-slate-400 leading-relaxed text-lg relative z-10 font-medium">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
+                    <h4 class="text-3xl font-black mb-4 uppercase tracking-wider relative z-10" data-i18n="aboutVisionTitle">Vision</h4>
+                    <p class="text-slate-400 leading-relaxed text-lg relative z-10 font-medium" data-i18n="aboutVisionDesc">มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้</p>
                 </div>
                 <div class="bg-snap-green text-white p-12 border-none rounded-[2rem] relative overflow-hidden group shadow-xl shadow-snap-green/20">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-black/10 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
                     <i class="fas fa-bullseye text-5xl text-snap-black mb-8 relative z-10 drop-shadow-md"></i>
-                    <h4 class="text-3xl font-black mb-4 uppercase tracking-wider text-snap-black relative z-10">Mission</h4>
-                    <p class="text-emerald-900 leading-relaxed text-lg font-bold relative z-10">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
+                    <h4 class="text-3xl font-black mb-4 uppercase tracking-wider text-snap-black relative z-10" data-i18n="aboutMissionTitle">Mission</h4>
+                    <p class="text-emerald-900 leading-relaxed text-lg font-bold relative z-10" data-i18n="aboutMissionDesc">พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก</p>
                 </div>
             </div>
         </div>
@@ -472,7 +483,7 @@ snapcon_html = """
                         <i class="fas fa-headset text-4xl text-snap-green"></i>
                     </div>
                     <h3 class="text-3xl font-black text-slate-900 mb-3 tracking-tight">Technical Support</h3>
-                    <p class="text-slate-500 mb-10 text-sm font-medium">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ พร้อมให้บริการคุณตลอด 24 ชั่วโมง</p>
+                    <p class="text-slate-500 mb-10 text-sm font-medium" data-i18n="contactSub">ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ พร้อมให้บริการคุณตลอด 24 ชั่วโมง</p>
                     
                     <div class="space-y-4 mb-10">
                         <div class="flex items-center gap-5 bg-slate-50 p-5 rounded-2xl border border-slate-100 hover:border-snap-green hover:shadow-md transition-all cursor-pointer group">
@@ -541,20 +552,20 @@ snapcon_html = """
             <div class="space-y-4">
                 <div class="relative">
                     <i class="fas fa-user absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="reg-id" placeholder="User ID" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                    <input type="text" id="reg-id" data-i18n-placeholder="regId" placeholder="User ID" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
                 </div>
                 <div class="relative">
                     <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="password" id="reg-pass" placeholder="Password" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                    <input type="password" id="reg-pass" data-i18n-placeholder="regPass" placeholder="Password" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
                 </div>
                 <div class="h-px w-full bg-slate-100 my-2"></div>
                 <div class="relative">
                     <i class="fas fa-building absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="reg-name" placeholder="Name / Company" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                    <input type="text" id="reg-name" data-i18n-placeholder="regName" placeholder="Name / Company" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
                 </div>
                 <div class="relative">
                     <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="reg-contact" placeholder="Email / Phone" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
+                    <input type="text" id="reg-contact" data-i18n-placeholder="regContact" placeholder="Email / Phone" class="w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl outline-none focus:border-snap-green focus:bg-white bg-slate-50 text-sm font-bold transition-colors">
                 </div>
                 <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-4.5 font-bold hover:bg-snap-green-hover rounded-xl uppercase tracking-widest mt-4 shadow-lg shadow-snap-green/30 transition-all active:scale-95 text-sm" data-i18n="btnSubmitReg">CONFIRM REGISTRATION</button>
             </div>
@@ -563,21 +574,136 @@ snapcon_html = """
 
     <script>
         // =========================================================================
-        // JAVASCRIPT SYSTEM (STABLE VERSION 6.0 - FIRE AND FORGET DATA SYNC)
+        // JAVASCRIPT SYSTEM (STABLE VERSION 7.0 - i18n FIXED & UI UPGRADED)
         // =========================================================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
         let cart = [], products = [], spares = [], documents = [], projects = [], articles = [], allItems = [];
-        
-        // -------------------------------------------------------------------------
-        // กู้คืนฟังก์ชัน Dashboard State
-        // -------------------------------------------------------------------------
-        let currentUserId = null;
-        let memoryUsers = { '001': '123', 'admin': 'admin' };
+        let currentUserId = null, memoryUsers = { '001': '123', 'admin': 'admin' };
         let activeDashInterval = null;
+
+        // -------------------------------------------------------------------------
+        // DICTIONARY FOR i18n (TH / EN) - กู้คืนพจนานุกรม
+        // -------------------------------------------------------------------------
+        const dict = {
+            th: {
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company",
+                navLogin: "Login", navRegister: "Register", navLogout: "Logout",
+                
+                heroEco: "Green Technology",
+                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", 
+                heroDesc: "เปลี่ยนความซับซ้อนให้เป็นเรื่องง่าย ด้วยระบบออโตเมชัน Plug & Play ที่พร้อมให้คุณควบคุมสายการผลิตได้ทันที",
+                heroLink: "ดูสินค้าทั้งหมด",
+                
+                fs1Title: "⚡ Easy Setup (Plug & Play)", fs1Desc: "ติดตั้งง่าย ใช้งานได้ทันที",
+                fs2Title: "📊 Real-Time Monitoring", fs2Desc: "แสดงผลแบบเรียลไทม์ เห็นข้อมูลทันที",
+                fs3Title: "🎛 Centralized Control", fs3Desc: "ควบคุมทุกเครื่องจักรจากจุดเดียว",
+                fs4Title: "🛡 Built-in Poka-Yoke", fs4Desc: "ระบบกันพลาดในตัว ป้องกันความผิดพลาดอัตโนมัติ",
+                fs5Title: "☁️ Cloud Ready", fs5Desc: "รองรับการเชื่อมต่อ Cloud พร้อมใช้งาน",
+                
+                cardDataSheet: "Data Sheet", selectModel: "Select Model",
+                cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download",
+                
+                homeProductsTitle: "Featured Products", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "View All Products",
+                knowledgeSub: "บทความเทคนิค คลังความรู้ และวิดีโอจากวิศวกรผู้เชี่ยวชาญ",
+                
+                pageProductTitle: "Conveyor Systems", pageSpareTitle: "Spare Parts", 
+                pageProjectTitle: "Project Reference", projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
+                
+                pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
+                cartTotalLabel: "ราคากลางประเมินรวม", btnRequestQuote: "ยื่นขอใบเสนอราคา", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก",
+                guestContactTitle: "ข้อมูลติดต่อกลับ",
+                
+                contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ พร้อมให้บริการคุณตลอด 24 ชั่วโมง",
+                aboutVisionTitle: "Vision", aboutVisionDesc: "มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้",
+                aboutMissionTitle: "Mission", aboutMissionDesc: "พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก",
+                aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด",
+                
+                regTitle: "CREATE ACCOUNT", btnSubmitReg: "CONFIRM REGISTRATION",
+                phId: "ID", phPass: "PW", phGuestName: "ชื่อ / บริษัท", phGuestContact: "อีเมล / เบอร์โทร",
+                regId: "ตั้งรหัส User ID", regPass: "ตั้งรหัส Password", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์",
+                
+                dashSubTitle: "ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์",
+                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
+                dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power",
+                dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status",
+                statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint."
+            },
+            en: {
+                navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company",
+                navLogin: "Login", navRegister: "Register", navLogout: "Logout",
+                
+                heroEco: "Green Technology",
+                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", 
+                heroDesc: "Turn complexity into simplicity with Plug & Play automation systems, ready for you to control your production line instantly.",
+                heroLink: "View All Products",
+                
+                fs1Title: "⚡ Easy Setup (Plug & Play)", fs1Desc: "Easy installation, ready to use",
+                fs2Title: "📊 Real-Time Monitoring", fs2Desc: "Real-time display, instant data visibility",
+                fs3Title: "🎛 Centralized Control", fs3Desc: "Control all machines from a single point",
+                fs4Title: "🛡 Built-in Poka-Yoke", fs4Desc: "Built-in mistake-proofing, automatic error prevention",
+                fs5Title: "☁️ Cloud Ready", fs5Desc: "Cloud connection supported, ready to use",
+                
+                cardDataSheet: "Data Sheet", selectModel: "Select Model",
+                cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download",
+                
+                homeProductsTitle: "Featured Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products",
+                knowledgeSub: "Technical articles, knowledge base, and videos from expert engineers",
+                
+                pageProductTitle: "Conveyor Systems", pageSpareTitle: "Spare Parts", 
+                pageProjectTitle: "Project Reference", projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
+                
+                pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty",
+                cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected",
+                guestContactTitle: "Contact Info",
+                
+                contactSub: "Official Technical Support & Inquiries, available 24/7.",
+                aboutVisionTitle: "Vision", aboutVisionDesc: "To be the leading provider of advanced and accessible Plug & Play automation systems in Southeast Asia.",
+                aboutMissionTitle: "Mission", aboutMissionDesc: "Develop innovations that reduce complexity, minimize installation time, and elevate industrial efficiency for global competitiveness.",
+                aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems. We are committed to revolutionizing the automation industry with solutions that reduce complexity, save time, and maximize production efficiency.",
+                
+                regTitle: "CREATE ACCOUNT", btnSubmitReg: "CONFIRM REGISTRATION",
+                phId: "ID", phPass: "PW", phGuestName: "Name / Company", phGuestContact: "Email / Phone",
+                regId: "Create User ID", regPass: "Create Password", regName: "Full Name / Company Name", regContact: "Email / Phone Number",
+                
+                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System",
+                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
+                dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power",
+                dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status",
+                statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint."
+            }
+        };
+
+        // ฟังก์ชันเปลี่ยนภาษาที่ใช้งาน i18n
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // เปลี่ยน Text ในแท็ก HTML
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[lang][key]) el.innerHTML = dict[lang][key];
+            });
+            
+            // เปลี่ยน Placeholder
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[lang][key]) el.placeholder = dict[lang][key];
+            });
+            
+            // เปลี่ยนสีปุ่ม TH/EN
+            document.getElementById('btn-lang-th').className = lang === 'th' ? "text-xs font-bold text-snap-green transition-colors" : "text-xs font-bold text-slate-400 hover:text-white transition-colors";
+            document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green transition-colors" : "text-xs font-bold text-slate-400 hover:text-white transition-colors";
+            
+            // โหลดเนื้อหาใหม่ตามภาษา
+            try { renderProjects(); } catch(e) {}
+            try { renderArticles(); } catch(e) {}
+            if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard();
+        }
         
+        // -------------------------------------------------------------------------
+
         function createDefaultDash() {
             return {
                 isRunning: false, target: 10000, carbonFactor: 0.0070, energyFactor: 0.015, elapsedSeconds: 0,
@@ -600,7 +726,6 @@ snapcon_html = """
             if (!currentUserId || !userDashboards[currentUserId]) return null;
             return userDashboards[currentUserId];
         }
-        // -------------------------------------------------------------------------
 
         function getValidImageUrl(url) {
             if (!url) return '';
@@ -640,10 +765,8 @@ snapcon_html = """
 
         async function loadDataFromSheet() {
             try {
-                console.log("Fetching data from Google Sheets...");
                 const response = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
                 if (!response.ok) throw new Error("Network response was not ok");
-                
                 const data = await response.json();
                 
                 products = normalizeKeys(data.products);
@@ -651,18 +774,15 @@ snapcon_html = """
                 documents = normalizeKeys(data.documents);
                 projects = normalizeKeys(data.projects);
                 articles = normalizeKeys(data.articles);
-                
                 allItems = [...products, ...spares];
                 
-                try { renderProducts(); } catch(e) { console.error("Error products", e); }
-                try { renderDocuments(); } catch(e) { console.error("Error documents", e); }
-                try { renderProjects(); } catch(e) { console.error("Error projects", e); }
-                try { renderArticles(); } catch(e) { console.error("Error articles", e); }
+                try { renderProducts(); } catch(e) {}
+                try { renderDocuments(); } catch(e) {}
+                try { renderProjects(); } catch(e) {}
+                try { renderArticles(); } catch(e) {}
                 if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
                 
-            } catch (e) { 
-                console.error("Fetch Error:", e); 
-            }
+            } catch (e) { console.error("Fetch Error:", e); }
         }
 
         function renderProducts() {
@@ -775,7 +895,7 @@ snapcon_html = """
                         <p class="text-slate-500 text-sm mb-6 line-clamp-2 leading-relaxed font-medium">${art.summary || ''}</p>
                         <div class="mt-auto flex justify-between items-center pt-5 border-t border-slate-100">
                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="far fa-calendar-alt mr-1"></i> ${art.date || 'Update'}</span>
-                            ${articleUrl !== '#' ? `<a href="${articleUrl}" target="_blank" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-snap-green transition-all shadow-md active:scale-95">อ่านบทความ</a>` : ''}
+                            ${articleUrl !== '#' ? `<a href="${articleUrl}" target="_blank" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-bold hover:bg-snap-green transition-colors">อ่านต่อ</a>` : ''}
                         </div>
                     </div>
                 </div>`;
@@ -804,13 +924,12 @@ snapcon_html = """
             const ca = document.getElementById('menu-catalog'); if(ca) ca.innerHTML = makeMenu('catalog');
         }
 
-        // 7. Cart System
         function addToCart(id) {
             const item = allItems.find(i => i.id === id);
             if(item) {
                 const existing = cart.find(i => i.id === id);
                 if(existing) existing.quantity++; else cart.push({...item, cartId: Date.now().toString(), selected: true, quantity: 1});
-                updateBadge(); alert("Added to cart!");
+                updateBadge(); alert(currentLang === 'th' ? "เพิ่มสินค้าลงตะกร้าแล้ว!" : "Added to cart!");
             }
         }
         function updateBadge() { const b = document.getElementById('cart-badge'); const count = cart.reduce((s,i)=>s+i.quantity,0); b.innerText=count>99?'99+':count; b.classList.toggle('hidden',count===0); }
@@ -827,7 +946,7 @@ snapcon_html = """
             if (quoteForm) quoteForm.classList.remove('hidden');
 
             if(cart.length === 0) {
-                container.innerHTML = `<p class="text-center py-10 text-slate-400 font-bold bg-slate-50 border border-slate-100 rounded-xl">ไม่มีสินค้าในรถเข็น</p>`;
+                container.innerHTML = `<p class="text-center py-10 text-slate-400 font-bold bg-slate-50 border border-slate-100 rounded-xl">${dict[currentLang].cartEmpty}</p>`;
                 document.getElementById('cart-total').innerText = '฿0'; return;
             }
             container.innerHTML = cart.map(item => `
@@ -852,13 +971,8 @@ snapcon_html = """
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
 
-        // ==========================================
-        // 🚀 FIRE AND FORGET SYNC SYSTEM 
-        // (แก้ปัญหากดส่งข้อมูลแล้วค้าง/Error เด้ง)
-        // ==========================================
+        // --- ระบบส่งข้อมูล Background Sync ป้องกันเบราว์เซอร์เด้ง Error ---
         function sendDataToServer(payloadObj) {
-            // ใช้ setTimeout ดัน fetch ออกจาก Main Thread ของเบราว์เซอร์
-            // เพื่อให้ UI เปลี่ยนแปลงเสร็จก่อน 100% จึงจะไม่เกิดการค้าง
             setTimeout(() => {
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
@@ -869,97 +983,19 @@ snapcon_html = """
             }, 100);
         }
 
-        function submitRegistration() {
-            const id = document.getElementById('reg-id').value.trim();
-            const pass = document.getElementById('reg-pass').value.trim();
-            const name = document.getElementById('reg-name').value.trim();
-            const contact = document.getElementById('reg-contact').value.trim();
-            
-            if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-            
-            // 1. จัดการตัวแปรระบบทันที
-            memoryUsers[id] = pass;
-            isLoggedIn = true;
-            currentUserId = id;
-            if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
-            
-            // 2. อัปเดตหน้าจอทันที (เปลี่ยนเป็นโหมด Login แล้ว)
-            document.getElementById('displayUser').innerText = id;
-            document.getElementById('dash-user-name').innerText = id; 
-            
-            // ใช้ classList.remove/add ที่แน่นอนกว่า replace
-            const loginSec = document.getElementById('login-section');
-            const userSec = document.getElementById('user-section');
-            loginSec.className = "hidden items-center gap-2";
-            userSec.className = "flex items-center gap-3";
-            
-            // 3. ล้างฟอร์ม
-            closeRegisterModal();
-            document.getElementById('reg-id').value = '';
-            document.getElementById('reg-pass').value = '';
-            document.getElementById('reg-name').value = '';
-            document.getElementById('reg-contact').value = '';
-
-            // 4. แจ้งเตือนผู้ใช้
-            alert("ลงทะเบียนสำเร็จ! ระบบพาคุณเข้าสู่ระบบอัตโนมัติแล้ว");
-
-            // 5. ส่งข้อมูลเงียบๆ (ไม่สะดุด UI)
-            sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
-        }
-
-        function handleLogin() { 
-            const id = document.getElementById('userId').value.trim();
-            const pass = document.getElementById('userPass').value.trim();
-            
-            if(!id || !pass) return alert("กรุณากรอก ID และ Password");
-
-            if (memoryUsers[id] === pass) {
-                isLoggedIn = true; currentUserId = id;
-                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
-                
-                document.getElementById('displayUser').innerText = id;
-                document.getElementById('dash-user-name').innerText = id; 
-                
-                const loginSec = document.getElementById('login-section');
-                const userSec = document.getElementById('user-section');
-                loginSec.className = "hidden items-center gap-2";
-                userSec.className = "flex items-center gap-3";
-                
-                document.getElementById('userId').value = '';
-                document.getElementById('userPass').value = '';
-                
-                alert("เข้าสู่ระบบสำเร็จ!");
-            } else {
-                alert("ID หรือ Password ไม่ถูกต้อง");
-            }
-        }
-
-        function handleLogout() { 
-            if (currentUserId) stopSystem();
-            isLoggedIn = false; currentUserId = null; 
-            
-            const loginSec = document.getElementById('login-section');
-            const userSec = document.getElementById('user-section');
-            userSec.className = "hidden items-center gap-3";
-            loginSec.className = "hidden lg:flex items-center gap-2";
-            
-            navigate('home'); 
-        }
-
         function requestQuote() {
             const selected = cart.filter(i => i.selected);
-            if(selected.length === 0) return alert("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
+            if(selected.length === 0) return alert(currentLang === 'th' ? "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น" : "Please select at least 1 item");
             
             const name = document.getElementById('quote-name').value.trim();
             const info = document.getElementById('quote-contact').value.trim();
-            if(!name || !info) return alert("กรุณากรอกชื่อและข้อมูลติดต่อกลับให้ครบถ้วน");
+            if(!name || !info) return alert(currentLang === 'th' ? "กรุณากรอกชื่อและข้อมูลติดต่อกลับให้ครบถ้วน" : "Please fill your contact info");
             
             const detailsStr = selected.map(i => `- ${i.name||i.title} x${i.quantity} (฿${(parseFloat(i.price||0) * i.quantity).toLocaleString()})`).join('\\n');
             const total = selected.reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
             const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
             
-            // ตอบสนองทันที
-            alert("ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ");
+            alert(currentLang === 'th' ? "ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ" : "Quotation request submitted! We will contact you soon.");
             cart = cart.filter(i => !i.selected); 
             updateBadge(); 
             renderCart(); 
@@ -968,14 +1004,43 @@ snapcon_html = """
             sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
         }
 
+        function submitRegistration() {
+            const id = document.getElementById('reg-id').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const contact = document.getElementById('reg-contact').value.trim();
+            
+            if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วน" : "Please fill all fields");
+            
+            memoryUsers[id] = pass;
+            isLoggedIn = true;
+            currentUserId = id;
+            if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+            
+            document.getElementById('displayUser').innerText = id;
+            document.getElementById('dash-user-name').innerText = id; 
+            document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
+            document.getElementById('user-section').classList.replace('hidden', 'flex');
+            
+            closeRegisterModal();
+            document.getElementById('reg-id').value = '';
+            document.getElementById('reg-pass').value = '';
+            document.getElementById('reg-name').value = '';
+            document.getElementById('reg-contact').value = '';
+
+            alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบพาคุณเข้าสู่ระบบอัตโนมัติแล้ว" : "Registration complete! You are now logged in.");
+
+            sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
+        }
+
         function submitContactForm() {
             const name = document.getElementById('contact-name').value.trim();
             const info = document.getElementById('contact-info').value.trim();
             const msg = document.getElementById('contact-message').value.trim();
 
-            if(!name || !info || !msg) return alert("กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งข้อความ");
+            if(!name || !info || !msg) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งข้อความ" : "Please fill all fields");
 
-            alert("ส่งข้อความสำเร็จ! ทีมงานเทคนิคจะรีบติดต่อกลับครับ");
+            alert(currentLang === 'th' ? "ส่งข้อความสำเร็จ! ทีมงานเทคนิคจะรีบติดต่อกลับครับ" : "Message sent! We will contact you soon.");
             document.getElementById('contact-name').value = '';
             document.getElementById('contact-info').value = '';
             document.getElementById('contact-message').value = '';
@@ -984,7 +1049,7 @@ snapcon_html = """
         }
 
         // ==========================================
-        // 8. DASHBOARD LOGIC
+        // 8. DASHBOARD LOGIC & SIMULATION
         // ==========================================
         function startSystem() {
             let dash = getDash(); if(!dash) return;
@@ -1107,7 +1172,7 @@ snapcon_html = """
             }).join('');
         }
 
-        // 9. Navigation & General UI
+        // 9. Navigation & UI States
         function navigate(p) { 
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); 
             const t = document.getElementById('page-'+p); 
@@ -1118,13 +1183,43 @@ snapcon_html = """
         }
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
         function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex', 'hidden'); }
-        function setLanguage(l) { currentLang = l; renderProjects(); renderArticles(); if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); }
+        
+        function handleLogin() { 
+            const id = document.getElementById('userId').value.trim();
+            const pass = document.getElementById('userPass').value.trim();
+            if(!id || !pass) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วน" : "Please fill ID and Password");
+
+            if (memoryUsers[id] === pass) {
+                isLoggedIn = true; currentUserId = id;
+                
+                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+                
+                document.getElementById('displayUser').innerText = id;
+                document.getElementById('dash-user-name').innerText = id; 
+                document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
+                document.getElementById('user-section').classList.replace('hidden', 'flex');
+                
+                document.getElementById('userId').value = '';
+                document.getElementById('userPass').value = '';
+                alert(currentLang === 'th' ? "เข้าสู่ระบบสำเร็จ!" : "Login Successful");
+            } else alert(currentLang === 'th' ? "ID หรือรหัสผ่านไม่ถูกต้อง" : "Invalid ID or Password");
+        }
+        function handleLogout() { 
+            if (currentUserId) stopSystem();
+            isLoggedIn = false; currentUserId = null; 
+            document.getElementById('user-section').classList.replace('flex', 'hidden'); 
+            document.getElementById('login-section').classList.replace('hidden', 'lg:flex'); 
+            navigate('home'); 
+        }
         function checkDashboardAuth() { 
             if (isLoggedIn) navigate('dashboard'); 
-            else { alert("Please Login First to access Dashboard"); document.getElementById('userId').focus(); } 
+            else { alert(currentLang === 'th' ? "กรุณาเข้าสู่ระบบก่อนเข้าใช้งาน Dashboard" : "Please Login First to access Dashboard"); document.getElementById('userId').focus(); } 
         }
 
-        window.onload = loadDataFromSheet;
+        window.onload = () => {
+            loadDataFromSheet();
+            setTimeout(() => setLanguage('th'), 100);
+        };
     </script>
 </body>
 </html>
