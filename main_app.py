@@ -90,7 +90,6 @@ snapcon_html = """
 </head>
 <body class="font-sans text-slate-800">
 
-    <!-- Top Navigation Bar -->
     <nav class="bg-snap-black h-[70px] w-full fixed top-0 z-50 flex items-center justify-between px-6 md:px-10 shadow-md">
         <div class="flex items-center gap-2 cursor-pointer shrink-0" onclick="navigate('home')">
             <span class="font-black text-3xl text-snap-green tracking-tighter">SNAPCON</span>
@@ -133,7 +132,6 @@ snapcon_html = """
 
     <div class="h-[70px]"></div>
 
-    <!-- ==================== PAGE: HOME ==================== -->
     <div id="page-home" class="page-section page-active">
         <section class="hero-container w-full min-h-[500px] md:min-h-[600px] flex items-center relative z-0 overflow-hidden">
             <div class="absolute inset-0 z-0">
@@ -155,8 +153,8 @@ snapcon_html = """
                         <span data-i18n="heroText2">Ready to Control.</span>
                     </h1>
                     <button onclick="navigate('product')" class="text-snap-green font-bold text-lg hover:text-snap-green-hover flex items-center gap-2 group">
-                        <i class="fas fa-chevron-right text-sm transition-transform group-hover:translate-x-1"></i>
                         <span data-i18n="heroLink">Find out more</span>
+                        <i class="fas fa-chevron-right text-sm transition-transform group-hover:translate-x-1"></i>
                     </button>
                 </div>
 
@@ -194,7 +192,6 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- Dark Feature Bar -->
         <section class="feature-bar w-full relative z-40 shadow-2xl border-t border-slate-800">
             <div class="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
                 <div class="dropdown-container relative flex flex-col group">
@@ -203,11 +200,8 @@ snapcon_html = """
                         <h3 data-i18n="cardDataSheet" class="text-xl font-black text-white tracking-wide uppercase">Data Sheet</h3>
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-snap-green transition-colors" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
-                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
-                        <a href="#" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
-                        <a href="#" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
-                        <a href="#" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green text-sm font-bold text-slate-700">Model 03</a>
-                    </div>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50" id="menu-datasheet">
+                        </div>
                 </div>
 
                 <div class="dropdown-container relative flex flex-col group">
@@ -216,11 +210,8 @@ snapcon_html = """
                         <h3 data-i18n="cardDrawing" class="text-xl font-black text-white tracking-wide uppercase">2D/3D Drawing</h3>
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-blue-400 transition-colors" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
-                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
-                        <a href="#" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 01</a>
-                        <a href="#" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">Model 02</a>
-                        <a href="#" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 text-sm font-bold text-slate-700">Model 03</a>
-                    </div>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50" id="menu-drawing">
+                        </div>
                 </div>
 
                 <div class="dropdown-container relative flex flex-col group">
@@ -229,9 +220,8 @@ snapcon_html = """
                         <h3 data-i18n="cardCatalog" class="text-xl font-black text-white tracking-wide uppercase">Catalog</h3>
                         <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-2 group-hover:text-amber-400 transition-colors" data-i18n="btnDownload">Download <i class="fas fa-angle-down ml-1"></i></p>
                     </div>
-                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50">
-                        <a href="#" data-i18n="cardCatalogFull" class="block px-8 py-4 hover:bg-amber-50 hover:text-amber-600 text-sm font-bold text-slate-700">Download Full Catalog</a>
-                    </div>
+                    <div class="dropdown-menu top-[100%] left-0 w-full bg-white border border-slate-200 shadow-2xl z-50" id="menu-catalog">
+                        </div>
                 </div>
             </div>
         </section>
@@ -260,7 +250,6 @@ snapcon_html = """
         </section>
     </div>
 
-    <!-- ==================== PAGE: PRODUCT ==================== -->
     <div id="page-product" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 data-i18n="pageProductTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Conveyor Systems</h2>
@@ -270,7 +259,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: SPARE PARTS ==================== -->
     <div id="page-spare" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 data-i18n="pageSpareTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Spare Parts</h2>
@@ -280,7 +268,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: CART ==================== -->
     <div id="page-cart" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-w-4xl mx-auto px-6 py-10">
             <h2 data-i18n="pageCartTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Quotation Request</h2>
@@ -323,7 +310,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: DASHBOARD ==================== -->
     <div id="page-dashboard" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">
@@ -405,7 +391,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: PROJECT REFERENCE ==================== -->
     <div id="page-project" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1400px] mx-auto px-6 py-10">
             <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Project Reference</h2>
@@ -468,7 +453,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: COMPANY (ABOUT) ==================== -->
     <div id="page-about" class="page-section bg-white min-h-screen pt-10">
         <div class="max-w-[1000px] mx-auto px-6 py-10">
             <h2 data-i18n="navAbout" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Company</h2>
@@ -502,7 +486,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== PAGE: SUPPORT (CONTACT) ==================== -->
     <div id="page-contact" class="page-section bg-snap-gray min-h-screen pt-10">
         <div class="max-w-[1000px] mx-auto px-6 py-10">
             <h2 data-i18n="navContact" class="text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Support</h2>
@@ -533,7 +516,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- ==================== MODALS ==================== -->
     <div id="modal-register" class="fixed inset-0 bg-snap-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-md sharp-card flex flex-col shadow-2xl relative">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-slate-400 hover:text-red-500"><i class="fas fa-times"></i></button>
@@ -615,7 +597,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- Floating Support Button -->
     <button onclick="openSocialModal()" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 active:scale-95 cursor-pointer">
         <i class="fas fa-user-cog group-hover:animate-pulse"></i>
         <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-bounce"></span>
@@ -625,7 +606,6 @@ snapcon_html = """
         // ==========================================
         // 1. GLOBAL VARIABLES & CONFIG
         // ==========================================
-        // อัปเดตลิงก์ Google App Script ล่าสุดที่นี่
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyX2EvZJ-lYI54hJpL78sSS8KM2FYsS8_05uQO63iIa-TGzvYXQyCKtUDPP__CtZmhy/exec';
         
         let currentLang = 'th';
@@ -633,6 +613,7 @@ snapcon_html = """
         let cart = [];
         let products = [];
         let spares = [];
+        let documents = []; // เก็บลิงก์เอกสาร
         let allItems = [];
         
         // ==========================================
@@ -680,14 +661,21 @@ snapcon_html = """
         // ==========================================
         // 3. FETCH DYNAMIC DATA (GOOGLE SHEETS)
         // ==========================================
+        function parseGoogleDriveLink(url) {
+            if(!url) return '#';
+            if(url.includes('/view')) {
+                // แปลงลิงก์ Drive แบบ view ให้กลายเป็น direct download ถ้าทำได้ (ทางเลือก)
+                return url; 
+            }
+            return url;
+        }
+
         async function loadDataFromSheet() {
             try {
-                // เติมพารามิเตอร์ป้องกัน Cache ของ Browser
                 const fetchUrl = GOOGLE_SCRIPT_URL + "?t=" + new Date().getTime();
                 console.log("Fetching dynamic data from Google Sheets...");
                 
                 const response = await fetch(fetchUrl, { redirect: "follow" });
-                
                 if (!response.ok) throw new Error("Network response was not ok");
                 
                 const data = await response.json();
@@ -718,19 +706,25 @@ snapcon_html = """
                         }
                     }));
                 }
+
+                // ดึงข้อมูลเอกสาร (ถ้ามี)
+                if (data.documents && data.documents.length > 0) {
+                    documents = data.documents;
+                }
                 
                 console.log("Data mapped successfully.");
                 allItems = [...products, ...spares];
                 
                 if (products.length > 0 || spares.length > 0) {
                     renderProducts();
+                    renderDocuments(); // เรียกฟังก์ชันแสดงเมนูเอกสาร
                     if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
                     return; 
                 }
                 
             } catch (e) {
                 console.error("Fetch Error: ไม่สามารถเชื่อมต่อ Google Sheets ได้", e);
-                alert("⚠️ ระบบไม่สามารถดึงข้อมูลสินค้าจาก Google Sheets ได้\\nกำลังใช้ข้อมูลจำลอง (Mock Data)\\n\\nกรุณาตรวจสอบว่า App Script ของคุณ:\\n1. ตั้งค่า Deploy ให้เข้าถึงโดย 'Anyone' (ทุกคน) หรือไม่\\n2. ฟังก์ชัน doGet ทำงานถูกต้องหรือไม่");
+                // alert("⚠️ ระบบไม่สามารถดึงข้อมูลสินค้าจาก Google Sheets ได้\\nกำลังใช้ข้อมูลจำลอง (Mock Data)\\n\\nกรุณาตรวจสอบว่า App Script ของคุณ:\\n1. ตั้งค่า Deploy ให้เข้าถึงโดย 'Anyone' (ทุกคน) หรือไม่\\n2. ฟังก์ชัน doGet ทำงานถูกต้องหรือไม่");
             }
             
             console.warn("Using fallback mock data due to empty sheet or fetch error.");
@@ -1117,6 +1111,16 @@ snapcon_html = """
                     </div>
                 `).join('');
             }
+        }
+        
+        function renderDocuments() {
+            const dsMenu = document.getElementById('menu-datasheet');
+            const dwMenu = document.getElementById('menu-drawing');
+            const catMenu = document.getElementById('menu-catalog');
+            
+            if(dsMenu) dsMenu.innerHTML = documents.filter(d => (d.type || '').toLowerCase() === 'datasheet').map(d => `<a href="${parseGoogleDriveLink(d.file_url)}" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold text-slate-700">${d.model_name}</a>`).join('') || '<div class="px-8 py-4 text-sm text-slate-400">No documents</div>';
+            if(dwMenu) dwMenu.innerHTML = documents.filter(d => (d.type || '').toLowerCase() === 'drawing').map(d => `<a href="${parseGoogleDriveLink(d.file_url)}" target="_blank" class="block px-8 py-4 hover:bg-blue-50 hover:text-blue-600 border-b border-slate-100 text-sm font-bold text-slate-700">${d.model_name}</a>`).join('') || '<div class="px-8 py-4 text-sm text-slate-400">No documents</div>';
+            if(catMenu) catMenu.innerHTML = documents.filter(d => (d.type || '').toLowerCase() === 'catalog').map(d => `<a href="${parseGoogleDriveLink(d.file_url)}" target="_blank" class="block px-8 py-4 hover:bg-amber-50 hover:text-amber-600 border-b border-slate-100 text-sm font-bold text-slate-700">${d.model_name}</a>`).join('') || '<div class="px-8 py-4 text-sm text-slate-400">No documents</div>';
         }
 
         function scrollSlider(dir) {
