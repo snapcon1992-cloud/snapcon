@@ -153,6 +153,26 @@ snapcon_html = """
                         <i class="fas fa-chevron-right text-sm transition-transform group-hover:translate-x-1"></i>
                     </button>
                 </div>
+
+                <div class="hidden md:flex flex-col justify-center flex-1 pl-4 lg:pl-16 z-10 w-full max-w-lg">
+                    <div>
+                        <h3 class="text-snap-green font-black tracking-widest uppercase text-xs mb-6 border-b border-white/20 pb-4 inline-block drop-shadow-md">Why Snapcon?</h3>
+                        <div class="feature-text-container">
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs1Title">⚡ Easy Setup</h4>
+                                <p class="text-lg md:text-xl text-emerald-400 font-bold" data-i18n="fs1Desc">Plug & Play ใช้งานได้ทันที</p>
+                            </div>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs2Title">🔗 Seamless Connection</h4>
+                                <p class="text-lg md:text-xl text-blue-400 font-bold" data-i18n="fs2Desc">เชื่อม PLC / Sensor ได้ง่าย</p>
+                            </div>
+                            <div class="feature-text-slide drop-shadow-xl">
+                                <h4 class="text-3xl md:text-4xl font-black text-white mb-2" data-i18n="fs3Title">📊 Real-Time Monitoring</h4>
+                                <p class="text-lg md:text-xl text-amber-400 font-bold" data-i18n="fs3Desc">เห็นข้อมูลทันที</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -228,10 +248,12 @@ snapcon_html = """
         <div class="max-container py-10">
             <h2 data-i18n="pageProjectTitle" class="text-3xl font-black text-slate-900 uppercase mb-2">Project Reference</h2>
             <div class="w-16 h-1 bg-snap-green mb-12"></div>
+            
             <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
                 <i class="fas fa-rocket text-snap-green"></i> <span data-i18n="projPilotTitle">Pilot / Demo Project</span>
             </h3>
             <div id="project-pilot-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"></div>
+            
             <h3 class="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
                 <i class="fas fa-industry text-blue-500"></i> <span data-i18n="projUseCaseTitle">Use Case / Application</span>
             </h3>
@@ -247,17 +269,17 @@ snapcon_html = """
             <div class="bg-white p-8 sharp-card">
                 <div id="cart-header" class="flex justify-between items-center mb-6 pb-4 border-b">
                     <div class="flex items-center gap-3">
-                        <input type="checkbox" id="cart-select-all" onclick="toggleSelectAll(this.checked)" class="w-4 h-4 accent-snap-green">
-                        <label for="cart-select-all" class="font-bold text-sm" data-i18n="selectAll">เลือกทั้งหมด</label>
+                        <input type="checkbox" id="cart-select-all" onclick="toggleSelectAll(this.checked)" class="w-4 h-4 accent-snap-green cursor-pointer">
+                        <label for="cart-select-all" class="font-bold text-sm cursor-pointer" data-i18n="selectAll">เลือกทั้งหมด</label>
                     </div>
-                    <button onclick="deleteSelected()" class="text-red-500 font-bold text-sm underline" data-i18n="deleteSelected">ลบที่เลือก</button>
+                    <button onclick="deleteSelected()" class="text-red-500 font-bold text-sm underline hover:text-red-700" data-i18n="deleteSelected">ลบที่เลือก</button>
                 </div>
-                <div id="cart-items" class="space-y-3 mb-10 max-h-[50vh] overflow-y-auto"></div>
+                <div id="cart-items" class="space-y-3 mb-10 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2"></div>
                 <div id="quote-contact-form" class="bg-slate-50 p-6 sharp-card mb-8 hidden">
                     <p class="font-bold text-slate-700 mb-4 uppercase text-xs tracking-widest"><i class="fas fa-info-circle text-snap-green"></i> <span data-i18n="guestContactTitle">ข้อมูลติดต่อกลับ</span></p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" id="quote-name" data-i18n-placeholder="phGuestName" placeholder="ชื่อ / บริษัท" class="px-4 py-3 bg-white border outline-none focus:border-snap-green sharp-card">
-                        <input type="text" id="quote-contact" data-i18n-placeholder="phGuestContact" placeholder="อีเมล / เบอร์โทร" class="px-4 py-3 bg-white border outline-none focus:border-snap-green sharp-card">
+                        <input type="text" id="quote-name" placeholder="ชื่อ / บริษัท" class="px-4 py-3 bg-white border outline-none focus:border-snap-green sharp-card">
+                        <input type="text" id="quote-contact" placeholder="อีเมล / เบอร์โทร" class="px-4 py-3 bg-white border outline-none focus:border-snap-green sharp-card">
                     </div>
                 </div>
                 <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t gap-6">
@@ -282,6 +304,15 @@ snapcon_html = """
         </div>
     </div>
 
+    <!-- PAGE: COMPANY -->
+    <div id="page-about" class="page-section bg-white min-h-screen pt-10">
+        <div class="max-container max-w-4xl py-10">
+            <h2 class="text-3xl font-black text-slate-900 uppercase mb-2">Company</h2>
+            <div class="w-16 h-1 bg-snap-green mb-10"></div>
+            <p class="text-slate-600 leading-relaxed mb-6 text-lg">Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System...</p>
+        </div>
+    </div>
+
     <!-- MODAL: REGISTER -->
     <div id="modal-register" class="fixed inset-0 bg-snap-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-md sharp-card shadow-2xl relative p-8">
@@ -296,136 +327,310 @@ snapcon_html = """
             </div>
         </div>
     </div>
+    
+    <!-- Floating Support Button -->
+    <button onclick="navigate('contact')" class="fixed bottom-6 right-6 w-16 h-16 bg-snap-black text-white rounded-full shadow-[0_15px_35px_rgba(0,0,0,0.4)] flex items-center justify-center text-2xl hover:bg-snap-green transition-all z-50 group border-[3px] border-white hover:scale-110 cursor-pointer">
+        <i class="fas fa-user-cog"></i>
+    </button>
 
     <script>
+        // =========================================================================
+        // JAVASCRIPT SYSTEM (STABLE VERSION 3.0)
+        // =========================================================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
+        
         let currentLang = 'th';
         let isLoggedIn = false;
-        let cart = [], products = [], spares = [], documents = [], projects = [], articles = [];
-        let currentUserId = null, memoryUsers = { '001': '123' };
+        let cart = [], products = [], spares = [], documents = [], projects = [], articles = [], allItems = [];
+        let currentUserId = null, memoryUsers = { '001': '123', 'admin': 'admin' };
 
+        // 1. Helper: แปลงลิงก์ Google Drive ให้เป็น Direct Image Link
+        function getValidImageUrl(url) {
+            if (!url) return '';
+            if (url.includes('drive.google.com/file/d/')) {
+                try {
+                    const fileId = url.split('/d/')[1].split('/')[0];
+                    return `https://drive.google.com/uc?export=view&id=${fileId}`;
+                } catch(e) { return url; }
+            }
+            return url;
+        }
+
+        // 2. โหลดข้อมูลทั้งหมดจาก Google Sheets
         async function loadDataFromSheet() {
             try {
+                console.log("Loading data from Google Sheets...");
                 const response = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
+                if (!response.ok) throw new Error("Network response was not ok");
+                
                 const data = await response.json();
+                console.log("Data received:", data);
+                
                 products = data.products || [];
                 spares = data.spares || [];
                 documents = data.documents || [];
-                projects = data.projects || [];
                 articles = data.articles || [];
+                allItems = [...products, ...spares];
                 
-                renderProducts();
-                renderDocuments(); 
-                renderProjects();
-                renderArticles();
-            } catch (e) { console.error("Fetch Error", e); }
+                // แมปข้อมูล Projects ให้ตรงกับชื่อคอลัมน์ใน Sheet ใหม่
+                if (data.projects && data.projects.length > 0) {
+                    projects = data.projects.map(p => ({
+                        id: p.id || p.ID || "N/A",
+                        category: (p.category || p.Category || "UseCase").toLowerCase(),
+                        title: p.title || p.Title || "Unnamed Project",
+                        description_th: p.description_th || p.Description_th || "",
+                        description_en: p.description_en || p.Description_en || "",
+                        img: p.img_url || p.img || p.Img || p.imageurl || "",
+                        icon: p.icon || p.Icon || ""
+                    }));
+                } else {
+                    projects = []; // ไม่มี Fallback
+                }
+                
+                // สั่ง Render หน้าจอต่างๆ
+                try { renderProducts(); } catch(e) { console.error("Error products", e); }
+                try { renderDocuments(); } catch(e) { console.error("Error documents", e); }
+                try { renderProjects(); } catch(e) { console.error("Error projects", e); }
+                try { renderArticles(); } catch(e) { console.error("Error articles", e); }
+                if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+                
+            } catch (e) { 
+                console.error("Fetch Error:", e); 
+            }
         }
 
+        // 3. Render: สินค้าและอะไหล่
+        function renderProducts() {
+            const pGrid = document.getElementById('product-grid');
+            const sGrid = document.getElementById('spare-grid');
+            const slider = document.getElementById('home-product-slider');
+
+            const makeCard = (p) => `
+                <div class="bg-white sharp-card p-4 flex flex-col h-full">
+                    <div class="bg-slate-50 h-40 flex items-center justify-center p-2 mb-3 overflow-hidden rounded">
+                        <img src="${getValidImageUrl(p.img || p.imageurl)}" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
+                    </div>
+                    <h4 class="font-black text-sm text-slate-900 mb-2 truncate" title="${p.name}">${p.name}</h4>
+                    <p class="text-snap-green font-black text-lg mb-3 mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
+                    <button onclick="addToCart('${p.id}')" class="w-full bg-slate-100 text-slate-700 py-2 font-bold text-xs hover:bg-snap-green hover:text-white sharp-btn border border-slate-200">ADD TO CART</button>
+                </div>`;
+
+            if(pGrid) pGrid.innerHTML = products.map(makeCard).join('');
+            if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
+            if(slider) slider.innerHTML = products.slice(0, 10).map(p => `
+                <div onclick="navigate('product')" class="min-w-[250px] snap-center bg-white border border-slate-100 p-4 rounded-[1.5rem] shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <div class="overflow-hidden rounded-xl mb-3 relative h-32 bg-slate-50"><img src="${getValidImageUrl(p.img)}" class="w-full h-full object-contain mix-blend-multiply p-2"></div>
+                    <h4 class="font-black text-sm text-slate-800 mb-1 truncate">${p.name}</h4>
+                    <p class="text-snap-green font-black text-lg mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
+                </div>`).join('');
+        }
+
+        // 4. Render: Project Reference
+        function renderProjects() {
+            const pilotGrid = document.getElementById('project-pilot-grid');
+            const usecaseGrid = document.getElementById('project-usecase-grid');
+
+            if (pilotGrid) {
+                const pilots = projects.filter(p => (p.category||'').toLowerCase().includes('pilot'));
+                pilotGrid.innerHTML = pilots.map(p => {
+                    let visual = '<i class="fas fa-cogs text-snap-green text-3xl"></i>';
+                    // ยึดข้อมูลจาก img_url เป็นหลัก ตามตาราง
+                    let imgSrc = getValidImageUrl(p.img || p.icon);
+                    
+                    if (imgSrc && imgSrc.includes('http')) {
+                        visual = `<img src="${imgSrc}" class="w-full h-full object-contain p-2">`;
+                    } else if (p.icon && !p.icon.includes('http')) {
+                        visual = `<i class="${p.icon} text-2xl text-snap-green"></i>`;
+                    }
+                    
+                    const desc = currentLang === 'th' ? p.description_th : p.description_en;
+
+                    return `
+                    <div class="bg-slate-50 p-8 sharp-card group flex flex-col items-start h-full">
+                        <div class="w-16 h-16 bg-white border border-slate-200 rounded-xl flex items-center justify-center mb-6 shadow-sm overflow-hidden shrink-0">${visual}</div>
+                        <h4 class="text-lg font-black text-slate-900 mb-3">${p.title || 'Untitled'}</h4>
+                        <p class="text-sm text-slate-600">${desc || ''}</p>
+                    </div>`;
+                }).join('') || '<p class="col-span-full text-slate-400 font-bold">ไม่มีข้อมูล (No Pilot Projects)</p>';
+            }
+
+            if (usecaseGrid) {
+                const usecases = projects.filter(p => (p.category||'').toLowerCase().includes('usecase'));
+                usecaseGrid.innerHTML = usecases.map((p, idx) => {
+                    let borderCol = ['border-t-amber-500', 'border-t-snap-green', 'border-t-blue-500'][idx % 3];
+                    let imgSrc = getValidImageUrl(p.img || p.icon);
+                    if(!imgSrc || !imgSrc.includes('http')) imgSrc = 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
+                    
+                    const desc = currentLang === 'th' ? p.description_th : p.description_en;
+
+                    return `
+                    <div class="bg-white p-6 sharp-card border-t-4 ${borderCol} flex flex-col items-center text-center h-full">
+                        <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
+                            <img src="${imgSrc}" class="w-full h-full object-cover mix-blend-multiply opacity-80 hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <h4 class="text-lg font-black text-slate-900 mb-2">${p.title || 'Untitled'}</h4>
+                        <p class="text-sm text-slate-600">${desc || ''}</p>
+                    </div>`;
+                }).join('') || '<p class="col-span-full text-slate-400 font-bold">ไม่มีข้อมูล (No Use Cases)</p>';
+            }
+        }
+
+        // 5. Render: Articles (Knowledge & Insight)
         function renderArticles() {
             const container = document.getElementById('article-list');
-            if (!container || articles.length === 0) return;
+            if (!container) return;
+            if (!articles || articles.length === 0) {
+                container.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold">ยังไม่มีบทความในขณะนี้</p>';
+                return;
+            }
             
             container.innerHTML = articles.map(art => {
-                let videoHtml = '';
-                if (art.youtube1) videoHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded" src="https://www.youtube.com/embed/${art.youtube1}" frameborder="0" allowfullscreen></iframe></div>`;
-                if (art.youtube2) videoHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded" src="https://www.youtube.com/embed/${art.youtube2}" frameborder="0" allowfullscreen></iframe></div>`;
+                let mediaHtml = '';
+                if (art.youtube1) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded" src="https://www.youtube.com/embed/${art.youtube1}" frameborder="0" allowfullscreen></iframe></div>`;
+                if (art.youtube2) mediaHtml += `<div class="aspect-video mb-2"><iframe class="w-full h-full rounded" src="https://www.youtube.com/embed/${art.youtube2}" frameborder="0" allowfullscreen></iframe></div>`;
+                if (!mediaHtml) {
+                    let imgSrc = getValidImageUrl(art.imageurl || art.img);
+                    mediaHtml = `<img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-44 object-cover rounded-lg border border-slate-100">`;
+                }
 
                 return `
-                <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
-                    <div class="p-2">
-                        ${videoHtml || `<img src="${art.imageurl || 'https://via.placeholder.com/400x200'}" class="w-full h-44 object-cover rounded-lg">`}
-                    </div>
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
+                    <div class="p-2">${mediaHtml}</div>
                     <div class="p-6 pt-2 flex flex-col flex-1">
                         <span class="text-snap-green text-[10px] font-black uppercase tracking-widest">${art.category || 'INSIGHT'}</span>
-                        <h3 class="text-xl font-black text-slate-900 mt-1 mb-2 line-clamp-2">${art.title}</h3>
+                        <h3 class="text-xl font-black text-slate-900 mt-1 mb-2 line-clamp-2">${art.title || 'Untitled'}</h3>
                         <p class="text-slate-500 text-sm mb-4 line-clamp-2">${art.summary || ''}</p>
                         <div class="mt-auto flex justify-between items-center pt-4 border-t border-slate-100">
                             <span class="text-[10px] font-bold text-slate-400 uppercase">${art.date || ''}</span>
-                            <a href="${art.link}" target="_blank" class="text-snap-black font-black text-xs hover:text-snap-green uppercase tracking-tighter">Read More <i class="fas fa-arrow-right ml-1"></i></a>
+                            ${art.link ? `<a href="${art.link}" target="_blank" class="bg-slate-900 text-white px-4 py-2 rounded text-xs font-bold hover:bg-snap-green transition">อ่านต่อ</a>` : ''}
                         </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        function renderProjects() {
-            const pilotGrid = document.getElementById('project-pilot-grid');
-            const usecaseGrid = document.getElementById('project-usecase-grid');
-            if (!pilotGrid) return;
-
-            pilotGrid.innerHTML = projects.filter(p => (p.category || '').toLowerCase().includes('pilot')).map(p => {
-                let visualHtml = '<i class="fas fa-cogs text-snap-green text-2xl"></i>';
-                const isUrl = (p.icon || '').includes('http') || (p.img || '').includes('http');
-                if (isUrl) visualHtml = `<img src="${p.icon || p.img}" class="w-full h-full object-contain p-2">`;
-                else if (p.icon) visualHtml = `<i class="${p.icon} text-2xl"></i>`;
-
-                return `
-                <div class="bg-slate-50 p-8 sharp-card group flex flex-col items-start h-full">
-                    <div class="w-16 h-16 bg-white border rounded-xl flex items-center justify-center mb-6 shadow-sm overflow-hidden shrink-0">
-                        ${visualHtml}
-                    </div>
-                    <h4 class="text-lg font-black text-slate-900 mb-3">${p.title}</h4>
-                    <p class="text-sm text-slate-600">${currentLang === 'th' ? (p.description_th || '') : (p.description_en || '')}</p>
-                </div>`;
-            }).join('') || '<p class="col-span-full text-slate-400 font-bold">ไม่มีข้อมูล (No Projects)</p>';
-
-            usecaseGrid.innerHTML = projects.filter(p => (p.category || '').toLowerCase().includes('usecase')).map((p, idx) => `
-                <div class="bg-white p-6 sharp-card border-t-4 border-t-snap-green flex flex-col h-full text-center">
-                    <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden"><img src="${p.img_url || p.img || 'https://via.placeholder.com/400x200'}" class="w-full h-full object-cover"></div>
-                    <h4 class="text-lg font-black text-slate-900 mb-2">${p.title}</h4>
-                    <p class="text-sm text-slate-600 line-clamp-2">${currentLang === 'th' ? (p.description_th || '') : (p.description_en || '')}</p>
-                </div>`).join('');
+        // 6. Render: Documents Dropdown
+        function renderDocuments() {
+            const makeMenu = (type) => documents.filter(d => (d.type || '').toLowerCase() === type).map(d => `<a href="${d.file_url}" target="_blank" class="block px-8 py-4 hover:bg-slate-50 hover:text-snap-green border-b border-slate-100 text-sm font-bold">${d.model_name}</a>`).join('') || '<div class="px-8 py-4 text-sm text-slate-400">No data</div>';
+            const ds = document.getElementById('menu-datasheet'); if(ds) ds.innerHTML = makeMenu('datasheet');
+            const dw = document.getElementById('menu-drawing'); if(dw) dw.innerHTML = makeMenu('drawing');
+            const ca = document.getElementById('menu-catalog'); if(ca) ca.innerHTML = makeMenu('catalog');
         }
 
-        async function submitRegistration() {
-            const data = { type: "Registration", name_or_id: document.getElementById('reg-id').value, email: document.getElementById('reg-contact').value, details: document.getElementById('reg-name').value };
-            if(!data.name_or_id || !data.email) return alert("Please fill all fields");
-            try { await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) }); } catch(e) {}
-            alert("ลงทะเบียนสำเร็จ!"); closeRegisterModal();
+        // 7. Cart & Quotation System
+        function addToCart(id) {
+            const item = allItems.find(i => i.id === id);
+            if(item) {
+                const existing = cart.find(i => i.id === id);
+                if(existing) existing.quantity++; else cart.push({...item, cartId: Date.now().toString(), selected: true, quantity: 1});
+                updateBadge(); alert("Added to cart!");
+            }
+        }
+        function updateBadge() { const b = document.getElementById('cart-badge'); const count = cart.reduce((s,i)=>s+i.quantity,0); b.innerText=count>99?'99+':count; b.classList.toggle('hidden',count===0); }
+        function updateQuantity(cartId, delta) { const item = cart.find(i => i.cartId === cartId); if(item) { item.quantity = Math.max(1, item.quantity + delta); renderCart(); updateBadge(); } }
+        function toggleItem(cartId) { const item = cart.find(i => i.cartId === cartId); if(item) { item.selected = !item.selected; renderCart(); } }
+        function toggleSelectAll(val) { cart.forEach(i => i.selected = val); renderCart(); }
+        function deleteSelected() { cart = cart.filter(i => !i.selected); updateBadge(); renderCart(); }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items'); 
+            const quoteForm = document.getElementById('quote-contact-form');
+            if(!container) return;
+            
+            if (quoteForm) quoteForm.classList.remove('hidden');
+
+            if(cart.length === 0) {
+                container.innerHTML = `<p class="text-center py-8 text-slate-400 font-bold bg-slate-50 border border-slate-100">ไม่มีสินค้าในรถเข็น</p>`;
+                document.getElementById('cart-total').innerText = '฿0'; return;
+            }
+            container.innerHTML = cart.map(item => `
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-5 rounded-xl mb-3 shadow-sm gap-4">
+                    <div class="flex items-center gap-5 w-full sm:w-auto flex-1">
+                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem('${item.cartId}')" class="w-6 h-6 accent-snap-green cursor-pointer">
+                        <div class="w-16 h-16 bg-white border rounded flex items-center justify-center shrink-0 p-1"><img src="${getValidImageUrl(item.img)}" class="max-w-full max-h-full object-contain"></div>
+                        <div class="flex-1 min-w-0"><span class="font-black text-slate-900 block truncate">${item.name}</span><span class="text-xs text-slate-400 font-bold">${item.id}</span></div>
+                    </div>
+                    <div class="flex items-center justify-between w-full sm:w-auto gap-4 mt-3 sm:mt-0">
+                        <div class="flex items-center border rounded overflow-hidden h-10 bg-white">
+                            <button onclick="updateQuantity('${item.cartId}', -1)" class="w-10 h-full bg-slate-50 font-black border-r">-</button>
+                            <span class="w-12 h-full flex items-center justify-center text-sm font-black">${item.quantity}</span>
+                            <button onclick="updateQuantity('${item.cartId}', 1)" class="w-10 h-full bg-slate-50 font-black border-l">+</button>
+                        </div>
+                        <span class="font-black text-slate-900 text-xl w-32 text-right shrink-0">฿${(item.price * item.quantity).toLocaleString()}</span>
+                    </div>
+                </div>`).join('');
+            
+            const total = cart.filter(i => i.selected).reduce((s, i) => s + (i.price * i.quantity), 0);
+            document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
+            document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
+        }
+
+        // --- ระบบส่งข้อมูลกลับไปที่โหมด JSON ที่ปลอดภัยจาก CORS ---
+        async function sendDataToServer(payloadObj) {
+            return fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payloadObj)
+            });
         }
 
         async function requestQuote() {
-            const items = cart.filter(i => i.selected); if(items.length === 0) return alert("Select an item");
-            const contact = { type: "Quotation", name_or_id: document.getElementById('quote-name').value, email: document.getElementById('quote-contact').value, details: items.map(i => i.name).join(', ') };
-            if(!contact.name_or_id || !contact.email) return alert("Please fill contact info");
-            try { await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(contact) }); } catch(e) {}
-            alert("ส่งคำขอใบเสนอราคาสำเร็จ!"); cart = []; updateBadge(); navigate('home');
+            const selected = cart.filter(i => i.selected);
+            if(selected.length === 0) return alert("กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น");
+            
+            const name = document.getElementById('quote-name').value.trim();
+            const info = document.getElementById('quote-contact').value.trim();
+            if(!name || !info) return alert("กรุณากรอกชื่อและข้อมูลติดต่อกลับให้ครบถ้วน");
+            
+            const detailsStr = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
+            const total = selected.reduce((s, i) => s + (i.price * i.quantity), 0);
+            const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
+            
+            try { 
+                await sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
+                alert("ส่งข้อมูลสำเร็จ! ทางเราจะติดต่อกลับโดยเร็วที่สุด");
+                cart = cart.filter(i => !i.selected); 
+                updateBadge(); renderCart(); navigate('home');
+            } catch(e) { 
+                console.error("Error", e); 
+            }
         }
 
-        function handleLogin() {
+        async function submitRegistration() {
+            const id = document.getElementById('reg-id').value.trim();
+            const pass = document.getElementById('reg-pass').value.trim();
+            const name = document.getElementById('reg-name').value.trim();
+            const contact = document.getElementById('reg-contact').value.trim();
+            
+            if(!id || !pass || !name || !contact) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+            
+            try {
+                await sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
+                alert("ลงทะเบียนสำเร็จ!");
+                closeRegisterModal();
+            } catch(e) { 
+                console.error("Error", e); 
+            }
+        }
+
+        // 8. Navigation & UI States
+        function navigate(p) { document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); const t = document.getElementById('page-'+p); if(t) t.classList.add('page-active'); window.scrollTo(0,0); if(p==='cart') renderCart(); }
+        function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
+        function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex', 'hidden'); }
+        function setLanguage(l) { currentLang = l; renderProjects(); renderArticles(); }
+        function handleLogin() { 
             const id = document.getElementById('userId').value.trim();
             if (memoryUsers[id] === document.getElementById('userPass').value) {
                 isLoggedIn = true; currentUserId = id;
                 document.getElementById('displayUser').innerText = id;
-                document.getElementById('dash-user-name').innerText = id;
                 document.getElementById('login-section').classList.replace('lg:flex', 'hidden');
                 document.getElementById('user-section').classList.replace('hidden', 'flex');
+                alert("Login Successful");
             } else alert("Invalid ID/PW");
         }
-
         function handleLogout() { isLoggedIn = false; document.getElementById('user-section').classList.replace('flex', 'hidden'); document.getElementById('login-section').classList.replace('hidden', 'lg:flex'); navigate('home'); }
-        function navigate(p) { document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); const t = document.getElementById('page-'+p); if(t) t.classList.add('page-active'); window.scrollTo(0,0); if(p==='cart') renderCart(); }
-        function checkDashboardAuth() { if(isLoggedIn) navigate('dashboard'); else alert("Please Login First"); }
-        function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
-        function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex', 'hidden'); }
-        function setLanguage(l) { currentLang = l; loadDataFromSheet(); }
-        function updateBadge() { const b = document.getElementById('cart-badge'); const count = cart.length; b.innerText = count; b.classList.toggle('hidden', count === 0); }
-        function addToCart(id) { const item = [...products, ...spares].find(i => i.id === id); if(item) { cart.push({...item, selected: true}); updateBadge(); alert("Added to cart!"); } }
-        
-        function renderProducts() {
-            const grid = document.getElementById('product-grid');
-            if(grid) grid.innerHTML = products.map(p => `
-                <div class="bg-white sharp-card p-4 flex flex-col h-full">
-                    <div class="bg-slate-50 h-40 flex items-center justify-center p-2 mb-3"><img src="${p.img}" class="max-h-full max-w-full object-contain"></div>
-                    <h4 class="font-black text-sm text-slate-900 mb-2 truncate">${p.name}</h4>
-                    <p class="text-snap-green font-black text-lg mb-3">฿${parseFloat(p.price).toLocaleString()}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full bg-slate-100 py-2 font-bold text-xs sharp-btn border hover:bg-snap-green hover:text-white">ADD TO CART</button>
-                </div>`).join('');
-            
-            const slider = document.getElementById('home-product-slider');
-            if(slider) slider.innerHTML = products.slice(0,6).map(p => `
-                <div class="min-w-[250px] snap-center bg-white border p-4 rounded-3xl"><img src="${p.img}" class="h-32 mx-auto object-contain"><h4 class="font-black text-sm mt-3 truncate">${p.name}</h4></div>`).join('');
-        }
+        function checkDashboardAuth() { navigate('dashboard'); }
 
         window.onload = loadDataFromSheet;
     </script>
@@ -433,5 +638,4 @@ snapcon_html = """
 </html>
 """
 
-# แสดงผลหน้าเว็บผ่าน Streamlit
 st.components.v1.html(snapcon_html, height=2500, scrolling=True)
