@@ -563,12 +563,12 @@ snapcon_html = """
         <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-bounce"></span>
     </button>
 
-    <!-- ==========================================
-         JAVASCRIPT SECTION (ระบบหลักทั้งหมด)
-    ========================================== -->
     <script>
+        // ==========================================
         // 1. GLOBAL VARIABLES & CONFIG
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwhedlEULYND-svmiHN-qz-u7gk3cPR2a8EV05oYyFO8uNhIcfoCChZrpGZOz_wUEkC/exec';
+        // ==========================================
+        // อัปเดตลิงก์ Google App Script ล่าสุดที่นี่
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         
         let currentLang = 'th';
         let isLoggedIn = false;
@@ -576,10 +576,12 @@ snapcon_html = """
         let products = [];
         let spares = [];
         let documents = []; 
-        let projects = [];
+        let projects = []; // เก็บข้อมูล Project
         let allItems = [];
         
+        // ==========================================
         // 2. USER ISOLATION & MOCK DATA
+        // ==========================================
         let currentUserId = null;
         let activeDashInterval = null;
         let memoryUsers = { '001': '123', 'admin': 'admin' };
@@ -619,9 +621,14 @@ snapcon_html = """
             return userDashboards[currentUserId];
         }
 
+        // ==========================================
         // 3. FETCH DYNAMIC DATA (GOOGLE SHEETS)
+        // ==========================================
         function parseGoogleDriveLink(url) {
             if(!url) return '#';
+            if(url.includes('/view')) {
+                return url; 
+            }
             return url;
         }
 
@@ -666,6 +673,7 @@ snapcon_html = """
                     documents = data.documents;
                 }
 
+                // ดึงข้อมูล Project Reference (ลบข้อมูลสำรอง Fallback ออกทั้งหมด)
                 if (data.projects && data.projects.length > 0) {
                     projects = data.projects.map(p => ({
                         id: p.id || p.ID || "N/A",
@@ -703,14 +711,6 @@ snapcon_html = """
             spares = [
                 { id: 'SP001', name: 'Roller Series - P001', price: 525, img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80', specs: { th: ["Type: Roller", "Stock: Ready"], en: ["Type: Roller", "Stock: Ready"] } }
             ];
-            projects = [
-                { id: 'PL1', category: 'pilot', title: 'Snapcon V1', description: { th: 'Multi-machine control demo ควบคุมเครื่องจักรหลายตัวพร้อมกันผ่านศูนย์กลางเดียว', en: 'Multi-machine control demo managing multiple units from a single hub.' }, icon: 'fas fa-network-wired text-snap-green', img: '' },
-                { id: 'PL2', category: 'pilot', title: 'Real-time Monitoring', description: { th: 'ติดตามสถานะอุณหภูมิ (Temperature), ความเร็ว (Speed), และยอดผลิต (Output) ทันที', en: 'Instant tracking of Temperature, Speed, and Output status.' }, icon: 'fas fa-chart-line text-blue-500', img: '' },
-                { id: 'PL3', category: 'pilot', title: 'Poka-Yoke Integrated', description: { th: 'ระบบป้องกันความผิดพลาดจากมนุษย์ แจ้งเตือนและหยุดเครื่องจักรเมื่อพบความผิดปกติ', en: 'Human error prevention system. Alerts and halts machinery upon detecting anomalies.' }, icon: 'fas fa-shield-alt text-rose-500', img: '' },
-                { id: 'UC1', category: 'usecase', title: 'Packaging Line Automation', description: { th: 'ระบบออโตเมชันสำหรับสายงานบรรจุภัณฑ์อัตโนมัติ ลดเวลาและเพิ่มความแม่นยำ', en: 'Automated packaging line systems to reduce time and increase precision.' }, icon: '', img: 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80' },
-                { id: 'UC2', category: 'usecase', title: 'Conveyor System Control', description: { th: 'ระบบควบคุมสายพานลำเลียงอัจฉริยะ ปรับความเร็วอัตโนมัติตามโหลดงาน', en: 'Intelligent conveyor control system adjusting speed automatically based on workload.' }, icon: '', img: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&w=600&q=80' },
-                { id: 'UC3', category: 'usecase', title: 'Machine Health Monitoring', description: { th: 'ระบบเฝ้าระวังสภาพเครื่องจักรเชิงคาดการณ์ แจ้งเตือนก่อนเกิดความเสียหายหนัก', en: 'Predictive machine health monitoring. Alerts before critical failures occur.' }, icon: '', img: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80' }
-            ];
             
             allItems = [...products, ...spares];
             renderProducts();
@@ -718,13 +718,16 @@ snapcon_html = """
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
 
+        // ==========================================
         // 4. DICTIONARY (i18n)
+        // ==========================================
         const dict = {
             th: {
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
                 
-                heroEco: "Green Technology", heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
+                heroEco: "Green Technology",
+                heroSub: "PLUG & PLAY AUTOMATION", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroLink: "Find out more",
                 
                 fs1Title: "⚡ Easy Setup", fs1Desc: "Plug & Play ใช้งานได้ทันที",
                 fs2Title: "🔗 Seamless Connection", fs2Desc: "เชื่อม PLC / Sensor ได้ง่าย",
@@ -734,12 +737,14 @@ snapcon_html = """
                 fs6Title: "🛡️ Built-in Poka-Yoke", fs6Desc: "ระบบป้องกันความผิดพลาดของคน",
                 
                 cardDataSheet: "Data Sheet", selectModel: "Select Model",
-                cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
+                cardDrawing: "2D/3D Drawing", 
+                cardCatalog: "Catalog", btnDownload: "Download", cardCatalogFull: "Download Full Catalog",
                 
                 pageProductTitle: "Conveyor Systems", pageProductSub: "ระบบสายพานลำเลียงอัจฉริยะสำหรับอุตสาหกรรมยุคใหม่",
                 pageSpareTitle: "Spare Parts", pageSpareSub: "อะไหล่และชิ้นส่วนสายพานลำเลียงคุณภาพสูง",
                 pageProjectTitle: "Project Reference", pageProjectSub: "รวมผลงานการติดตั้งและตัวอย่างการประยุกต์ใช้งานระบบ Snapcon ในอุตสาหกรรมจริง",
-                projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
+                projPilotTitle: "Pilot / Demo Project",
+                projUseCaseTitle: "Use Case / Application",
                 
                 btnAddToCart: "ADD TO CART", pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
                 cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "ลบที่เลือก", specTitle: "SPECS",
@@ -812,7 +817,9 @@ snapcon_html = """
             }
         };
 
+        // ==========================================
         // 5. NAVIGATION & MODALS
+        // ==========================================
         function navigate(pageId) {
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('page-active'));
             const target = document.getElementById('page-' + pageId);
@@ -840,7 +847,9 @@ snapcon_html = """
         function openSocialModal() { document.getElementById('modal-social').classList.replace('hidden', 'flex'); }
         function closeSocialModal() { document.getElementById('modal-social').classList.replace('flex', 'hidden'); }
 
+        // ==========================================
         // 6. AUTHENTICATION (LOGIN / REGISTER)
+        // ==========================================
         function handleLogin() {
             const id = document.getElementById('userId').value.trim();
             const pass = document.getElementById('userPass').value.trim();
@@ -848,6 +857,7 @@ snapcon_html = """
             if (memoryUsers[id] === pass) {
                 isLoggedIn = true;
                 currentUserId = id;
+                
                 if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
 
                 document.getElementById('displayUser').innerText = id;
@@ -922,7 +932,9 @@ snapcon_html = """
             navigate('home');
         }
 
+        // ==========================================
         // 7. DASHBOARD LOGIC
+        // ==========================================
         function startSystem() {
             let dash = getDash(); if(!dash) return;
             dash.isRunning = true;
@@ -1023,7 +1035,9 @@ snapcon_html = """
             }).join('');
         }
 
+        // ==========================================
         // 8. E-COMMERCE / CART LOGIC
+        // ==========================================
         function updateBadge() {
             const b = document.getElementById('cart-badge');
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -1085,24 +1099,26 @@ snapcon_html = """
             if (pilotGrid) {
                 const pilots = projects.filter(p => p.category.includes('pilot'));
                 pilotGrid.innerHTML = pilots.map(p => {
-                    let visualHtml = '<i class="fas fa-cogs text-snap-green"></i>';
-                    if (p.icon && p.icon.startsWith('http')) {
-                        visualHtml = `<img src="${p.icon}" class="max-w-full max-h-full object-contain mix-blend-multiply p-1">`;
-                    } else if (p.img && p.img.startsWith('http')) {
-                        visualHtml = `<img src="${p.img}" class="max-w-full max-h-full object-contain mix-blend-multiply p-1">`;
+                    let visualHtml = '<i class="fas fa-cogs text-snap-green text-2xl"></i>';
+                    
+                    // ปรับแก้ไขให้รูปภาพรองรับขนาดความกว้างความสูงเต็มที่ เพื่อไม่ให้รูปหายหรือซ่อนเป็นกล่องสีขาว
+                    if (p.icon && p.icon.includes('http')) {
+                        visualHtml = `<img src="${p.icon}" class="w-full h-full object-contain p-2">`;
+                    } else if (p.img && p.img.includes('http')) {
+                        visualHtml = `<img src="${p.img}" class="w-full h-full object-contain p-2">`;
                     } else if (p.icon) {
-                        visualHtml = `<i class="${p.icon}"></i>`;
+                        visualHtml = `<i class="${p.icon} text-2xl"></i>`;
                     }
 
                     return `
-                    <div class="bg-slate-50 p-8 sharp-card group">
-                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-sm group-hover:scale-110 transition-transform overflow-hidden">
+                    <div class="bg-slate-50 p-8 sharp-card group flex flex-col items-start">
+                        <div class="w-16 h-16 bg-white border border-slate-200 rounded-xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform overflow-hidden">
                             ${visualHtml}
                         </div>
                         <h4 class="text-lg font-black text-slate-900 mb-3">${p.title}</h4>
                         <p class="text-sm text-slate-600">${p.description[currentLang] || p.description.th}</p>
                     </div>
-                `}).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
+                `}).join('') || '<p class="text-slate-400 font-bold col-span-full">ไม่มีข้อมูล (No data available)</p>';
             }
 
             if (usecaseGrid) {
@@ -1110,7 +1126,7 @@ snapcon_html = """
                 const usecases = projects.filter(p => p.category.includes('usecase') || p.category.includes('use case'));
                 
                 usecaseGrid.innerHTML = usecases.map((p, index) => {
-                    let imgSrc = (p.img && p.img.startsWith('http')) ? p.img : 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
+                    let imgSrc = (p.img && p.img.includes('http')) ? p.img : 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
                     return `
                     <div class="bg-white p-6 sharp-card border-t-4 ${borderColors[index % borderColors.length]} flex flex-col items-center text-center">
                         <div class="w-full h-40 bg-slate-100 rounded-lg mb-4 overflow-hidden flex items-center justify-center">
@@ -1119,7 +1135,7 @@ snapcon_html = """
                         <h4 class="text-lg font-black text-slate-900 mb-2">${p.title}</h4>
                         <p class="text-sm text-slate-600">${p.description[currentLang] || p.description.th}</p>
                     </div>
-                `}).join('') || '<p class="text-slate-400 font-bold">ไม่มีข้อมูล (No data available)</p>';
+                `}).join('') || '<p class="text-slate-400 font-bold col-span-full">ไม่มีข้อมูล (No data available)</p>';
             }
         }
 
@@ -1219,7 +1235,7 @@ snapcon_html = """
             let info = document.getElementById('quote-contact').value.trim();
             
             if(!name || !info) {
-                return alert(dict[currentLang].alertQuoteGuestReq);
+                return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลติดต่อกลับให้ครบถ้วน" : "Please provide your contact info.");
             }
             
             let detailsForDB = selected.map(i => `- ${i.name} x${i.quantity} (฿${(i.price * i.quantity).toLocaleString()})`).join('\\n');
@@ -1250,7 +1266,9 @@ snapcon_html = """
             navigate('home');
         }
 
+        // ==========================================
         // 9. INITIALIZATION & I18N
+        // ==========================================
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[lang][key]) el.innerHTML = dict[lang][key]; });
@@ -1260,7 +1278,7 @@ snapcon_html = """
             document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
             
             renderProducts(); 
-            renderProjects();
+            renderProjects(); // วาดข้อมูลโปรเจกต์ใหม่เมื่อเปลี่ยนภาษา
             if(document.getElementById('page-dashboard').classList.contains('page-active')) renderDashboard(); 
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
