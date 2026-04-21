@@ -545,7 +545,7 @@ snapcon_html = """
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors shrink-0"><i class="fas fa-phone-alt text-slate-400 group-hover:text-white text-lg md:text-xl"></i></div>
                             <div class="min-w-0">
                                 <p class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hotline</p>
-                                <span class="font-black text-slate-800 text-sm md:text-base truncate block">097-926-1616</span>
+                                <span class="font-black text-slate-800 text-sm md:text-base truncate block">081-XXX-XXXX</span>
                             </div>
                         </div>
                     </div>
@@ -853,15 +853,48 @@ snapcon_html = """
             const sGrid = document.getElementById('spare-grid');
             const slider = document.getElementById('home-product-slider');
 
-            const makeCard = (p) => `
-                <div class="bg-white sharp-card p-4 sm:p-5 flex flex-col h-full rounded-2xl sm:rounded-[1.5rem] shadow-sm border border-slate-100">
-                    <div class="bg-slate-50 h-32 sm:h-40 flex items-center justify-center p-3 mb-4 overflow-hidden rounded-xl border border-slate-100">
+            const makeCard = (p) => {
+                // 1. จัดการข้อมูลรายละเอียดสินค้า (Specs) ให้ออกมาเป็น Array
+                let specArray = [];
+                if (currentLang === 'th') specArray = p.specsth || p.specs_th || p.specs || [];
+                else specArray = p.specsen || p.specs_en || p.specs || [];
+                
+                // 2. Fallback: ถ้าไม่มีคอลัมน์ Specs ให้ลองดึงคอลัมน์ Description แทน
+                if (!specArray || specArray.length === 0) {
+                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
+                    if (desc) specArray = [desc];
+                }
+                
+                // 3. ทำให้แน่ใจว่าเป็น Array เสมอ (ถ้าใน Sheet พิมพ์คั่นด้วยลูกน้ำ ระบบจะตัดขึ้นบรรทัดใหม่ให้)
+                if (!Array.isArray(specArray)) {
+                    specArray = typeof specArray === 'string' ? specArray.split(',') : [specArray];
+                }
+
+                // 4. สร้าง HTML สำหรับแสดงรายการ Specs พร้อมไอคอนติ๊กถูก
+                let specsHtml = '';
+                if (specArray.length > 0 && specArray[0] && specArray[0].trim() !== '') {
+                    specsHtml = `<div class="mb-4 flex-grow text-[10px] sm:text-xs text-slate-500 space-y-1.5">` + 
+                        specArray.map(s => `<div class="truncate border-b border-slate-50 pb-1.5 last:border-0 last:pb-0 font-medium tracking-tight"><i class="fas fa-check text-emerald-400 mr-1.5"></i> ${s.trim()}</div>`).join('') +
+                        `</div>`;
+                } else {
+                    specsHtml = `<div class="mb-4 flex-grow"></div>`; // ดันปุ่มและราคาไปด้านล่างสุดกรณีไม่มีข้อมูล
+                }
+
+                return `
+                <div class="bg-white sharp-card p-4 sm:p-5 flex flex-col h-full rounded-2xl sm:rounded-[1.5rem] shadow-sm border border-slate-100 hover:shadow-lg transition-all">
+                    <div class="bg-slate-50 h-32 sm:h-40 flex items-center justify-center p-3 mb-4 overflow-hidden rounded-xl border border-slate-100 shrink-0">
                         <img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
                     </div>
-                    <h4 class="font-black text-xs sm:text-sm text-slate-900 mb-2 line-clamp-2" title="${p.name || p.title}">${p.name || p.title}</h4>
-                    <p class="text-snap-green font-black text-lg sm:text-xl mb-4 mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full bg-slate-50 text-slate-700 py-2.5 sm:py-3 rounded-xl font-bold text-[10px] sm:text-xs hover:bg-snap-green hover:text-white transition-all border border-slate-200 hover:border-transparent">ADD TO CART</button>
+                    <h4 class="font-black text-sm sm:text-base text-slate-900 mb-3 line-clamp-2" title="${p.name || p.title}">${p.name || p.title}</h4>
+                    
+                    ${specsHtml}
+                    
+                    <div class="mt-auto pt-3 border-t border-slate-50">
+                        <p class="text-snap-green font-black text-lg sm:text-xl mb-4">฿${parseFloat(p.price || 0).toLocaleString()}</p>
+                        <button onclick="addToCart('${p.id}')" class="w-full bg-slate-50 text-slate-700 py-2.5 sm:py-3 rounded-xl font-bold text-[10px] sm:text-xs hover:bg-snap-green hover:text-white transition-all border border-slate-200 hover:border-transparent active:scale-95 shadow-sm"><i class="fas fa-cart-plus mr-1"></i> ADD TO CART</button>
+                    </div>
                 </div>`;
+            };
 
             if(pGrid) pGrid.innerHTML = products.map(makeCard).join('');
             if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
