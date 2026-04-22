@@ -71,9 +71,6 @@ snapcon_html = """
         .page-active { display: block !important; animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .dropdown-menu { display: none; position: absolute; z-index: 50; }
-        .dropdown-container:hover .dropdown-menu, .dropdown-container:focus-within .dropdown-menu { display: block; }
-        
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -81,8 +78,6 @@ snapcon_html = """
         
         .sharp-card { border-radius: 1rem; transition: all 0.3s; }
         .sharp-card:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); transform: translateY(-4px); }
-        .sharp-btn { border-radius: 0.5rem; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.05em; }
-        .sharp-btn:active { transform: scale(0.98); }
         
         .feature-text-container { position: relative; height: 120px; width: 100%; display: flex; align-items: flex-start; }
         .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(20px); animation: fadeSlideText 25s infinite; }
@@ -100,6 +95,12 @@ snapcon_html = """
         }
         
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* Document Tab Animation */
+        .tab-content { display: none; animation: slideDown 0.3s ease-out forwards; }
+        .tab-content.active { display: block; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .doc-btn.active { background-color: #f8fafc; border-color: #00B36E; color: #00B36E; }
     </style>
 </head>
 <body class="font-sans text-slate-800">
@@ -185,7 +186,7 @@ snapcon_html = """
             <button onclick="checkDashboardAuth(); toggleMobileMenu();" class="text-left text-snap-green text-xl font-black py-4 border-b border-slate-800 flex justify-between" data-i18n="navDashboard">Dashboard <i class="fas fa-chevron-right text-sm"></i></button>
             <button onclick="navigate('project'); toggleMobileMenu();" class="text-left text-xl font-black py-4 border-b border-slate-800 flex justify-between" data-i18n="navProject">Projects <i class="fas fa-chevron-right text-sm"></i></button>
             <button onclick="navigate('about'); toggleMobileMenu();" class="text-left text-xl font-black py-4 border-b border-slate-800 flex justify-between" data-i18n="navAbout">Company <i class="fas fa-chevron-right text-sm"></i></button>
-            <button onclick="navigate('contact'); toggleMobileMenu();" class="text-left text-xl font-black py-4 border-b border-slate-800 flex justify-between" data-i18n="navContact">Support <i class="fas fa-chevron-right text-sm"></i></button>
+            <button onclick="navigate('contact'); toggleMobileMenu();" class="text-left text-xl font-black py-4 hover:text-snap-green flex justify-between" data-i18n="navContact">Support <i class="fas fa-chevron-right text-sm"></i></button>
         </div>
     </div>
 
@@ -198,7 +199,7 @@ snapcon_html = """
                 <div class="slide-img slide-4"></div>
             </div>
             <div class="hero-overlay z-0"></div>
-            <div class="max-container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 w-full">
+            <div class="max-container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 w-full pt-6 md:pt-10">
                 <div class="hero-white-box w-full lg:w-[520px] p-8 sm:p-10 md:p-12 bg-white/95 backdrop-blur-sm">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-emerald-200">
                         <i class="fas fa-leaf"></i> <span data-i18n="heroEco">Green Technology</span>
@@ -247,34 +248,32 @@ snapcon_html = """
             </div>
         </section>
 
-        <div class="relative z-40 max-container lg:-mt-16 mb-16 px-4 sm:px-6">
-            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-                <div tabindex="0" class="dropdown-container relative group p-6 sm:p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-file-pdf text-2xl sm:text-3xl text-snap-green"></i>
-                    </div>
-                    <h3 data-i18n="cardDataSheet" class="text-base sm:text-lg font-black text-slate-800 uppercase tracking-tight">Data Sheet</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest flex items-center" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
-                    <div class="dropdown-menu md:absolute top-full left-0 w-full bg-slate-50 md:bg-white md:shadow-2xl border-t border-slate-100 md:border md:border-slate-100 rounded-b-2xl overflow-hidden mt-4 md:mt-1 z-50" id="menu-datasheet"></div>
+        <section class="relative z-40 max-container lg:-mt-16 mb-16 px-4 sm:px-6">
+            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+                <div class="grid grid-cols-3 border-b border-slate-100">
+                    <button onclick="switchDocTab('datasheet')" id="btn-tab-datasheet" class="doc-btn active flex flex-col items-center justify-center p-4 sm:p-6 transition-all hover:bg-slate-50 outline-none border-b-4 border-snap-green text-snap-green font-black">
+                        <i class="fas fa-file-pdf text-xl sm:text-2xl mb-2"></i>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-widest">Data Sheet</span>
+                    </button>
+                    <button onclick="switchDocTab('drawing')" id="btn-tab-drawing" class="doc-btn flex flex-col items-center justify-center p-4 sm:p-6 transition-all hover:bg-slate-50 outline-none border-b-4 border-transparent text-slate-400 hover:text-slate-600 font-bold">
+                        <i class="fas fa-drafting-compass text-xl sm:text-2xl mb-2"></i>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-widest">Drawing</span>
+                    </button>
+                    <button onclick="switchDocTab('catalog')" id="btn-tab-catalog" class="doc-btn flex flex-col items-center justify-center p-4 sm:p-6 transition-all hover:bg-slate-50 outline-none border-b-4 border-transparent text-slate-400 hover:text-slate-600 font-bold">
+                        <i class="fas fa-book-open text-xl sm:text-2xl mb-2"></i>
+                        <span class="text-[10px] sm:text-xs uppercase tracking-widest">Catalog</span>
+                    </button>
                 </div>
-                <div tabindex="0" class="dropdown-container relative group p-6 sm:p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-drafting-compass text-2xl sm:text-3xl text-blue-500"></i>
+                
+                <div class="bg-slate-50 min-h-[150px] relative">
+                    <div id="content-datasheet" class="tab-content active w-full p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="col-span-full text-center py-6 text-slate-400 font-medium text-sm">กำลังโหลดข้อมูล...</div>
                     </div>
-                    <h3 data-i18n="cardDrawing" class="text-base sm:text-lg font-black text-slate-800 uppercase tracking-tight">2D/3D Drawing</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest flex items-center" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
-                    <div class="dropdown-menu md:absolute top-full left-0 w-full bg-slate-50 md:bg-white md:shadow-2xl border-t border-slate-100 md:border md:border-slate-100 rounded-b-2xl overflow-hidden mt-4 md:mt-1 z-50" id="menu-drawing"></div>
-                </div>
-                <div tabindex="0" class="dropdown-container relative group p-6 sm:p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-b-2xl md:rounded-r-2xl md:rounded-bl-none">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-book-open text-2xl sm:text-3xl text-amber-500"></i>
-                    </div>
-                    <h3 data-i18n="cardCatalog" class="text-base sm:text-lg font-black text-slate-800 uppercase tracking-tight">Catalog</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest flex items-center" data-i18n="btnDownload">Download <i class="fas fa-angle-down ml-1"></i></p>
-                    <div class="dropdown-menu md:absolute top-full left-0 w-full bg-slate-50 md:bg-white md:shadow-2xl border-t border-slate-100 md:border md:border-slate-100 rounded-b-2xl overflow-hidden mt-4 md:mt-1 z-50" id="menu-catalog"></div>
+                    <div id="content-drawing" class="tab-content w-full p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                    <div id="content-catalog" class="tab-content w-full p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
                 </div>
             </div>
-        </div>
+        </section>
 
         <section class="bg-transparent py-10">
             <div class="max-container">
@@ -293,7 +292,7 @@ snapcon_html = """
                 <div id="home-product-slider" class="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-6 custom-scrollbar px-1 sm:px-2">
                     </div>
                 
-                <div class="text-center mt-6 px-4">
+                <div class="text-center mt-6">
                     <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-snap-green transition-colors bg-white px-6 py-3 rounded-xl border border-slate-200 hover:border-snap-green shadow-sm w-full sm:w-auto justify-center">
                         <span data-i18n="viewAllProducts">View All Products</span> <i class="fas fa-arrow-right"></i>
                     </button>
@@ -320,7 +319,7 @@ snapcon_html = """
         <div class="max-container py-10">
             <h2 data-i18n="pageProductTitle" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2 px-2">Conveyor Systems</h2>
             <div class="w-16 h-1.5 bg-snap-green rounded-full mb-8 ml-2"></div>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 px-2" id="product-grid"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-2" id="product-grid"></div>
         </div>
     </div>
 
@@ -328,7 +327,7 @@ snapcon_html = """
         <div class="max-container py-10">
             <h2 data-i18n="pageSpareTitle" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2 px-2">Spare Parts</h2>
             <div class="w-16 h-1.5 bg-snap-green rounded-full mb-8 ml-2"></div>
-            <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 px-2" id="spare-grid"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" id="spare-grid"></div>
         </div>
     </div>
 
@@ -407,9 +406,13 @@ snapcon_html = """
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashTarget">Target</label>
                             <input type="number" id="cfg-target" onchange="updateDashboardConfig()" class="w-20 sm:w-24 text-right outline-none font-black text-slate-800 bg-slate-50 px-2 py-1 rounded">
                         </div>
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                             <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashCarbon">Carbon Factor</label>
                             <input type="number" step="0.0001" id="cfg-carbon" onchange="updateDashboardConfig()" class="w-20 sm:w-24 text-right outline-none font-black text-slate-800 bg-slate-50 px-2 py-1 rounded">
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest" data-i18n="dashEnergy">Energy Factor</label>
+                            <input type="number" step="0.001" id="cfg-energy" onchange="updateDashboardConfig()" class="w-20 sm:w-24 text-right outline-none font-black text-slate-800 bg-slate-50 px-2 py-1 rounded">
                         </div>
                     </div>
                 </div>
@@ -429,13 +432,26 @@ snapcon_html = """
         </div>
     </div>
 
+    <div id="modal-register" class="fixed inset-0 bg-snap-black/90 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md shadow-2xl relative p-6 sm:p-10 rounded-[2rem] max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 sm:w-10 sm:h-10 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full flex items-center justify-center transition-colors text-base sm:text-lg focus:outline-none"><i class="fas fa-times"></i></button>
+            <h3 class="text-xl sm:text-2xl font-black text-slate-900 uppercase mb-4 tracking-tight text-center" data-i18n="regTitle">CREATE ACCOUNT</h3>
+            <div class="space-y-3">
+                <input type="text" id="reg-id" data-i18n-placeholder="regId" placeholder="User ID" class="w-full px-4 py-3 border rounded-xl outline-none focus:border-snap-green bg-slate-50 font-bold">
+                <input type="password" id="reg-pass" data-i18n-placeholder="regPass" placeholder="Password" class="w-full px-4 py-3 border rounded-xl outline-none focus:border-snap-green bg-slate-50 font-bold">
+                <input type="text" id="reg-name" data-i18n-placeholder="regName" placeholder="Name" class="w-full px-4 py-3 border rounded-xl outline-none focus:border-snap-green bg-slate-50 font-bold">
+                <input type="text" id="reg-contact" data-i18n-placeholder="regContact" placeholder="Contact" class="w-full px-4 py-3 border rounded-xl outline-none focus:border-snap-green bg-slate-50 font-bold">
+                <button onclick="submitRegistration()" class="w-full bg-snap-green text-white py-3.5 font-bold rounded-xl mt-4" data-i18n="btnSubmitReg">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         let currentLang = 'th';
         let isLoggedIn = false;
         let cart = [], products = [], spares = [], documents = [], projects = [], articles = [], allItems = [];
         let currentUserId = null, memoryUsers = { '001': '123', 'admin': 'admin' };
-        let activeDashInterval = null;
 
         // i18n Dictionary
         const dict = {
@@ -494,22 +510,19 @@ snapcon_html = """
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.getAttribute('data-i18n'); if (dict[lang][k]) el.innerHTML = dict[lang][k]; });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const k = el.getAttribute('data-i18n-placeholder'); if (dict[lang][k]) el.placeholder = dict[lang][k]; });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const k = el.getAttribute('data-i18n-placeholder'); if (dict[lang][key]) el.placeholder = dict[lang][k]; });
             document.getElementById('btn-lang-th').className = lang === 'th' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
             document.getElementById('btn-lang-en').className = lang === 'en' ? "text-xs font-bold text-snap-green" : "text-xs font-bold text-slate-400 hover:text-white";
             renderProducts(); renderProjects(); renderArticles();
         }
 
-        // Helpers
         function toggleMobileMenu() { const m = document.getElementById('mobile-menu'); if (m.classList.contains('hidden')) { m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow = 'hidden'; } else { m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow = ''; } }
         function scrollSlider(dir) { const s = document.getElementById('home-product-slider'); if(s) { const a = window.innerWidth > 768 ? 320 : 260; s.scrollBy({ left: dir === 'left' ? -a : a, behavior: 'smooth' }); } }
         function navigate(p) { document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); const t = document.getElementById('page-'+p); if(t) t.classList.add('page-active'); window.scrollTo(0,0); if(p==='cart') renderCart(); if(p==='dashboard') renderDashboard(); }
         function getValidImageUrl(u) { if(!u) return ''; if(u.includes('drive.google.com/file/d/')) { try { const id = u.split('/d/')[1].split('/')[0]; return `https://drive.google.com/uc?export=view&id=${id}`; } catch(e) { return u; } } return u; }
         function getEmbedVideoUrl(u) { if(!u) return ''; if(u.includes('drive.google.com/file/d/')) { try { const id = u.split('/d/')[1].split('/')[0]; return `https://drive.google.com/file/d/${id}/preview`; } catch(e) { return u; } } if(u.includes('youtube.com/watch?v=')) return u.replace('watch?v=', 'embed/'); return u; }
         function normalizeKeys(arr) { if(!arr || arr.length === 0) return []; return arr.map(obj => { const n = {}; for(let k in obj) { n[k.toLowerCase().replace(/[\\s_]+/g, '')] = obj[k]; } return n; }); }
-        function createDefaultDash() { return { isRunning: false, target: 10000, carbonFactor: 0.0070, energyFactor: 0.015, elapsedSeconds: 0, nodes: [{ id: 1, name: "Node-01", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },{ id: 2, name: "Node-02", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 }] }; }
-        function getDash() { if(!currentUserId || !userDashboards[currentUserId]) return null; return userDashboards[currentUserId]; }
-
+        
         async function loadDataFromSheet() {
             try {
                 const r = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
@@ -520,9 +533,55 @@ snapcon_html = """
             } catch(e) { console.log(e); }
         }
 
+        // --- ระบบสลับแท็บเอกสาร (TABS LOGIC) ---
+        function switchDocTab(tabName) {
+            document.querySelectorAll('.doc-btn').forEach(b => {
+                b.classList.remove('active', 'border-snap-green', 'text-snap-green');
+                b.classList.add('border-transparent', 'text-slate-400');
+            });
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            const btn = document.getElementById('btn-tab-' + tabName);
+            const content = document.getElementById('content-' + tabName);
+            
+            if(btn && content) {
+                btn.classList.add('active', 'border-snap-green', 'text-snap-green');
+                btn.classList.remove('border-transparent', 'text-slate-400');
+                content.classList.add('active');
+            }
+        }
+
+        function renderDocuments() {
+            const makeList = (typeStr) => {
+                const f = documents.filter(d => (d.type||d.category||'').toLowerCase().includes(typeStr));
+                if(!f.length) return '<div class="col-span-full text-center py-8 text-slate-400 text-sm font-medium">ไม่มีไฟล์ในหมวดหมู่นี้</div>';
+                return f.map(d => {
+                    const n = d.modelname||d.name||d.title||'Untitled';
+                    const u = d.fileurl||d.link||d.url||'#';
+                    if(u==='#') return '';
+                    let icon = 'fa-file';
+                    if(typeStr==='datasheet') icon='fa-file-pdf text-red-400';
+                    else if(typeStr==='drawing') icon='fa-file-alt text-blue-400';
+                    else icon='fa-book text-amber-400';
+                    
+                    return `
+                    <a href="${u}" target="_blank" class="flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-slate-100 hover:border-snap-green hover:shadow-md transition-all group">
+                        <div class="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-emerald-50 transition-colors"><i class="fas ${icon} text-lg group-hover:text-snap-green transition-colors"></i></div>
+                        <div class="min-w-0"><p class="text-sm font-bold text-slate-800 truncate">${n}</p><p class="text-[9px] text-slate-400 uppercase tracking-widest mt-0.5">Click to Download</p></div>
+                    </a>`;
+                }).join('');
+            };
+            
+            const ds = document.getElementById('content-datasheet'); if(ds) ds.innerHTML = makeList('datasheet');
+            const dw = document.getElementById('content-drawing'); if(dw) dw.innerHTML = makeList('drawing');
+            const ca = document.getElementById('content-catalog'); if(ca) ca.innerHTML = makeList('catalog');
+        }
+
         function renderProducts() {
             const pGrid = document.getElementById('product-grid');
+            const sGrid = document.getElementById('spare-grid');
             const slider = document.getElementById('home-product-slider');
+
             const makeCard = (p) => {
                 let specArr = (currentLang==='th'?p.specsth:p.specsen) || p.specs || [];
                 if(!Array.isArray(specArr)) specArr = typeof specArr==='string'?specArr.split(','):[specArr];
@@ -537,6 +596,7 @@ snapcon_html = """
                     </div></div>`;
             };
             if(pGrid) pGrid.innerHTML = products.map(makeCard).join('');
+            if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
             if(slider) slider.innerHTML = products.slice(0, 10).map(p => `<div onclick="navigate('product')" class="min-w-[220px] sm:min-w-[280px] snap-center bg-white border border-slate-100 p-4 sm:p-5 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all cursor-pointer"><div class="overflow-hidden rounded-xl mb-4 h-28 sm:h-36 bg-slate-50 border border-slate-100 p-2"><img src="${getValidImageUrl(p.img||p.imageurl)}" class="w-full h-full object-contain mix-blend-multiply"></div><h4 class="font-black text-[13px] sm:text-[15px] text-slate-800 mb-1 truncate">${p.name||p.title}</h4><p class="text-snap-green font-black text-base sm:text-lg mt-auto">฿${parseFloat(p.price||0).toLocaleString()}</p></div>`).join('');
         }
 
@@ -556,17 +616,6 @@ snapcon_html = """
             }).join('');
         }
 
-        function renderDocuments() {
-            const makeMenu = (tStr) => {
-                const f = documents.filter(d => (d.type||d.category||'').toLowerCase().includes(tStr));
-                if(!f.length) return '<div class="px-8 py-6 text-sm text-slate-400 text-center">No Data</div>';
-                return f.map(d => `<a href="${d.fileurl||d.link||d.url||'#'}" target="_blank" class="block px-8 py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-sm font-bold transition-colors"><i class="fas fa-file-download mr-2"></i>${d.modelname||d.name||d.title}</a>`).join('');
-            };
-            const ds = document.getElementById('menu-datasheet'); if(ds) ds.innerHTML = makeMenu('datasheet');
-            const dw = document.getElementById('menu-drawing'); if(dw) dw.innerHTML = makeMenu('drawing');
-            const ca = document.getElementById('menu-catalog'); if(ca) ca.innerHTML = makeMenu('catalog');
-        }
-
         // Post Data Functions
         function sendPost(payload) { setTimeout(()=>fetch(GOOGLE_SCRIPT_URL,{method:'POST',mode:'no-cors',body:JSON.stringify(payload)}),100); }
         function handleLogin() { 
@@ -574,7 +623,7 @@ snapcon_html = """
             const pass = document.getElementById('userPass').value.trim() || document.getElementById('mobile-userPass').value.trim();
             if(!id || !pass) return alert("Please enter ID and PW");
             if(memoryUsers[id]===pass) { 
-                isLoggedIn=true; currentUserId=id; if(!userDashboards[id]) userDashboards[id]=createDefaultDash();
+                isLoggedIn=true; currentUserId=id;
                 document.getElementById('displayUser').innerText=id; document.getElementById('mobile-displayUser').innerText=id;
                 document.getElementById('login-section').className="hidden items-center gap-2 pr-5";
                 document.getElementById('user-section').className="flex items-center gap-3 pr-5";
@@ -587,7 +636,7 @@ snapcon_html = """
         function submitRegistration() {
             const id=document.getElementById('reg-id').value.trim(), pass=document.getElementById('reg-pass').value.trim(), name=document.getElementById('reg-name').value.trim(), contact=document.getElementById('reg-contact').value.trim();
             if(!id||!pass||!name||!contact) return alert("Fill all fields");
-            memoryUsers[id]=pass; isLoggedIn=true; currentUserId=id; userDashboards[id]=createDefaultDash();
+            memoryUsers[id]=pass; isLoggedIn=true; currentUserId=id; 
             document.getElementById('displayUser').innerText=id; document.getElementById('mobile-displayUser').innerText=id;
             document.getElementById('login-section').className="hidden"; document.getElementById('user-section').className="flex items-center gap-3 pr-5";
             closeRegisterModal(); sendPost({type:"Registration",name_or_id:id,email:contact,details:name});
@@ -609,6 +658,20 @@ snapcon_html = """
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden','flex'); }
         function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex','hidden'); }
         function checkDashboardAuth() { if(isLoggedIn) navigate('dashboard'); else alert("Please login first"); }
+        function addToCart(id) { const item=allItems.find(i=>i.id===id); if(item) { const e=cart.find(i=>i.id===id); if(e) e.quantity++; else cart.push({...item,cartId:Date.now().toString(),selected:true,quantity:1}); updateBadge(); alert("Added!"); } }
+        function updateBadge() { const b=document.getElementById('cart-badge'); const c=cart.reduce((s,i)=>s+i.quantity,0); b.innerText=c>99?'99+':c; b.classList.toggle('hidden',c===0); }
+        function updateQuantity(cId, d) { const i=cart.find(x=>x.cartId===cId); if(i) { i.quantity=Math.max(1,i.quantity+d); renderCart(); updateBadge(); } }
+        function toggleItem(cId) { const i=cart.find(x=>x.cartId===cId); if(i) { i.selected=!i.selected; renderCart(); } }
+        function toggleSelectAll(v) { cart.forEach(i=>i.selected=v); renderCart(); }
+        function deleteSelected() { cart=cart.filter(i=>!i.selected); updateBadge(); renderCart(); }
+        function renderCart() {
+            const c=document.getElementById('cart-items'); const q=document.getElementById('quote-contact-form');
+            if(!c) return; if(q) q.classList.remove('hidden');
+            if(!cart.length) { c.innerHTML=`<p class="text-center py-10 text-slate-400 font-bold bg-slate-50 border rounded-xl">Empty Cart</p>`; document.getElementById('cart-total').innerText='฿0'; return; }
+            c.innerHTML=cart.map(i=>`<div class="flex flex-col sm:flex-row items-start sm:items-center bg-white border p-4 rounded-xl mb-3 gap-4"><div class="flex items-center gap-3 w-full sm:w-auto flex-1"><input type="checkbox" ${i.selected?'checked':''} onclick="toggleItem('${i.cartId}')" class="w-5 h-5 accent-snap-green"><img src="${getValidImageUrl(i.img||i.imageurl)}" class="w-14 h-14 object-contain border p-1 rounded"><div class="min-w-0"><span class="font-black text-sm block truncate">${i.name||i.title}</span><span class="text-[10px] text-slate-400 font-bold">${i.id}</span></div></div><div class="flex items-center gap-4"><div class="flex items-center border rounded h-9"><button onclick="updateQuantity('${i.cartId}',-1)" class="w-8 h-full bg-slate-50 font-black">-</button><span class="w-10 h-full flex items-center justify-center text-sm font-black">${i.quantity}</span><button onclick="updateQuantity('${i.cartId}',1)" class="w-8 h-full bg-slate-50 font-black">+</button></div><span class="font-black text-lg w-24 text-right">฿${((i.price||0)*i.quantity).toLocaleString()}</span></div></div>`).join('');
+            document.getElementById('cart-total').innerText='฿'+cart.filter(i=>i.selected).reduce((s,i)=>s+(i.price||0)*i.quantity,0).toLocaleString();
+            document.getElementById('cart-select-all').checked=cart.length>0&&cart.every(i=>i.selected);
+        }
 
         window.onload = () => { loadDataFromSheet(); setTimeout(()=>setLanguage('th'), 200); };
     </script>
