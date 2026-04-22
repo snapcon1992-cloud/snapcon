@@ -2,7 +2,7 @@ import streamlit as st
 
 # ตั้งค่าหน้าหลักของ Streamlit
 st.set_page_config(
-    page_title="SNAPCON Automation Solution", 
+    page_title="SNAPCON | Automation Solution", 
     layout="wide", 
     initial_sidebar_state="collapsed"
 )
