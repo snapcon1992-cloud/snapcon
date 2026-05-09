@@ -1242,15 +1242,46 @@ snapcon_html = """
             dash.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
             renderDashboard();
         }
-        function simulateProduction() {
-            let dash = getDash(); if(!dash || !dash.isRunning) return;
-            dash.elapsedSeconds += 0.5;
-            dash.nodes.forEach(n => { 
-                if(n.status === 'Running' || n.status === 'Warning') {
-                    if(Math.random() > 0.5) { n.output += 1; n.health -= n.wearRate; if(n.health < 0) n.health = 0; }
-                    if(n.health <= 30) n.status = 'Maintenance'; else if (n.health <= 70) n.status = 'Warning';
+       // กำหนดตัวแปรไว้จำสถานะเซนเซอร์รอบก่อนหน้า (เพื่อทำ Rising Edge กันนับเบิ้ล)
+        window.lastSensorOut = 0;
+
+        async function simulateProduction() {
+            let dash = getDash();
+            if(!dash || !dash.isRunning) return;
+            
+            dash.elapsedSeconds += 0.5; // นับเวลาทำงาน
+
+            try {
+                // 🌐 1. วิ่งไปดึงข้อมูล JSON ของจริงจากตู้ Snapcon (ESP32)
+                const response = await fetch('http://192.168.1.109/status');
+                const realData = await response.json();
+
+                // === 2. นำข้อมูลมาอัปเดตใส่ Node 1 (ตู้ Main) ของ Dashboard ===
+                const mainNode = dash.nodes[0];
+                
+                // --- อัปเดตสถานะมอเตอร์ ---
+                if (realData.motor_status === "ON") {
+                    mainNode.status = 'Running';
+                    mainNode.health -= mainNode.wearRate; 
+                    if(mainNode.health < 0) mainNode.health = 0;
+                } else if (realData.motor_status === "EMERGENCY!") {
+                    mainNode.status = 'Maintenance'; 
+                } else {
+                    mainNode.status = 'Stopped';
                 }
-            });
+                
+                // --- ลอจิกนับชิ้นงาน (อิงจาก Sensor Out / X4) ---
+                if (realData.sensor_out == 1 && window.lastSensorOut == 0) {
+                    mainNode.output += 1; 
+                }
+                window.lastSensorOut = realData.sensor_out; 
+
+            } catch (err) {
+                console.log("No connection to ESP32");
+                dash.nodes[0].status = "Offline"; 
+            }
+
+            // 3. สั่งวาดหน้าจอ Dashboard ใหม่เพื่อโชว์ข้อมูลล่าสุด
             if(document.getElementById('page-dashboard').classList.contains('page-active')) {
                 renderDashboard();
             }
