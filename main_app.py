@@ -17,8 +17,13 @@ snapcon_html = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SNAPCON | Automation</title>
+    <link rel="preconnect" href="https://script.google.com">
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></noscript>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Prompt:wght@400;700;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -56,11 +61,13 @@ snapcon_html = """
         .hero-white-box { background-color: white; border-bottom: 6px solid #00B36E; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border-radius: 1rem; }
 
         .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; animation: slideBgAnimation 20s infinite linear; }
-        .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80'); animation-delay: 0s; }
-        .slide-2 { background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80'); animation-delay: 5s; }
-        .slide-3 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); animation-delay: 10s; }
-        .slide-4 { background-image: url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1920&q=80'); animation-delay: 15s; }
+        .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=60'); animation-delay: 0s; }
+        .slide-2, .slide-3, .slide-4 { background-image: none; }
+        body.hero-bg-ready .slide-2 { background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=60'); animation-delay: 5s; }
+        body.hero-bg-ready .slide-3 { background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=60'); animation-delay: 10s; }
+        body.hero-bg-ready .slide-4 { background-image: url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1200&q=60'); animation-delay: 15s; }
         @keyframes slideBgAnimation { 0% { opacity: 0; transform: scale(1.05) translateX(20px); } 5% { opacity: 1; transform: scale(1.05) translateX(15px); } 20% { opacity: 1; transform: scale(1.05) translateX(-5px); } 25% { opacity: 0; transform: scale(1.05) translateX(-10px); } 100% { opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .slide-img, .feature-text-slide, .page-active { animation: none !important; transform: none !important; } .slide-1 { opacity: 1; } }
 
         .nav-link { position: relative; color: white; font-weight: 700; font-size: 0.85rem; transition: color 0.3s; }
         .nav-link:hover { color: #00B36E; }
@@ -489,7 +496,7 @@ snapcon_html = """
                     </p>
                 </div>
                 <div class="h-64 sm:h-80 md:h-[400px] overflow-hidden relative group rounded-[2rem] shadow-2xl shadow-slate-200">
-                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=65" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-snap-black/60 to-transparent"></div>
                 </div>
             </div>
@@ -545,7 +552,7 @@ snapcon_html = """
                             <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors shrink-0"><i class="fas fa-phone-alt text-slate-400 group-hover:text-white text-lg md:text-xl"></i></div>
                             <div class="min-w-0">
                                 <p class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hotline</p>
-                                <span class="font-black text-slate-800 text-sm md:text-base truncate block">097-926-1616</span>
+                                <span class="font-black text-slate-800 text-sm md:text-base truncate block">081-XXX-XXXX</span>
                             </div>
                         </div>
                     </div>
@@ -623,8 +630,9 @@ snapcon_html = """
         let isLoggedIn = false;
         let cart = [], products = [], spares = [], documents = [], projects = [], articles = [], allItems = [];
         
-        let currentUserId = null, memoryUsers = { '001': '123', 'admin': 'admin' };
+        let currentUserId = null, memoryUsers = {};
         let activeDashInterval = null;
+        let lastSubmitAt = 0;
 
         // ดักจับ Error กะทันหัน ป้องกันระบบค้าง
         window.onerror = function(message, source, lineno, colno, error) {
@@ -782,35 +790,94 @@ snapcon_html = """
             };
         }
 
-        let userDashboards = { '001': createDefaultDash(), 'admin': createDefaultDash() };
+        let userDashboards = {};
 
         function getDash() {
             if (!currentUserId || !userDashboards[currentUserId]) return null;
             return userDashboards[currentUserId];
         }
 
+        function toText(value) {
+            return String(value ?? '');
+        }
+
+        function escapeHTML(value) {
+            return toText(value).replace(/[&<>"']/g, (char) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[char]));
+        }
+
+        function escapeAttr(value) {
+            return escapeHTML(value).replace(/`/g, '&#96;');
+        }
+
+        function jsString(value) {
+            return escapeAttr(JSON.stringify(toText(value)));
+        }
+
+        function toNumber(value, fallback = 0) {
+            const parsed = Number(value);
+            return Number.isFinite(parsed) ? parsed : fallback;
+        }
+
+        function safeUrl(url, allowHash = false) {
+            const raw = toText(url).trim();
+            if (!raw) return '';
+            if (allowHash && raw === '#') return '#';
+            try {
+                const parsed = new URL(raw, window.location.href);
+                return ['https:', 'http:'].includes(parsed.protocol) ? parsed.href : '';
+            } catch(e) { return ''; }
+        }
+
+        async function hashText(text) {
+            if (!window.crypto || !window.crypto.subtle) return toText(text);
+            const data = new TextEncoder().encode(toText(text));
+            const buffer = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
         function getValidImageUrl(url) {
-            if (!url) return '';
-            if (url.includes('drive.google.com/file/d/')) {
+            const raw = toText(url).trim();
+            if (!raw) return '';
+            if (raw.includes('drive.google.com/file/d/')) {
                 try {
-                    const fileId = url.split('/d/')[1].split('/')[0];
+                    const fileId = raw.split('/d/')[1].split('/')[0].replace(/[^a-zA-Z0-9_-]/g, '');
                     return `https://drive.google.com/uc?export=view&id=${fileId}`;
-                } catch(e) { return url; }
+                } catch(e) { return ''; }
             }
-            return url;
+            return safeUrl(raw);
         }
 
         function getEmbedVideoUrl(url) {
-            if (!url) return '';
-            if (url.includes('drive.google.com/file/d/')) {
+            const raw = toText(url).trim();
+            if (!raw) return '';
+            if (raw.includes('drive.google.com/file/d/')) {
                 try {
-                    const fileId = url.split('/d/')[1].split('/')[0];
+                    const fileId = raw.split('/d/')[1].split('/')[0].replace(/[^a-zA-Z0-9_-]/g, '');
                     return `https://drive.google.com/file/d/${fileId}/preview`;
-                } catch(e) { return url; }
+                } catch(e) { return ''; }
             }
-            if (url.includes('youtube.com/watch?v=')) return url.replace('watch?v=', 'embed/');
-            if (url.length === 11 && !url.includes('/')) return `https://www.youtube.com/embed/${url}`;
-            return url;
+            if (/^[a-zA-Z0-9_-]{11}$/.test(raw)) return `https://www.youtube.com/embed/${raw}`;
+            try {
+                const parsed = new URL(raw);
+                const host = parsed.hostname.replace(/^www\\./, '');
+                if (host === 'youtube.com') {
+                    const id = parsed.searchParams.get('v');
+                    if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) return `https://www.youtube.com/embed/${id}`;
+                    if (parsed.pathname.startsWith('/embed/')) {
+                        const embedId = parsed.pathname.split('/embed/')[1].split('/')[0];
+                        if (/^[a-zA-Z0-9_-]{11}$/.test(embedId)) return `https://www.youtube.com/embed/${embedId}`;
+                    }
+                }
+                if (host === 'youtu.be') {
+                    const id = parsed.pathname.replace('/', '').split('/')[0];
+                    if (/^[a-zA-Z0-9_-]{11}$/.test(id)) return `https://www.youtube.com/embed/${id}`;
+                }
+            } catch(e) {
+                return '';
+            }
+            return '';
         }
 
         function normalizeKeys(arr) {
@@ -818,32 +885,43 @@ snapcon_html = """
             return arr.map(obj => {
                 const newObj = {};
                 for (let key in obj) {
-                    const cleanKey = key.toLowerCase().replace(/[\s_]+/g, '');
+                    const cleanKey = key.toLowerCase().replace(/[\\s_]+/g, '');
                     newObj[cleanKey] = obj[key];
                 }
                 return newObj;
             });
         }
 
+        function applySheetData(data) {
+            products = normalizeKeys(data.products);
+            spares = normalizeKeys(data.spares);
+            documents = normalizeKeys(data.documents);
+            projects = normalizeKeys(data.projects);
+            articles = normalizeKeys(data.articles);
+            allItems = [...products, ...spares];
+            
+            try { renderProducts(); } catch(e) {}
+            try { renderDocuments(); } catch(e) {}
+            try { renderProjects(); } catch(e) {}
+            try { renderArticles(); } catch(e) {}
+            if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+        }
+
         async function loadDataFromSheet() {
             try {
+                const cacheKey = 'snapcon-sheet-cache-v1';
+                const cacheTtlMs = 10 * 60 * 1000;
+                const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
+                if (cached && cached.data && Date.now() - cached.savedAt < cacheTtlMs) {
+                    applySheetData(cached.data);
+                }
+
                 console.log("Fetching data from Google Sheets...");
-                const response = await fetch(GOOGLE_SCRIPT_URL + "?t=" + Date.now());
+                const response = await fetch(GOOGLE_SCRIPT_URL, { cache: 'default' });
                 if (!response.ok) throw new Error("Network response was not ok");
                 const data = await response.json();
-                
-                products = normalizeKeys(data.products);
-                spares = normalizeKeys(data.spares);
-                documents = normalizeKeys(data.documents);
-                projects = normalizeKeys(data.projects);
-                articles = normalizeKeys(data.articles);
-                allItems = [...products, ...spares];
-                
-                try { renderProducts(); } catch(e) {}
-                try { renderDocuments(); } catch(e) {}
-                try { renderProjects(); } catch(e) {}
-                try { renderArticles(); } catch(e) {}
-                if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
+                sessionStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), data }));
+                applySheetData(data);
                 
             } catch (e) { console.log("Fetch Warning (Using Local Fallback):", e); }
         }
@@ -870,11 +948,17 @@ snapcon_html = """
                     specArray = typeof specArray === 'string' ? specArray.split(',') : [specArray];
                 }
 
+                const idArg = jsString(p.id);
+                const imgSrc = escapeAttr(getValidImageUrl(p.img || p.imageurl || p.image) || 'https://via.placeholder.com/200');
+                const itemTitle = escapeHTML(p.name || p.title || 'Untitled');
+                const itemTitleAttr = escapeAttr(p.name || p.title || 'Untitled');
+                const price = toNumber(p.price).toLocaleString();
+
                 // 4. สร้าง HTML สำหรับแสดงรายการ Specs พร้อมไอคอนติ๊กถูก
                 let specsHtml = '';
-                if (specArray.length > 0 && specArray[0] && specArray[0].trim() !== '') {
+                if (specArray.length > 0 && specArray[0] && toText(specArray[0]).trim() !== '') {
                     specsHtml = `<div class="mb-4 flex-grow text-[10px] sm:text-xs text-slate-500 space-y-1.5">` + 
-                        specArray.map(s => `<div class="truncate border-b border-slate-50 pb-1.5 last:border-0 last:pb-0 font-medium tracking-tight"><i class="fas fa-check text-emerald-400 mr-1.5"></i> ${s.trim()}</div>`).join('') +
+                        specArray.map(s => `<div class="truncate border-b border-slate-50 pb-1.5 last:border-0 last:pb-0 font-medium tracking-tight"><i class="fas fa-check text-emerald-400 mr-1.5"></i> ${escapeHTML(toText(s).trim())}</div>`).join('') +
                         `</div>`;
                 } else {
                     specsHtml = `<div class="mb-4 flex-grow"></div>`; // ดันปุ่มและราคาไปด้านล่างสุดกรณีไม่มีข้อมูล
@@ -883,15 +967,15 @@ snapcon_html = """
                 return `
                 <div class="bg-white sharp-card p-4 sm:p-5 flex flex-col h-full rounded-2xl sm:rounded-[1.5rem] shadow-sm border border-slate-100 hover:shadow-lg transition-all">
                     <div class="bg-slate-50 h-32 sm:h-40 flex items-center justify-center p-3 mb-4 overflow-hidden rounded-xl border border-slate-100 shrink-0">
-                        <img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
+                        <img src="${imgSrc}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
                     </div>
-                    <h4 class="font-black text-sm sm:text-base text-slate-900 mb-3 line-clamp-2" title="${p.name || p.title}">${p.name || p.title}</h4>
+                    <h4 class="font-black text-sm sm:text-base text-slate-900 mb-3 line-clamp-2" title="${itemTitleAttr}">${itemTitle}</h4>
                     
                     ${specsHtml}
                     
                     <div class="mt-auto pt-3 border-t border-slate-50">
-                        <p class="text-snap-green font-black text-lg sm:text-xl mb-4">฿${parseFloat(p.price || 0).toLocaleString()}</p>
-                        <button onclick="addToCart('${p.id}')" class="w-full bg-slate-50 text-slate-700 py-2.5 sm:py-3 rounded-xl font-bold text-[10px] sm:text-xs hover:bg-snap-green hover:text-white transition-all border border-slate-200 hover:border-transparent active:scale-95 shadow-sm"><i class="fas fa-cart-plus mr-1"></i> ADD TO CART</button>
+                        <p class="text-snap-green font-black text-lg sm:text-xl mb-4">฿${price}</p>
+                        <button onclick="addToCart(${idArg})" class="w-full bg-slate-50 text-slate-700 py-2.5 sm:py-3 rounded-xl font-bold text-[10px] sm:text-xs hover:bg-snap-green hover:text-white transition-all border border-slate-200 hover:border-transparent active:scale-95 shadow-sm"><i class="fas fa-cart-plus mr-1"></i> ADD TO CART</button>
                     </div>
                 </div>`;
             };
@@ -900,9 +984,9 @@ snapcon_html = """
             if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
             if(slider) slider.innerHTML = products.slice(0, 10).map(p => `
                 <div onclick="navigate('product')" class="min-w-[220px] sm:min-w-[280px] snap-center bg-white border border-slate-100 p-4 sm:p-5 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 relative h-28 sm:h-36 bg-slate-50 border border-slate-100"><img src="${getValidImageUrl(p.img || p.imageurl || p.image)}" class="w-full h-full object-contain mix-blend-multiply p-2 sm:p-3"></div>
-                    <h4 class="font-black text-[13px] sm:text-[15px] text-slate-800 mb-1 truncate">${p.name || p.title}</h4>
-                    <p class="text-snap-green font-black text-base sm:text-lg mt-auto">฿${parseFloat(p.price || 0).toLocaleString()}</p>
+                    <div class="overflow-hidden rounded-xl mb-4 relative h-28 sm:h-36 bg-slate-50 border border-slate-100"><img src="${escapeAttr(getValidImageUrl(p.img || p.imageurl || p.image) || 'https://via.placeholder.com/200')}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-contain mix-blend-multiply p-2 sm:p-3"></div>
+                    <h4 class="font-black text-[13px] sm:text-[15px] text-slate-800 mb-1 truncate">${escapeHTML(p.name || p.title || 'Untitled')}</h4>
+                    <p class="text-snap-green font-black text-base sm:text-lg mt-auto">฿${toNumber(p.price).toLocaleString()}</p>
                 </div>`).join('');
         }
 
@@ -916,19 +1000,20 @@ snapcon_html = """
                     let visual = '<i class="fas fa-cogs text-snap-green text-3xl sm:text-4xl"></i>';
                     let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
                     if (imgSrc && imgSrc.includes('http')) {
-                        visual = `<img src="${imgSrc}" class="w-full h-full object-contain p-2">`;
-                    } else if (p.icon && !p.icon.includes('http')) {
-                        visual = `<i class="${p.icon} text-3xl sm:text-4xl text-snap-green"></i>`;
+                        visual = `<img src="${escapeAttr(imgSrc)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-contain p-2">`;
+                    } else if (p.icon && !toText(p.icon).includes('http')) {
+                        visual = `<i class="${escapeAttr(p.icon)} text-3xl sm:text-4xl text-snap-green"></i>`;
                     }
                     const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
+                    const title = escapeHTML(p.title || 'Untitled');
 
                     return `
                     <div class="bg-slate-50 p-6 sm:p-8 sharp-card border border-slate-100 rounded-[2rem] group flex flex-col items-start h-full">
                         <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white border border-slate-200 rounded-2xl flex items-center justify-center mb-6 sm:mb-8 shadow-sm overflow-hidden shrink-0 group-hover:scale-110 transition-transform">
                             ${visual}
                         </div>
-                        <h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${p.title || 'Untitled'}</h4>
-                        <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${desc || ''}</p>
+                        <h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${title}</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${escapeHTML(desc || '')}</p>
                     </div>`;
                 }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Pilot Projects)</p>';
             }
@@ -940,14 +1025,15 @@ snapcon_html = """
                     let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
                     if(!imgSrc || !imgSrc.includes('http')) imgSrc = 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
                     const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
+                    const title = escapeHTML(p.title || 'Untitled');
 
                     return `
                     <div class="bg-white p-6 sm:p-8 sharp-card rounded-[2rem] shadow-sm border-t-[6px] ${borderCol} flex flex-col items-center text-center h-full">
                         <div class="w-full h-36 sm:h-44 bg-slate-100 rounded-2xl mb-6 sm:mb-8 overflow-hidden flex items-center justify-center">
-                            <img src="${imgSrc}" class="w-full h-full object-cover mix-blend-multiply opacity-90 hover:scale-110 transition-transform duration-500">
+                            <img src="${escapeAttr(imgSrc)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-cover mix-blend-multiply opacity-90 hover:scale-110 transition-transform duration-500">
                         </div>
-                        <h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${p.title || 'Untitled'}</h4>
-                        <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${desc || ''}</p>
+                        <h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${title}</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${escapeHTML(desc || '')}</p>
                     </div>`;
                 }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Use Cases)</p>';
             }
@@ -968,30 +1054,30 @@ snapcon_html = """
 
                 if (vid1) {
                     const embed1 = getEmbedVideoUrl(vid1);
-                    mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${embed1}" frameborder="0" allowfullscreen></iframe></div>`;
+                    if (embed1) mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${escapeAttr(embed1)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
                 }
                 if (vid2) {
                     const embed2 = getEmbedVideoUrl(vid2);
-                    mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${embed2}" frameborder="0" allowfullscreen></iframe></div>`;
+                    if (embed2) mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${escapeAttr(embed2)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
                 }
                 
                 if (!mediaHtml) {
                     let imgSrc = getValidImageUrl(art.imageurl || art.img || art.image);
-                    mediaHtml = `<div class="aspect-video mb-4"><img src="${imgSrc || 'https://via.placeholder.com/400x200'}" class="w-full h-full object-cover rounded-2xl shadow-sm border border-slate-100"></div>`;
+                    mediaHtml = `<div class="aspect-video mb-4"><img src="${escapeAttr(imgSrc || 'https://via.placeholder.com/400x200')}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-cover rounded-2xl shadow-sm border border-slate-100"></div>`;
                 }
 
-                const articleUrl = art.link || art.url || '#';
+                const articleUrl = safeUrl(art.link || art.url, true) || '#';
 
                 return `
                 <div class="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-snap-green/10 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group p-3">
                     ${mediaHtml}
                     <div class="p-4 sm:p-6 pt-2 flex flex-col flex-1">
-                        <span class="text-emerald-600 bg-emerald-50 self-start px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest mb-3 sm:mb-4">${art.category || 'INSIGHT'}</span>
-                        <h3 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight group-hover:text-snap-green transition-colors">${art.title || 'Untitled'}</h3>
-                        <p class="text-slate-500 text-xs sm:text-sm mb-4 sm:mb-6 line-clamp-2 leading-relaxed font-medium">${art.summary || ''}</p>
+                        <span class="text-emerald-600 bg-emerald-50 self-start px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest mb-3 sm:mb-4">${escapeHTML(art.category || 'INSIGHT')}</span>
+                        <h3 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight group-hover:text-snap-green transition-colors">${escapeHTML(art.title || 'Untitled')}</h3>
+                        <p class="text-slate-500 text-xs sm:text-sm mb-4 sm:mb-6 line-clamp-2 leading-relaxed font-medium">${escapeHTML(art.summary || '')}</p>
                         <div class="mt-auto flex justify-between items-center pt-4 sm:pt-5 border-t border-slate-100">
-                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="far fa-calendar-alt mr-1"></i> ${art.date || 'Update'}</span>
-                            ${articleUrl !== '#' ? `<a href="${articleUrl}" target="_blank" class="bg-slate-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-bold hover:bg-snap-green transition-colors shadow-md active:scale-95">อ่านบทความ</a>` : ''}
+                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="far fa-calendar-alt mr-1"></i> ${escapeHTML(art.date || 'Update')}</span>
+                            ${articleUrl !== '#' ? `<a href="${escapeAttr(articleUrl)}" target="_blank" rel="noopener noreferrer" class="bg-slate-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-bold hover:bg-snap-green transition-colors shadow-md active:scale-95">อ่านบทความ</a>` : ''}
                         </div>
                     </div>
                 </div>`;
@@ -1009,9 +1095,9 @@ snapcon_html = """
                 
                 return filteredDocs.map(d => {
                     const name = d.modelname || d.name || d.model || d.title || 'Untitled Document';
-                    const url = d.fileurl || d.link || d.url || d.file || '#'; 
+                    const url = safeUrl(d.fileurl || d.link || d.url || d.file, true) || '#'; 
                     if(url === '#' || url === '') return '';
-                    return `<a href="${url}" target="_blank" class="block px-6 sm:px-8 py-3 sm:py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-[11px] sm:text-sm font-bold text-slate-700 transition-colors"><i class="fas fa-file-download mr-2 text-slate-400"></i> ${name}</a>`;
+                    return `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" class="block px-6 sm:px-8 py-3 sm:py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-[11px] sm:text-sm font-bold text-slate-700 transition-colors"><i class="fas fa-file-download mr-2 text-slate-400"></i> ${escapeHTML(name)}</a>`;
                 }).join('');
             };
 
@@ -1021,9 +1107,9 @@ snapcon_html = """
         }
 
         function addToCart(id) {
-            const item = allItems.find(i => i.id === id);
+            const item = allItems.find(i => toText(i.id) === toText(id));
             if(item) {
-                const existing = cart.find(i => i.id === id);
+                const existing = cart.find(i => toText(i.id) === toText(id));
                 if(existing) existing.quantity++; else cart.push({...item, cartId: Date.now().toString(), selected: true, quantity: 1});
                 updateBadge(); alert(currentLang === 'th' ? "เพิ่มสินค้าลงตะกร้าแล้ว!" : "Added to cart!");
             }
@@ -1050,24 +1136,32 @@ snapcon_html = """
                 container.innerHTML = `<p class="text-center py-10 text-slate-400 font-bold bg-slate-50 border border-slate-100 rounded-xl">${dict[currentLang].cartEmpty}</p>`;
                 document.getElementById('cart-total').innerText = '฿0'; return;
             }
-            container.innerHTML = cart.map(item => `
+            container.innerHTML = cart.map(item => {
+                const cartIdArg = jsString(item.cartId);
+                const imgSrc = escapeAttr(getValidImageUrl(item.img || item.imageurl) || 'https://via.placeholder.com/120');
+                const itemName = escapeHTML(item.name || item.title || 'Untitled');
+                const itemId = escapeHTML(item.id || '');
+                const quantity = Math.max(1, toNumber(item.quantity, 1));
+                const lineTotal = (toNumber(item.price) * quantity).toLocaleString();
+                return `
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-4 sm:p-5 rounded-xl mb-3 shadow-sm gap-4">
                     <div class="flex items-center gap-3 sm:gap-5 w-full sm:w-auto flex-1">
-                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem('${item.cartId}')" class="w-5 h-5 sm:w-6 sm:h-6 accent-snap-green cursor-pointer rounded">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1"><img src="${getValidImageUrl(item.img || item.imageurl)}" class="max-w-full max-h-full object-contain"></div>
-                        <div class="flex-1 min-w-0"><span class="font-black text-slate-900 text-sm sm:text-base block truncate">${item.name || item.title}</span><span class="text-[10px] sm:text-xs text-slate-400 font-bold">${item.id}</span></div>
+                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${cartIdArg})" class="w-5 h-5 sm:w-6 sm:h-6 accent-snap-green cursor-pointer rounded">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1"><img src="${imgSrc}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="max-w-full max-h-full object-contain"></div>
+                        <div class="flex-1 min-w-0"><span class="font-black text-slate-900 text-sm sm:text-base block truncate">${itemName}</span><span class="text-[10px] sm:text-xs text-slate-400 font-bold">${itemId}</span></div>
                     </div>
                     <div class="flex items-center justify-between w-full sm:w-auto gap-4 mt-2 sm:mt-0">
                         <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden h-9 sm:h-10 bg-white">
-                            <button onclick="updateQuantity('${item.cartId}', -1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-r border-slate-200 transition-colors">-</button>
-                            <span class="w-10 sm:w-12 h-full flex items-center justify-center text-xs sm:text-sm font-black">${item.quantity}</span>
-                            <button onclick="updateQuantity('${item.cartId}', 1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-l border-slate-200 transition-colors">+</button>
+                            <button onclick="updateQuantity(${cartIdArg}, -1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-r border-slate-200 transition-colors">-</button>
+                            <span class="w-10 sm:w-12 h-full flex items-center justify-center text-xs sm:text-sm font-black">${quantity}</span>
+                            <button onclick="updateQuantity(${cartIdArg}, 1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-l border-slate-200 transition-colors">+</button>
                         </div>
-                        <span class="font-black text-slate-900 text-lg sm:text-xl w-24 sm:w-32 text-right shrink-0">฿${(parseFloat(item.price||0) * item.quantity).toLocaleString()}</span>
+                        <span class="font-black text-slate-900 text-lg sm:text-xl w-24 sm:w-32 text-right shrink-0">฿${lineTotal}</span>
                     </div>
-                </div>`).join('');
+                </div>`;
+            }).join('');
             
-            const total = cart.filter(i => i.selected).reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
+            const total = cart.filter(i => i.selected).reduce((s, i) => s + (toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))), 0);
             document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
             document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
@@ -1075,13 +1169,28 @@ snapcon_html = """
         // ==========================================
         // 🚀 FIRE AND FORGET SYNC SYSTEM 
         // ==========================================
+        function cleanPayload(payloadObj) {
+            const allowedFields = ['type', 'name_or_id', 'email', 'details'];
+            return allowedFields.reduce((safe, key) => {
+                safe[key] = toText(payloadObj[key]).slice(0, key === 'details' ? 3000 : 200);
+                return safe;
+            }, {});
+        }
+
         function sendDataToServer(payloadObj) {
+            const now = Date.now();
+            if (now - lastSubmitAt < 3000) {
+                alert(currentLang === 'th' ? "กรุณารอสักครู่ก่อนส่งข้อมูลซ้ำ" : "Please wait before submitting again");
+                return;
+            }
+            lastSubmitAt = now;
+
             setTimeout(() => {
                 fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payloadObj)
+                    body: JSON.stringify(cleanPayload(payloadObj))
                 }).catch(e => console.log("Sync done"));
             }, 100);
         }
@@ -1095,8 +1204,8 @@ snapcon_html = """
                 const info = document.getElementById('quote-contact').value.trim();
                 if(!name || !info) return alert(currentLang === 'th' ? "กรุณากรอกชื่อและข้อมูลติดต่อกลับให้ครบถ้วน" : "Please fill your contact info");
                 
-                const detailsStr = selected.map(i => `- ${i.name||i.title} x${i.quantity} (฿${(parseFloat(i.price||0) * i.quantity).toLocaleString()})`).join('\\n');
-                const total = selected.reduce((s, i) => s + (parseFloat(i.price||0) * i.quantity), 0);
+                const detailsStr = selected.map(i => `- ${toText(i.name||i.title)} x${Math.max(1, toNumber(i.quantity, 1))} (฿${(toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))).toLocaleString()})`).join('\\n');
+                const total = selected.reduce((s, i) => s + (toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))), 0);
                 const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
                 
                 alert(currentLang === 'th' ? "ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ" : "Quotation request submitted! We will contact you soon.");
@@ -1109,7 +1218,7 @@ snapcon_html = """
             } catch(e) { console.log(e); }
         }
 
-        function submitRegistration() {
+        async function submitRegistration() {
             try {
                 const id = document.getElementById('reg-id').value.trim();
                 const pass = document.getElementById('reg-pass').value.trim();
@@ -1117,8 +1226,9 @@ snapcon_html = """
                 const contact = document.getElementById('reg-contact').value.trim();
                 
                 if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วน" : "Please fill all fields");
+                if(pass.length < 8) return alert(currentLang === 'th' ? "กรุณาตั้งรหัสผ่านอย่างน้อย 8 ตัวอักษร" : "Password must be at least 8 characters");
                 
-                memoryUsers[id] = pass;
+                memoryUsers[id] = await hashText(pass);
                 isLoggedIn = true;
                 currentUserId = id;
                 if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
@@ -1146,14 +1256,14 @@ snapcon_html = """
             } catch(e) { console.log(e); }
         }
 
-        function handleLogin() { 
+        async function handleLogin() { 
             try {
                 const id = document.getElementById('userId').value.trim() || document.getElementById('mobile-userId').value.trim();
                 const pass = document.getElementById('userPass').value.trim() || document.getElementById('mobile-userPass').value.trim();
                 
                 if(!id || !pass) return alert(currentLang === 'th' ? "กรุณากรอก ID และ Password" : "Please fill ID and Password");
 
-                if (memoryUsers[id] === pass) {
+                if (memoryUsers[id] && memoryUsers[id] === await hashText(pass)) {
                     isLoggedIn = true; currentUserId = id;
                     if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
                     
@@ -1237,63 +1347,37 @@ snapcon_html = """
         }
         function updateDashboardConfig() {
             let dash = getDash(); if(!dash) return;
-            dash.target = parseInt(document.getElementById('cfg-target').value) || 1;
-            dash.carbonFactor = parseFloat(document.getElementById('cfg-carbon').value) || 0;
-            dash.energyFactor = parseFloat(document.getElementById('cfg-energy').value) || 0;
+            dash.target = Math.max(1, Math.floor(toNumber(document.getElementById('cfg-target').value, 1)));
+            dash.carbonFactor = Math.max(0, toNumber(document.getElementById('cfg-carbon').value));
+            dash.energyFactor = Math.max(0, toNumber(document.getElementById('cfg-energy').value));
             renderDashboard();
         }
-       // กำหนดตัวแปรไว้จำสถานะเซนเซอร์รอบก่อนหน้า (เพื่อทำ Rising Edge กันนับเบิ้ล)
-        window.lastSensorOut = 0;
-
-        async function simulateProduction() {
-            let dash = getDash();
-            if(!dash || !dash.isRunning) return;
-            
-            dash.elapsedSeconds += 0.5; // นับเวลาทำงาน
-
-            try {
-                // 🌐 1. วิ่งไปดึงข้อมูล JSON ของจริงจากตู้ Snapcon (ESP32)
-                const response = await fetch('http://192.168.1.109/status');
-                const realData = await response.json();
-
-                // === 2. นำข้อมูลมาอัปเดตใส่ Node 1 (ตู้ Main) ของ Dashboard ===
-                const mainNode = dash.nodes[0];
-                
-                // --- อัปเดตสถานะมอเตอร์ ---
-                if (realData.motor_status === "ON") {
-                    mainNode.status = 'Running';
-                    mainNode.health -= mainNode.wearRate; 
-                    if(mainNode.health < 0) mainNode.health = 0;
-                } else if (realData.motor_status === "EMERGENCY!") {
-                    mainNode.status = 'Maintenance'; 
-                } else {
-                    mainNode.status = 'Stopped';
+        function simulateProduction() {
+            let dash = getDash(); if(!dash || !dash.isRunning) return;
+            dash.elapsedSeconds += 0.5;
+            dash.nodes.forEach(n => { 
+                if(n.status === 'Running' || n.status === 'Warning') {
+                    if(Math.random() > 0.5) { n.output += 1; n.health -= n.wearRate; if(n.health < 0) n.health = 0; }
+                    if(n.health <= 30) n.status = 'Maintenance'; else if (n.health <= 70) n.status = 'Warning';
                 }
-                
-                // --- ลอจิกนับชิ้นงาน (อิงจาก Sensor Out / X4) ---
-                if (realData.sensor_out == 1 && window.lastSensorOut == 0) {
-                    mainNode.output += 1; 
-                }
-                window.lastSensorOut = realData.sensor_out; 
-
-            } catch (err) {
-                console.log("No connection to ESP32");
-                dash.nodes[0].status = "Offline"; 
-            }
-
-            // 3. สั่งวาดหน้าจอ Dashboard ใหม่เพื่อโชว์ข้อมูลล่าสุด
+            });
             if(document.getElementById('page-dashboard').classList.contains('page-active')) {
                 renderDashboard();
             }
         }
         function exportCSV() {
             let dash = getDash(); if(!dash) return;
+            const csvCell = (value) => {
+                let text = toText(value).replace(/"/g, '""');
+                if (/^[=+@-]/.test(text)) text = "'" + text;
+                return `"${text}"`;
+            };
             let bom = "\uFEFF";
             let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
             let totalOut = 0;
             dash.nodes.forEach(n => {
                 let c = (n.output * dash.carbonFactor).toFixed(4); let e = (n.output * dash.energyFactor).toFixed(4); totalOut += n.output;
-                csvContent += `${n.id},${n.name},${n.status},${n.output},${n.health.toFixed(2)},${c},${e}\\n`;
+                csvContent += [n.id, n.name, n.status, n.output, n.health.toFixed(2), c, e].map(csvCell).join(',') + '\\n';
             });
             csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dash.carbonFactor).toFixed(4)},${(totalOut * dash.energyFactor).toFixed(4)}\\n`;
             
@@ -1347,23 +1431,25 @@ snapcon_html = """
                 if(dashTimeRemain) dashTimeRemain.innerText = remainStr;
 
                 grid.innerHTML = dash.nodes.map(n => {
+                    const output = Math.max(0, Math.floor(toNumber(n.output)));
+                    const health = Math.min(100, Math.max(0, toNumber(n.health)));
                     const isRun = n.status === 'Running', isWarn = n.status === 'Warning', isMaint = n.status === 'Maintenance';
                     let dotBg = 'bg-slate-300';
                     if (isRun) dotBg = 'bg-snap-green animate-pulse'; else if (isWarn) dotBg = 'bg-amber-400 animate-pulse'; else if (isMaint) dotBg = 'bg-red-500';
-                    let healthBarCol = n.health > 70 ? 'bg-snap-green' : (n.health > 30 ? 'bg-amber-400' : 'bg-red-500');
+                    let healthBarCol = health > 70 ? 'bg-snap-green' : (health > 30 ? 'bg-amber-400' : 'bg-red-500');
                     
                     return `
                     <div class="bg-slate-50 border border-slate-200 p-2 sm:p-3 rounded-xl shadow-sm flex flex-col justify-between h-full">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 truncate" title="${n.name}">${n.name}</span>
+                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 truncate" title="${escapeAttr(n.name)}">${escapeHTML(n.name)}</span>
                             <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${dotBg} shrink-0"></div>
                         </div>
-                        <h4 class="text-lg sm:text-xl font-black text-slate-800 text-center my-1 sm:my-2">${n.output}</h4>
+                        <h4 class="text-lg sm:text-xl font-black text-slate-800 text-center my-1 sm:my-2">${output}</h4>
                         <div>
                             <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mt-1">
-                                <div class="h-full ${healthBarCol} transition-all duration-500" style="width: ${n.health}%"></div>
+                                <div class="h-full ${healthBarCol} transition-all duration-500" style="width: ${health}%"></div>
                             </div>
-                            <p class="text-[8px] sm:text-[9px] text-center mt-1 text-slate-400 font-bold uppercase tracking-widest">Health: ${n.health.toFixed(1)}%</p>
+                            <p class="text-[8px] sm:text-[9px] text-center mt-1 text-slate-400 font-bold uppercase tracking-widest">Health: ${health.toFixed(1)}%</p>
                         </div>
                     </div>`;
                 }).join('');
@@ -1385,12 +1471,13 @@ snapcon_html = """
             else { alert(currentLang === 'th' ? "กรุณาเข้าสู่ระบบก่อนเข้าใช้งาน Dashboard" : "Please Login First to access Dashboard"); document.getElementById('userId').focus(); } 
         }
 
-        window.onload = () => {
+        window.addEventListener('load', () => {
             try {
                 loadDataFromSheet();
+                setTimeout(() => document.body.classList.add('hero-bg-ready'), 800);
                 setTimeout(() => setLanguage('th'), 100);
             } catch(e) { console.log(e); }
-        };
+        });
     </script>
 </body>
 </html>
