@@ -1471,8 +1471,12 @@ snapcon_html = """
             else { alert(currentLang === 'th' ? "กรุณาเข้าสู่ระบบก่อนเข้าใช้งาน Dashboard" : "Please Login First to access Dashboard"); document.getElementById('userId').focus(); } 
         }
 
-        window.addEventListener('load', () => {
+ window.addEventListener('load', async () => {
             try {
+                // --- เพิ่มส่วนนี้สำหรับสร้าง User Test เริ่มต้น ---
+                memoryUsers['snapcon'] = await hashText('1992');
+                // ------------------------------------------
+
                 loadDataFromSheet();
                 setTimeout(() => document.body.classList.add('hero-bg-ready'), 800);
                 setTimeout(() => setLanguage('th'), 100);
