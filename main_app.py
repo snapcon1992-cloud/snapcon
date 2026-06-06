@@ -1,16 +1,11 @@
 import streamlit as st
-import streamlit.components.v1 as components
 
-# ตั้งค่าหน้าหลักของ Streamlit
 st.set_page_config(
     page_title="SNAPCON | Automation Solution", 
     layout="wide", 
     initial_sidebar_state="collapsed"
 )
 
-# ==========================================
-# SNAPCON MASTER HTML/CSS/JS (PRODUCTION READY + WEBSOCKET)
-# ==========================================
 snapcon_html = """
 <!DOCTYPE html>
 <html lang="th">
@@ -33,16 +28,8 @@ snapcon_html = """
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        'snap-dark': '#1e2329',
-                        'snap-black': '#0f172a',
-                        'snap-green': '#00B36E',
-                        'snap-green-hover': '#00965c',
-                        'snap-gray': '#f1f5f9',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'Prompt', 'sans-serif'],
-                    }
+                    colors: { 'snap-dark': '#1e2329', 'snap-black': '#0f172a', 'snap-green': '#00B36E', 'snap-green-hover': '#00965c', 'snap-gray': '#f1f5f9' },
+                    fontFamily: { sans: ['Inter', 'Prompt', 'sans-serif'] }
                 }
             }
         }
@@ -50,20 +37,10 @@ snapcon_html = """
     <style>
         body { margin: 0; padding: 0; background-color: #f8fafc; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .max-container { max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
-        
         .hero-container { background-color: #e2e8f0; position: relative; }
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.9) 65%, rgba(2, 44, 34, 0.95) 100%);
-            z-index: 5; pointer-events: none;
-        }
-        @media (max-width: 768px) {
-            .hero-overlay {
-                background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(16, 185, 129, 0.9) 50%, rgba(2, 44, 34, 0.95) 100%);
-            }
-        }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to right, #ffffff 40%, rgba(16, 185, 129, 0.9) 65%, rgba(2, 44, 34, 0.95) 100%); z-index: 5; pointer-events: none; }
+        @media (max-width: 768px) { .hero-overlay { background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(16, 185, 129, 0.9) 50%, rgba(2, 44, 34, 0.95) 100%); } }
         .hero-white-box { background-color: white; border-bottom: 6px solid #00B36E; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border-radius: 1rem; }
-
         .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; animation: slideBgAnimation 20s infinite linear; }
         .slide-1 { background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=60'); animation-delay: 0s; }
         .slide-2, .slide-3, .slide-4 { background-image: none; }
@@ -72,42 +49,25 @@ snapcon_html = """
         body.hero-bg-ready .slide-4 { background-image: url('https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?auto=format&fit=crop&w=1200&q=60'); animation-delay: 15s; }
         @keyframes slideBgAnimation { 0% { opacity: 0; transform: scale(1.05) translateX(20px); } 5% { opacity: 1; transform: scale(1.05) translateX(15px); } 20% { opacity: 1; transform: scale(1.05) translateX(-5px); } 25% { opacity: 0; transform: scale(1.05) translateX(-10px); } 100% { opacity: 0; } }
         @media (prefers-reduced-motion: reduce) { .slide-img, .feature-text-slide, .page-active { animation: none !important; transform: none !important; } .slide-1 { opacity: 1; } }
-
         .nav-link { position: relative; color: white; font-weight: 700; font-size: 0.85rem; transition: color 0.3s; }
         .nav-link:hover { color: #00B36E; }
         .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background-color: #00B36E; transition: width 0.3s; }
         .nav-link:hover::after { width: 100%; }
-
         .page-section { display: none !important; }
         .page-active { display: block !important; animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
         .dropdown-menu { display: none; position: absolute; z-index: 50; }
         .dropdown-container:hover .dropdown-menu, .dropdown-container:focus-within .dropdown-menu { display: block; }
-        
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
         .sharp-card { border-radius: 1rem; transition: all 0.3s; }
         .sharp-card:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); transform: translateY(-4px); }
-        
         .feature-text-container { position: relative; height: 120px; width: 100%; display: flex; align-items: flex-start; }
         .feature-text-slide { position: absolute; width: 100%; opacity: 0; transform: translateY(20px); animation: fadeSlideText 25s infinite; }
-        .feature-text-slide:nth-child(1) { animation-delay: 0s; } 
-        .feature-text-slide:nth-child(2) { animation-delay: 5s; } 
-        .feature-text-slide:nth-child(3) { animation-delay: 10s; }
-        .feature-text-slide:nth-child(4) { animation-delay: 15s; }
-        .feature-text-slide:nth-child(5) { animation-delay: 20s; }
-        @keyframes fadeSlideText { 
-            0% { opacity: 0; transform: translateY(20px); } 
-            4% { opacity: 1; transform: translateY(0); } 
-            16% { opacity: 1; transform: translateY(0); } 
-            20% { opacity: 0; transform: translateY(-20px); } 
-            100% { opacity: 0; transform: translateY(-20px); } 
-        }
-        
+        .feature-text-slide:nth-child(1) { animation-delay: 0s; } .feature-text-slide:nth-child(2) { animation-delay: 5s; } .feature-text-slide:nth-child(3) { animation-delay: 10s; } .feature-text-slide:nth-child(4) { animation-delay: 15s; } .feature-text-slide:nth-child(5) { animation-delay: 20s; }
+        @keyframes fadeSlideText { 0% { opacity: 0; transform: translateY(20px); } 4% { opacity: 1; transform: translateY(0); } 16% { opacity: 1; transform: translateY(0); } 20% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 0; transform: translateY(-20px); } }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 </head>
@@ -196,12 +156,7 @@ snapcon_html = """
 
     <div id="page-home" class="page-section page-active">
         <section class="hero-container w-full min-h-[550px] md:min-h-[650px] flex items-center relative overflow-hidden pb-16">
-            <div class="absolute inset-0 z-0">
-                <div class="slide-img slide-1"></div>
-                <div class="slide-img slide-2"></div>
-                <div class="slide-img slide-3"></div>
-                <div class="slide-img slide-4"></div>
-            </div>
+            <div class="absolute inset-0 z-0"><div class="slide-img slide-1"></div><div class="slide-img slide-2"></div><div class="slide-img slide-3"></div><div class="slide-img slide-4"></div></div>
             <div class="hero-overlay z-0"></div>
             <div class="max-container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10 w-full pt-20">
                 <div class="hero-white-box w-full lg:w-[520px] p-8 sm:p-10 md:p-12 bg-white/95 backdrop-blur-sm">
@@ -226,26 +181,11 @@ snapcon_html = """
                         <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/30 blur-[50px] rounded-full pointer-events-none"></div>
                         <h3 class="text-emerald-400 font-black tracking-widest uppercase text-[10px] sm:text-xs mb-6 sm:mb-8 border-b border-white/10 pb-3 sm:pb-4 inline-block relative z-10">Why Snapcon?</h3>
                         <div class="feature-text-container relative z-10">
-                            <div class="feature-text-slide">
-                                <h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs1Title">⚡ Easy Setup (Plug & Play)</h4>
-                                <p class="text-sm sm:text-base md:text-lg text-emerald-300 font-medium" data-i18n="fs1Desc">ติดตั้งง่าย ใช้งานได้ทันที</p>
-                            </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs2Title">📊 Real-Time Monitoring</h4>
-                                <p class="text-sm sm:text-base md:text-lg text-blue-300 font-medium" data-i18n="fs2Desc">แสดงผลแบบเรียลไทม์ เห็นข้อมูลทันที</p>
-                            </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs3Title">🎛 Centralized Control</h4>
-                                <p class="text-sm sm:text-base md:text-lg text-amber-300 font-medium" data-i18n="fs3Desc">ควบคุมทุกเครื่องจักรจากจุดเดียว</p>
-                            </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs4Title">🛡 Built-in Poka-Yoke</h4>
-                                <p class="text-sm sm:text-base md:text-lg text-rose-300 font-medium" data-i18n="fs4Desc">ระบบกันพลาดในตัว ป้องกันความผิดพลาดอัตโนมัติ</p>
-                            </div>
-                            <div class="feature-text-slide">
-                                <h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs5Title">☁️ Cloud Ready</h4>
-                                <p class="text-sm sm:text-base md:text-lg text-cyan-300 font-medium" data-i18n="fs5Desc">รองรับการเชื่อมต่อ Cloud พร้อมใช้งาน</p>
-                            </div>
+                            <div class="feature-text-slide"><h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs1Title">⚡ Easy Setup (Plug & Play)</h4><p class="text-sm sm:text-base md:text-lg text-emerald-300 font-medium" data-i18n="fs1Desc">ติดตั้งง่าย ใช้งานได้ทันที</p></div>
+                            <div class="feature-text-slide"><h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs2Title">📊 Real-Time Monitoring</h4><p class="text-sm sm:text-base md:text-lg text-blue-300 font-medium" data-i18n="fs2Desc">แสดงผลแบบเรียลไทม์ เห็นข้อมูลทันที</p></div>
+                            <div class="feature-text-slide"><h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs3Title">🎛 Centralized Control</h4><p class="text-sm sm:text-base md:text-lg text-amber-300 font-medium" data-i18n="fs3Desc">ควบคุมทุกเครื่องจักรจากจุดเดียว</p></div>
+                            <div class="feature-text-slide"><h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs4Title">🛡 Built-in Poka-Yoke</h4><p class="text-sm sm:text-base md:text-lg text-rose-300 font-medium" data-i18n="fs4Desc">ระบบกันพลาดในตัว ป้องกันความผิดพลาดอัตโนมัติ</p></div>
+                            <div class="feature-text-slide"><h4 class="text-xl sm:text-2xl md:text-3xl font-black text-white mb-2 tracking-tight" data-i18n="fs5Title">☁️ Cloud Ready</h4><p class="text-sm sm:text-base md:text-lg text-cyan-300 font-medium" data-i18n="fs5Desc">รองรับการเชื่อมต่อ Cloud พร้อมใช้งาน</p></div>
                         </div>
                     </div>
                 </div>
@@ -255,25 +195,19 @@ snapcon_html = """
         <div class="relative z-40 max-container lg:-mt-16 mb-16 px-4 sm:px-6">
             <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                 <div tabindex="0" class="dropdown-container relative group p-6 sm:p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-file-pdf text-2xl sm:text-3xl text-snap-green"></i>
-                    </div>
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-file-pdf text-2xl sm:text-3xl text-snap-green"></i></div>
                     <h3 data-i18n="cardDataSheet" class="text-base sm:text-lg font-black text-slate-800 uppercase tracking-tight">Data Sheet</h3>
                     <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest flex items-center" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     <div class="dropdown-menu md:absolute top-full left-0 w-full bg-slate-50 md:bg-white md:shadow-2xl border-t border-slate-100 md:border md:border-slate-100 rounded-b-2xl overflow-hidden mt-4 md:mt-1 z-50" id="menu-datasheet"></div>
                 </div>
                 <div tabindex="0" class="dropdown-container relative group p-6 sm:p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-drafting-compass text-2xl sm:text-3xl text-blue-500"></i>
-                    </div>
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-drafting-compass text-2xl sm:text-3xl text-blue-500"></i></div>
                     <h3 data-i18n="cardDrawing" class="text-base sm:text-lg font-black text-slate-800 uppercase tracking-tight">2D/3D Drawing</h3>
                     <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest flex items-center" data-i18n="selectModel">Select Model <i class="fas fa-angle-down ml-1"></i></p>
                     <div class="dropdown-menu md:absolute top-full left-0 w-full bg-slate-50 md:bg-white md:shadow-2xl border-t border-slate-100 md:border md:border-slate-100 rounded-b-2xl overflow-hidden mt-4 md:mt-1 z-50" id="menu-drawing"></div>
                 </div>
                 <div tabindex="0" class="dropdown-container relative group p-6 sm:p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-b-2xl md:rounded-r-2xl md:rounded-bl-none">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-book-open text-2xl sm:text-3xl text-amber-500"></i>
-                    </div>
+                    <div class="w-14 h-14 sm:w-16 sm:h-16 bg-amber-50 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform"><i class="fas fa-book-open text-2xl sm:text-3xl text-amber-500"></i></div>
                     <h3 data-i18n="cardCatalog" class="text-base sm:text-lg font-black text-slate-800 uppercase tracking-tight">Catalog</h3>
                     <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest flex items-center" data-i18n="btnDownload">Download <i class="fas fa-angle-down ml-1"></i></p>
                     <div class="dropdown-menu md:absolute top-full left-0 w-full bg-slate-50 md:bg-white md:shadow-2xl border-t border-slate-100 md:border md:border-slate-100 rounded-b-2xl overflow-hidden mt-4 md:mt-1 z-50" id="menu-catalog"></div>
@@ -294,10 +228,7 @@ snapcon_html = """
                         <button onclick="scrollSlider('right')" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-snap-green hover:text-white hover:border-snap-green transition-colors shadow-sm active:scale-95"><i class="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
-                
-                <div id="home-product-slider" class="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-6 custom-scrollbar px-1 sm:px-2">
-                    </div>
-                
+                <div id="home-product-slider" class="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-6 custom-scrollbar px-1 sm:px-2"></div>
                 <div class="text-center mt-6">
                     <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-snap-green transition-colors bg-white px-6 py-3 rounded-full border border-slate-200 hover:border-snap-green shadow-sm w-full sm:w-auto justify-center">
                         <span data-i18n="viewAllProducts">View All Products</span> <i class="fas fa-arrow-right"></i>
@@ -315,8 +246,7 @@ snapcon_html = """
                         <p class="text-slate-500 font-medium text-sm" data-i18n="knowledgeSub">บทความเทคนิค คลังความรู้ และวิดีโอจากวิศวกรผู้เชี่ยวชาญ</p>
                     </div>
                 </div>
-                <div id="article-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                    </div>
+                <div id="article-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8"></div>
             </div>
         </section>
     </div>
@@ -606,7 +536,6 @@ snapcon_html = """
         let currentUserId = null, memoryUsers = {};
         let activeDashInterval = null;
         let lastSubmitAt = 0;
-        const USER_STORAGE_KEY = 'snapcon-users-v1';
 
         window.onerror = function(message, source, lineno, colno, error) { return true; };
 
@@ -634,35 +563,19 @@ snapcon_html = """
         const MQTT_OPTIONS = {
             username: 'snapcon',
             password: 'Ya0979261616',
-            clientId: 'Snapcon-Web-' + Math.random().toString(16).substr(2, 8),
-            reconnectPeriod: 5000,
-            connectTimeout: 10000
+            clientId: 'Snapcon-Web-' + Math.random().toString(16).substr(2, 8)
         };
         const MQTT_TOPIC = "snapcon/factory/dashboard/posa";
         let mqttClient = null;
 
         function connectRealtimeMQTT() {
             if (mqttClient) return;
-            if (!window.mqtt || !mqtt.connect) {
-                console.log("MQTT library is not ready. Dashboard will wait for realtime data.");
-                return;
-            }
             console.log("Connecting to HiveMQ Cloud (WebSocket)...");
             mqttClient = mqtt.connect(MQTT_BROKER_WSS, MQTT_OPTIONS);
 
             mqttClient.on('connect', () => {
                 console.log("✅ Connected to Snapcon Factory Data!");
-                mqttClient.subscribe(MQTT_TOPIC, (err) => {
-                    if (err) console.log("MQTT subscribe warning:", err);
-                });
-            });
-
-            mqttClient.on('error', (err) => {
-                console.log("MQTT connection warning:", err);
-            });
-
-            mqttClient.on('close', () => {
-                console.log("MQTT connection closed.");
+                mqttClient.subscribe(MQTT_TOPIC);
             });
 
             mqttClient.on('message', (topic, message) => {
@@ -671,13 +584,12 @@ snapcon_html = """
                     if(!dash) return; 
 
                     const payload = JSON.parse(message.toString());
-                    const machines = Array.isArray(payload.machines) ? payload.machines : [];
-                    if (machines.length === 0) return;
+                    const machines = payload.machines;
 
                     // ปรับข้อมูลจากตู้จริงเข้ากับโครงสร้างหน้าเว็บ (พร้อมคำนวณ Health เชิงคาดการณ์)
                     dash.nodes = machines.map((m, index) => {
                         let baseHealth = 100.0;
-                        let stat = toText(m.status).toUpperCase();
+                        let stat = m.status;
                         let amp = parseFloat(m.amp) || 0;
                         
                         // ถอดรหัสสถานะจากตู้
@@ -691,7 +603,7 @@ snapcon_html = """
 
                         return {
                             id: index + 1,
-                            name: "Node-0" + toText(m.id || (index + 1)),
+                            name: "Node-0" + m.id,
                             output: parseInt(m.box) || 0,
                             powerAmp: amp,
                             status: stat.includes('RUNNING') ? 'Running' : (stat.includes('STOPPED') ? 'Warning' : 'Maintenance'),
@@ -699,7 +611,7 @@ snapcon_html = """
                         };
                     });
 
-                    // อัปเดตเวลาการทำงานสะสมจำลอง (เพราะเราดึงข้อมูลมาเรียลไทม์)
+                    // อัปเดตเวลาการทำงานสะสมจำลอง
                     dash.elapsedSeconds += 1;
 
                     if(document.getElementById('page-dashboard').classList.contains('page-active')) {
@@ -707,12 +619,6 @@ snapcon_html = """
                     }
                 } catch(e) { console.log("Data Parse Error:", e); }
             });
-        }
-
-        function disconnectRealtimeMQTT() {
-            if (!mqttClient) return;
-            try { mqttClient.end(true); } catch(e) {}
-            mqttClient = null;
         }
 
         // -------------------------------------------------------------------------
@@ -773,42 +679,14 @@ snapcon_html = """
         function createDefaultDash() {
             return {
                 isRunning: false, target: 10000, carbonFactor: 0.0070, energyFactor: 0.015, elapsedSeconds: 0,
-                nodes: [] // จะถูกเขียนทับด้วยข้อมูลจาก MQTT
+                nodes: [] 
             };
         }
 
         let userDashboards = {};
-
-        const FALLBACK_DATA = {
-            products: [
-                { id: 'SC-CV-001', name: 'Snapcon Modular Conveyor', price: 125000, img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=65', specs: 'Plug & Play setup,Real-time monitoring,Compact modular frame' },
-                { id: 'SC-CTL-010', name: 'Automation Control Node', price: 45000, img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=65', specs: 'Digital I/O ready,Dashboard compatible,Low maintenance' }
-            ],
-            spares: [
-                { id: 'SP-MTR-24V', name: '24V Drive Motor', price: 8500, img: 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=700&q=65', specs: 'High torque,Quick replacement,Industrial grade' }
-            ],
-            documents: [],
-            projects: [
-                { title: 'Smart Conveyor Pilot Line', category: 'pilot', description: 'ระบบเดโมสำหรับทดสอบสายพานอัตโนมัติพร้อม Dashboard แบบเรียลไทม์', descriptionen: 'Pilot demo line for automated conveyor monitoring with a real-time dashboard.', icon: 'fas fa-industry' },
-                { title: 'Packing Line Use Case', category: 'usecase', description: 'ตัวอย่างการใช้งานสำหรับสายการบรรจุที่ต้องการลดเวลาติดตั้งและตรวจสถานะเครื่องจักร', descriptionen: 'Use case for packing lines that need faster setup and machine status visibility.' }
-            ],
-            articles: []
-        };
-
         function getDash() {
             if (!currentUserId || !userDashboards[currentUserId]) return null;
             return userDashboards[currentUserId];
-        }
-
-        function loadStoredUsers() {
-            try {
-                const saved = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || '{}');
-                if (saved && typeof saved === 'object' && !Array.isArray(saved)) memoryUsers = saved;
-            } catch(e) { memoryUsers = {}; }
-        }
-
-        function saveStoredUsers() {
-            try { localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(memoryUsers)); } catch(e) {}
         }
 
         function toText(value) { return String(value ?? ''); }
@@ -876,10 +754,10 @@ snapcon_html = """
         }
 
         function normalizeKeys(arr) {
-            if (!Array.isArray(arr) || arr.length === 0) return [];
+            if (!arr || arr.length === 0) return [];
             return arr.map(obj => {
                 const newObj = {};
-                for (let key in (obj || {})) {
+                for (let key in obj) {
                     const cleanKey = key.toLowerCase().replace(/[\\s_]+/g, '');
                     newObj[cleanKey] = obj[key];
                 }
@@ -887,15 +765,10 @@ snapcon_html = """
             });
         }
 
-        function hasCatalogData() {
-            return products.length > 0 || spares.length > 0 || documents.length > 0 || projects.length > 0 || articles.length > 0;
-        }
-
         function applySheetData(data) {
-            const safeData = data || {};
-            products = normalizeKeys(safeData.products); spares = normalizeKeys(safeData.spares);
-            documents = normalizeKeys(safeData.documents); projects = normalizeKeys(safeData.projects);
-            articles = normalizeKeys(safeData.articles); allItems = [...products, ...spares];
+            products = normalizeKeys(data.products); spares = normalizeKeys(data.spares);
+            documents = normalizeKeys(data.documents); projects = normalizeKeys(data.projects);
+            articles = normalizeKeys(data.articles); allItems = [...products, ...spares];
             
             try { renderProducts(); } catch(e) {} try { renderDocuments(); } catch(e) {}
             try { renderProjects(); } catch(e) {} try { renderArticles(); } catch(e) {}
@@ -905,20 +778,15 @@ snapcon_html = """
         async function loadDataFromSheet() {
             try {
                 const cacheKey = 'snapcon-sheet-cache-v1'; const cacheTtlMs = 10 * 60 * 1000;
-                let cached = null;
-                try { cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null'); } catch(e) {}
+                const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
                 if (cached && cached.data && Date.now() - cached.savedAt < cacheTtlMs) { applySheetData(cached.data); }
-                if (!hasCatalogData()) applySheetData(FALLBACK_DATA);
 
                 const response = await fetch(GOOGLE_SCRIPT_URL, { cache: 'default' });
                 if (!response.ok) throw new Error("Network error");
                 const data = await response.json();
-                try { sessionStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), data })); } catch(e) {}
+                sessionStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), data }));
                 applySheetData(data);
-            } catch (e) {
-                console.log("Fetch Warning:", e);
-                if (!hasCatalogData()) applySheetData(FALLBACK_DATA);
-            }
+            } catch (e) { console.log("Fetch Warning:", e); }
         }
 
         function renderProducts() {
@@ -1026,14 +894,13 @@ snapcon_html = """
             try {
                 const id = document.getElementById('reg-id').value.trim(); const pass = document.getElementById('reg-pass').value.trim(); const name = document.getElementById('reg-name').value.trim(); const contact = document.getElementById('reg-contact').value.trim();
                 if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วน" : "Please fill all fields"); if(pass.length < 8) return alert(currentLang === 'th' ? "กรุณาตั้งรหัสผ่านอย่างน้อย 8 ตัวอักษร" : "Password must be at least 8 characters");
-                if(memoryUsers[id]) return alert(currentLang === 'th' ? "User ID นี้ถูกใช้งานแล้ว กรุณาใช้ ID อื่น" : "This User ID is already registered");
-                memoryUsers[id] = await hashText(pass); saveStoredUsers(); isLoggedIn = true; currentUserId = id; if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+                memoryUsers[id] = await hashText(pass); isLoggedIn = true; currentUserId = id; if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
                 document.getElementById('displayUser').innerText = id; document.getElementById('dash-user-name').innerText = id; 
                 document.getElementById('login-section').className = "hidden lg:flex items-center gap-2"; document.getElementById('user-section').className = "flex items-center gap-3";
                 closeRegisterModal(); document.getElementById('reg-id').value = ''; document.getElementById('reg-pass').value = ''; document.getElementById('reg-name').value = ''; document.getElementById('reg-contact').value = '';
                 alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบพาคุณเข้าสู่ระบบอัตโนมัติแล้ว" : "Registration complete! You are now logged in.");
                 const mobileMenu = document.getElementById('mobile-menu'); if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
-                connectRealtimeMQTT(); // เชื่อม MQTT
+                connectRealtimeMQTT(); 
                 sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
             } catch(e) { console.log(e); }
         }
@@ -1050,14 +917,13 @@ snapcon_html = """
                     document.getElementById('userId').value = ''; document.getElementById('userPass').value = ''; document.getElementById('mobile-userId').value = ''; document.getElementById('mobile-userPass').value = '';
                     alert(currentLang === 'th' ? "เข้าสู่ระบบสำเร็จ!" : "Login Successful");
                     const mobileMenu = document.getElementById('mobile-menu'); if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
-                    connectRealtimeMQTT(); // เชื่อม MQTT
+                    connectRealtimeMQTT(); 
                 } else alert(currentLang === 'th' ? "ID หรือรหัสผ่านไม่ถูกต้อง" : "Invalid ID or Password");
             } catch(e) { console.log(e); }
         }
 
         function handleLogout() { 
             try {
-                disconnectRealtimeMQTT();
                 isLoggedIn = false; currentUserId = null; 
                 document.getElementById('user-section').className = "hidden lg:hidden items-center gap-3 pr-5"; document.getElementById('login-section').className = "hidden lg:flex items-center gap-2 pr-5";
                 document.getElementById('mobile-user-section').className = "hidden"; document.getElementById('mobile-login-section').className = "flex flex-col gap-4 mb-8 pb-8 border-b border-slate-800 w-full";
@@ -1131,9 +997,7 @@ snapcon_html = """
 
         window.addEventListener('load', async () => {
             try {
-                loadStoredUsers();
-                memoryUsers['snapcon'] = memoryUsers['snapcon'] || await hashText('1992'); // สร้าง User Test เริ่มต้น
-                saveStoredUsers();
+                memoryUsers['snapcon'] = await hashText('1992'); 
                 loadDataFromSheet();
                 setTimeout(() => document.body.classList.add('hero-bg-ready'), 800);
                 setTimeout(() => setLanguage('th'), 100);
@@ -1144,5 +1008,4 @@ snapcon_html = """
 </html>
 """
 
-# แสดงผลหน้าเว็บผ่าน Streamlit
-components.html(snapcon_html, height=2500, scrolling=True)
+st.components.v1.html(snapcon_html, height=2500, scrolling=True)
