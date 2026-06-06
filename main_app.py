@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
 # ตั้งค่าหน้าหลักของ Streamlit
 st.set_page_config(
@@ -8,7 +9,7 @@ st.set_page_config(
 )
 
 # ==========================================
-# SNAPCON MASTER HTML/CSS/JS (PRODUCTION READY)
+# SNAPCON MASTER HTML/CSS/JS (PRODUCTION READY + WEBSOCKET)
 # ==========================================
 snapcon_html = """
 <!DOCTYPE html>
@@ -25,6 +26,9 @@ snapcon_html = """
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"></noscript>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Prompt:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -109,7 +113,6 @@ snapcon_html = """
 </head>
 <body class="font-sans text-slate-800">
 
-    <!-- Top Navigation -->
     <nav class="bg-snap-black h-[70px] w-full fixed top-0 z-[999] flex items-center justify-between px-4 md:px-10 shadow-md">
         <div class="flex items-center gap-2 cursor-pointer shrink-0" onclick="navigate('home')">
             <span class="font-black text-2xl md:text-3xl text-snap-green tracking-tighter">SNAPCON</span>
@@ -153,7 +156,6 @@ snapcon_html = """
         </div>
     </nav>
 
-    <!-- MOBILE MENU -->
     <div id="mobile-menu" class="fixed inset-0 bg-snap-black/95 backdrop-blur-md z-[999] hidden flex-col px-6 py-8 overflow-y-auto w-full h-full">
         <div class="flex justify-between items-center mb-10 border-b border-slate-800 pb-6 mt-2">
             <span class="font-black text-3xl text-snap-green tracking-tighter">SNAPCON</span>
@@ -192,7 +194,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- PAGE: HOME -->
     <div id="page-home" class="page-section page-active">
         <section class="hero-container w-full min-h-[550px] md:min-h-[650px] flex items-center relative overflow-hidden pb-16">
             <div class="absolute inset-0 z-0">
@@ -251,7 +252,6 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- Feature Dropdowns -->
         <div class="relative z-40 max-container lg:-mt-16 mb-16 px-4 sm:px-6">
             <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
                 <div tabindex="0" class="dropdown-container relative group p-6 sm:p-8 flex flex-col items-center cursor-pointer hover:bg-slate-50 transition-colors focus:outline-none rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
@@ -281,7 +281,6 @@ snapcon_html = """
             </div>
         </div>
 
-        <!-- Featured Products Slider -->
         <section class="bg-transparent py-10">
             <div class="max-container">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
@@ -297,8 +296,7 @@ snapcon_html = """
                 </div>
                 
                 <div id="home-product-slider" class="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-6 custom-scrollbar px-1 sm:px-2">
-                    <!-- Products inject here -->
-                </div>
+                    </div>
                 
                 <div class="text-center mt-6">
                     <button onclick="navigate('product')" class="inline-flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-snap-green transition-colors bg-white px-6 py-3 rounded-full border border-slate-200 hover:border-snap-green shadow-sm w-full sm:w-auto justify-center">
@@ -308,7 +306,6 @@ snapcon_html = """
             </div>
         </section>
 
-        <!-- KNOWLEDGE & INSIGHT SECTION -->
         <section class="bg-white py-16 sm:py-24 border-t border-slate-200 mt-10">
             <div class="max-container">
                 <div class="flex justify-between items-end mb-10 sm:mb-12">
@@ -319,13 +316,11 @@ snapcon_html = """
                     </div>
                 </div>
                 <div id="article-list" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                    <!-- Articles will load here -->
-                </div>
+                    </div>
             </div>
         </section>
     </div>
 
-    <!-- PAGE: PRODUCT -->
     <div id="page-product" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container py-10">
             <h2 data-i18n="pageProductTitle" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Conveyor Systems</h2>
@@ -334,7 +329,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- PAGE: SPARE PARTS -->
     <div id="page-spare" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container py-10">
             <h2 data-i18n="pageSpareTitle" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Spare Parts</h2>
@@ -343,7 +337,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- PAGE: PROJECT REFERENCE -->
     <div id="page-project" class="page-section bg-white min-h-screen pt-10">
         <div class="max-container py-10">
             <h2 data-i18n="pageProjectTitle" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Project Reference</h2>
@@ -363,7 +356,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- PAGE: CART / QUOTATION -->
     <div id="page-cart" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container max-w-4xl py-10">
             <h2 data-i18n="pageCartTitle" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Quotation Request</h2>
@@ -395,7 +387,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- PAGE: DASHBOARD -->
     <div id="page-dashboard" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container py-10">
             <h2 class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">
@@ -406,14 +397,26 @@ snapcon_html = """
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
                 <div class="bg-white p-6 sm:p-8 sharp-card lg:col-span-2 flex flex-col justify-center rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm">
-                    <h3 class="font-bold text-slate-800 mb-4 sm:mb-6 uppercase text-xs tracking-widest" data-i18n="dashCtrlTitle">System Controls</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                        <button onclick="startSystem()" id="btn-start" class="bg-snap-green text-white py-3 sm:py-4 font-bold hover:bg-snap-green-hover rounded-xl text-[10px] sm:text-xs transition-colors shadow-sm"><i class="fas fa-play mb-1 text-base sm:text-lg block"></i> START</button>
-                        <button onclick="stopSystem()" id="btn-stop" class="bg-slate-100 text-slate-600 py-3 sm:py-4 font-bold hover:bg-red-500 hover:text-white rounded-xl text-[10px] sm:text-xs transition-colors shadow-sm border border-slate-200 hover:border-red-500"><i class="fas fa-stop mb-1 text-base sm:text-lg block"></i> STOP</button>
-                        <button onclick="resetSystem()" class="bg-snap-black text-white py-3 sm:py-4 font-bold hover:bg-slate-800 rounded-xl text-[10px] sm:text-xs transition-colors shadow-sm"><i class="fas fa-sync-alt mb-1 text-base sm:text-lg block"></i> REFRESH</button>
-                        <button onclick="exportCSV()" class="bg-blue-600 text-white py-3 sm:py-4 font-bold hover:bg-blue-700 rounded-xl text-[10px] sm:text-xs transition-colors shadow-sm"><i class="fas fa-file-csv mb-1 text-base sm:text-lg block"></i> REPORT</button>
+                    <h3 class="font-bold text-slate-800 mb-4 sm:mb-6 uppercase text-xs tracking-widest" data-i18n="dashTotOut">System Overview</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center justify-center relative overflow-hidden">
+                            <i class="fas fa-box absolute -right-2 -bottom-2 text-6xl text-slate-200 opacity-50"></i>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1 z-10" data-i18n="dashTotOut">Total Output</p>
+                            <h3 id="dash-total-output" class="text-3xl sm:text-4xl font-black text-blue-600 tracking-tighter z-10">0</h3>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center justify-center relative overflow-hidden">
+                            <i class="fas fa-leaf absolute -right-2 -bottom-2 text-6xl text-slate-200 opacity-50"></i>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1 z-10" data-i18n="dashCalCarbon">Cal Carbon</p>
+                            <h3 id="dash-carbon" class="text-3xl sm:text-4xl font-black text-emerald-600 tracking-tighter z-10">0.00</h3>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center justify-center relative overflow-hidden">
+                            <i class="fas fa-bolt absolute -right-2 -bottom-2 text-6xl text-slate-200 opacity-50"></i>
+                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1 z-10" data-i18n="dashTotPower">Total Power</p>
+                            <h3 id="dash-power" class="text-3xl sm:text-4xl font-black text-amber-500 tracking-tighter z-10">0.00</h3>
+                        </div>
                     </div>
                 </div>
+
                 <div class="bg-white p-6 sm:p-8 sharp-card rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm">
                     <h3 class="font-bold text-slate-800 mb-4 sm:mb-6 uppercase text-xs tracking-widest" data-i18n="dashCfgTitle">Configuration</h3>
                     <div class="space-y-4">
@@ -430,24 +433,6 @@ snapcon_html = """
                             <input type="number" step="0.001" id="cfg-energy" onchange="updateDashboardConfig()" class="w-20 sm:w-24 text-right outline-none font-black text-slate-800 bg-slate-50 px-2 py-1 rounded">
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
-                <div class="bg-white p-6 sm:p-8 sharp-card rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-16 h-16 bg-blue-50 rounded-bl-[100px] flex items-top justify-right p-4"><i class="fas fa-box text-blue-500 text-xl opacity-50"></i></div>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotOut">Total Output</p>
-                    <h3 id="dash-total-output" class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tighter">0</h3>
-                </div>
-                <div class="bg-white p-6 sm:p-8 sharp-card rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-16 h-16 bg-emerald-50 rounded-bl-[100px] flex items-top justify-right p-4"><i class="fas fa-leaf text-emerald-500 text-xl opacity-50"></i></div>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashCalCarbon">Cal Carbon</p>
-                    <h3 id="dash-carbon" class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tighter">0.00</h3>
-                </div>
-                <div class="bg-white p-6 sm:p-8 sharp-card rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-16 h-16 bg-amber-50 rounded-bl-[100px] flex items-top justify-right p-4"><i class="fas fa-bolt text-amber-500 text-xl opacity-50"></i></div>
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1" data-i18n="dashTotPower">Total Power</p>
-                    <h3 id="dash-power" class="text-4xl sm:text-5xl font-black text-slate-900 tracking-tighter">0.00</h3>
                 </div>
             </div>
 
@@ -469,20 +454,19 @@ snapcon_html = """
 
             <div class="bg-white p-4 sm:p-8 sharp-card rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-4 border-b border-slate-100 gap-4">
-                    <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashMacStatus2">Machine Status</h3>
+                    <h3 class="font-bold text-slate-800 uppercase text-xs tracking-widest" data-i18n="dashMacStatus2">Machine Status & Predictive Maint.</h3>
                     <div class="flex flex-wrap gap-3 sm:gap-4 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500 bg-slate-50 px-4 py-2 rounded-full w-fit">
                         <span class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-snap-green rounded-full shadow-sm"></div> <span data-i18n="statusNormal">Normal</span></span>
                         <span class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-amber-400 rounded-full shadow-sm"></div> <span data-i18n="statusWarning">Warning</span></span>
                         <span class="flex items-center gap-1.5"><div class="w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm"></div> <span data-i18n="statusMaint">Maint.</span></span>
                     </div>
                 </div>
-                <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-10 gap-3 sm:gap-4 max-h-[60vh] overflow-y-auto custom-scrollbar p-1">
-                </div>
+                <div id="dash-nodes-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 p-1">
+                    </div>
             </div>
         </div>
     </div>
 
-    <!-- PAGE: COMPANY -->
     <div id="page-about" class="page-section bg-white min-h-screen pt-10">
         <div class="max-container py-10">
             <h2 data-i18n="navAbout" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Company</h2>
@@ -518,14 +502,12 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- PAGE: SUPPORT / CONTACT -->
     <div id="page-contact" class="page-section bg-slate-50 min-h-screen pt-10">
         <div class="max-container max-w-5xl py-10">
             <h2 data-i18n="navContact" class="text-2xl sm:text-3xl font-black text-slate-900 uppercase tracking-tight mb-2">Support</h2>
             <div class="w-16 h-1.5 bg-snap-green rounded-full mb-10"></div>
             
             <div class="grid md:grid-cols-2 gap-8 md:gap-10 items-start">
-                <!-- ข้อมูลติดต่อด่วน -->
                 <div class="bg-white p-8 md:p-10 text-left rounded-[2rem] shadow-sm h-full border border-slate-200">
                     <div class="w-16 h-16 md:w-20 md:h-20 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6 md:mb-8">
                         <i class="fas fa-headset text-3xl md:text-4xl text-snap-green"></i>
@@ -548,17 +530,9 @@ snapcon_html = """
                                 <span class="font-black text-slate-800 text-sm md:text-base truncate block">@SnapconAuto</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4 md:gap-5 bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-100 hover:border-blue-500 hover:shadow-md transition-all cursor-pointer group">
-                            <div class="w-10 h-10 md:w-12 md:h-12 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors shrink-0"><i class="fas fa-phone-alt text-slate-400 group-hover:text-white text-lg md:text-xl"></i></div>
-                            <div class="min-w-0">
-                                <p class="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hotline</p>
-                                <span class="font-black text-slate-800 text-sm md:text-base truncate block">081-XXX-XXXX</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                <!-- ฟอร์มติดต่อส่งเข้า Google Sheets -->
                 <div class="bg-white p-8 md:p-10 shadow-sm rounded-[2rem] h-full border border-slate-200">
                     <h3 class="text-lg md:text-xl font-black text-slate-900 mb-6 md:mb-8 uppercase tracking-widest flex items-center gap-3">
                         <div class="w-8 h-8 md:w-10 md:h-10 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-paper-plane text-snap-green"></i></div>
@@ -586,7 +560,6 @@ snapcon_html = """
         </div>
     </div>
 
-    <!-- MODAL: REGISTER -->
     <div id="modal-register" class="fixed inset-0 bg-snap-black/90 backdrop-blur-sm z-[200] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-md shadow-2xl relative p-6 sm:p-10 rounded-[2rem] max-h-[90vh] overflow-y-auto custom-scrollbar">
             <button onclick="closeRegisterModal()" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 sm:w-10 sm:h-10 bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-full flex items-center justify-center transition-colors text-base sm:text-lg focus:outline-none"><i class="fas fa-times"></i></button>
@@ -622,7 +595,7 @@ snapcon_html = """
 
     <script>
         // =========================================================================
-        // JAVASCRIPT SYSTEM (STABLE & BULLETPROOF VERSION)
+        // JAVASCRIPT SYSTEM
         // =========================================================================
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaV4oNSs0eWV5TOsVU9Ky8pl08d7f8H4L98vb1-ZLFQn95q4Kiy15ZqC34hrKoziYl/exec';
         
@@ -633,34 +606,113 @@ snapcon_html = """
         let currentUserId = null, memoryUsers = {};
         let activeDashInterval = null;
         let lastSubmitAt = 0;
+        const USER_STORAGE_KEY = 'snapcon-users-v1';
 
-        // ดักจับ Error กะทันหัน ป้องกันระบบค้าง
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.log("System Caught an Error: ", message);
-            return true; // ป้องกันบราวเซอร์ขึ้นหน้าแดง
-        };
+        window.onerror = function(message, source, lineno, colno, error) { return true; };
 
-        // Mobile Menu Toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                menu.classList.add('flex');
-                document.body.style.overflow = 'hidden'; 
+                menu.classList.remove('hidden'); menu.classList.add('flex'); document.body.style.overflow = 'hidden'; 
             } else {
-                menu.classList.add('hidden');
-                menu.classList.remove('flex');
-                document.body.style.overflow = '';
+                menu.classList.add('hidden'); menu.classList.remove('flex'); document.body.style.overflow = '';
             }
         }
 
-        // Slider Function (ฟังก์ชันที่หายไปก่อนหน้า ตอนนี้เพิ่มให้แล้วครับ)
         function scrollSlider(dir) {
             const slider = document.getElementById('home-product-slider');
             if (slider) {
                 const scrollAmount = window.innerWidth > 768 ? 320 : 260;
                 slider.scrollBy({ left: dir === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
             }
+        }
+
+        // ==========================================
+        // 🚀 REAL-TIME MQTT WEBSOCKET CONNECTION
+        // ==========================================
+        const MQTT_BROKER_WSS = "wss://47baacffdefb4653ace4c2c764e70889.s1.eu.hivemq.cloud:8884/mqtt";
+        const MQTT_OPTIONS = {
+            username: 'snapcon',
+            password: 'Ya0979261616',
+            clientId: 'Snapcon-Web-' + Math.random().toString(16).substr(2, 8),
+            reconnectPeriod: 5000,
+            connectTimeout: 10000
+        };
+        const MQTT_TOPIC = "snapcon/factory/dashboard/posa";
+        let mqttClient = null;
+
+        function connectRealtimeMQTT() {
+            if (mqttClient) return;
+            if (!window.mqtt || !mqtt.connect) {
+                console.log("MQTT library is not ready. Dashboard will wait for realtime data.");
+                return;
+            }
+            console.log("Connecting to HiveMQ Cloud (WebSocket)...");
+            mqttClient = mqtt.connect(MQTT_BROKER_WSS, MQTT_OPTIONS);
+
+            mqttClient.on('connect', () => {
+                console.log("✅ Connected to Snapcon Factory Data!");
+                mqttClient.subscribe(MQTT_TOPIC, (err) => {
+                    if (err) console.log("MQTT subscribe warning:", err);
+                });
+            });
+
+            mqttClient.on('error', (err) => {
+                console.log("MQTT connection warning:", err);
+            });
+
+            mqttClient.on('close', () => {
+                console.log("MQTT connection closed.");
+            });
+
+            mqttClient.on('message', (topic, message) => {
+                try {
+                    let dash = getDash(); 
+                    if(!dash) return; 
+
+                    const payload = JSON.parse(message.toString());
+                    const machines = Array.isArray(payload.machines) ? payload.machines : [];
+                    if (machines.length === 0) return;
+
+                    // ปรับข้อมูลจากตู้จริงเข้ากับโครงสร้างหน้าเว็บ (พร้อมคำนวณ Health เชิงคาดการณ์)
+                    dash.nodes = machines.map((m, index) => {
+                        let baseHealth = 100.0;
+                        let stat = toText(m.status).toUpperCase();
+                        let amp = parseFloat(m.amp) || 0;
+                        
+                        // ถอดรหัสสถานะจากตู้
+                        if(stat.includes('ERROR')) baseHealth = 10.0;
+                        else if(stat.includes('STOPPED')) baseHealth = 50.0;
+                        
+                        // จำลองระบบ Predictive Maintenance (ตัดแต้มความสมบูรณ์ถ้าแอมป์สูง)
+                        if(amp > 1.5 && baseHealth > 50) {
+                            baseHealth -= (amp * 10); // กระแสสูงเลือดลด
+                        }
+
+                        return {
+                            id: index + 1,
+                            name: "Node-0" + toText(m.id || (index + 1)),
+                            output: parseInt(m.box) || 0,
+                            powerAmp: amp,
+                            status: stat.includes('RUNNING') ? 'Running' : (stat.includes('STOPPED') ? 'Warning' : 'Maintenance'),
+                            health: Math.max(0, Math.min(100, baseHealth))
+                        };
+                    });
+
+                    // อัปเดตเวลาการทำงานสะสมจำลอง (เพราะเราดึงข้อมูลมาเรียลไทม์)
+                    dash.elapsedSeconds += 1;
+
+                    if(document.getElementById('page-dashboard').classList.contains('page-active')) {
+                        renderDashboard();
+                    }
+                } catch(e) { console.log("Data Parse Error:", e); }
+            });
+        }
+
+        function disconnectRealtimeMQTT() {
+            if (!mqttClient) return;
+            try { mqttClient.end(true); } catch(e) {}
+            mqttClient = null;
         }
 
         // -------------------------------------------------------------------------
@@ -670,88 +722,29 @@ snapcon_html = """
             th: {
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company", navHome: "Home",
                 navLogin: "เข้าสู่ระบบ (Login)", navRegister: "สมัครสมาชิก", navLogout: "Logout",
-                
-                heroEco: "Green Technology",
-                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", 
-                heroDesc: "เปลี่ยนความซับซ้อนให้เป็นเรื่องง่าย ด้วยระบบออโตเมชัน Plug & Play ที่พร้อมให้คุณควบคุมสายการผลิตได้ทันที",
-                heroLink: "ดูสินค้าทั้งหมด",
-                
-                fs1Title: "⚡ Easy Setup (Plug & Play)", fs1Desc: "ติดตั้งง่าย ใช้งานได้ทันที",
-                fs2Title: "📊 Real-Time Monitoring", fs2Desc: "แสดงผลแบบเรียลไทม์ เห็นข้อมูลทันที",
-                fs3Title: "🎛 Centralized Control", fs3Desc: "ควบคุมทุกเครื่องจักรจากจุดเดียว",
-                fs4Title: "🛡 Built-in Poka-Yoke", fs4Desc: "ระบบกันพลาดในตัว ป้องกันความผิดพลาดอัตโนมัติ",
-                fs5Title: "☁️ Cloud Ready", fs5Desc: "รองรับการเชื่อมต่อ Cloud พร้อมใช้งาน",
-                
-                cardDataSheet: "Data Sheet", selectModel: "Select Model",
-                cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download",
-                
-                homeProductsTitle: "Featured Products", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "View All Products",
-                knowledgeSub: "บทความเทคนิค คลังความรู้ และวิดีโอจากวิศวกรผู้เชี่ยวชาญ",
-                
-                pageProductTitle: "Conveyor Systems", pageSpareTitle: "Spare Parts", 
-                pageProjectTitle: "Project Reference", projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
-                
-                pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น",
-                cartTotalLabel: "ราคากลางประเมินรวม", btnRequestQuote: "ยื่นขอใบเสนอราคา", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก",
-                guestContactTitle: "ข้อมูลติดต่อกลับ",
-                
-                contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ พร้อมให้บริการคุณตลอด 24 ชั่วโมง",
-                aboutVisionTitle: "Vision", aboutVisionDesc: "มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้",
-                aboutMissionTitle: "Mission", aboutMissionDesc: "พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก",
-                aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด",
-                
-                regTitle: "CREATE ACCOUNT", btnSubmitReg: "CONFIRM REGISTRATION",
-                phId: "ID", phPass: "PW", phGuestName: "ชื่อ / บริษัท", phGuestContact: "อีเมล / เบอร์โทร",
-                regId: "ตั้งรหัส User ID", regPass: "ตั้งรหัส Password", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์",
-                
-                dashSubTitle: "ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์",
-                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
-                dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power",
-                dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status",
-                statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint."
+                heroEco: "Green Technology", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", 
+                heroDesc: "เปลี่ยนความซับซ้อนให้เป็นเรื่องง่าย ด้วยระบบออโตเมชัน Plug & Play ที่พร้อมให้คุณควบคุมสายการผลิตได้ทันที", heroLink: "ดูสินค้าทั้งหมด",
+                fs1Title: "⚡ Easy Setup (Plug & Play)", fs1Desc: "ติดตั้งง่าย ใช้งานได้ทันที", fs2Title: "📊 Real-Time Monitoring", fs2Desc: "แสดงผลแบบเรียลไทม์ เห็นข้อมูลทันที", fs3Title: "🎛 Centralized Control", fs3Desc: "ควบคุมทุกเครื่องจักรจากจุดเดียว", fs4Title: "🛡 Built-in Poka-Yoke", fs4Desc: "ระบบกันพลาดในตัว ป้องกันความผิดพลาดอัตโนมัติ", fs5Title: "☁️ Cloud Ready", fs5Desc: "รองรับการเชื่อมต่อ Cloud พร้อมใช้งาน",
+                cardDataSheet: "Data Sheet", selectModel: "Select Model", cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download",
+                homeProductsTitle: "Featured Products", homeProductsSub: "เลือกดูเครื่องจักรและอุปกรณ์ออโตเมชันรุ่นล่าสุด", viewAllProducts: "View All Products", knowledgeSub: "บทความเทคนิค คลังความรู้ และวิดีโอจากวิศวกรผู้เชี่ยวชาญ",
+                pageProductTitle: "Conveyor Systems", pageSpareTitle: "Spare Parts", pageProjectTitle: "Project Reference", projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
+                pageCartTitle: "Quotation Request", cartEmpty: "ไม่มีสินค้าในรถเข็น", cartTotalLabel: "ราคากลางประเมินรวม", btnRequestQuote: "ยื่นขอใบเสนอราคา", selectAll: "เลือกทั้งหมด", deleteSelected: "ลบที่เลือก", guestContactTitle: "ข้อมูลติดต่อกลับ",
+                contactSub: "ศูนย์ช่วยเหลือและสนับสนุนด้านเทคนิคอย่างเป็นทางการ พร้อมให้บริการคุณตลอด 24 ชั่วโมง", aboutVisionTitle: "Vision", aboutVisionDesc: "มุ่งมั่นที่จะเป็นผู้นำอันดับหนึ่งในด้านระบบอัตโนมัติแบบ Plug & Play ที่เข้าถึงง่ายและล้ำสมัยที่สุดในภูมิภาคเอเชียตะวันออกเฉียงใต้", aboutMissionTitle: "Mission", aboutMissionDesc: "พัฒนานวัตกรรมที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และยกระดับประสิทธิภาพการทำงานของอุตสาหกรรมทุกขนาดให้พร้อมแข่งขันในระดับโลก", aboutDesc: "Snapcon Automation คือผู้นำด้านเทคโนโลยีอุตสาหกรรมยุคใหม่ ที่เน้นความง่ายในการเชื่อมต่อและการติดตั้งในรูปแบบ Plug & Play System เรามุ่งมั่นที่จะพลิกโฉมวงการออโตเมชันด้วยโซลูชันที่ลดความซับซ้อน ลดเวลาในการติดตั้ง และเพิ่มประสิทธิภาพการผลิตสูงสุด",
+                regTitle: "CREATE ACCOUNT", btnSubmitReg: "CONFIRM REGISTRATION", phId: "ID", phPass: "PW", phGuestName: "ชื่อ / บริษัท", phGuestContact: "อีเมล / เบอร์โทร", regId: "ตั้งรหัส User ID", regPass: "ตั้งรหัส Password", regName: "ชื่อ-นามสกุล / ชื่อบริษัท", regContact: "อีเมล / เบอร์โทรศัพท์",
+                dashSubTitle: "ระบบตรวจสอบระดับองค์กรพร้อมระบบซ่อมบำรุงเชิงคาดการณ์", dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor", dashPlanTitle: "Production Planning", dashTotOut: "System Overview", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power", dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status & Predictive Maint.", statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint."
             },
             en: {
                 navProduct: "Products", navSpare: "Spare Parts", navDashboard: "Dashboard", navProject: "Projects", navContact: "Support", navAbout: "Company", navHome: "Home",
                 navLogin: "Login", navRegister: "Register", navLogout: "Logout",
-                
-                heroEco: "Green Technology",
-                heroText1: "Snap to Connect.", heroText2: "Ready to Control.", 
-                heroDesc: "Turn complexity into simplicity with Plug & Play automation systems, ready for you to control your production line instantly.",
-                heroLink: "View All Products",
-                
-                fs1Title: "⚡ Easy Setup (Plug & Play)", fs1Desc: "Easy installation, ready to use",
-                fs2Title: "📊 Real-Time Monitoring", fs2Desc: "Real-time display, instant data visibility",
-                fs3Title: "🎛 Centralized Control", fs3Desc: "Control all machines from a single point",
-                fs4Title: "🛡 Built-in Poka-Yoke", fs4Desc: "Built-in mistake-proofing, automatic error prevention",
-                fs5Title: "☁️ Cloud Ready", fs5Desc: "Cloud connection supported, ready to use",
-                
-                cardDataSheet: "Data Sheet", selectModel: "Select Model",
-                cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download",
-                
-                homeProductsTitle: "Featured Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products",
-                knowledgeSub: "Technical articles, knowledge base, and videos from expert engineers",
-                
-                pageProductTitle: "Conveyor Systems", pageSpareTitle: "Spare Parts", 
-                pageProjectTitle: "Project Reference", projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
-                
-                pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty",
-                cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected",
-                guestContactTitle: "Contact Info",
-                
-                contactSub: "Official Technical Support & Inquiries, available 24/7.",
-                aboutVisionTitle: "Vision", aboutVisionDesc: "To be the leading provider of advanced and accessible Plug & Play automation systems in Southeast Asia.",
-                aboutMissionTitle: "Mission", aboutMissionDesc: "Develop innovations that reduce complexity, minimize installation time, and elevate industrial efficiency for global competitiveness.",
-                aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems. We are committed to revolutionizing the automation industry with solutions that reduce complexity, save time, and maximize production efficiency.",
-                
-                regTitle: "CREATE ACCOUNT", btnSubmitReg: "CONFIRM REGISTRATION",
-                phId: "ID", phPass: "PW", phGuestName: "Name / Company", phGuestContact: "Email / Phone",
-                regId: "Create User ID", regPass: "Create Password", regName: "Full Name / Company Name", regContact: "Email / Phone Number",
-                
-                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System",
-                dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor",
-                dashPlanTitle: "Production Planning", dashTotOut: "Total Output", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power",
-                dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status",
-                statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint."
+                heroEco: "Green Technology", heroText1: "Snap to Connect.", heroText2: "Ready to Control.", heroDesc: "Turn complexity into simplicity with Plug & Play automation systems, ready for you to control your production line instantly.", heroLink: "View All Products",
+                fs1Title: "⚡ Easy Setup (Plug & Play)", fs1Desc: "Easy installation, ready to use", fs2Title: "📊 Real-Time Monitoring", fs2Desc: "Real-time display, instant data visibility", fs3Title: "🎛 Centralized Control", fs3Desc: "Control all machines from a single point", fs4Title: "🛡 Built-in Poka-Yoke", fs4Desc: "Built-in mistake-proofing, automatic error prevention", fs5Title: "☁️ Cloud Ready", fs5Desc: "Cloud connection supported, ready to use",
+                cardDataSheet: "Data Sheet", selectModel: "Select Model", cardDrawing: "2D/3D Drawing", cardCatalog: "Catalog", btnDownload: "Download",
+                homeProductsTitle: "Featured Products", homeProductsSub: "Explore our latest automation machines and equipment", viewAllProducts: "View All Products", knowledgeSub: "Technical articles, knowledge base, and videos from expert engineers",
+                pageProductTitle: "Conveyor Systems", pageSpareTitle: "Spare Parts", pageProjectTitle: "Project Reference", projPilotTitle: "Pilot / Demo Project", projUseCaseTitle: "Use Case / Application",
+                pageCartTitle: "Quotation Request", cartEmpty: "Your cart is empty", cartTotalLabel: "ESTIMATED TOTAL", btnRequestQuote: "SUBMIT REQUEST", selectAll: "Select All", deleteSelected: "Delete Selected", guestContactTitle: "Contact Info",
+                contactSub: "Official Technical Support & Inquiries, available 24/7.", aboutVisionTitle: "Vision", aboutVisionDesc: "To be the leading provider of advanced and accessible Plug & Play automation systems in Southeast Asia.", aboutMissionTitle: "Mission", aboutMissionDesc: "Develop innovations that reduce complexity, minimize installation time, and elevate industrial efficiency for global competitiveness.", aboutDesc: "Snapcon Automation is a leader in modern industrial technology, focusing on ease of connection and installation through Plug & Play Systems. We are committed to revolutionizing the automation industry with solutions that reduce complexity, save time, and maximize production efficiency.",
+                regTitle: "CREATE ACCOUNT", btnSubmitReg: "CONFIRM REGISTRATION", phId: "ID", phPass: "PW", phGuestName: "Name / Company", phGuestContact: "Email / Phone", regId: "Create User ID", regPass: "Create Password", regName: "Full Name / Company Name", regContact: "Email / Phone Number",
+                dashSubTitle: "Enterprise Monitoring & Predictive Maintenance System", dashCtrlTitle: "System Controls", dashCfgTitle: "Configuration", dashTarget: "Target", dashCarbon: "Carbon Factor", dashEnergy: "Energy Factor", dashPlanTitle: "Production Planning", dashTotOut: "System Overview", dashCalCarbon: "Cal Carbon", dashTotPower: "Total Power", dashTimeElapsed: "Elapsed", dashTimeRemain: "ETA", dashMacStatus2: "Machine Status & Predictive Maint.", statusNormal: "Normal", statusWarning: "Warning", statusMaint: "Maint."
             }
         };
 
@@ -780,45 +773,49 @@ snapcon_html = """
         function createDefaultDash() {
             return {
                 isRunning: false, target: 10000, carbonFactor: 0.0070, energyFactor: 0.015, elapsedSeconds: 0,
-                nodes: [
-                    { id: 1, name: "Node-01 Main", output: 0, status: 'Offline', health: 100.0, wearRate: 0.3 },
-                    { id: 2, name: "Node-02 Sub", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
-                    { id: 3, name: "Node-03 Pack", output: 0, status: 'Offline', health: 100.0, wearRate: 0.2 },
-                    { id: 4, name: "Node-04 Seal", output: 0, status: 'Offline', health: 100.0, wearRate: 0.4 },
-                    { id: 5, name: "Node-05 Label", output: 0, status: 'Offline', health: 100.0, wearRate: 0.6 }
-                ]
+                nodes: [] // จะถูกเขียนทับด้วยข้อมูลจาก MQTT
             };
         }
 
         let userDashboards = {};
+
+        const FALLBACK_DATA = {
+            products: [
+                { id: 'SC-CV-001', name: 'Snapcon Modular Conveyor', price: 125000, img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=700&q=65', specs: 'Plug & Play setup,Real-time monitoring,Compact modular frame' },
+                { id: 'SC-CTL-010', name: 'Automation Control Node', price: 45000, img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=700&q=65', specs: 'Digital I/O ready,Dashboard compatible,Low maintenance' }
+            ],
+            spares: [
+                { id: 'SP-MTR-24V', name: '24V Drive Motor', price: 8500, img: 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=700&q=65', specs: 'High torque,Quick replacement,Industrial grade' }
+            ],
+            documents: [],
+            projects: [
+                { title: 'Smart Conveyor Pilot Line', category: 'pilot', description: 'ระบบเดโมสำหรับทดสอบสายพานอัตโนมัติพร้อม Dashboard แบบเรียลไทม์', descriptionen: 'Pilot demo line for automated conveyor monitoring with a real-time dashboard.', icon: 'fas fa-industry' },
+                { title: 'Packing Line Use Case', category: 'usecase', description: 'ตัวอย่างการใช้งานสำหรับสายการบรรจุที่ต้องการลดเวลาติดตั้งและตรวจสถานะเครื่องจักร', descriptionen: 'Use case for packing lines that need faster setup and machine status visibility.' }
+            ],
+            articles: []
+        };
 
         function getDash() {
             if (!currentUserId || !userDashboards[currentUserId]) return null;
             return userDashboards[currentUserId];
         }
 
-        function toText(value) {
-            return String(value ?? '');
+        function loadStoredUsers() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(USER_STORAGE_KEY) || '{}');
+                if (saved && typeof saved === 'object' && !Array.isArray(saved)) memoryUsers = saved;
+            } catch(e) { memoryUsers = {}; }
         }
 
-        function escapeHTML(value) {
-            return toText(value).replace(/[&<>"']/g, (char) => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-            }[char]));
+        function saveStoredUsers() {
+            try { localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(memoryUsers)); } catch(e) {}
         }
 
-        function escapeAttr(value) {
-            return escapeHTML(value).replace(/`/g, '&#96;');
-        }
-
-        function jsString(value) {
-            return escapeAttr(JSON.stringify(toText(value)));
-        }
-
-        function toNumber(value, fallback = 0) {
-            const parsed = Number(value);
-            return Number.isFinite(parsed) ? parsed : fallback;
-        }
+        function toText(value) { return String(value ?? ''); }
+        function escapeHTML(value) { return toText(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char])); }
+        function escapeAttr(value) { return escapeHTML(value).replace(/`/g, '&#96;'); }
+        function jsString(value) { return escapeAttr(JSON.stringify(toText(value))); }
+        function toNumber(value, fallback = 0) { const parsed = Number(value); return Number.isFinite(parsed) ? parsed : fallback; }
 
         function safeUrl(url, allowHash = false) {
             const raw = toText(url).trim();
@@ -874,17 +871,15 @@ snapcon_html = """
                     const id = parsed.pathname.replace('/', '').split('/')[0];
                     if (/^[a-zA-Z0-9_-]{11}$/.test(id)) return `https://www.youtube.com/embed/${id}`;
                 }
-            } catch(e) {
-                return '';
-            }
+            } catch(e) { return ''; }
             return '';
         }
 
         function normalizeKeys(arr) {
-            if (!arr || arr.length === 0) return [];
+            if (!Array.isArray(arr) || arr.length === 0) return [];
             return arr.map(obj => {
                 const newObj = {};
-                for (let key in obj) {
+                for (let key in (obj || {})) {
                     const cleanKey = key.toLowerCase().replace(/[\\s_]+/g, '');
                     newObj[cleanKey] = obj[key];
                 }
@@ -892,215 +887,99 @@ snapcon_html = """
             });
         }
 
+        function hasCatalogData() {
+            return products.length > 0 || spares.length > 0 || documents.length > 0 || projects.length > 0 || articles.length > 0;
+        }
+
         function applySheetData(data) {
-            products = normalizeKeys(data.products);
-            spares = normalizeKeys(data.spares);
-            documents = normalizeKeys(data.documents);
-            projects = normalizeKeys(data.projects);
-            articles = normalizeKeys(data.articles);
-            allItems = [...products, ...spares];
+            const safeData = data || {};
+            products = normalizeKeys(safeData.products); spares = normalizeKeys(safeData.spares);
+            documents = normalizeKeys(safeData.documents); projects = normalizeKeys(safeData.projects);
+            articles = normalizeKeys(safeData.articles); allItems = [...products, ...spares];
             
-            try { renderProducts(); } catch(e) {}
-            try { renderDocuments(); } catch(e) {}
-            try { renderProjects(); } catch(e) {}
-            try { renderArticles(); } catch(e) {}
+            try { renderProducts(); } catch(e) {} try { renderDocuments(); } catch(e) {}
+            try { renderProjects(); } catch(e) {} try { renderArticles(); } catch(e) {}
             if(document.getElementById('page-cart').classList.contains('page-active')) renderCart();
         }
 
         async function loadDataFromSheet() {
             try {
-                const cacheKey = 'snapcon-sheet-cache-v1';
-                const cacheTtlMs = 10 * 60 * 1000;
-                const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
-                if (cached && cached.data && Date.now() - cached.savedAt < cacheTtlMs) {
-                    applySheetData(cached.data);
-                }
+                const cacheKey = 'snapcon-sheet-cache-v1'; const cacheTtlMs = 10 * 60 * 1000;
+                let cached = null;
+                try { cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null'); } catch(e) {}
+                if (cached && cached.data && Date.now() - cached.savedAt < cacheTtlMs) { applySheetData(cached.data); }
+                if (!hasCatalogData()) applySheetData(FALLBACK_DATA);
 
-                console.log("Fetching data from Google Sheets...");
                 const response = await fetch(GOOGLE_SCRIPT_URL, { cache: 'default' });
-                if (!response.ok) throw new Error("Network response was not ok");
+                if (!response.ok) throw new Error("Network error");
                 const data = await response.json();
-                sessionStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), data }));
+                try { sessionStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), data })); } catch(e) {}
                 applySheetData(data);
-                
-            } catch (e) { console.log("Fetch Warning (Using Local Fallback):", e); }
+            } catch (e) {
+                console.log("Fetch Warning:", e);
+                if (!hasCatalogData()) applySheetData(FALLBACK_DATA);
+            }
         }
 
         function renderProducts() {
-            const pGrid = document.getElementById('product-grid');
-            const sGrid = document.getElementById('spare-grid');
-            const slider = document.getElementById('home-product-slider');
-
+            const pGrid = document.getElementById('product-grid'); const sGrid = document.getElementById('spare-grid'); const slider = document.getElementById('home-product-slider');
             const makeCard = (p) => {
-                // 1. จัดการข้อมูลรายละเอียดสินค้า (Specs) ให้ออกมาเป็น Array
-                let specArray = [];
-                if (currentLang === 'th') specArray = p.specsth || p.specs_th || p.specs || [];
-                else specArray = p.specsen || p.specs_en || p.specs || [];
-                
-                // 2. Fallback: ถ้าไม่มีคอลัมน์ Specs ให้ลองดึงคอลัมน์ Description แทน
-                if (!specArray || specArray.length === 0) {
-                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
-                    if (desc) specArray = [desc];
-                }
-                
-                // 3. ทำให้แน่ใจว่าเป็น Array เสมอ (ถ้าใน Sheet พิมพ์คั่นด้วยลูกน้ำ ระบบจะตัดขึ้นบรรทัดใหม่ให้)
-                if (!Array.isArray(specArray)) {
-                    specArray = typeof specArray === 'string' ? specArray.split(',') : [specArray];
-                }
+                let specArray = currentLang === 'th' ? (p.specsth || p.specs_th || p.specs || []) : (p.specsen || p.specs_en || p.specs || []);
+                if (!specArray || specArray.length === 0) { const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description); if (desc) specArray = [desc]; }
+                if (!Array.isArray(specArray)) specArray = typeof specArray === 'string' ? specArray.split(',') : [specArray];
 
-                const idArg = jsString(p.id);
-                const imgSrc = escapeAttr(getValidImageUrl(p.img || p.imageurl || p.image) || 'https://via.placeholder.com/200');
-                const itemTitle = escapeHTML(p.name || p.title || 'Untitled');
-                const itemTitleAttr = escapeAttr(p.name || p.title || 'Untitled');
-                const price = toNumber(p.price).toLocaleString();
+                const idArg = jsString(p.id); const imgSrc = escapeAttr(getValidImageUrl(p.img || p.imageurl || p.image) || 'https://via.placeholder.com/200');
+                const itemTitle = escapeHTML(p.name || p.title || 'Untitled'); const price = toNumber(p.price).toLocaleString();
+                let specsHtml = (specArray.length > 0 && specArray[0] && toText(specArray[0]).trim() !== '') ? `<div class="mb-4 flex-grow text-[10px] sm:text-xs text-slate-500 space-y-1.5">` + specArray.map(s => `<div class="truncate border-b border-slate-50 pb-1.5 last:border-0 last:pb-0 font-medium tracking-tight"><i class="fas fa-check text-emerald-400 mr-1.5"></i> ${escapeHTML(toText(s).trim())}</div>`).join('') + `</div>` : `<div class="mb-4 flex-grow"></div>`;
 
-                // 4. สร้าง HTML สำหรับแสดงรายการ Specs พร้อมไอคอนติ๊กถูก
-                let specsHtml = '';
-                if (specArray.length > 0 && specArray[0] && toText(specArray[0]).trim() !== '') {
-                    specsHtml = `<div class="mb-4 flex-grow text-[10px] sm:text-xs text-slate-500 space-y-1.5">` + 
-                        specArray.map(s => `<div class="truncate border-b border-slate-50 pb-1.5 last:border-0 last:pb-0 font-medium tracking-tight"><i class="fas fa-check text-emerald-400 mr-1.5"></i> ${escapeHTML(toText(s).trim())}</div>`).join('') +
-                        `</div>`;
-                } else {
-                    specsHtml = `<div class="mb-4 flex-grow"></div>`; // ดันปุ่มและราคาไปด้านล่างสุดกรณีไม่มีข้อมูล
-                }
-
-                return `
-                <div class="bg-white sharp-card p-4 sm:p-5 flex flex-col h-full rounded-2xl sm:rounded-[1.5rem] shadow-sm border border-slate-100 hover:shadow-lg transition-all">
-                    <div class="bg-slate-50 h-32 sm:h-40 flex items-center justify-center p-3 mb-4 overflow-hidden rounded-xl border border-slate-100 shrink-0">
-                        <img src="${imgSrc}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply">
-                    </div>
-                    <h4 class="font-black text-sm sm:text-base text-slate-900 mb-3 line-clamp-2" title="${itemTitleAttr}">${itemTitle}</h4>
-                    
-                    ${specsHtml}
-                    
-                    <div class="mt-auto pt-3 border-t border-slate-50">
-                        <p class="text-snap-green font-black text-lg sm:text-xl mb-4">฿${price}</p>
-                        <button onclick="addToCart(${idArg})" class="w-full bg-slate-50 text-slate-700 py-2.5 sm:py-3 rounded-xl font-bold text-[10px] sm:text-xs hover:bg-snap-green hover:text-white transition-all border border-slate-200 hover:border-transparent active:scale-95 shadow-sm"><i class="fas fa-cart-plus mr-1"></i> ADD TO CART</button>
-                    </div>
-                </div>`;
+                return `<div class="bg-white sharp-card p-4 sm:p-5 flex flex-col h-full rounded-2xl sm:rounded-[1.5rem] shadow-sm border border-slate-100 hover:shadow-lg transition-all"><div class="bg-slate-50 h-32 sm:h-40 flex items-center justify-center p-3 mb-4 overflow-hidden rounded-xl border border-slate-100 shrink-0"><img src="${imgSrc}" loading="lazy" onerror="this.src='https://via.placeholder.com/200'" class="max-h-full max-w-full object-contain mix-blend-multiply"></div><h4 class="font-black text-sm sm:text-base text-slate-900 mb-3 line-clamp-2" title="${escapeAttr(itemTitle)}">${itemTitle}</h4>${specsHtml}<div class="mt-auto pt-3 border-t border-slate-50"><p class="text-snap-green font-black text-lg sm:text-xl mb-4">฿${price}</p><button onclick="addToCart(${idArg})" class="w-full bg-slate-50 text-slate-700 py-2.5 sm:py-3 rounded-xl font-bold text-[10px] sm:text-xs hover:bg-snap-green hover:text-white transition-all border border-slate-200 hover:border-transparent active:scale-95 shadow-sm"><i class="fas fa-cart-plus mr-1"></i> ADD TO CART</button></div></div>`;
             };
 
             if(pGrid) pGrid.innerHTML = products.map(makeCard).join('');
             if(sGrid) sGrid.innerHTML = spares.map(makeCard).join('');
-            if(slider) slider.innerHTML = products.slice(0, 10).map(p => `
-                <div onclick="navigate('product')" class="min-w-[220px] sm:min-w-[280px] snap-center bg-white border border-slate-100 p-4 sm:p-5 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all cursor-pointer">
-                    <div class="overflow-hidden rounded-xl mb-4 relative h-28 sm:h-36 bg-slate-50 border border-slate-100"><img src="${escapeAttr(getValidImageUrl(p.img || p.imageurl || p.image) || 'https://via.placeholder.com/200')}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-contain mix-blend-multiply p-2 sm:p-3"></div>
-                    <h4 class="font-black text-[13px] sm:text-[15px] text-slate-800 mb-1 truncate">${escapeHTML(p.name || p.title || 'Untitled')}</h4>
-                    <p class="text-snap-green font-black text-base sm:text-lg mt-auto">฿${toNumber(p.price).toLocaleString()}</p>
-                </div>`).join('');
+            if(slider) slider.innerHTML = products.slice(0, 10).map(p => `<div onclick="navigate('product')" class="min-w-[220px] sm:min-w-[280px] snap-center bg-white border border-slate-100 p-4 sm:p-5 rounded-[1.5rem] shadow-sm hover:shadow-xl transition-all cursor-pointer"><div class="overflow-hidden rounded-xl mb-4 relative h-28 sm:h-36 bg-slate-50 border border-slate-100"><img src="${escapeAttr(getValidImageUrl(p.img || p.imageurl || p.image) || 'https://via.placeholder.com/200')}" loading="lazy" class="w-full h-full object-contain mix-blend-multiply p-2 sm:p-3"></div><h4 class="font-black text-[13px] sm:text-[15px] text-slate-800 mb-1 truncate">${escapeHTML(p.name || p.title || 'Untitled')}</h4><p class="text-snap-green font-black text-base sm:text-lg mt-auto">฿${toNumber(p.price).toLocaleString()}</p></div>`).join('');
         }
 
         function renderProjects() {
-            const pilotGrid = document.getElementById('project-pilot-grid');
-            const usecaseGrid = document.getElementById('project-usecase-grid');
-
+            const pilotGrid = document.getElementById('project-pilot-grid'); const usecaseGrid = document.getElementById('project-usecase-grid');
             if (pilotGrid) {
                 const pilots = projects.filter(p => (p.category||'').toLowerCase().includes('pilot'));
                 pilotGrid.innerHTML = pilots.map(p => {
-                    let visual = '<i class="fas fa-cogs text-snap-green text-3xl sm:text-4xl"></i>';
-                    let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
-                    if (imgSrc && imgSrc.includes('http')) {
-                        visual = `<img src="${escapeAttr(imgSrc)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-contain p-2">`;
-                    } else if (p.icon && !toText(p.icon).includes('http')) {
-                        visual = `<i class="${escapeAttr(p.icon)} text-3xl sm:text-4xl text-snap-green"></i>`;
-                    }
-                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
-                    const title = escapeHTML(p.title || 'Untitled');
-
-                    return `
-                    <div class="bg-slate-50 p-6 sm:p-8 sharp-card border border-slate-100 rounded-[2rem] group flex flex-col items-start h-full">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white border border-slate-200 rounded-2xl flex items-center justify-center mb-6 sm:mb-8 shadow-sm overflow-hidden shrink-0 group-hover:scale-110 transition-transform">
-                            ${visual}
-                        </div>
-                        <h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${title}</h4>
-                        <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${escapeHTML(desc || '')}</p>
-                    </div>`;
+                    let visual = '<i class="fas fa-cogs text-snap-green text-3xl sm:text-4xl"></i>'; let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
+                    if (imgSrc && imgSrc.includes('http')) visual = `<img src="${escapeAttr(imgSrc)}" loading="lazy" class="w-full h-full object-contain p-2">`; else if (p.icon && !toText(p.icon).includes('http')) visual = `<i class="${escapeAttr(p.icon)} text-3xl sm:text-4xl text-snap-green"></i>`;
+                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description); const title = escapeHTML(p.title || 'Untitled');
+                    return `<div class="bg-slate-50 p-6 sm:p-8 sharp-card border border-slate-100 rounded-[2rem] group flex flex-col items-start h-full"><div class="w-16 h-16 sm:w-20 sm:h-20 bg-white border border-slate-200 rounded-2xl flex items-center justify-center mb-6 sm:mb-8 shadow-sm overflow-hidden shrink-0 group-hover:scale-110 transition-transform">${visual}</div><h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${title}</h4><p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${escapeHTML(desc || '')}</p></div>`;
                 }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Pilot Projects)</p>';
             }
-
             if (usecaseGrid) {
                 const usecases = projects.filter(p => (p.category||'').toLowerCase().includes('usecase'));
                 usecaseGrid.innerHTML = usecases.map((p, idx) => {
-                    let borderCol = ['border-t-amber-500', 'border-t-snap-green', 'border-t-blue-500'][idx % 3];
-                    let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon);
-                    if(!imgSrc || !imgSrc.includes('http')) imgSrc = 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
-                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description);
-                    const title = escapeHTML(p.title || 'Untitled');
-
-                    return `
-                    <div class="bg-white p-6 sm:p-8 sharp-card rounded-[2rem] shadow-sm border-t-[6px] ${borderCol} flex flex-col items-center text-center h-full">
-                        <div class="w-full h-36 sm:h-44 bg-slate-100 rounded-2xl mb-6 sm:mb-8 overflow-hidden flex items-center justify-center">
-                            <img src="${escapeAttr(imgSrc)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-cover mix-blend-multiply opacity-90 hover:scale-110 transition-transform duration-500">
-                        </div>
-                        <h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${title}</h4>
-                        <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${escapeHTML(desc || '')}</p>
-                    </div>`;
+                    let borderCol = ['border-t-amber-500', 'border-t-snap-green', 'border-t-blue-500'][idx % 3]; let imgSrc = getValidImageUrl(p.imgurl || p.img || p.icon) || 'https://images.unsplash.com/photo-1589792923962-537704632910?auto=format&fit=crop&w=600&q=80';
+                    const desc = currentLang === 'th' ? (p.descriptionth || p.description) : (p.descriptionen || p.description); const title = escapeHTML(p.title || 'Untitled');
+                    return `<div class="bg-white p-6 sm:p-8 sharp-card rounded-[2rem] shadow-sm border-t-[6px] ${borderCol} flex flex-col items-center text-center h-full"><div class="w-full h-36 sm:h-44 bg-slate-100 rounded-2xl mb-6 sm:mb-8 overflow-hidden flex items-center justify-center"><img src="${escapeAttr(imgSrc)}" loading="lazy" class="w-full h-full object-cover mix-blend-multiply opacity-90 hover:scale-110 transition-transform duration-500"></div><h4 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 leading-tight">${title}</h4><p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">${escapeHTML(desc || '')}</p></div>`;
                 }).join('') || '<p class="col-span-full text-slate-400 font-bold bg-slate-50 p-8 rounded-2xl text-center">ไม่มีข้อมูล (No Use Cases)</p>';
             }
         }
 
         function renderArticles() {
-            const container = document.getElementById('article-list');
-            if (!container) return;
-            if (!articles || articles.length === 0) {
-                container.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold bg-white border border-slate-100 py-10 rounded-2xl">กำลังอัปเดตบทความใหม่เร็วๆ นี้...</p>';
-                return;
-            }
-            
+            const container = document.getElementById('article-list'); if (!container) return;
+            if (!articles || articles.length === 0) { container.innerHTML = '<p class="col-span-full text-center text-slate-400 font-bold bg-white border border-slate-100 py-10 rounded-2xl">กำลังอัปเดตบทความใหม่เร็วๆ นี้...</p>'; return; }
             container.innerHTML = articles.map(art => {
-                let mediaHtml = '';
-                const vid1 = art.video1 || art.youtube1 || art.video;
-                const vid2 = art.video2 || art.youtube2;
-
-                if (vid1) {
-                    const embed1 = getEmbedVideoUrl(vid1);
-                    if (embed1) mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${escapeAttr(embed1)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
-                }
-                if (vid2) {
-                    const embed2 = getEmbedVideoUrl(vid2);
-                    if (embed2) mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${escapeAttr(embed2)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" frameborder="0" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
-                }
-                
-                if (!mediaHtml) {
-                    let imgSrc = getValidImageUrl(art.imageurl || art.img || art.image);
-                    mediaHtml = `<div class="aspect-video mb-4"><img src="${escapeAttr(imgSrc || 'https://via.placeholder.com/400x200')}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-cover rounded-2xl shadow-sm border border-slate-100"></div>`;
-                }
-
+                let mediaHtml = ''; const vid1 = art.video1 || art.youtube1 || art.video; const vid2 = art.video2 || art.youtube2;
+                if (vid1) { const embed1 = getEmbedVideoUrl(vid1); if (embed1) mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${escapeAttr(embed1)}" loading="lazy" frameborder="0" allowfullscreen></iframe></div>`; }
+                if (vid2) { const embed2 = getEmbedVideoUrl(vid2); if (embed2) mediaHtml += `<div class="aspect-video mb-4"><iframe class="w-full h-full rounded-2xl shadow-sm border border-slate-100" src="${escapeAttr(embed2)}" loading="lazy" frameborder="0" allowfullscreen></iframe></div>`; }
+                if (!mediaHtml) { let imgSrc = getValidImageUrl(art.imageurl || art.img || art.image); mediaHtml = `<div class="aspect-video mb-4"><img src="${escapeAttr(imgSrc || 'https://via.placeholder.com/400x200')}" loading="lazy" class="w-full h-full object-cover rounded-2xl shadow-sm border border-slate-100"></div>`; }
                 const articleUrl = safeUrl(art.link || art.url, true) || '#';
-
-                return `
-                <div class="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-snap-green/10 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group p-3">
-                    ${mediaHtml}
-                    <div class="p-4 sm:p-6 pt-2 flex flex-col flex-1">
-                        <span class="text-emerald-600 bg-emerald-50 self-start px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest mb-3 sm:mb-4">${escapeHTML(art.category || 'INSIGHT')}</span>
-                        <h3 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight group-hover:text-snap-green transition-colors">${escapeHTML(art.title || 'Untitled')}</h3>
-                        <p class="text-slate-500 text-xs sm:text-sm mb-4 sm:mb-6 line-clamp-2 leading-relaxed font-medium">${escapeHTML(art.summary || '')}</p>
-                        <div class="mt-auto flex justify-between items-center pt-4 sm:pt-5 border-t border-slate-100">
-                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="far fa-calendar-alt mr-1"></i> ${escapeHTML(art.date || 'Update')}</span>
-                            ${articleUrl !== '#' ? `<a href="${escapeAttr(articleUrl)}" target="_blank" rel="noopener noreferrer" class="bg-slate-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-bold hover:bg-snap-green transition-colors shadow-md active:scale-95">อ่านบทความ</a>` : ''}
-                        </div>
-                    </div>
-                </div>`;
+                return `<div class="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-snap-green/10 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full group p-3">${mediaHtml}<div class="p-4 sm:p-6 pt-2 flex flex-col flex-1"><span class="text-emerald-600 bg-emerald-50 self-start px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest mb-3 sm:mb-4">${escapeHTML(art.category || 'INSIGHT')}</span><h3 class="text-lg sm:text-xl font-black text-slate-900 mb-2 sm:mb-3 line-clamp-2 leading-tight group-hover:text-snap-green transition-colors">${escapeHTML(art.title || 'Untitled')}</h3><p class="text-slate-500 text-xs sm:text-sm mb-4 sm:mb-6 line-clamp-2 leading-relaxed font-medium">${escapeHTML(art.summary || '')}</p><div class="mt-auto flex justify-between items-center pt-4 sm:pt-5 border-t border-slate-100"><span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest"><i class="far fa-calendar-alt mr-1"></i> ${escapeHTML(art.date || 'Update')}</span>${articleUrl !== '#' ? `<a href="${escapeAttr(articleUrl)}" target="_blank" class="bg-slate-900 text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs font-bold hover:bg-snap-green transition-colors shadow-md active:scale-95">อ่านบทความ</a>` : ''}</div></div></div>`;
             }).join('');
         }
 
         function renderDocuments() {
             const makeMenu = (typeStr) => {
-                const filteredDocs = documents.filter(d => {
-                    const t = (d.type || d.category || '').toLowerCase();
-                    if (typeStr === 'drawing') return t.includes('drawing') || t.includes('cad') || t.includes('2d') || t.includes('3d') || t.includes('model');
-                    return t.includes(typeStr);
-                });
+                const filteredDocs = documents.filter(d => { const t = (d.type || d.category || '').toLowerCase(); return (typeStr === 'drawing') ? (t.includes('drawing') || t.includes('cad') || t.includes('2d') || t.includes('3d') || t.includes('model')) : t.includes(typeStr); });
                 if (filteredDocs.length === 0) return '<div class="px-6 sm:px-8 py-4 sm:py-6 text-[11px] sm:text-sm text-slate-400 font-medium text-center bg-slate-50">ไม่มีข้อมูล (No Data)</div>';
-                
-                return filteredDocs.map(d => {
-                    const name = d.modelname || d.name || d.model || d.title || 'Untitled Document';
-                    const url = safeUrl(d.fileurl || d.link || d.url || d.file, true) || '#'; 
-                    if(url === '#' || url === '') return '';
-                    return `<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer" class="block px-6 sm:px-8 py-3 sm:py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-[11px] sm:text-sm font-bold text-slate-700 transition-colors"><i class="fas fa-file-download mr-2 text-slate-400"></i> ${escapeHTML(name)}</a>`;
-                }).join('');
+                return filteredDocs.map(d => { const name = d.modelname || d.name || d.model || d.title || 'Untitled Document'; const url = safeUrl(d.fileurl || d.link || d.url || d.file, true) || '#'; if(url === '#' || url === '') return ''; return `<a href="${escapeAttr(url)}" target="_blank" class="block px-6 sm:px-8 py-3 sm:py-4 hover:bg-emerald-50 hover:text-emerald-700 border-b border-slate-100 text-[11px] sm:text-sm font-bold text-slate-700 transition-colors"><i class="fas fa-file-download mr-2 text-slate-400"></i> ${escapeHTML(name)}</a>`; }).join('');
             };
-
             const ds = document.getElementById('menu-datasheet'); if(ds) ds.innerHTML = makeMenu('datasheet');
             const dw = document.getElementById('menu-drawing'); if(dw) dw.innerHTML = makeMenu('drawing');
             const ca = document.getElementById('menu-catalog'); if(ca) ca.innerHTML = makeMenu('catalog');
@@ -1108,243 +987,94 @@ snapcon_html = """
 
         function addToCart(id) {
             const item = allItems.find(i => toText(i.id) === toText(id));
-            if(item) {
-                const existing = cart.find(i => toText(i.id) === toText(id));
-                if(existing) existing.quantity++; else cart.push({...item, cartId: Date.now().toString(), selected: true, quantity: 1});
-                updateBadge(); alert(currentLang === 'th' ? "เพิ่มสินค้าลงตะกร้าแล้ว!" : "Added to cart!");
-            }
+            if(item) { const existing = cart.find(i => toText(i.id) === toText(id)); if(existing) existing.quantity++; else cart.push({...item, cartId: Date.now().toString(), selected: true, quantity: 1}); updateBadge(); alert(currentLang === 'th' ? "เพิ่มสินค้าลงตะกร้าแล้ว!" : "Added to cart!"); }
         }
-        function updateBadge() { 
-            const b = document.getElementById('cart-badge'); 
-            const count = cart.reduce((s,i)=>s+i.quantity,0); 
-            b.innerText=count>99?'99+':count; 
-            b.classList.toggle('hidden',count===0); 
-        }
+        function updateBadge() { const b = document.getElementById('cart-badge'); const count = cart.reduce((s,i)=>s+i.quantity,0); b.innerText=count>99?'99+':count; b.classList.toggle('hidden',count===0); }
         function updateQuantity(cartId, delta) { const item = cart.find(i => i.cartId === cartId); if(item) { item.quantity = Math.max(1, item.quantity + delta); renderCart(); updateBadge(); } }
         function toggleItem(cartId) { const item = cart.find(i => i.cartId === cartId); if(item) { item.selected = !item.selected; renderCart(); } }
         function toggleSelectAll(val) { cart.forEach(i => i.selected = val); renderCart(); }
         function deleteSelected() { cart = cart.filter(i => !i.selected); updateBadge(); renderCart(); }
 
         function renderCart() {
-            const container = document.getElementById('cart-items'); 
-            const quoteForm = document.getElementById('quote-contact-form');
-            if(!container) return;
-            
+            const container = document.getElementById('cart-items'); const quoteForm = document.getElementById('quote-contact-form'); if(!container) return;
             if (quoteForm) quoteForm.classList.remove('hidden');
-
-            if(cart.length === 0) {
-                container.innerHTML = `<p class="text-center py-10 text-slate-400 font-bold bg-slate-50 border border-slate-100 rounded-xl">${dict[currentLang].cartEmpty}</p>`;
-                document.getElementById('cart-total').innerText = '฿0'; return;
-            }
+            if(cart.length === 0) { container.innerHTML = `<p class="text-center py-10 text-slate-400 font-bold bg-slate-50 border border-slate-100 rounded-xl">${dict[currentLang].cartEmpty}</p>`; document.getElementById('cart-total').innerText = '฿0'; return; }
             container.innerHTML = cart.map(item => {
-                const cartIdArg = jsString(item.cartId);
-                const imgSrc = escapeAttr(getValidImageUrl(item.img || item.imageurl) || 'https://via.placeholder.com/120');
-                const itemName = escapeHTML(item.name || item.title || 'Untitled');
-                const itemId = escapeHTML(item.id || '');
-                const quantity = Math.max(1, toNumber(item.quantity, 1));
-                const lineTotal = (toNumber(item.price) * quantity).toLocaleString();
-                return `
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-4 sm:p-5 rounded-xl mb-3 shadow-sm gap-4">
-                    <div class="flex items-center gap-3 sm:gap-5 w-full sm:w-auto flex-1">
-                        <input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${cartIdArg})" class="w-5 h-5 sm:w-6 sm:h-6 accent-snap-green cursor-pointer rounded">
-                        <div class="w-14 h-14 sm:w-16 sm:h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1"><img src="${imgSrc}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="max-w-full max-h-full object-contain"></div>
-                        <div class="flex-1 min-w-0"><span class="font-black text-slate-900 text-sm sm:text-base block truncate">${itemName}</span><span class="text-[10px] sm:text-xs text-slate-400 font-bold">${itemId}</span></div>
-                    </div>
-                    <div class="flex items-center justify-between w-full sm:w-auto gap-4 mt-2 sm:mt-0">
-                        <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden h-9 sm:h-10 bg-white">
-                            <button onclick="updateQuantity(${cartIdArg}, -1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-r border-slate-200 transition-colors">-</button>
-                            <span class="w-10 sm:w-12 h-full flex items-center justify-center text-xs sm:text-sm font-black">${quantity}</span>
-                            <button onclick="updateQuantity(${cartIdArg}, 1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-l border-slate-200 transition-colors">+</button>
-                        </div>
-                        <span class="font-black text-slate-900 text-lg sm:text-xl w-24 sm:w-32 text-right shrink-0">฿${lineTotal}</span>
-                    </div>
-                </div>`;
+                const cartIdArg = jsString(item.cartId); const imgSrc = escapeAttr(getValidImageUrl(item.img || item.imageurl) || 'https://via.placeholder.com/120'); const itemName = escapeHTML(item.name || item.title || 'Untitled'); const itemId = escapeHTML(item.id || ''); const quantity = Math.max(1, toNumber(item.quantity, 1)); const lineTotal = (toNumber(item.price) * quantity).toLocaleString();
+                return `<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-slate-200 p-4 sm:p-5 rounded-xl mb-3 shadow-sm gap-4"><div class="flex items-center gap-3 sm:gap-5 w-full sm:w-auto flex-1"><input type="checkbox" ${item.selected ? 'checked' : ''} onclick="toggleItem(${cartIdArg})" class="w-5 h-5 sm:w-6 sm:h-6 accent-snap-green cursor-pointer rounded"><div class="w-14 h-14 sm:w-16 sm:h-16 bg-white border border-slate-100 rounded-lg flex items-center justify-center shrink-0 p-1"><img src="${imgSrc}" loading="lazy" class="max-w-full max-h-full object-contain"></div><div class="flex-1 min-w-0"><span class="font-black text-slate-900 text-sm sm:text-base block truncate">${itemName}</span><span class="text-[10px] sm:text-xs text-slate-400 font-bold">${itemId}</span></div></div><div class="flex items-center justify-between w-full sm:w-auto gap-4 mt-2 sm:mt-0"><div class="flex items-center border border-slate-200 rounded-lg overflow-hidden h-9 sm:h-10 bg-white"><button onclick="updateQuantity(${cartIdArg}, -1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-r border-slate-200 transition-colors">-</button><span class="w-10 sm:w-12 h-full flex items-center justify-center text-xs sm:text-sm font-black">${quantity}</span><button onclick="updateQuantity(${cartIdArg}, 1)" class="w-8 sm:w-10 h-full bg-slate-50 hover:bg-slate-100 font-black border-l border-slate-200 transition-colors">+</button></div><span class="font-black text-slate-900 text-lg sm:text-xl w-24 sm:w-32 text-right shrink-0">฿${lineTotal}</span></div></div>`;
             }).join('');
-            
-            const total = cart.filter(i => i.selected).reduce((s, i) => s + (toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))), 0);
-            document.getElementById('cart-total').innerText = '฿' + total.toLocaleString();
-            document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
+            const total = cart.filter(i => i.selected).reduce((s, i) => s + (toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))), 0); document.getElementById('cart-total').innerText = '฿' + total.toLocaleString(); document.getElementById('cart-select-all').checked = cart.length > 0 && cart.every(i => i.selected);
         }
 
-        // ==========================================
-        // 🚀 FIRE AND FORGET SYNC SYSTEM 
-        // ==========================================
-        function cleanPayload(payloadObj) {
-            const allowedFields = ['type', 'name_or_id', 'email', 'details'];
-            return allowedFields.reduce((safe, key) => {
-                safe[key] = toText(payloadObj[key]).slice(0, key === 'details' ? 3000 : 200);
-                return safe;
-            }, {});
-        }
-
+        function cleanPayload(payloadObj) { const allowedFields = ['type', 'name_or_id', 'email', 'details']; return allowedFields.reduce((safe, key) => { safe[key] = toText(payloadObj[key]).slice(0, key === 'details' ? 3000 : 200); return safe; }, {}); }
         function sendDataToServer(payloadObj) {
-            const now = Date.now();
-            if (now - lastSubmitAt < 3000) {
-                alert(currentLang === 'th' ? "กรุณารอสักครู่ก่อนส่งข้อมูลซ้ำ" : "Please wait before submitting again");
-                return;
-            }
-            lastSubmitAt = now;
-
-            setTimeout(() => {
-                fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(cleanPayload(payloadObj))
-                }).catch(e => console.log("Sync done"));
-            }, 100);
+            const now = Date.now(); if (now - lastSubmitAt < 3000) { alert(currentLang === 'th' ? "กรุณารอสักครู่ก่อนส่งข้อมูลซ้ำ" : "Please wait before submitting again"); return; }
+            lastSubmitAt = now; setTimeout(() => { fetch(GOOGLE_SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(cleanPayload(payloadObj)) }).catch(e => console.log("Sync done")); }, 100);
         }
 
         function requestQuote() {
             try {
-                const selected = cart.filter(i => i.selected);
-                if(selected.length === 0) return alert(currentLang === 'th' ? "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น" : "Please select at least 1 item");
-                
-                const name = document.getElementById('quote-name').value.trim();
-                const info = document.getElementById('quote-contact').value.trim();
-                if(!name || !info) return alert(currentLang === 'th' ? "กรุณากรอกชื่อและข้อมูลติดต่อกลับให้ครบถ้วน" : "Please fill your contact info");
-                
-                const detailsStr = selected.map(i => `- ${toText(i.name||i.title)} x${Math.max(1, toNumber(i.quantity, 1))} (฿${(toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))).toLocaleString()})`).join('\\n');
-                const total = selected.reduce((s, i) => s + (toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))), 0);
-                const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
-                
+                const selected = cart.filter(i => i.selected); if(selected.length === 0) return alert(currentLang === 'th' ? "กรุณาเลือกสินค้าอย่างน้อย 1 ชิ้น" : "Please select at least 1 item");
+                const name = document.getElementById('quote-name').value.trim(); const info = document.getElementById('quote-contact').value.trim(); if(!name || !info) return alert(currentLang === 'th' ? "กรุณากรอกชื่อและข้อมูลติดต่อกลับให้ครบถ้วน" : "Please fill your contact info");
+                const detailsStr = selected.map(i => `- ${toText(i.name||i.title)} x${Math.max(1, toNumber(i.quantity, 1))} (฿${(toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))).toLocaleString()})`).join('\\n'); const total = selected.reduce((s, i) => s + (toNumber(i.price) * Math.max(1, toNumber(i.quantity, 1))), 0); const fullDetails = `Items:\\n${detailsStr}\\n\\nTotal: ฿${total.toLocaleString()}`;
                 alert(currentLang === 'th' ? "ส่งข้อมูลขอใบเสนอราคาสำเร็จ! ทางเราจะรีบติดต่อกลับครับ" : "Quotation request submitted! We will contact you soon.");
-                cart = cart.filter(i => !i.selected); 
-                updateBadge(); 
-                renderCart(); 
-                navigate('home');
-
-                sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
+                cart = cart.filter(i => !i.selected); updateBadge(); renderCart(); navigate('home'); sendDataToServer({ type: "Quotation", name_or_id: name, email: info, details: fullDetails });
             } catch(e) { console.log(e); }
         }
 
         async function submitRegistration() {
             try {
-                const id = document.getElementById('reg-id').value.trim();
-                const pass = document.getElementById('reg-pass').value.trim();
-                const name = document.getElementById('reg-name').value.trim();
-                const contact = document.getElementById('reg-contact').value.trim();
-                
-                if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วน" : "Please fill all fields");
-                if(pass.length < 8) return alert(currentLang === 'th' ? "กรุณาตั้งรหัสผ่านอย่างน้อย 8 ตัวอักษร" : "Password must be at least 8 characters");
-                
-                memoryUsers[id] = await hashText(pass);
-                isLoggedIn = true;
-                currentUserId = id;
-                if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
-                
-                document.getElementById('displayUser').innerText = id;
-                document.getElementById('dash-user-name').innerText = id; 
-                
-                const loginSec = document.getElementById('login-section');
-                const userSec = document.getElementById('user-section');
-                loginSec.className = "hidden lg:flex items-center gap-2";
-                userSec.className = "flex items-center gap-3";
-                
-                closeRegisterModal();
-                document.getElementById('reg-id').value = '';
-                document.getElementById('reg-pass').value = '';
-                document.getElementById('reg-name').value = '';
-                document.getElementById('reg-contact').value = '';
-
+                const id = document.getElementById('reg-id').value.trim(); const pass = document.getElementById('reg-pass').value.trim(); const name = document.getElementById('reg-name').value.trim(); const contact = document.getElementById('reg-contact').value.trim();
+                if(!id || !pass || !name || !contact) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วน" : "Please fill all fields"); if(pass.length < 8) return alert(currentLang === 'th' ? "กรุณาตั้งรหัสผ่านอย่างน้อย 8 ตัวอักษร" : "Password must be at least 8 characters");
+                if(memoryUsers[id]) return alert(currentLang === 'th' ? "User ID นี้ถูกใช้งานแล้ว กรุณาใช้ ID อื่น" : "This User ID is already registered");
+                memoryUsers[id] = await hashText(pass); saveStoredUsers(); isLoggedIn = true; currentUserId = id; if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+                document.getElementById('displayUser').innerText = id; document.getElementById('dash-user-name').innerText = id; 
+                document.getElementById('login-section').className = "hidden lg:flex items-center gap-2"; document.getElementById('user-section').className = "flex items-center gap-3";
+                closeRegisterModal(); document.getElementById('reg-id').value = ''; document.getElementById('reg-pass').value = ''; document.getElementById('reg-name').value = ''; document.getElementById('reg-contact').value = '';
                 alert(currentLang === 'th' ? "ลงทะเบียนสำเร็จ! ระบบพาคุณเข้าสู่ระบบอัตโนมัติแล้ว" : "Registration complete! You are now logged in.");
-                
-                const mobileMenu = document.getElementById('mobile-menu');
-                if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
-
+                const mobileMenu = document.getElementById('mobile-menu'); if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
+                connectRealtimeMQTT(); // เชื่อม MQTT
                 sendDataToServer({ type: "Registration", name_or_id: id, email: contact, details: name });
             } catch(e) { console.log(e); }
         }
 
         async function handleLogin() { 
             try {
-                const id = document.getElementById('userId').value.trim() || document.getElementById('mobile-userId').value.trim();
-                const pass = document.getElementById('userPass').value.trim() || document.getElementById('mobile-userPass').value.trim();
-                
+                const id = document.getElementById('userId').value.trim() || document.getElementById('mobile-userId').value.trim(); const pass = document.getElementById('userPass').value.trim() || document.getElementById('mobile-userPass').value.trim();
                 if(!id || !pass) return alert(currentLang === 'th' ? "กรุณากรอก ID และ Password" : "Please fill ID and Password");
-
                 if (memoryUsers[id] && memoryUsers[id] === await hashText(pass)) {
-                    isLoggedIn = true; currentUserId = id;
-                    if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
-                    
-                    document.getElementById('displayUser').innerText = id;
-                    document.getElementById('dash-user-name').innerText = id; 
-                    
-                    document.getElementById('login-section').className = "hidden lg:flex items-center gap-2";
-                    document.getElementById('user-section').className = "flex items-center gap-3";
-                    
-                    document.getElementById('mobile-displayUser').innerText = id;
-                    document.getElementById('mobile-login-section').className = "hidden";
-                    document.getElementById('mobile-user-section').className = "flex flex-col gap-4 mb-8 pb-8 border-b border-slate-800 w-full";
-                    
-                    document.getElementById('userId').value = ''; document.getElementById('userPass').value = '';
-                    document.getElementById('mobile-userId').value = ''; document.getElementById('mobile-userPass').value = '';
-                    
+                    isLoggedIn = true; currentUserId = id; if (!userDashboards[id]) userDashboards[id] = createDefaultDash();
+                    document.getElementById('displayUser').innerText = id; document.getElementById('dash-user-name').innerText = id; 
+                    document.getElementById('login-section').className = "hidden lg:flex items-center gap-2"; document.getElementById('user-section').className = "flex items-center gap-3";
+                    document.getElementById('mobile-displayUser').innerText = id; document.getElementById('mobile-login-section').className = "hidden"; document.getElementById('mobile-user-section').className = "flex flex-col gap-4 mb-8 pb-8 border-b border-slate-800 w-full";
+                    document.getElementById('userId').value = ''; document.getElementById('userPass').value = ''; document.getElementById('mobile-userId').value = ''; document.getElementById('mobile-userPass').value = '';
                     alert(currentLang === 'th' ? "เข้าสู่ระบบสำเร็จ!" : "Login Successful");
-                    
-                    const mobileMenu = document.getElementById('mobile-menu');
-                    if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
+                    const mobileMenu = document.getElementById('mobile-menu'); if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
+                    connectRealtimeMQTT(); // เชื่อม MQTT
                 } else alert(currentLang === 'th' ? "ID หรือรหัสผ่านไม่ถูกต้อง" : "Invalid ID or Password");
             } catch(e) { console.log(e); }
         }
 
         function handleLogout() { 
             try {
-                if (currentUserId) stopSystem();
+                disconnectRealtimeMQTT();
                 isLoggedIn = false; currentUserId = null; 
-                
-                document.getElementById('user-section').className = "hidden lg:hidden items-center gap-3 pr-5";
-                document.getElementById('login-section').className = "hidden lg:flex items-center gap-2 pr-5";
-                
-                document.getElementById('mobile-user-section').className = "hidden";
-                document.getElementById('mobile-login-section').className = "flex flex-col gap-4 mb-8 pb-8 border-b border-slate-800 w-full";
-                
-                navigate('home'); 
-                
-                const mobileMenu = document.getElementById('mobile-menu');
-                if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
+                document.getElementById('user-section').className = "hidden lg:hidden items-center gap-3 pr-5"; document.getElementById('login-section').className = "hidden lg:flex items-center gap-2 pr-5";
+                document.getElementById('mobile-user-section').className = "hidden"; document.getElementById('mobile-login-section').className = "flex flex-col gap-4 mb-8 pb-8 border-b border-slate-800 w-full";
+                navigate('home'); const mobileMenu = document.getElementById('mobile-menu'); if(!mobileMenu.classList.contains('hidden')) toggleMobileMenu();
             } catch(e) { console.log(e); }
         }
 
         function submitContactForm() {
             try {
-                const name = document.getElementById('contact-name').value.trim();
-                const info = document.getElementById('contact-info').value.trim();
-                const msg = document.getElementById('contact-message').value.trim();
-
+                const name = document.getElementById('contact-name').value.trim(); const info = document.getElementById('contact-info').value.trim(); const msg = document.getElementById('contact-message').value.trim();
                 if(!name || !info || !msg) return alert(currentLang === 'th' ? "กรุณากรอกข้อมูลให้ครบถ้วนก่อนส่งข้อความ" : "Please fill all fields");
-
                 alert(currentLang === 'th' ? "ส่งข้อความสำเร็จ! ทีมงานเทคนิคจะรีบติดต่อกลับครับ" : "Message sent! We will contact you soon.");
-                document.getElementById('contact-name').value = '';
-                document.getElementById('contact-info').value = '';
-                document.getElementById('contact-message').value = '';
-
+                document.getElementById('contact-name').value = ''; document.getElementById('contact-info').value = ''; document.getElementById('contact-message').value = '';
                 sendDataToServer({ type: "Contact Support", name_or_id: name, email: info, details: msg });
             } catch(e) { console.log(e); }
         }
 
-        // ==========================================
-        // 8. DASHBOARD LOGIC
-        // ==========================================
-        function startSystem() {
-            let dash = getDash(); if(!dash) return;
-            dash.isRunning = true;
-            dash.nodes.forEach(n => { if(n.health > 30) n.status = 'Running'; else n.status = 'Maintenance'; });
-            if(!activeDashInterval) activeDashInterval = setInterval(simulateProduction, 500);
-            renderDashboard();
-        }
-        function stopSystem() {
-            let dash = getDash(); if(!dash) return;
-            dash.isRunning = false;
-            dash.nodes.forEach(n => { if(n.status !== 'Maintenance') n.status = 'Stopped'; });
-            if(activeDashInterval) { clearInterval(activeDashInterval); activeDashInterval = null; }
-            renderDashboard();
-        }
-        function resetSystem() { 
-            let dash = getDash(); if(!dash) return;
-            dash.nodes.forEach(n => { n.output = 0; n.health = 100.0; n.status = dash.isRunning ? 'Running' : 'Offline'; }); 
-            dash.elapsedSeconds = 0; renderDashboard(); 
-        }
         function updateDashboardConfig() {
             let dash = getDash(); if(!dash) return;
             dash.target = Math.max(1, Math.floor(toNumber(document.getElementById('cfg-target').value, 1)));
@@ -1352,131 +1082,58 @@ snapcon_html = """
             dash.energyFactor = Math.max(0, toNumber(document.getElementById('cfg-energy').value));
             renderDashboard();
         }
-        function simulateProduction() {
-            let dash = getDash(); if(!dash || !dash.isRunning) return;
-            dash.elapsedSeconds += 0.5;
-            dash.nodes.forEach(n => { 
-                if(n.status === 'Running' || n.status === 'Warning') {
-                    if(Math.random() > 0.5) { n.output += 1; n.health -= n.wearRate; if(n.health < 0) n.health = 0; }
-                    if(n.health <= 30) n.status = 'Maintenance'; else if (n.health <= 70) n.status = 'Warning';
-                }
-            });
-            if(document.getElementById('page-dashboard').classList.contains('page-active')) {
-                renderDashboard();
-            }
-        }
-        function exportCSV() {
-            let dash = getDash(); if(!dash) return;
-            const csvCell = (value) => {
-                let text = toText(value).replace(/"/g, '""');
-                if (/^[=+@-]/.test(text)) text = "'" + text;
-                return `"${text}"`;
-            };
-            let bom = "\uFEFF";
-            let csvContent = bom + "Node ID,Machine Name,Status,Output (Units),Health (%),Est. Carbon (kgCO2e),Est. Power (kWh)\\n";
-            let totalOut = 0;
-            dash.nodes.forEach(n => {
-                let c = (n.output * dash.carbonFactor).toFixed(4); let e = (n.output * dash.energyFactor).toFixed(4); totalOut += n.output;
-                csvContent += [n.id, n.name, n.status, n.output, n.health.toFixed(2), c, e].map(csvCell).join(',') + '\\n';
-            });
-            csvContent += `\\nTOTAL,, ,${totalOut},-,${(totalOut * dash.carbonFactor).toFixed(4)},${(totalOut * dash.energyFactor).toFixed(4)}\\n`;
-            
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Snapcon_Report_${currentUserId}.csv`; link.click();
-        }
+
         function formatTimeStr(totalSecs) {
             if (!isFinite(totalSecs) || totalSecs < 0) return "--:--:--";
             const h = Math.floor(totalSecs / 3600); const m = Math.floor((totalSecs % 3600) / 60); const s = Math.floor(totalSecs % 60);
             return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
         }
+
         function renderDashboard() {
             try {
                 const grid = document.getElementById('dash-nodes-grid'); if(!grid) return;
                 let dash = getDash(); if (!dash) return;
 
-                const cfgTarget = document.getElementById('cfg-target');
-                const cfgCarbon = document.getElementById('cfg-carbon');
-                const cfgEnergy = document.getElementById('cfg-energy');
-                if (cfgTarget) cfgTarget.value = dash.target;
-                if (cfgCarbon) cfgCarbon.value = dash.carbonFactor;
-                if (cfgEnergy) cfgEnergy.value = dash.energyFactor;
+                const cfgTarget = document.getElementById('cfg-target'); const cfgCarbon = document.getElementById('cfg-carbon'); const cfgEnergy = document.getElementById('cfg-energy');
+                if (cfgTarget) cfgTarget.value = dash.target; if (cfgCarbon) cfgCarbon.value = dash.carbonFactor; if (cfgEnergy) cfgEnergy.value = dash.energyFactor;
 
                 const totalOutput = dash.nodes.reduce((sum, n) => sum + n.output, 0);
+                const dashTotalOutput = document.getElementById('dash-total-output'); const dashCarbon = document.getElementById('dash-carbon'); const dashPower = document.getElementById('dash-power');
+                if(dashTotalOutput) dashTotalOutput.innerText = totalOutput.toLocaleString(); if(dashCarbon) dashCarbon.innerText = (totalOutput * dash.carbonFactor).toFixed(2); if(dashPower) dashPower.innerText = (totalOutput * dash.energyFactor).toFixed(2);
                 
-                const dashTotalOutput = document.getElementById('dash-total-output');
-                const dashCarbon = document.getElementById('dash-carbon');
-                const dashPower = document.getElementById('dash-power');
-                
-                if(dashTotalOutput) dashTotalOutput.innerText = totalOutput.toLocaleString();
-                if(dashCarbon) dashCarbon.innerText = (totalOutput * dash.carbonFactor).toFixed(2);
-                if(dashPower) dashPower.innerText = (totalOutput * dash.energyFactor).toFixed(2);
-                
-                let progress = dash.target > 0 ? (totalOutput / dash.target) * 100 : 0; 
-                if(progress > 100) progress = 100;
-                
-                const dashProgressBar = document.getElementById('dash-progress-bar');
-                const dashProgressText = document.getElementById('dash-progress-text');
-                if(dashProgressBar) dashProgressBar.style.width = `${progress}%`;
-                if(dashProgressText) dashProgressText.innerText = `${progress.toFixed(1)}%`;
+                let progress = dash.target > 0 ? (totalOutput / dash.target) * 100 : 0; if(progress > 100) progress = 100;
+                const dashProgressBar = document.getElementById('dash-progress-bar'); const dashProgressText = document.getElementById('dash-progress-text');
+                if(dashProgressBar) dashProgressBar.style.width = `${progress}%`; if(dashProgressText) dashProgressText.innerText = `${progress.toFixed(1)}%`;
                 
                 let elapsedStr = formatTimeStr(dash.elapsedSeconds), remainStr = "--:--:--";
-                if (totalOutput > 0 && dash.elapsedSeconds > 0) {
-                    let ups = totalOutput / dash.elapsedSeconds, remainUnits = dash.target - totalOutput;
-                    if (remainUnits > 0 && ups > 0) remainStr = formatTimeStr(remainUnits / ups); else if (remainUnits <= 0) remainStr = "00:00:00";
-                }
-                
-                const dashTimeElapsed = document.getElementById('dash-time-elapsed');
-                const dashTimeRemain = document.getElementById('dash-time-remain');
-                if(dashTimeElapsed) dashTimeElapsed.innerText = elapsedStr;
-                if(dashTimeRemain) dashTimeRemain.innerText = remainStr;
+                if (totalOutput > 0 && dash.elapsedSeconds > 0) { let ups = totalOutput / dash.elapsedSeconds, remainUnits = dash.target - totalOutput; if (remainUnits > 0 && ups > 0) remainStr = formatTimeStr(remainUnits / ups); else if (remainUnits <= 0) remainStr = "00:00:00"; }
+                const dashTimeElapsed = document.getElementById('dash-time-elapsed'); const dashTimeRemain = document.getElementById('dash-time-remain');
+                if(dashTimeElapsed) dashTimeElapsed.innerText = elapsedStr; if(dashTimeRemain) dashTimeRemain.innerText = remainStr;
 
                 grid.innerHTML = dash.nodes.map(n => {
-                    const output = Math.max(0, Math.floor(toNumber(n.output)));
-                    const health = Math.min(100, Math.max(0, toNumber(n.health)));
+                    const output = Math.max(0, Math.floor(toNumber(n.output))); const health = Math.min(100, Math.max(0, toNumber(n.health)));
                     const isRun = n.status === 'Running', isWarn = n.status === 'Warning', isMaint = n.status === 'Maintenance';
-                    let dotBg = 'bg-slate-300';
-                    if (isRun) dotBg = 'bg-snap-green animate-pulse'; else if (isWarn) dotBg = 'bg-amber-400 animate-pulse'; else if (isMaint) dotBg = 'bg-red-500';
+                    let dotBg = 'bg-slate-300'; if (isRun) dotBg = 'bg-snap-green animate-pulse'; else if (isWarn) dotBg = 'bg-amber-400 animate-pulse'; else if (isMaint) dotBg = 'bg-red-500';
                     let healthBarCol = health > 70 ? 'bg-snap-green' : (health > 30 ? 'bg-amber-400' : 'bg-red-500');
+                    let ampStr = n.powerAmp ? `${n.powerAmp.toFixed(2)}A` : '';
                     
-                    return `
-                    <div class="bg-slate-50 border border-slate-200 p-2 sm:p-3 rounded-xl shadow-sm flex flex-col justify-between h-full">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-500 truncate" title="${escapeAttr(n.name)}">${escapeHTML(n.name)}</span>
-                            <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${dotBg} shrink-0"></div>
-                        </div>
-                        <h4 class="text-lg sm:text-xl font-black text-slate-800 text-center my-1 sm:my-2">${output}</h4>
-                        <div>
-                            <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mt-1">
-                                <div class="h-full ${healthBarCol} transition-all duration-500" style="width: ${health}%"></div>
-                            </div>
-                            <p class="text-[8px] sm:text-[9px] text-center mt-1 text-slate-400 font-bold uppercase tracking-widest">Health: ${health.toFixed(1)}%</p>
-                        </div>
-                    </div>`;
-                }).join('');
+                    return `<div class="bg-slate-50 border border-slate-200 p-2 sm:p-3 rounded-xl shadow-sm flex flex-col justify-between h-full"><div class="flex justify-between items-center mb-2"><span class="text-[9px] sm:text-[10px] font-bold text-slate-500 truncate" title="${escapeAttr(n.name)}">${escapeHTML(n.name)}</span><div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${dotBg} shrink-0"></div></div><h4 class="text-lg sm:text-xl font-black text-slate-800 text-center my-1 sm:my-2">${output}</h4><div><div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mt-1"><div class="h-full ${healthBarCol} transition-all duration-500" style="width: ${health}%"></div></div><div class="flex justify-between mt-1"><p class="text-[8px] sm:text-[9px] text-slate-400 font-bold uppercase tracking-widest">Health: ${health.toFixed(0)}%</p><p class="text-[8px] sm:text-[9px] text-slate-500 font-bold uppercase tracking-widest">${ampStr}</p></div></div></div>`;
+                }).join('') || '<p class="col-span-full text-center text-slate-400 font-bold py-4">Waiting for Machine Data...</p>';
             } catch(e) { console.log(e); }
         }
 
         function navigate(p) { 
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); 
-            const t = document.getElementById('page-'+p); 
-            if(t) t.classList.add('page-active'); 
-            window.scrollTo(0,0); 
-            if(p==='cart') renderCart(); 
-            if(p==='dashboard') renderDashboard(); 
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('page-active')); const t = document.getElementById('page-'+p); if(t) t.classList.add('page-active'); window.scrollTo(0,0); if(p==='cart') renderCart(); if(p==='dashboard') renderDashboard(); 
         }
         function openRegisterModal() { document.getElementById('modal-register').classList.replace('hidden', 'flex'); }
         function closeRegisterModal() { document.getElementById('modal-register').classList.replace('flex', 'hidden'); }
-        function checkDashboardAuth() { 
-            if (isLoggedIn) navigate('dashboard'); 
-            else { alert(currentLang === 'th' ? "กรุณาเข้าสู่ระบบก่อนเข้าใช้งาน Dashboard" : "Please Login First to access Dashboard"); document.getElementById('userId').focus(); } 
-        }
+        function checkDashboardAuth() { if (isLoggedIn) navigate('dashboard'); else { alert(currentLang === 'th' ? "กรุณาเข้าสู่ระบบก่อนเข้าใช้งาน Dashboard" : "Please Login First to access Dashboard"); document.getElementById('userId').focus(); } }
 
- window.addEventListener('load', async () => {
+        window.addEventListener('load', async () => {
             try {
-                // --- เพิ่มส่วนนี้สำหรับสร้าง User Test เริ่มต้น ---
-                memoryUsers['snapcon'] = await hashText('1992');
-                // ------------------------------------------
-
+                loadStoredUsers();
+                memoryUsers['snapcon'] = memoryUsers['snapcon'] || await hashText('1992'); // สร้าง User Test เริ่มต้น
+                saveStoredUsers();
                 loadDataFromSheet();
                 setTimeout(() => document.body.classList.add('hero-bg-ready'), 800);
                 setTimeout(() => setLanguage('th'), 100);
@@ -1488,4 +1145,4 @@ snapcon_html = """
 """
 
 # แสดงผลหน้าเว็บผ่าน Streamlit
-st.components.v1.html(snapcon_html, height=2500, scrolling=True)
+components.html(snapcon_html, height=2500, scrolling=True)
